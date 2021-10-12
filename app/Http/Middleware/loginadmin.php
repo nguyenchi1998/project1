@@ -3,24 +3,23 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class loginadmin
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param Request $request
+     * @param Closure $next
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
-        if($request->session()->has('tk_ad'))
-        {
+        if (Auth::user()->role()->name == config('role.admin')) {
             return $next($request);
-        }
-        else
-        {
+        } else {
             return redirect()->route('login');
         }
     }

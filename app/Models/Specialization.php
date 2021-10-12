@@ -7,9 +7,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Specialization extends Model
 {
+    protected $fillable = [
+        'name',
+    ];
+
     public function subjects(): BelongsToMany
     {
         return $this->belongsToMany(Subject::class);
     }
-
 }
