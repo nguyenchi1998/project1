@@ -12,12 +12,10 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        $roles = ['Super Admin', 'Admin', 'Teacher', 'Student'];
-
-        foreach ($roles as $role) {
+        foreach (config('common.roles') as $key => $value) {
             Role::create([
-                'name' => str_replace(' ', '-', strtolower($role)),
-                'guard_name' => 'web'
+                'name' => $value['name'],
+                'guard_name' => $value['guard']
             ]);
         }
     }

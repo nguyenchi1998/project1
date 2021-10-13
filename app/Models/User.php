@@ -31,4 +31,14 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    public function scopeIsSuperAdmin()
+    {
+        return in_array(config('common.roles.superAdmin'), $this->getRoleNames()->toArray());
+    }
+
+    public function schedules()
+    {
+        return $this->hasMany(Subject::class);
+    }
+
 }

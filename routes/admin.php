@@ -6,6 +6,7 @@ Route::group(['as' => 'admin.'], function () {
     Route::group(['middleware' => 'auth:admin'], function () {
         Route::get('', 'HomeController@index')->name('home');
         Route::resource('subjects', 'SubjectController');
+        Route::resource('schedules', 'ScheduleController');
         Route::resource('roles', 'RoleController');
         Route::resource('specializations', 'SpecializationController');
         Route::resource('classes', 'ClassController');

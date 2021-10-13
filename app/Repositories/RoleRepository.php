@@ -15,4 +15,19 @@ class RoleRepository implements IRoleRepository
     {
         return Role::create($arr);
     }
+
+    public function whereNotIn($values)
+    {
+        return Role::whereNotIn('name', $values);
+    }
+
+    public function findById($id)
+    {
+        return Role::findById($id);
+    }
+
+    public function findByName($name)
+    {
+        return Role::findByName($name);
+    }
 }

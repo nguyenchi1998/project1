@@ -229,8 +229,14 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="pages/tables/basic-table.html">
-                            <span class="menu-title">Tables</span>
+                        <a class="nav-link" href="{{ route('admin.roles.index') }}">
+                            <span class="menu-title">Role</span>
+                            <i class="mdi mdi-table-large menu-icon"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.schedules.index') }}">
+                            <span class="menu-title">Schedule</span>
                             <i class="mdi mdi-table-large menu-icon"></i>
                         </a>
                     </li>

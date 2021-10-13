@@ -11,9 +11,14 @@ class Subject extends Model
         'name',
         'type',
     ];
-    
+
     public function specializations(): BelongsToMany
     {
         return $this->belongsToMany(Specialization::class);
+    }
+
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class);
     }
 }

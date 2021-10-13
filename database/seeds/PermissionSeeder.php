@@ -14,16 +14,9 @@ class PermissionSeeder extends Seeder
     {
         $actions = ['list', 'show', 'update', 'create', 'delete'];
 
-        $models = ['*', 'subject', 'mark', 'student', 'admin', 'schedule'];
+        $models = ['subject', 'mark', 'student', 'admin', 'schedule'];
 
         foreach ($models as $model) {
-            if ($model == '*') {
-                Permission::create([
-                    'name' => 'all',
-                    'guard_name' => 'web'
-                ]);
-                continue;
-            }
             foreach ($actions as $action) {
                 Permission::create([
                     'name' => strtolower($action) . '-' . strtolower($model),

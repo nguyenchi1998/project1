@@ -4,6 +4,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class UserSeeder extends Seeder
@@ -20,9 +21,9 @@ class UserSeeder extends Seeder
             'gender' => 1,
             'birthday' => Carbon::now(),
             'email' => 'admin@gmail.com',
-            'password' => Hash::make('123456')
+            'password' => Hash::make(config('default.auth.password'))
         ]);
-        $superAdminRole = Role::findById(1);
+        $superAdminRole = Role::findById(1, 'admin');
         $superAdmin->assignRole($superAdminRole);
         factory(User::class, 10)->create();
     }

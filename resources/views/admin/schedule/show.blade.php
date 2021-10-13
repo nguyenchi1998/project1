@@ -9,7 +9,8 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Manager Classes</li>
+                    <li class="breadcrumb-item " aria-current="page"><a href="">Manager Classes</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Manager Student</li>
                 </ol>
             </nav>
         </div>
@@ -26,39 +27,48 @@
             <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-12 ">
+                                <h2 class="text-center">{{ $class->name }}</h2>
+                            </div>
+                        </div>
                         <div class="d-flex mb-4">
-                            <a class="btn btn-primary" href="{{ route('admin.classes.create') }}">Create</a>
+                            <a class="btn btn-primary" href="{{ route('admin.classes.create') }}">Add Student</a>
                         </div>
                         <table class="table table-bordered">
                             <thead>
                             <tr>
-                                <th>Class</th>
-                                <th>Number Student</th>
+                                <th>Student</th>
+                                <th>Phone</th>
+                                <th>Gender</th>
+                                <th>Birthday</th>
+                                <th>Address</th>
                                 <th></th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($classes as $class)
+                            @foreach($class->students as $student)
                                 <tr>
                                     <td>
-                                        {{ $class->name }}
+                                        {{ $student->name }}
                                     </td>
                                     <td>
-                                        {{ count($class->students) }}
+                                        {{ $student->phone }}
+                                    </td>
+                                    <td>
+                                        {{ $student->gender ? 'Male' : 'Female' }}
+                                    </td>
+                                    <td>
+                                        {{ $student->birthday }}
+                                    </td>
+                                    <td>
+                                        {{ $student->address }}
                                     </td>
                                     <td width="100">
                                         <div class="d-flex justify-content-between">
-                                            <div class="mr-3">
-                                                <a href="{{ route('admin.classes.show', $class->id) }}"
-                                                   class="btn btn-sm btn-info">Student</a>
-                                            </div>
-                                            <div class="mr-3">
-                                                <a href="{{ route('admin.classes.edit', $class->id) }}"
-                                                   class="btn btn-sm btn-warning">Edit</a>
-                                            </div>
                                             <div>
                                                 <form action="">
-                                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                                    <button type="submit" class="btn btn-sm btn-danger">Remove</button>
                                                 </form>
                                             </div>
                                         </div>

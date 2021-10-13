@@ -67,15 +67,14 @@ class ClassController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return Response
-     */
     public function show($id)
     {
-        //
+        $class = $this->classRepository->find($id);
+        if ($class) {
+            $class->load('students');
+        }
+
+        return view('admin.class.show', compact('class'));
     }
 
     public function edit($id)

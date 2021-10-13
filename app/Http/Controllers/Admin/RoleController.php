@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\IPermissionRepository;
 use App\Repositories\IRoleRepository;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -10,15 +11,19 @@ use Illuminate\Http\Response;
 class RoleController extends Controller
 {
     protected $roleRepository;
+    protected $permissionRepository;
 
-    public function __construct(IRoleRepository $roleRepository)
+    public function __construct(IRoleRepository $roleRepository, IPermissionRepository $permissionRepository)
     {
         $this->roleRepository = $roleRepository;
+        $this->permissionRepository = $permissionRepository;
     }
 
     public function index()
     {
-        $roles = $this->roleRepository->all();
+        $roles = $this->roleRepository->whereNotIn(['super-admin'])
+            ->get()
+            ->load('permissions');
 
         return view('admin.role.index', compact('roles'));
     }
@@ -55,15 +60,12 @@ class RoleController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return Response
-     */
     public function edit($id)
     {
-        //
+        $role = $this->roleRepository->findById($id)->load('permissions');
+        $permissions = $this->permissionRepository->all();
+
+        return view('admin.role.edit', compact('role', 'permissions'));
     }
 
     /**

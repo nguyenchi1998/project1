@@ -4,12 +4,16 @@ namespace App\Providers;
 
 use App\Repositories\ClassRepository;
 use App\Repositories\IClassRepository;
+use App\Repositories\IPermissionRepository;
 use App\Repositories\IRoleRepository;
+use App\Repositories\IScheduleRepository;
 use App\Repositories\ISpecializationRepository;
 use App\Repositories\IStudentRepository;
 use App\Repositories\ISubjectRepository;
 use App\Repositories\IUserRepository;
+use App\Repositories\PermissionRepository;
 use App\Repositories\RoleRepository;
+use App\Repositories\ScheduleRepository;
 use App\Repositories\SpecializationRepository;
 use App\Repositories\StudentRepository;
 use App\Repositories\SubjectRepository;
@@ -25,6 +29,8 @@ class RepositoryProvider extends ServiceProvider
         IStudentRepository::class => StudentRepository::class,
         IUserRepository::class => UserRepository::class,
         IRoleRepository::class => RoleRepository::class,
+        IPermissionRepository::class => PermissionRepository::class,
+        IScheduleRepository::class => ScheduleRepository::class,
     ];
 
     /**

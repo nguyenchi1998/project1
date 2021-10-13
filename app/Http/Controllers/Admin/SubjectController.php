@@ -15,9 +15,10 @@ class SubjectController extends Controller
     private $specializationRepository;
 
     public function __construct(
-        ISubjectRepository $subjectRepository,
+        ISubjectRepository        $subjectRepository,
         ISpecializationRepository $specializationRepository
-    ) {
+    )
+    {
         $this->subjectRepository = $subjectRepository;
         $this->specializationRepository = $specializationRepository;
     }
@@ -25,12 +26,13 @@ class SubjectController extends Controller
     public function index(Request $request)
     {
         $filter = $request->get('filter');
-        $subjects = $this->subjectRepository->model()->whereHas('specializations', function ($query) use ($filter) {
-            $query->when(!$filter || $filter == 'all', function ($query) {
-            }, function ($query) use ($filter) {
-                $query->where('specializations.id', $filter);
-            });
-        })->get();
+        $subjects = $this->subjectRepository->model()
+            ->whereHas('specializations', function ($query) use ($filter) {
+                $query->when(!$filter || $filter == 'all', function ($query) {
+                }, function ($query) use ($filter) {
+                    $query->where('specializations.id', $filter);
+                });
+            })->get();
         $subjects = $subjects->map(function ($subject) {
             $specializations = array_map(function ($specialization) {
                 return $specialization['name'];

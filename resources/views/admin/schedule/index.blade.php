@@ -1,19 +1,18 @@
 @extends('layouts.manager')
 @section('title')
-    Manager Classes
+    Manager Schedules
 @endsection
 @section('main')
     <div class="content-wrapper">
         <div class="page-header">
-            <h3 class="page-title">Manager Classes</h3>
+            <h3 class="page-title">Manager Schedules</h3>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Manager Classes</li>
+                    <li class="breadcrumb-item active" aria-current="page">Manager Schedules</li>
                 </ol>
             </nav>
         </div>
-
         @if($errors->any())
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <strong>Warning!</strong> {{ $errors->first() }}
@@ -32,28 +31,36 @@
                         <table class="table table-bordered">
                             <thead>
                             <tr>
-                                <th>Class</th>
+                                <th>Schedule</th>
+                                <th>Subject</th>
+                                <th>Teacher</th>
                                 <th>Number Student</th>
                                 <th></th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($classes as $class)
+                            @foreach($schedules as $schedule)
                                 <tr>
                                     <td>
-                                        {{ $class->name }}
+                                        {{ $schedule->subject->name }}
                                     </td>
                                     <td>
-                                        {{ count($class->students) }}
+                                        {{ $schedule->subject->name }}
+                                    </td>
+                                    <td>
+                                        {{ $schedule->teacher->name }}
+                                    </td>
+                                    <td>
+                                        {{ count($schedule->scheduleDetails) }}
                                     </td>
                                     <td width="100">
                                         <div class="d-flex justify-content-between">
                                             <div class="mr-3">
-                                                <a href="{{ route('admin.classes.show', $class->id) }}"
+                                                <a href="{{ route('admin.classes.show', $schedule->id) }}"
                                                    class="btn btn-sm btn-info">Student</a>
                                             </div>
                                             <div class="mr-3">
-                                                <a href="{{ route('admin.classes.edit', $class->id) }}"
+                                                <a href="{{ route('admin.classes.edit', $schedule->id) }}"
                                                    class="btn btn-sm btn-warning">Edit</a>
                                             </div>
                                             <div>
