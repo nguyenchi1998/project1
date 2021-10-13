@@ -211,20 +211,20 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('subjects.index')}}">
+                        <a class="nav-link" href="{{route('admin.subjects.index')}}">
                             <span class="menu-title">Subjects</span>
                             <i class="mdi mdi-contacts menu-icon"></i>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('specializations.index')}}">
+                        <a class="nav-link" href="{{route('admin.specializations.index')}}">
                             <span class="menu-title">Specialization</span>
                             <i class="mdi mdi-format-list-bulleted menu-icon"></i>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="pages/charts/chartjs.html">
-                            <span class="menu-title">Charts</span>
+                        <a class="nav-link" href="{{ route('admin.classes.index') }}">
+                            <span class="menu-title">Class</span>
                             <i class="mdi mdi-chart-bar menu-icon"></i>
                         </a>
                     </li>

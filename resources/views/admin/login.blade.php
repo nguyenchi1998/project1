@@ -20,11 +20,11 @@
 @endif
 <div class="text-center">
 
-    <h1 class="text-info">Hệ thống quản lí điểm(Student Login)</h1>
+    <h1 class="text-info">Hệ thống quản lí điểm(Admin Login)</h1>
 </div>
 
 <div class="col-sm-6 col-md-4 col-lg-3" style="margin:40px auto; float:none;">
-    <form method="POST" action="{{  url('/login') }}">
+    <form method="POST" action="{{ route('admin.login') }}">
        @csrf()
         <div class="col-xs-12">
             <div class="form-group">
