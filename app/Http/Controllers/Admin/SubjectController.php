@@ -27,12 +27,12 @@ class SubjectController extends Controller
     {
         $filter = $request->get('filter');
         $subjects = $this->subjectRepository->model()
-            ->whereHas('specializations', function ($query) use ($filter) {
+            ->with(['specializations' => function ($query) use ($filter) {
                 $query->when(!$filter || $filter == 'all', function ($query) {
                 }, function ($query) use ($filter) {
                     $query->where('specializations.id', $filter);
                 });
-            })->get();
+            }])->get();
         $subjects = $subjects->map(function ($subject) {
             $specializations = array_map(function ($specialization) {
                 return $specialization['name'];
@@ -40,7 +40,7 @@ class SubjectController extends Controller
             $subject['specializations'] = implode(' ,', $specializations);
 
             return $subject;
-        }, $subjects);
+        });
         $specializations = $this->specializationRepository->all();
 
         return view('admin.subject.index', compact('subjects', 'specializations', 'filter'));
@@ -59,7 +59,8 @@ class SubjectController extends Controller
             DB::beginTransaction();
             $basic = $request->get('basic');
             $subject = $this->subjectRepository->create([
-                'name' => $request->get('name')
+                'name' => $request->get('name'),
+                'credit' => $request->get('credit'),
             ]);
             if ($basic) {
                 $specializations = $this->specializationRepository->get('id');
@@ -104,6 +105,7 @@ class SubjectController extends Controller
             DB::beginTransaction();
             $this->subjectRepository->update($id, [
                 'name' => $request->get('name'),
+                'credit' => $request->get('credit'),
             ]);
             $subject = $this->subjectRepository->find($id);
             $subject->specializations()->sync($request->get('specializations'));

@@ -15,4 +15,9 @@ class Specialization extends Model
     {
         return $this->belongsToMany(Subject::class);
     }
+
+    public function teachers()
+    {
+        return $this->hasMany(User::class);
+    }
 }

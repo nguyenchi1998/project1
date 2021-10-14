@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Repositories\ClassRepository;
+use App\Repositories\DepartmentRepository;
 use App\Repositories\IClassRepository;
+use App\Repositories\IDepartmentRepository;
 use App\Repositories\IPermissionRepository;
 use App\Repositories\IRoleRepository;
 use App\Repositories\IScheduleRepository;
@@ -31,6 +33,7 @@ class RepositoryProvider extends ServiceProvider
         IRoleRepository::class => RoleRepository::class,
         IPermissionRepository::class => PermissionRepository::class,
         IScheduleRepository::class => ScheduleRepository::class,
+        IDepartmentRepository::class => DepartmentRepository::class,
     ];
 
     /**

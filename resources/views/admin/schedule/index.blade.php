@@ -26,7 +26,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex mb-4">
-                            <a class="btn btn-primary" href="{{ route('admin.classes.create') }}">Create</a>
+                            <a class="btn btn-primary" href="{{ route('admin.schedules.create') }}">Create</a>
                         </div>
                         <table class="table table-bordered">
                             <thead>

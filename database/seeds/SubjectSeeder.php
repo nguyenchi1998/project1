@@ -37,7 +37,7 @@ class SubjectSeeder extends Seeder
         foreach ($subjects as $subject) {
             Subject::create([
                 'name' => $subject['name'],
-                'type' => $subject['type'] ?? null
+                'type' => $subject['type'] ?? null,
             ]);
         }
     }

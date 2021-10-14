@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -19,7 +19,15 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name',
+        'email',
+        'password',
+        'gender',
+        'birthday',
+        'address',
+        'phone',
+        'department_id',
+        'next_department_id',
     ];
 
     /**
@@ -36,9 +44,28 @@ class User extends Authenticatable
         return in_array(config('common.roles.superAdmin'), $this->getRoleNames()->toArray());
     }
 
+    public function scopeIsAdmin()
+    {
+        return in_array(config('common.roles.admin'), $this->getRoleNames()->toArray());
+    }
+
+    public function scopeIsTeacher()
+    {
+        return in_array(config('common.roles.teacher'), $this->getRoleNames()->toArray());
+    }
+
     public function schedules()
     {
         return $this->hasMany(Subject::class);
     }
 
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
+
+    public function nextDepartment()
+    {
+        return $this->belongsTo(Department::class, 'next_department_id');
+    }
 }

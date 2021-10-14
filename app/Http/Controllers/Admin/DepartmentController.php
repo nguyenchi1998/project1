@@ -3,25 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Schedule;
-use App\Repositories\IScheduleRepository;
 use Illuminate\Http\Request;
 
-class ScheduleController extends Controller
+class DepartmentController extends Controller
 {
-    protected $scheduleRepository;
-
-    public function __construct(IScheduleRepository $scheduleRepository)
-    {
-        $this->scheduleRepository = $scheduleRepository;
-    }
-
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
-        $schedules = $this->scheduleRepository->all()->load('subject', 'teacher', 'scheduleDetails');
-
-
-        return view('admin.schedule.index', compact('schedules'));
+        //
     }
 
     /**
@@ -31,14 +24,13 @@ class ScheduleController extends Controller
      */
     public function create()
     {
-
-        return view('admin.schedule.create');
+        //
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -49,7 +41,7 @@ class ScheduleController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -60,7 +52,7 @@ class ScheduleController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param int $id
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -71,8 +63,8 @@ class ScheduleController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -83,7 +75,7 @@ class ScheduleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

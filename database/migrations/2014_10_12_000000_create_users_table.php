@@ -22,6 +22,8 @@ class CreateUsersTable extends Migration
             $table->string('address')->nullable();
             $table->string('phone')->nullable();
             $table->string('password');
+            $table->unsignedInteger('department_id')->nullable();
+            $table->unsignedInteger('next_department_id')->nullable();
             $table->softDeletes();
             $table->timestamps();
             $table->rememberToken();
