@@ -34,7 +34,7 @@
                             </div>
                             <a class="btn btn-primary" href="{{ route('admin.subjects.create') }}">Create</a>
                         </div>
-                        <table class="table table-bordered">
+                        <div class="table-responsive"><table class="table table-bordered">
                             <thead>
                             <tr>
                                 <th>Name</th>
@@ -71,7 +71,7 @@
                                 </tr>
                             @endforeach
                             </tbody>
-                        </table>
+                        </table></div>
                     </div>
                 </div>
             </div>

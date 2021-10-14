@@ -4590,7 +4590,7 @@ pre code {
 }
 
 .table-responsive > .table-bordered {
-    border: 0;
+    border: 1px solid #ebedf2;
 }
 
 .form-control {

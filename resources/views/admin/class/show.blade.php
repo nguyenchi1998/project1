@@ -35,7 +35,7 @@
                         <div class="d-flex mb-4">
                             <a class="btn btn-primary" href="{{ route('admin.classes.create') }}">Add Student</a>
                         </div>
-                        <table class="table table-bordered">
+                        <div class="table-responsive"><table class="table table-bordered">
                             <thead>
                             <tr>
                                 <th>Student</th>
@@ -76,7 +76,7 @@
                                 </tr>
                             @endforeach
                             </tbody>
-                        </table>
+                        </table></div>
                     </div>
                 </div>
             </div>

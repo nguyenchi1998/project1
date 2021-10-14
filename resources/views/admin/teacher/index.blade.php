@@ -34,63 +34,66 @@
                             </div>
                             <a class="btn btn-primary" href="{{ route('admin.teachers.create') }}">Create</a>
                         </div>
-                        <table class="table table-bordered">
-                            <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Phone</th>
-                                <th>Gender</th>
-                                <th>Birthday</th>
-                                <th>Address</th>
-                                <th>Department</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($teachers as $teacher)
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
                                 <tr>
-                                    <td>
-                                        {{ $teacher->name }}
-                                    </td>
-                                    <td>
-                                        {{ $teacher->phone }}
-                                    </td>
-                                    <td>
-                                        {{ $teacher->gender ? 'Male' : 'Female' }}
-                                    </td>
-                                    <td>
-                                        {{ $teacher->birthday }}
-                                    </td>
-                                    <td>
-                                        {{ $teacher->address }}
-                                    </td>
-                                    <td>
-                                        {{ $teacher->department->name }}
-                                        @if($teacher->department->manager_id == $teacher->id)
-                                            <strong class="text text-danger ">(Manager)</strong>
-                                        @endif
-                                    </td>
-                                    <td width="100">
-                                        <div class="d-flex justify-content-between">
-                                            <div class="mr-3">
-                                                <a href="{{ route('admin.teachers.edit', $teacher->id) }}"
-                                                   class="btn btn-sm btn-warning">Edit</a>
-                                            </div>
-                                            <div class="mr-3">
-                                                <a href="{{ route('admin.teachers.change_department_show', $teacher->id) }}"
-                                                   class="btn btn-sm btn-info">Change Department</a>
-                                            </div>
-                                            <div>
-                                                <form action="">
-                                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </td>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <th>Gender</th>
+                                    <th>Birthday</th>
+                                    <th>Address</th>
+                                    <th>Department</th>
+                                    <th></th>
                                 </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                @foreach($teachers as $teacher)
+                                    <tr>
+                                        <td>
+                                            {{ $teacher->name }}
+                                        </td>
+                                        <td>
+                                            {{ $teacher->phone }}
+                                        </td>
+                                        <td>
+                                            {{ $teacher->gender ? 'Male' : 'Female' }}
+                                        </td>
+                                        <td>
+                                            {{ $teacher->birthday }}
+                                        </td>
+                                        <td>
+                                            {{ $teacher->address }}
+                                        </td>
+                                        <td>
+                                            {{ $teacher->department->name }}
+                                            @if($teacher->department->manager_id == $teacher->id)
+                                                <strong class="text text-danger ">(Manager)</strong>
+                                            @endif
+                                        </td>
+                                        <td width="100">
+                                            <div class="d-flex justify-content-between">
+                                                <div class="mr-3">
+                                                    <a href="{{ route('admin.teachers.edit', $teacher->id) }}"
+                                                       class="btn btn-sm btn-warning">Edit</a>
+                                                </div>
+                                                <div class="mr-3">
+                                                    <a href="{{ route('admin.teachers.change_department_show', $teacher->id) }}"
+                                                       class="btn btn-sm btn-info">Change Department</a>
+                                                </div>
+                                                <div>
+                                                    <form action="">
+                                                        <button type="submit" class="btn btn-sm btn-danger">Delete
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
