@@ -19,7 +19,7 @@
                     <div class="card-body">
                         <div class="d-flex mb-4 justify-content-between">
                             <div class="w-15">
-                                <form action="{{route('admin.subjects.index')}}">
+                                <form action="{{route('admin.teachers.index')}}">
                                     <select class="form-control" name="filter" onchange="this.form.submit()">
                                         <option value="all"
                                                 @if(!$filter || $filter == 'all') selected="selected" @endif>

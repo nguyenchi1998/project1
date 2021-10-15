@@ -35,7 +35,7 @@
                         </div>
                         <div class="form-group">
                             <label for="email">Email</label>
-                            {{ Form::input('email', 'name', $teacher->email, ['class' => 'form-control', 'id' => 'name', 'disabled' => true, 'placeholder' => 'Enter Email']) }}
+                            {{ Form::input('email', 'email', $teacher->email, ['class' => 'form-control', 'id' => 'name', 'disabled' => true, 'placeholder' => 'Enter Email']) }}
                         </div>
                         <div class="form-group">
                             <label for="phone">Phone</label>
@@ -66,29 +66,6 @@
                                         <i class="input-helper"></i>
                                     </label>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            {{ Form::label('department', 'Department')}}
-                            <div class="scroll-list">
-                                @foreach($departments as $key => $department)
-                                    <div class="form-check form-check-info">
-                                        <label class="form-check-label">
-                                            {{ Form::radio('department_id', $department->id, $teacher->department->id == $department->id ,  ['class'=>'form-check-input']) }}
-                                            {{ $department->name }}
-                                            <i class="input-helper"></i>
-                                        </label>
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="form-check form-check-primary">
-                                <label class="form-check-label">
-                                    {{ Form::checkbox('isManager', 1, false, ['class'=>'form-check-input']) }}
-                                    Manager Department
-                                    <i class="input-helper"></i>
-                                </label>
                             </div>
                         </div>
                         {{Form::submit('Submit', ['class'=> 'btn btn-gradient-primary mr-2'])}}

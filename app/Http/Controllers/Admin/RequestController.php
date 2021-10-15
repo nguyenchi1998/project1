@@ -39,8 +39,12 @@ class RequestController extends Controller
             if ($teacher->nextDepartment->next_manager_id == $teacher->id) {
                 $title[] = $titleRequest['upgrade'];
             }
-            if ($teacher->next_department_id == $teacher->department_id
-                && $teacher->department->manager_id == $teacher->id) {
+            if (
+                ($teacher->next_department_id == $teacher->department_id
+                    && $teacher->department->manager_id == $teacher->id) ||
+                ($teacher->next_department_id != $teacher->department_id
+                    && $teacher->nextDepartment->next_manager_id != $teacher->id)
+            ) {
                 $title[] = $titleRequest['downgrade'];
             }
             if ($teacher->department_id != $teacher->next_department_id) {
@@ -63,25 +67,35 @@ class RequestController extends Controller
         }
         try {
             DB::beginTransaction();
-            if ($teacher->department->manager_id == $teacher->id) {
-                if ($teacher->department_id == $teacher->next_department_id) {
+            // same department
+            if ($teacher->department_id == $teacher->next_department_id) {
+                // upgrade to manager
+                if ($teacher->department->next_manager_id == $teacher->id) {
+                    $this->departmentRepository->update($teacher->department_id, [
+                        'manager_id' => $teacher->id,
+                        'next_manager_id' => null,
+                    ]);
+                } else {
                     $this->departmentRepository->update($teacher->department_id, [
                         'manager_id' => null,
                         'next_manager_id' => null,
                     ]);
-                } else {
-                    $department = $this->departmentRepository->find($teacher->next_department_id);
-                    $department->update([
+                }
+            } else {
+                // remove departmnet manager
+                if ($teacher->department->manager_id == $teacher->id) {
+                    $this->departmentRepository->update($teacher->department_id, [
+                        'manager_id' => null,
+                        'next_manager_id' => null,
+                    ]);
+                }
+                // upgrade new department manager
+                if ($teacher->nextDepartment->next_manager_id == $teacher->id) {
+                    $this->departmentRepository->update($teacher->next_department_id, [
                         'manager_id' => $teacher->id,
                         'next_manager_id' => null,
                     ]);
                 }
-            } else {
-                $department = $this->departmentRepository->find($teacher->next_department_id);
-                $department->update([
-                    'manager_id' => $department->next_manager_id,
-                    'next_manager_id' => null,
-                ]);
             }
             $teacher->update([
                 'department_id' => $teacher->next_department_id,
@@ -95,6 +109,19 @@ class RequestController extends Controller
 
             return redirect()->back();
         }
+    }
 
+    public function rejectDepartmentChange(Request $request)
+    {
+        $teacherId = $request->get('teacherId');
+        $teacher = $this->userRepository->find($teacherId)->load(['department', 'nextDepartment']);
+        if ($teacher->nextDepartment->next_manager_id == $teacher->id) {
+            $this->departmentRepository->update($teacher->nextDepartment->id, [
+                'next_manager_id' => null,
+            ]);
+        }
+        $teacher->update([
+            'next_department_id' => null
+        ]);
     }
 }

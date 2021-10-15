@@ -44,7 +44,6 @@
                                             {{ $teacher->nextDepartment->name }}
                                             <label class="ml-2 badge badge-danger">{{ $teacher->nextDepartment->next_manager_id == $teacher->id ? 'Manager' : '' }}</label>
                                         </td>
-
                                         <td width="100">
                                             <div class="d-flex justify-content-between">
                                                 <div class="mr-1">
@@ -56,7 +55,10 @@
                                                     </form>
                                                 </div>
                                                 <div>
-                                                    <form action="">
+                                                    <form action="{{ route('admin.requests.departments.reject') }}"
+                                                          method="post">
+                                                        @csrf
+                                                        {{ Form::text('teacherId', $teacher->id, ['hidden'=> true]) }}
                                                         <button class="btn btn-sm btn-danger">Reject</button>
                                                     </form>
                                                 </div>
@@ -66,7 +68,7 @@
                                     </tr>
                                 @endforeach
                                 </tbody>
-                            </table></div>
+                            </table>
                         </div>
                     </div>
                 </div>

@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
+use ImageResize;
 
 class Repository implements IRepository
 {
@@ -65,5 +66,18 @@ class Repository implements IRepository
     public function model()
     {
         return $this->model;
+    }
+
+    public function saveImage($file, $fileName, $path, $width = 100, $height = 100)
+    {
+        if (!file_exists($path)) {
+            mkdir($path, 777, true);
+        }
+        $img = ImageResize::make($file->path());
+        $img->resize($width, $height, function ($constraint) {
+            $constraint->aspectRatio();
+        })->save(config('default.path.media.avatar.teacher'), $fileName);
+
+        return $img;
     }
 }

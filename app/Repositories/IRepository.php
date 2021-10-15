@@ -21,4 +21,6 @@ interface IRepository
     public function where($key, $value, $operator = '=');
 
     public function with($relation);
+
+    public function saveImage($file, $fileName, $path, $width = 100, $height = 100);
 }

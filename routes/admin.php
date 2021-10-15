@@ -18,8 +18,10 @@ Route::group(['as' => 'admin.'], function () {
 
         Route::group(['prefix' => 'request', 'as' => 'requests.'], function () {
             Route::get('', 'RequestController@index')->name('index');
-            Route::post('/departments', 'RequestController@approveDepartmentChange')
+            Route::post('/departments/approve', 'RequestController@approveDepartmentChange')
                 ->name('departments.approve');
+            Route::post('/departments/reject', 'RequestController@approveDepartmentChange')
+                ->name('departments.reject');
         });
     });
     Route::get('login', 'LoginController@showLoginForm')

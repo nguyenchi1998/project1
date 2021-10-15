@@ -68,4 +68,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Department::class, 'next_department_id');
     }
+
+    public function avatar()
+    {
+        return $this->morphOne(Media::class, 'mediable');
+    }
 }

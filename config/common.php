@@ -112,5 +112,5 @@ return [
                 "deleteSchedule" => "delete-schedule",
             ],
         ],
-    ]
+    ],
 ];

@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 
 class CreateUsersTable extends Migration
 {
@@ -20,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->boolean('gender');
             $table->date('birthday');
             $table->string('address')->nullable();
+            $table->string('experience')->nullable();
             $table->string('phone')->nullable();
             $table->string('password');
             $table->unsignedInteger('department_id')->nullable();
