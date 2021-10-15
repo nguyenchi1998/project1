@@ -9,6 +9,7 @@ class Specialization extends Model
 {
     protected $fillable = [
         'name',
+        'number_semester',
     ];
 
     public function subjects(): BelongsToMany

@@ -55,7 +55,7 @@ class TeacherController extends Controller
 
     public function store(Request $request)
     {
-//        try {
+        //        try {
         DB::beginTransaction();
         $teacher = $this->userRepository->create(array_merge($request->only([
             'name', 'email', 'phone', 'birthday', 'address', 'gender', 'department_id',
@@ -69,22 +69,22 @@ class TeacherController extends Controller
             100,
             10
         );
-           dd($path);
-           $teacher->avatar()->create([
-               'path' => storage_path() . $avatarFilename
-           ]);
+        dd($path);
+        $teacher->avatar()->create([
+            'path' => storage_path() . $avatarFilename
+        ]);
 
 
-            $teacherRole = $this->roleRepository->findByName(config('common.roles.teacher.name'));
-            $teacher->assignRole($teacherRole);
-            DB::commit();
+        $teacherRole = $this->roleRepository->findByName(config('common.roles.teacher.name'));
+        $teacher->assignRole($teacherRole);
+        DB::commit();
 
-            return redirect()->route('admin.teachers.index');
-//        } catch (Exception $e) {
-//            DB::rollBack();
-//
-//            return back();
-//        }
+        return redirect()->route('admin.teachers.index');
+        //        } catch (Exception $e) {
+        //            DB::rollBack();
+        //
+        //            return back();
+        //        }
     }
 
     /**
@@ -140,10 +140,11 @@ class TeacherController extends Controller
                     'next_manager_status' => config('status.department.next_manager.pending')
                 ]);
             }
-            if()
-            $this->userRepository->update($id, [
-                'next_department_id' => $departmentId,
-            ]);
+            if ($teacher->department_id != $departmentId) {
+                $this->userRepository->update($id, [
+                    'next_department_id' => $departmentId,
+                ]);
+            }
             DB::commit();
 
             return redirect()->route('admin.teachers.index');

@@ -15,6 +15,7 @@ Route::group(['as' => 'admin.'], function () {
         Route::resource('roles', 'RoleController');
         Route::resource('specializations', 'SpecializationController');
         Route::resource('classes', 'ClassController');
+        Route::resource('grades', 'GradeController');
 
         Route::group(['prefix' => 'request', 'as' => 'requests.'], function () {
             Route::get('', 'RequestController@index')->name('index');

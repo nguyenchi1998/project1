@@ -2,6 +2,7 @@
 
 use App\Models\Department;
 use App\Models\Specialization;
+use App\Models\Subject;
 use Illuminate\Database\Seeder;
 
 class DepartmentSeeder extends Seeder
@@ -61,10 +62,13 @@ class DepartmentSeeder extends Seeder
                 'name' => $department['name'],
             ]);
             foreach ($department['specializations'] as $specialization) {
-                Specialization::create([
+                $specializationInstance = Specialization::create([
                     'name' => $specialization,
                     'department_id' => $departmentInstance->id,
+                    'number_semester' => 6
                 ]);
+                $basicSubject = Subject::where('type', config('common.subjectType.basic'))->get()->pluck('id')->toArray();
+                $specializationInstance->subjects()->sync($basicSubject);
             }
         }
     }

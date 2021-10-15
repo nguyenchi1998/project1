@@ -16,8 +16,9 @@ class ClassSeeder extends Seeder
         $classes = ['IT', 'CK', 'TT'];
         foreach ($classes as $class) {
             for ($i = 1; $i <= 5; $i++) {
-                $classInstance =  Classs::create([
+                $classInstance = Classs::create([
                     'name' => $class . '-' . $i,
+                    'grade_id' => 1
                 ]);
                 factory(Student::class, 15)->create([
                     'class_id' => $classInstance->id

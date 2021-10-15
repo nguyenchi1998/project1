@@ -41,6 +41,7 @@ class SpecializationController extends Controller
             DB::beginTransaction();
             $specialization = $this->specializationRepository->create([
                 'name' => $request->get('name'),
+                'number_semester' => $request->get('number_semester'),
             ]);
             $basicSubjects = $this->subjectRepository->where('type', config('common.subjectType.basic'))->get()
                 ->pluck('id')->toArray();
@@ -82,6 +83,7 @@ class SpecializationController extends Controller
             DB::beginTransaction();
             $specialization = $this->specializationRepository->update($id, [
                 'name' => $request->get('name'),
+                'number_semester' => $request->get('number_semester'),
             ]);
             $basicSubjects = $this->subjectRepository->where('type', null)->get()->pluck('id')->toArray();
             $subjects = $request->get('subjects');

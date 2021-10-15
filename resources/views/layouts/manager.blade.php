@@ -209,6 +209,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="{{route('admin.grades.index')}}">
+                        <span class="menu-title">Grades</span>
+                        <i class="mdi mdi-contacts menu-icon"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="{{route('admin.subjects.index')}}">
                         <span class="menu-title">Subjects</span>
                         <i class="mdi mdi-contacts menu-icon"></i>

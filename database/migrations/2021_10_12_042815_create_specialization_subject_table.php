@@ -17,6 +17,7 @@ class CreateSpecializationSubjectTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('specialization_id');
             $table->unsignedInteger('subject_id');
+            $table->unsignedInteger('semester');
             $table->timestamps();
         });
     }

@@ -9,7 +9,8 @@ class Classs extends Model
     protected $table = 'classes';
 
     protected $fillable = [
-        'name'
+        'name',
+        'grade_id'
     ];
 
     public function students()
@@ -17,4 +18,8 @@ class Classs extends Model
         return $this->hasMany(Student::class, 'class_id');
     }
 
+    public function grade()
+    {
+        return $this->belongsTo(Grades::class);
+    }
 }
