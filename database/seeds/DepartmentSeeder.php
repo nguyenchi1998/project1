@@ -52,7 +52,8 @@ class DepartmentSeeder extends Seeder
                 'specializations' => [
                     'Kỹ thuật Điện',
                     'Kỹ thuật Điều khiển - Tự động hóa',
-                    'Chương trình tiên tiến Điều khiển-Tự động hóa và Hệ thống điện'
+                    'Chương trình tiên tiến Điều khiển-Tự động hóa và Hệ thống điện',
+                    'Kĩ thuật robot',
                 ]
             ]
         ];
@@ -65,9 +66,9 @@ class DepartmentSeeder extends Seeder
                 $specializationInstance = Specialization::create([
                     'name' => $specialization,
                     'department_id' => $departmentInstance->id,
-                    'number_semester' => 6
+                    'max_semester' => 6,
                 ]);
-                $basicSubject = Subject::where('type', config('common.subjectType.basic'))->get()->pluck('id')->toArray();
+                $basicSubject = Subject::where('type', config('common.subject.type.basic'))->get()->pluck('id')->toArray();
                 $specializationInstance->subjects()->sync($basicSubject);
             }
         }

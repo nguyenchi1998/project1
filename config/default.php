@@ -7,8 +7,11 @@ return [
     'path' => [
         'media' => [
             'avatar' => [
-                'teacher' => '/media/avatar/'
+                'teacher' => '/image/avatar/',
+                'student' => '/image/avatar/',
+                'admin' => '/image/avatar/',
             ]
         ]
-    ]
+    ],
+    ''
 ];

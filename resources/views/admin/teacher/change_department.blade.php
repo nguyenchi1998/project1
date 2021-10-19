@@ -30,7 +30,6 @@
                         @method('PUT')
                         <div class="form-group">
                             {{ Form::label('department', 'Department')}}
-                            <div class="scroll-list">
                                 @foreach($departments as $key => $department)
                                     <div class="form-check form-check-info">
                                         <label class="form-check-label">
@@ -40,7 +39,6 @@
                                         </label>
                                     </div>
                                 @endforeach
-                            </div>
                         </div>
                         <div class="form-group">
                             <div class="form-check form-check-primary">

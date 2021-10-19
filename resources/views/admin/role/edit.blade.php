@@ -27,7 +27,6 @@
                         </div>
                         <div class="form-group">
                             {{ Form::label('subject', 'Subject')}}
-                            <div class="scroll-list">
                                 @foreach($permissions as $key => $permission)
                                     <div class="form-check form-check-info">
                                         <label class="form-check-label">
@@ -37,7 +36,6 @@
                                         </label>
                                     </div>
                                 @endforeach
-                            </div>
                         </div>
                         {{Form::submit('Submit', ['class'=> 'btn btn-gradient-primary mr-2'])}}
                         <a href="{{ route('admin.classes.index') }}" class="btn btn-light">Cancel</a>

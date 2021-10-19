@@ -18,18 +18,7 @@ class GradeController extends Controller
 
     public function index()
     {
-        $grades = $this->gradeRepository->all()->load('classes.students');
-
-        $grades = $grades->map(function ($grade) {
-            $students = array_reduce($grade->classes->toArray(), function ($sum, $class) {
-                $sum += count($class['students']);
-
-                return $sum;
-            }, 0);
-            $grade['students'] = $students;
-
-            return $grade;
-        });
+        $grades = $this->gradeRepository->all()->load('students');
 
         return view('admin.grade.index', compact('grades'));
     }
@@ -61,10 +50,14 @@ class GradeController extends Controller
 
     public function update(Request $request, $id)
     {
-        $success = $this->gradeRepository->update($id, $request->only(['name',]));
+        $success = $this->gradeRepository->update(
+            $id,
+            $request->only(['name',])
+        );
         if ($success) {
             return redirect()->route('admin.grade.index');
         }
+        
         return back();
     }
 

@@ -17,7 +17,10 @@ class CreateSubjectsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->unsignedInteger('credit')->default(3);
+            $table->unsignedInteger('semester');
+            $table->unsignedInteger('max_students')->default(30);
             $table->string('type')->nullable();
+            $table->boolean('force')->default(true);
             $table->softDeletes();
             $table->timestamps();
         });

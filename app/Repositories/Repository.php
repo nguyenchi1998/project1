@@ -53,7 +53,7 @@ class Repository implements IRepository
         return $this->model->whereIn($key, $values);
     }
 
-    public function where($key, $value, $operator = '=')
+    public function where($key, $operator , $value)
     {
         return $this->model->where($key, $operator, $value);
     }

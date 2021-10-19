@@ -48,12 +48,11 @@ class ClassController extends Controller
     public function store(Request $request)
     {
         $students = $request->get('students');
-        $name = $request->get('name');
         try {
             DB::beginTransaction();
-            $class = $this->classRepository->create([
-                'name' => $name
-            ]);
+            $class = $this->classRepository->create(
+                $request->only(['name', 'specialization_id'])
+            );
             $this->studentRepository->whereIn('id', $students)->update([
                 'class_id' => $class->id
             ]);
@@ -90,12 +89,9 @@ class ClassController extends Controller
     public function update(UpdateClass $request, $id)
     {
         $students = $request->get('students');
-        $name = $request->get('name');
         try {
             DB::beginTransaction();
-            $this->classRepository->update($id, [
-                'name' => $name
-            ]);
+            $this->classRepository->update($id, $request->only(['name', 'specialization_id']));
             $this->studentRepository->whereIn('id', $students)->update([
                 'class_id' => $id,
             ]);

@@ -40,6 +40,7 @@
                                 <th>Name</th>
                                 <th>Credit</th>
                                 <th>Specializations</th>
+                                <th>Force</th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -49,10 +50,15 @@
                                     <td>{{ $subject->name }}</td>
                                     <td>{{ $subject->credit }}</td>
                                     <td style="white-space:normal">
-                                        @if($subject->type == config('common.subjectType.basic'))
+                                        @if($subject->type == config('common.subject.type.basic'))
                                             Basic
                                         @else
                                             {{ $subject->specializations }}
+                                        @endif
+                                    </td>
+                                    <td style="white-space:normal">
+                                        @if($subject->force)
+                                            Force
                                         @endif
                                     </td>
                                     <td width="100">

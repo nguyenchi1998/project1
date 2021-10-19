@@ -73,4 +73,9 @@ class User extends Authenticatable
     {
         return $this->morphOne(Media::class, 'mediable');
     }
+
+    public function subjects()
+    {
+        return $this->belongsToMany(Subject::class, 'subject_teacher', 'subject_id', 'teacher_id');
+    }
 }

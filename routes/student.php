@@ -15,9 +15,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Auth::routes([
-    'middleware' => 'student'
 ]);
 
-Route::group(['middleware' => 'auth'], function () {
-
+Route::group(['middleware' => 'auth:student'], function () {
+    Route::get('/', 'HomeController@index')->name('home');
+    Route::resource('credits', 'CreditController');
 });

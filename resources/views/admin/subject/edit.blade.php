@@ -31,7 +31,6 @@
                         </div>
                         <div class="form-group">
                             {{ Form::label('specialization', 'Specialization')}}
-                            <div class="scroll-list">
                                 @foreach($specializations as $key => $specialization)
                                     <div class="form-check form-check-info">
                                         <label class="form-check-label">
@@ -41,12 +40,11 @@
                                         </label>
                                     </div>
                                 @endforeach
-                            </div>
                         </div>
                         <div class="form-group">
                             <div class="form-check form-check-primary">
                                 <label class="form-check-label">
-                                    {{ Form::checkbox('basic', 0, $subject->type == config('common.subjectType.basic'), ['class'=>'form-check-input']) }}
+                                    {{ Form::checkbox('basic', config('common.subject.type.basic'), $subject->type == config('common.subject.type.basic'), ['class'=>'form-check-input']) }}
                                     Basic Subject
                                     <i class="input-helper"></i>
                                 </label>

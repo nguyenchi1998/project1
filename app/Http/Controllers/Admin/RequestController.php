@@ -29,7 +29,7 @@ class RequestController extends Controller
             'upgrade' => 'Upgrade to Manager',
             'downgrade' => 'Downgrade to Member',
         ];
-        $moveDepartmenteTeachers = $this->userRepository->where('next_department_id', null, '!=')->get();
+        $moveDepartmenteTeachers = $this->userRepository->where('next_department_id', '!=', null)->get();
         if ($moveDepartmenteTeachers) {
             $moveDepartmenteTeachers->load(['department', 'nextDepartment']);
         }

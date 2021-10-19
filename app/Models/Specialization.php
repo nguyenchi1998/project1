@@ -3,22 +3,27 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Specialization extends Model
 {
     protected $fillable = [
         'name',
-        'number_semester',
+        'min_credit',
     ];
 
-    public function subjects(): BelongsToMany
+    public function subjects()
     {
         return $this->belongsToMany(Subject::class);
     }
 
-    public function teachers()
+    public function specializationSubject()
     {
-        return $this->hasMany(User::class);
+        return $this->subjects()->where('type', '!=', config('common.subject.type.basic'));
     }
+
+    public function classes()
+    {
+        return $this->hasMany(Classs::class);
+    }
+
 }

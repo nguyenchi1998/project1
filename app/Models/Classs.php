@@ -10,7 +10,8 @@ class Classs extends Model
 
     protected $fillable = [
         'name',
-        'grade_id'
+        'specialization_id',
+        'semester',
     ];
 
     public function students()
@@ -18,8 +19,18 @@ class Classs extends Model
         return $this->hasMany(Student::class, 'class_id');
     }
 
-    public function grade()
+    public function specialization()
     {
-        return $this->belongsTo(Grades::class);
+        return $this->belongsTo(Specialization::class);
+    }
+
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class, 'class_id');
+    }
+
+    public function subjects()
+    {
+        return $this->hasManyThrough(Subject::class, Schedule::class);
     }
 }

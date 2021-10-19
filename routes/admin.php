@@ -11,12 +11,18 @@ Route::group(['as' => 'admin.'], function () {
             ->name('teachers.change_department_show');
         Route::put('teachers/{id}/change-department', 'TeacherController@changeDepartment')
             ->name('teachers.change_department');
-        Route::resource('schedules', 'ScheduleController');
+        Route::get('teachers/{id}/choose-subject', 'TeacherController@chooseSubjectShow')
+            ->name('teachers.choose_subject_show');
+        Route::put('teachers/{id}/choose-subject', 'TeacherController@chooseSubject')
+            ->name('teachers.choose_subject');
+        Route::resource('schedules', 'ScheduleController')->only(['index']);
+        Route::get('schedules/register/{id}', 'ScheduleController@registerScheduleShow')->name('schedules.registerShow');
+        Route::post('schedules/register/{id}', 'ScheduleController@registerSchedule')->name('schedules.register');
         Route::resource('roles', 'RoleController');
         Route::resource('specializations', 'SpecializationController');
         Route::resource('classes', 'ClassController');
         Route::resource('grades', 'GradeController');
-
+        Route::resource('schedule', 'ScheduleController');
         Route::group(['prefix' => 'request', 'as' => 'requests.'], function () {
             Route::get('', 'RequestController@index')->name('index');
             Route::post('/departments/approve', 'RequestController@approveDepartmentChange')
@@ -29,5 +35,6 @@ Route::group(['as' => 'admin.'], function () {
         ->name('loginShow');
     Route::post('login', 'LoginController@login')
         ->name('login');
+    Route::post('logout', 'LoginController@logout')->name('logout');
 });
 

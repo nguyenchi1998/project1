@@ -49,8 +49,12 @@ class SubjectController extends Controller
     public function create()
     {
         $specializations = $this->specializationRepository->all();
+        $semesters = [];
+        for ($i = 1; $i <= config('common.semester.max'); $i++) {
+            $semesters[$i] = $i;
+        }
 
-        return view('admin.subject.create', compact('specializations'));
+        return view('admin.subject.create', compact('specializations', 'semesters'));
     }
 
     public function store(Request $request)
@@ -69,7 +73,9 @@ class SubjectController extends Controller
                     ->get()
                     ->pluck('id');
             }
-            $subject->specializations()->attach($specializations);
+            $subject->specializations()->attach($specializations, [
+                'semester' => $basic ? config('common.semester.default') : null,
+            ]);
             DB::commit();
 
             return redirect()->route('subjects.index');
@@ -91,9 +97,8 @@ class SubjectController extends Controller
         if ($subject) {
             $subject = $subject->load('specializations');
         }
-
-        $subject['specializations'] = $subject->specializations->pluck('id')->toArray();
-
+        $subject['specializations'] = $subject->specializations->pluck('id')
+            ->toArray();
         $specializations = $this->specializationRepository->all();
 
         return view('admin.subject.edit', compact('subject', 'specializations'));

@@ -18,7 +18,7 @@ interface IRepository
 
     public function whereIn($key = 'id', $values = []);
 
-    public function where($key, $value, $operator = '=');
+    public function where($key, $operator, $value);
 
     public function with($relation);
 

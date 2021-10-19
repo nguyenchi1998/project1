@@ -1,9 +1,11 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+/** @var Factory $factory */
 
 use App\Models\Student;
 use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Support\Facades\Hash;
 
 $factory->define(Student::class, function (Faker $faker) {
     return [
@@ -12,7 +14,8 @@ $factory->define(Student::class, function (Faker $faker) {
         'gender' => $faker->numberBetween(0, 1),
         'birthday' => $faker->date,
         'phone' => $faker->phoneNumber,
-        'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
+        'password' => Hash::make('123456'),
         'remember_token' => str_random(10),
+        'address' => $faker->address(),
     ];
 });

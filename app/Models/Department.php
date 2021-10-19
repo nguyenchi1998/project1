@@ -22,4 +22,9 @@ class Department extends Model
     {
         return $this->hasOne(User::class, 'next_manager_id');
     }
+
+    public function specializations()
+    {
+        return $this->hasMany(Specialization::class);
+    }
 }

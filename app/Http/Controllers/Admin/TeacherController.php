@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Repositories\IDepartmentRepository;
 use App\Repositories\IRoleRepository;
+use App\Repositories\ISubjectRepository;
 use App\Repositories\IUserRepository;
 use Exception;
 use Illuminate\Http\Request;
@@ -18,12 +19,18 @@ class TeacherController extends Controller
     private $departmentRepository;
     private $userRepository;
     private $roleRepository;
+    private $subjectReposutory;
 
-    public function __construct(IDepartmentRepository $departmentRepository, IUserRepository $userRepository, IRoleRepository $roleRepository)
+    public function __construct(
+        IDepartmentRepository $departmentRepository,
+        IUserRepository       $userRepository,
+        IRoleRepository       $roleRepository,
+        ISubjectRepository    $subjectRepository)
     {
         $this->departmentRepository = $departmentRepository;
         $this->userRepository = $userRepository;
         $this->roleRepository = $roleRepository;
+        $this->subjectReposutory = $subjectRepository;
     }
 
     public function index(Request $request)
@@ -55,36 +62,33 @@ class TeacherController extends Controller
 
     public function store(Request $request)
     {
-        //        try {
-        DB::beginTransaction();
-        $teacher = $this->userRepository->create(array_merge($request->only([
-            'name', 'email', 'phone', 'birthday', 'address', 'gender', 'department_id',
-        ]), ['password' => Hash::make(config('default.auth.password'))]));
-        $avatar = $request->file('avatar');
-        $avatarFilename = $teacher->email . '.' . $request->file('avatar')->getClientOriginalExtension();
-        $path = $this->userRepository->saveImage(
-            $avatar,
-            $avatarFilename,
-            storage_path(config('default.path.media.avatar.teacher')),
-            100,
-            10
-        );
-        dd($path);
-        $teacher->avatar()->create([
-            'path' => storage_path() . $avatarFilename
-        ]);
+        try {
+            DB::beginTransaction();
+            $teacher = $this->userRepository->create(array_merge($request->only([
+                'name', 'email', 'phone', 'birthday', 'address', 'gender', 'department_id',
+            ]), ['password' => Hash::make(config('default.auth.password'))]));
+            $avatar = $request->file('avatar');
+            $avatarFilename = $teacher->email . '.' . $request->file('avatar')->getClientOriginalExtension();
+            $path = $this->userRepository->saveImage(
+                $avatar,
+                $avatarFilename,
+                storage_path(config('default.path.media.avatar.teacher')),
+                100,
+                10
+            );
+            $teacher->avatar()->create([
+                'path' => storage_path() . $avatarFilename
+            ]);
+            $teacherRole = $this->roleRepository->findByName(config('common.roles.teacher.name'));
+            $teacher->assignRole($teacherRole);
+            DB::commit();
 
+            return redirect()->route('admin.teachers.index');
+        } catch (Exception $e) {
+            DB::rollBack();
 
-        $teacherRole = $this->roleRepository->findByName(config('common.roles.teacher.name'));
-        $teacher->assignRole($teacherRole);
-        DB::commit();
-
-        return redirect()->route('admin.teachers.index');
-        //        } catch (Exception $e) {
-        //            DB::rollBack();
-        //
-        //            return back();
-        //        }
+            return back();
+        }
     }
 
     /**
@@ -153,6 +157,27 @@ class TeacherController extends Controller
 
             return back();
         }
+    }
+
+    public function chooseSubjectShow($id)
+    {
+        $teacher = $this->userRepository->find($id)->load('department.specializations.specializationSubject');
+        $teacherSubjects = $teacher->subjects->pluck('id')->toArray();
+        $subjects = $teacher->department->specializations->reduce(function ($subjects, $specialization) {
+            return array_merge($subjects, $specialization->subjects->toArray() ?? []);
+        }, []);
+        $subjects = collect($subjects)->unique('id');
+
+        return view('admin.teacher.choose_subject', compact('teacher', 'subjects', 'teacherSubjects'));
+    }
+
+    public function chooseSubject(Request $request, $id)
+    {
+        $subjectIds = $request->get('subject_id');
+        $teacher = $this->userRepository->find($id);
+        $teacher->subjects()->sync($subjectIds);
+
+        return redirect()->route('admin.teachers.index');
     }
 
     /**

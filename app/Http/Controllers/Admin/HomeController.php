@@ -19,7 +19,7 @@ class HomeController extends Controller
 
     public function index()
     {
-        $moveDepartmenteTeachers = $this->userRepository->where('next_department_id', null, '!=')->get();
+        $moveDepartmenteTeachers = $this->userRepository->where('next_department_id', '!=', null)->get();
 
         if ($moveDepartmenteTeachers) {
             $moveDepartmenteTeachers->load(['department', 'nextDepartment']);

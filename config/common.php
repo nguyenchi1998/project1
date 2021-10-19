@@ -4,15 +4,22 @@ return [
     'role' => [
         'admin' => 'admin',
     ],
-    'subjectType' => [
-        'basic' => 1
+    'subject' => [
+        'type' => [
+            'basic' => 0,
+            'specialization' => 1,
+        ],
+    ],
+    'semester' => [
+        'default' => 1,
+        'max' => 6,
     ],
     'limit' => [
         'studentInClass' => 20,
     ],
     'guard' => [
         'admin' => 'admin',
-        'web' => 'web',
+        'student' => 'student',
     ],
     'roles' => [
         'superAdmin' => [

@@ -18,7 +18,8 @@ class CreateDepartmentsTable extends Migration
             $table->string('name');
             $table->unsignedInteger('manager_id')->nullable();
             $table->unsignedInteger('next_manager_id')->nullable();
-            $table->boolean('next_manager_status')->default(config('status.department.next_manager.pending'));
+            $table->boolean('next_manager_status')
+                ->default(config('status.department.next_manager.pending'));
             $table->timestamps();
         });
     }

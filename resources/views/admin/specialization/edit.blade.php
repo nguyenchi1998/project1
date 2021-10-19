@@ -26,8 +26,11 @@
                             {{ Form::input('text', 'name', $specialization->name, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Enter name']) }}
                         </div>
                         <div class="form-group">
+                            <label for="min_creddit">Min Credit</label>
+                            {{ Form::input('text', 'min_credit', $specialization->min_credit, ['class' => 'form-control', 'id' => 'min_creddit', 'placeholder' => 'Enter name']) }}
+                        </div>
+                        <div class="form-group">
                             {{ Form::label('subject', 'Subject')}}
-                            <div class="scroll-list">
                                 @foreach($subjects as $key => $subject)
                                     <div class="form-check form-check-info">
                                         <label class="form-check-label">
@@ -37,7 +40,6 @@
                                         </label>
                                     </div>
                                 @endforeach
-                            </div>
                         </div>
                         {{Form::submit('Submit', ['class'=> 'btn btn-gradient-primary mr-2'])}}
                         <a href="{{ route('admin.specializations.index') }}" class="btn btn-light">Cancel</a>

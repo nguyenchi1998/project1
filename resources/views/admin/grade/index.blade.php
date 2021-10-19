@@ -33,7 +33,7 @@
                             @foreach($grades as $grade)
                                 <tr>
                                     <td>{{ $grade->name }}</td>
-                                    <td>{{ $grade->students }}</td>
+                                    <td>{{ count($grade->students) }}</td>
 
                                     <td width="100">
                                         <div class="d-flex justify-content-between">

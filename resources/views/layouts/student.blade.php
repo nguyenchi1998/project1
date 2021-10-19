@@ -13,7 +13,6 @@
     <link rel="stylesheet" href="{{ asset('asset/css/style.css') }}">
     <!-- End layout styles -->
     <link rel="shortcut icon" href="{{ asset('asset/images/favicon.ico') }}"/>
-    @yield('css')
 </head>
 
 <body>
@@ -46,7 +45,7 @@
                     <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown"
                        aria-expanded="false">
                         <div class="nav-profile-img">
-                            <img src="{{ asset(auth()->user()->avatar->path ?? '') }}" alt="image">
+                            <img src="{{ asset(auth()->user()->avatar->path) }}" alt="image">
                             <span class="availability-status online"></span>
                         </div>
                         <div class="nav-profile-text">
@@ -57,7 +56,7 @@
                         <a class="dropdown-item" href="#">
                             <i class="mdi mdi-cached mr-2 text-success"></i> Activity Log </a>
                         <div class="dropdown-divider"></div>
-                        {{ Form::open(['url' => route('admin.logout')]) }}
+                        {{ Form::open(['url' => route('logout'), 'method' => 'POST']) }}
                         <button class="dropdown-item">
                             <i class="mdi mdi-logout mr-2 text-primary"></i> Signout
                         </button>
@@ -189,78 +188,29 @@
                 <li class="nav-item nav-profile">
                     <a href="#" class="nav-link">
                         <div class="nav-profile-image">
-                            <img src="{{ asset(auth()->user()->avatar->path ?? '') }}" alt="profile">
+                            <img src="{{ asset(auth()->user()->avatar->path) }}" alt="profile">
                             <span class="login-status online"></span>
                             <!--change to offline or busy as needed-->
                         </div>
                         <div class="nav-profile-text d-flex flex-column">
                             <span class="font-weight-bold mb-2">{{ auth()->user()->name }}</span>
-                            <span class="text-secondary text-small">Project Manager</span>
+                            <span class="text-secondary text-small text-uppercase">{{ get_guard() }}</span>
                         </div>
-                        <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
+                        <div class="ml-1">
+                            <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
+                        </div>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.home') }}">
+                    <a class="nav-link" href="{{ route('home') }}">
                         <span class="menu-title">Dashboard</span>
                         <i class="mdi mdi-home menu-icon"></i>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('admin.requests.index')}}">
-                        <span class="menu-title">Requests</span>
+                    <a class="nav-link" href="{{route('credits.index')}}">
+                        <span class="menu-title">Credit</span>
                         <i class="mdi mdi-contacts menu-icon"></i>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{route('admin.grades.index')}}">
-                        <span class="menu-title">Grades</span>
-                        <i class="mdi mdi-contacts menu-icon"></i>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{route('admin.subjects.index')}}">
-                        <span class="menu-title">Subjects</span>
-                        <i class="mdi mdi-contacts menu-icon"></i>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{route('admin.specializations.index')}}">
-                        <span class="menu-title">Specialization</span>
-                        <i class="mdi mdi-format-list-bulleted menu-icon"></i>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.classes.index') }}">
-                        <span class="menu-title">Class</span>
-                        <i class="mdi mdi-chart-bar menu-icon"></i>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.roles.index') }}">
-                        <span class="menu-title">Role</span>
-                        <i class="mdi mdi-table-large menu-icon"></i>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="collapse" href="#general-pages" aria-expanded="true"
-                       aria-controls="general-pages">
-                        <span class="menu-title">Schedule</span>
-                        <i class="menu-arrow"></i>
-                        <i class="mdi mdi-medical-bag menu-icon"></i>
-                    </a>
-                    <div class="collapse" id="general-pages">
-                        <ul class="nav flex-column sub-menu">
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('admin.schedules.index') }}">Class (Only for semester 1,2)</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.teachers.index') }}">
-                        <span class="menu-title">Teacher</span>
-                        <i class="mdi mdi-table-large menu-icon"></i>
                     </a>
                 </li>
             </ul>

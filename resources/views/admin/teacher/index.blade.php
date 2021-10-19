@@ -38,7 +38,7 @@
                             <table class="table table-bordered">
                                 <thead>
                                 <tr>
-                                    <th>Name</th>
+                                    <th>Teacher</th>
                                     <th>Phone</th>
                                     <th>Gender</th>
                                     <th>Birthday</th>
@@ -51,7 +51,12 @@
                                 @foreach($teachers as $teacher)
                                     <tr>
                                         <td>
-                                            {{ $teacher->name }}
+                                            <div class="d-flex align-items-center">
+                                                <div class="mr-4">
+                                                    <img src="{{ asset($teacher->avatar->path) }}" alt="avatar">
+                                                </div>
+                                                {{ $teacher->name }}
+                                            </div>
                                         </td>
                                         <td>
                                             {{ $teacher->phone }}
@@ -78,8 +83,12 @@
                                                        class="btn btn-sm btn-warning">Edit</a>
                                                 </div>
                                                 <div class="mr-3">
-                                                    <a href="{{ route('admin.teachers.change_department_show', $teacher->id) }}"
-                                                       class="btn btn-sm btn-info">Change Department</a>
+                                                    <a href="{{ route('admin.teachers.choose_subject_show', $teacher->id) }}"
+                                                       class="btn btn-sm btn-gradient-light">Choose Subject</a>
+                                                </div>
+                                                <div class="mr-3">
+                                                    <button disabled="disabled" href="{{ route('admin.teachers.change_department_show', $teacher->id) }}"
+                                                       class="btn btn-sm btn-info">Change Department</button>
                                                 </div>
                                                 <div>
                                                     <form action="">

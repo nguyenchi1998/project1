@@ -39,6 +39,25 @@
                                     <label for="name">Name</label>
                                     {{ Form::input('text', 'name', null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Enter name']) }}
                                 </div>
+                                <div class="form-group ">
+                                    {{ Form::label('gender', 'Gender')}}
+                                    <div class="form-inline">
+                                        <div class="form-check form-check-info">
+                                            <label class="form-check-label">
+                                                {{ Form::radio('gender', 1, false ,  ['class'=>'form-check-input']) }}
+                                                {{ 'Male' }}
+                                                <i class="input-helper"></i>
+                                            </label>
+                                        </div>
+                                        <div class="ml-3 form-check form-check-info">
+                                            <label class="form-check-label">
+                                                {{ Form::radio('gender', 0, false ,  ['class'=>'form-check-input']) }}
+                                                {{ 'Female' }}
+                                                <i class="input-helper"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <label for="email">Email</label>
                                     {{ Form::input('email', 'email', null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Enter Email']) }}
@@ -61,39 +80,17 @@
                             <label for="experience">Experience</label>
                             {{ Form::textarea('experience', null, ['class' => ' form-control', 'id' => 'credit', 'placeholder' => 'Enter Address']) }}
                         </div>
-
-                        <div class="form-group ">
-                            {{ Form::label('gender', 'Specialization')}}
-                            <div class="form-inline">
-                                <div class="form-check form-check-info">
-                                    <label class="form-check-label">
-                                        {{ Form::radio('gender', 1, false ,  ['class'=>'form-check-input']) }}
-                                        {{ 'Male' }}
-                                        <i class="input-helper"></i>
-                                    </label>
-                                </div>
-                                <div class="ml-3 form-check form-check-info">
-                                    <label class="form-check-label">
-                                        {{ Form::radio('gender', 0, false ,  ['class'=>'form-check-input']) }}
-                                        {{ 'Female' }}
-                                        <i class="input-helper"></i>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
                         <div class="form-group">
                             {{ Form::label('department', 'Department')}}
-                            <div class="scroll-list">
-                                @foreach($departments as $key => $department)
-                                    <div class="form-check form-check-info">
-                                        <label class="form-check-label">
-                                            {{ Form::radio('department_id', $department->id, false, ['class'=>'form-check-input']) }}
-                                            {{ $department->name }}
-                                            <i class="input-helper"></i>
-                                        </label>
-                                    </div>
-                                @endforeach
-                            </div>
+                            @foreach($departments as $key => $department)
+                                <div class="form-check form-check-info">
+                                    <label class="form-check-label">
+                                        {{ Form::radio('department_id', $department->id, false, ['class'=>'form-check-input']) }}
+                                        {{ $department->name }}
+                                        <i class="input-helper"></i>
+                                    </label>
+                                </div>
+                            @endforeach
                         </div>
                         {{Form::submit('Submit', ['class'=> 'btn btn-gradient-primary mr-2'])}}
                         <a href="{{ route('admin.teachers.index') }}" class="btn btn-light">Cancel</a>

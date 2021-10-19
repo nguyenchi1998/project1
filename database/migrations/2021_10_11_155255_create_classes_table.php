@@ -16,7 +16,8 @@ class CreateClassesTable extends Migration
         Schema::create('classes', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->unsignedInteger('grade_id');
+            $table->unsignedInteger('specialization_id');
+            $table->unsignedInteger('semester');
             $table->timestamps();
         });
     }

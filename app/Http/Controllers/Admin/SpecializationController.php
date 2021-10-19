@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Repositories\ISpecializationRepository;
 use App\Repositories\ISubjectRepository;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -29,7 +30,7 @@ class SpecializationController extends Controller
 
     public function create()
     {
-        $subjects = $this->subjectRepository->where('type', null)->get();
+        $subjects = $this->subjectRepository->where('type', '=', null)->get();
 
         return view('admin.specialization.create', compact('subjects'));
     }
@@ -39,11 +40,8 @@ class SpecializationController extends Controller
     {
         try {
             DB::beginTransaction();
-            $specialization = $this->specializationRepository->create([
-                'name' => $request->get('name'),
-                'number_semester' => $request->get('number_semester'),
-            ]);
-            $basicSubjects = $this->subjectRepository->where('type', config('common.subjectType.basic'))->get()
+            $specialization = $this->specializationRepository->create($request->only(['name', 'min_credit']));
+            $basicSubjects = $this->subjectRepository->where('type', '=', config('common.subject.type.basic'))->get()
                 ->pluck('id')->toArray();
             $subjects = $request->get('subjects');
             $specialization->subjects()->attach(array_merge($basicSubjects, $subjects));
@@ -65,13 +63,10 @@ class SpecializationController extends Controller
     public function edit($id)
     {
         $specialization = $this->specializationRepository->find($id);
-
         if ($specialization) {
             $specialization = $specialization->load('subjects');
         }
-
         $specialization['subjects'] = $specialization->subjects->pluck('id')->toArray();
-
         $subjects = $this->subjectRepository->all();
 
         return view('admin.specialization.edit', compact('specialization', 'subjects'));
@@ -81,13 +76,9 @@ class SpecializationController extends Controller
     {
         try {
             DB::beginTransaction();
-            $specialization = $this->specializationRepository->update($id, [
-                'name' => $request->get('name'),
-                'number_semester' => $request->get('number_semester'),
-            ]);
-            $basicSubjects = $this->subjectRepository->where('type', null)->get()->pluck('id')->toArray();
-            $subjects = $request->get('subjects');
-            $specialization->subjects()->sync(array_merge($basicSubjects, $subjects));
+            $specialization = $this->specializationRepository->update($id, $request->only(['name', 'min_credit']));
+            $basicSubjects = $this->subjectRepository->where('type', '=', null)->get()->pluck('id')->toArray();
+            $specialization->subjects()->sync(array_merge($basicSubjects, $request->get('subjects')));
             DB::commit();
 
             return redirect()->route('admin.specializations.index');
