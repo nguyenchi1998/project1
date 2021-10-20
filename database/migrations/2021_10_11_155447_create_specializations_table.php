@@ -17,7 +17,8 @@ class CreateSpecializationsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->unsignedInteger('department_id');
-            $table->unsignedInteger('min_credit')->default(20);
+            $table->unsignedInteger('min_credit');
+            $table->unsignedInteger('total_semester');
             $table->timestamps();
         });
     }

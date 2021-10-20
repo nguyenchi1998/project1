@@ -26,6 +26,7 @@
                                 <th>Name</th>
                                 <th>Number Subject</th>
                                 <th>Min Credit</th>
+                                <th>Total Semester</th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -40,6 +41,9 @@
                                     </td>
                                     <td>
                                         {{ $specialization->min_credit }}
+                                    </td>
+                                    <td>
+                                        {{ $specialization->total_semester }}
                                     </td>
                                     <td width="100">
                                         <div class="d-flex justify-content-between">

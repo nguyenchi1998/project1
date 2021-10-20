@@ -15,13 +15,13 @@ class CreateScheduleDetailsTable extends Migration
     {
         Schema::create('schedule_details', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedInteger('schedule_id');
+            $table->unsignedInteger('schedule_id')->nullable();
             $table->unsignedInteger('student_id');
             $table->unsignedInteger('subject_id');
             $table->unsignedInteger('activity_mark')->nullable();
             $table->unsignedInteger('middle_mark')->nullable();
             $table->unsignedInteger('final_mark')->nullable();
-            $table->unsignedInteger('result')->nullable();
+            $table->unsignedInteger('status')->nullable();
             $table->timestamps();
         });
     }

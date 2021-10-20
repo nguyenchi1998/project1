@@ -20,4 +20,5 @@ Auth::routes([
 Route::group(['middleware' => 'auth:student'], function () {
     Route::get('/', 'HomeController@index')->name('home');
     Route::resource('credits', 'CreditController');
+    Route::resource('marks', 'MarkController')->only(['index']);
 });

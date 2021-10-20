@@ -48,6 +48,11 @@ class Repository implements IRepository
         return $this->model->create($array);
     }
 
+    public function createMany($array)
+    {
+        return $this->model->insert($array);
+    }
+
     public function whereIn($key = 'id', $values = [])
     {
         return $this->model->whereIn($key, $values);

@@ -2,95 +2,86 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\IClassRepository;
 use App\Repositories\IScheduleDetailRepository;
+use App\Repositories\ISubjectRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CreditController extends Controller
 {
     protected $scheduleDetailRepository;
+    protected $classRepository;
+    protected $subjectRepository;
 
-    public function __construct(IScheduleDetailRepository $scheduleDetailRepository)
+    public function __construct(
+        IScheduleDetailRepository $scheduleDetailRepository,
+        IClassRepository          $classRepository,
+        ISubjectRepository        $subjectRepository
+    )
     {
         $this->scheduleDetailRepository = $scheduleDetailRepository;
+        $this->classRepository = $classRepository;
+        $this->subjectRepository = $subjectRepository;
     }
+
     public function index(Request $request)
     {
-        $studentId = Auth::user()->id;
-        $credits = $this->scheduleDetailRepository->where('student_id', '=', $studentId)
-            ->where('result', '=', null)
+        $semesterFilter = $request->semester;
+        $student = Auth::user();
+        $class = $this->classRepository->find($student->class_id)->load('specialization');
+        $semester = range(1, $class->specialization->total_semester);
+        $credits = $this->scheduleDetailRepository->where('student_id', '=', $student->id)
+            ->where('status', '=', null)
             ->get();
         if ($credits) {
             $credits->load(['subject', 'schedule']);
         }
 
-        return view('credit.index', compact('credits'));
+        return view('credit.index', compact('credits', 'semester', 'semesterFilter'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create(Request $request)
     {
+        $student = Auth::user();
+        $class = $this->classRepository->find($student->class_id)->load('specialization');
+        $subjects = $this->subjectRepository->model()
+            ->specializationSubjects()
+            ->whereHas('specializations', function ($query) use ($class) {
+                $query->where('specialization_id', '=', $class->specialization->id);
+            })->get();
         $filter = $request->get('filter');
         $student = Auth::user();
 
-        return view('credit.create', compact('filter', 'student'));
+        return view('credit.create', compact('filter', 'student', 'subjects'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $student = Auth::user();
+        $subjectIds = $request->get('subject_id');
+        $scheduleDetails = array_map(function ($subject) use ($student) {
+            return ['subject_id' => $subject, 'student_id' => $student->id];
+        }, $subjectIds);
+        $this->scheduleDetailRepository->createMany($scheduleDetails);
+        return redirect()->route('credits.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         //

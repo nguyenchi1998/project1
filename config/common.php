@@ -9,7 +9,29 @@ return [
             'basic' => 0,
             'specialization' => 1,
         ],
+        'force' => [
+            'basic' => 1,
+            'specialization' => [
+                'forced' => 1,
+                'unforced' => 10,
+            ],
+        ],
     ],
+    'status' => [
+        'schedule' => [
+            'new' => 0,
+            'inprogess' => 1,
+            'finish' => 2,
+            'marking' => 3,
+            'done' => 4,
+        ],
+        'scheduleDetail' => [
+            'relearn' => 0,
+            'retest' => 1,
+            'pass' => 2,
+        ],
+    ],
+    'can_register_credit' => 1,
     'semester' => [
         'default' => 1,
         'max' => 6,

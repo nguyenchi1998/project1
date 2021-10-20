@@ -9,6 +9,7 @@ class Specialization extends Model
     protected $fillable = [
         'name',
         'min_credit',
+        'total_semester',
     ];
 
     public function subjects()

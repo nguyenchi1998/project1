@@ -213,6 +213,12 @@
                         <i class="mdi mdi-contacts menu-icon"></i>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('marks.index')}}">
+                        <span class="menu-title">Mark</span>
+                        <i class="mdi mdi-contacts menu-icon"></i>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- partial -->

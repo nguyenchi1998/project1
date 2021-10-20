@@ -29,7 +29,7 @@
                         </div>
                         <div class="form-group">
                             {{ Form::label('semester', 'Semester')}}
-                            {{ Form::select('number', $semesters , null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Choose semester', 'min' => 1, 'max' => config('common.semester.max')]) }}
+                            {{ Form::select('semester', $semesters , null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Choose semester', 'min' => 1, 'max' => config('common.semester.max')]) }}
                         </div>
                         <div class="form-group">
                             <label for="specializations">Specializations</label>

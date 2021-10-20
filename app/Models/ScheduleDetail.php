@@ -13,7 +13,7 @@ class ScheduleDetail extends Model
         'activity_mark',
         'middle_mark',
         'final_mark',
-        'result',
+        'status',
     ];
 
     public function schedule()
@@ -25,4 +25,5 @@ class ScheduleDetail extends Model
     {
         return $this->belongsTo(Subject::class);
     }
+
 }

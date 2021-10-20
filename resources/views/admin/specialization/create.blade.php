@@ -21,11 +21,15 @@
                         {{ Form::open(['url' =>route('admin.specializations.store') , 'method' => 'POST', 'class' => "forms-sample" ]) }}
                         <div class="form-group">
                             <label for="name">Name</label>
-                            {{ Form::input('text', 'min_credit', null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Enter name']) }}
+                            {{ Form::input('text', 'min_credit', null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Enter Name']) }}
                         </div>
                         <div class="form-group">
                             <label for="min_creddit">Min Credit</label>
-                            {{ Form::input('text', 'min_credit', null, ['class' => 'form-control', 'id' => 'min_creddit', 'placeholder' => 'Enter name']) }}
+                            {{ Form::input('number', 'min_credit', null, ['class' => 'form-control', 'id' => 'min_creddit', 'placeholder' => 'Enter Min Credit', 'min' => 0]) }}
+                        </div>
+                        <div class="form-group">
+                            <label for="min_creddit">Total Semester</label>
+                            {{ Form::input('number', 'max_semester', null, ['class' => 'form-control', 'id' => 'min_creddit', 'placeholder' => 'Enter Total Semester', 'min' => 0]) }}
                         </div>
                         <div class="form-group">
                             {{ Form::label('subject', 'Subject')}}

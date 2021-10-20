@@ -16,6 +16,8 @@ interface IRepository
 
     public function create($array);
 
+    public function createMany($array);
+
     public function whereIn($key = 'id', $values = []);
 
     public function where($key, $operator, $value);

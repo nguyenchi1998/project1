@@ -38,7 +38,6 @@ class ClassSeeder extends Seeder
                     'class_id' => $classInstance->id,
                     'grade_id' => 1
                 ])->each(function ($student) use ($path) {
-
                     $media = Media::create([
                         'path' => 'storage/' . str_replace('storage/app/public/', '', $path),
                     ]);

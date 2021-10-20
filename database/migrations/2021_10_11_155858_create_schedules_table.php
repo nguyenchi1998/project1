@@ -21,6 +21,7 @@ class CreateSchedulesTable extends Migration
             $table->date('start_time')->nullable();
             $table->date('end_time')->nullable();
             $table->unsignedInteger('class_id')->nullable();
+            $table->unsignedInteger('status')->nullable();
             $table->timestamps();
         });
     }

@@ -36,8 +36,8 @@ class SubjectController extends Controller
         $subjects = $subjects->map(function ($subject) {
             $specializations = array_map(function ($specialization) {
                 return $specialization['name'];
-            }, $subject['specializations']->toArray());
-            $subject['specializations'] = implode(' ,', $specializations);
+            }, $subject->specializations->toArray());
+            $subject['specializations'] = implode(',', $specializations);
 
             return $subject;
         });
@@ -65,6 +65,9 @@ class SubjectController extends Controller
             $subject = $this->subjectRepository->create([
                 'name' => $request->get('name'),
                 'credit' => $request->get('credit'),
+                'semester' => $request->get('semester'),
+                'type' => $basic ? config('common.subject.type.basic') : config('common.subject.type.specialization'),
+                'force' => $basic ? config('common.subject.force.basic') : 0,
             ]);
             if ($basic) {
                 $specializations = $this->specializationRepository->get('id');
@@ -73,12 +76,10 @@ class SubjectController extends Controller
                     ->get()
                     ->pluck('id');
             }
-            $subject->specializations()->attach($specializations, [
-                'semester' => $basic ? config('common.semester.default') : null,
-            ]);
+            $subject->specializations()->attach($specializations);
             DB::commit();
 
-            return redirect()->route('subjects.index');
+            return redirect()->route('admin.subjects.index');
         } catch (Exception $e) {
             DB::rollBack();
 
@@ -116,7 +117,7 @@ class SubjectController extends Controller
             $subject->specializations()->sync($request->get('specializations'));
             DB::commit();
 
-            return redirect()->route('subjects.index');
+            return redirect()->route('admin.subjects.index');
         } catch (Exception $e) {
             DB::rollBack();
 

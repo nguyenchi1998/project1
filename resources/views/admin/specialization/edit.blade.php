@@ -23,11 +23,15 @@
                         {{ Form::text('id',$specialization->id, ['hidden'=>true]) }}
                         <div class="form-group">
                             <label for="name">Name</label>
-                            {{ Form::input('text', 'name', $specialization->name, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Enter name']) }}
+                            {{ Form::input('text', 'name', $specialization->name, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Enter Name']) }}
                         </div>
                         <div class="form-group">
                             <label for="min_creddit">Min Credit</label>
-                            {{ Form::input('text', 'min_credit', $specialization->min_credit, ['class' => 'form-control', 'id' => 'min_creddit', 'placeholder' => 'Enter name']) }}
+                            {{ Form::input('number', 'min_credit', $specialization->min_credit, ['class' => 'form-control', 'id' => 'min_creddit', 'placeholder' => 'Enter Min Credit', 'min' => 0]) }}
+                        </div>
+                        <div class="form-group">
+                            <label for="max_semester">Total Semester</label>
+                            {{ Form::input('number', 'max_semester', $specialization->total_semester, ['class' => 'form-control', 'id' => 'max_semester', 'placeholder' => 'Enter Total Semester', 'min' => 0]) }}
                         </div>
                         <div class="form-group">
                             {{ Form::label('subject', 'Subject')}}

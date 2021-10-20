@@ -66,9 +66,10 @@ class DepartmentSeeder extends Seeder
                 $specializationInstance = Specialization::create([
                     'name' => $specialization,
                     'department_id' => $departmentInstance->id,
-                    'max_semester' => 6,
+                    'min_credit' => 30,
+                    'total_semester' => 9,
                 ]);
-                $basicSubject = Subject::where('type', config('common.subject.type.basic'))->get()->pluck('id')->toArray();
+                $basicSubject = Subject::whereType(config('common.subject.type.basic'))->get()->pluck('id')->toArray();
                 $specializationInstance->subjects()->sync($basicSubject);
             }
         }

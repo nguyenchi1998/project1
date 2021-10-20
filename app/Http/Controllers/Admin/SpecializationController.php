@@ -40,7 +40,7 @@ class SpecializationController extends Controller
     {
         try {
             DB::beginTransaction();
-            $specialization = $this->specializationRepository->create($request->only(['name', 'min_credit']));
+            $specialization = $this->specializationRepository->create($request->only(['name', 'min_credit', 'total_semester']));
             $basicSubjects = $this->subjectRepository->where('type', '=', config('common.subject.type.basic'))->get()
                 ->pluck('id')->toArray();
             $subjects = $request->get('subjects');
@@ -76,7 +76,7 @@ class SpecializationController extends Controller
     {
         try {
             DB::beginTransaction();
-            $specialization = $this->specializationRepository->update($id, $request->only(['name', 'min_credit']));
+            $specialization = $this->specializationRepository->update($id, $request->only(['name', 'min_credit', 'total_semester']));
             $basicSubjects = $this->subjectRepository->where('type', '=', null)->get()->pluck('id')->toArray();
             $specialization->subjects()->sync(array_merge($basicSubjects, $request->get('subjects')));
             DB::commit();

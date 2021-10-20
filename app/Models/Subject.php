@@ -12,12 +12,17 @@ class Subject extends Model
         'type',
         'credit',
         'force',
-        'semester'
+        'semester',
     ];
 
     public function basicSubjects()
     {
         return $this->whereType(config('common.subject.type.basic'));
+    }
+
+    public function specializationSubjects()
+    {
+        return $this->where('type', '!=', config('common.subject.type.basic'));
     }
 
     public function specializations(): BelongsToMany
