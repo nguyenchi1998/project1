@@ -35,14 +35,24 @@ class UserSeeder extends Seeder
             'password' => Hash::make(config('default.auth.password')),
             'address' => $faker->address(),
         ]);
+        $teacher = User::create([
+            'name' => 'Teacher Chi',
+            'gender' => 1,
+            'birthday' => Carbon::now(),
+            'email' => 'teacher@gmail.com',
+            'password' => Hash::make(config('default.auth.password')),
+            'address' => $faker->address(),
+        ]);
         $media = Media::create([
             'path' => 'storage/' . str_replace('storage/app/public/', '', $path),
         ]);
         $superAdmin->avatar()->save($media);
+        $teacher->avatar()->save($media);
         $superAdminRole = Role::findByName(config('common.roles.superAdmin.name'), 'admin');
         $adminRole = Role::findByName(config('common.roles.admin.name'), 'admin');
         $teacherRole = Role::findByName(config('common.roles.teacher.name'), 'admin');
         $superAdmin->assignRole($superAdminRole);
+        $teacher->assignRole($teacherRole);
         factory(User::class, 2)->create()->each(function ($user) use ($adminRole, $path) {
             $media = Media::create([
                 'path' => 'storage/' . str_replace('storage/app/public/', '', $path),

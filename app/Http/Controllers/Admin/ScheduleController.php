@@ -19,11 +19,12 @@ class ScheduleController extends Controller
     protected $classRepository;
 
     public function __construct(
-        IScheduleRepository $scheduleRepository,
+        IScheduleRepository       $scheduleRepository,
         ISpecializationRepository $specializationRepository,
-        ISubjectRepository $subjectRepository,
-        IClassRepository $classRepository
-    ) {
+        ISubjectRepository        $subjectRepository,
+        IClassRepository          $classRepository
+    )
+    {
         $this->scheduleRepository = $scheduleRepository;
         $this->specializationRepository = $specializationRepository;
         $this->subjectRepository = $subjectRepository;
@@ -36,16 +37,23 @@ class ScheduleController extends Controller
         $semester = $request->get('semester');
         $classId = $request->get('class');
         $schedules = $this->scheduleRepository->all()->load('subject', 'teacher', 'scheduleDetails');
-        $allClasses = $this->classRepository->where('semester', '<=', 2)->when($semester, function ($query) use ($semester) {
-            $query->where('semester', $semester);
-        })->get()->load('specialization.subjects');
-        $basicSubjects = $this->subjectRepository->model()->basicSubjects()->get();
-        $scheduleClass = $this->scheduleRepository->where('class_id', '!=', null)->get()->load('subject');
+        $allClasses = $this->classRepository->where('semester', '<=', 2)
+            ->when($semester, function ($query) use ($semester) {
+                $query->where('semester', $semester);
+            })
+            ->get()
+            ->load('specialization.subjects');
+        $basicSubjects = $this->subjectRepository->model()
+            ->basicSubjects()->get();
+        $scheduleClass = $this
+            ->scheduleRepository->where('class_id', '!=', null)
+            ->get()
+            ->load('subject');
         $allClasses = $allClasses->map(function ($class) use ($scheduleClass, $basicSubjects) {
             $subjects = $scheduleClass->where('class_id', $class->id)->all();
             $specializationSubjects = $basicSubjects->diff($subjects);
             $class['unCreditSubjects'] = $specializationSubjects;
-            return  $class;
+            return $class;
         });
 
         return view('admin.schedule.class.index', compact('allClasses', 'basicSubjects', 'semester', 'semesters'));

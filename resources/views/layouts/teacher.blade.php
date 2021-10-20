@@ -200,6 +200,7 @@
                         <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
                     </a>
                 </li>
+                @can('isAdmin')
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('admin.home') }}">
                         <span class="menu-title">Dashboard</span>
@@ -264,6 +265,7 @@
                         <i class="mdi mdi-table-large menu-icon"></i>
                     </a>
                 </li>
+                @endcan
             </ul>
         </nav>
         <!-- partial -->

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 class RedirectIfAuthenticated
 {
     const ADMIN_GUARD = 'admin';
+    const TEACHER_GUARD = 'teacher';
 
     /**
      * Handle an incoming request.
@@ -21,8 +22,10 @@ class RedirectIfAuthenticated
     public function handle($request, Closure $next, $guard = null)
     {
         if (Auth::guard($guard)->check()) {
-            if ($guard == self::ADMIN_GUARD) {
+            if ($guard == config('common.guard.admin')) {
                 return redirect()->route('admin.home');
+            } elseif ($guard == config('common.guard.teacher')) {
+                return redirect()->route('teacher.home');
             } else {
                 return redirect()->route('student.home');
             }

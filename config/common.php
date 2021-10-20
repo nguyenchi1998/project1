@@ -4,6 +4,11 @@ return [
     'role' => [
         'admin' => 'admin',
     ],
+    'guard' => [
+        'admin' => 'admin',
+        'teacher' => 'teacher',
+        'student' => 'student',
+    ],
     'subject' => [
         'type' => [
             'basic' => 0,
@@ -38,10 +43,6 @@ return [
     ],
     'limit' => [
         'studentInClass' => 20,
-    ],
-    'guard' => [
-        'admin' => 'admin',
-        'student' => 'student',
     ],
     'roles' => [
         'superAdmin' => [

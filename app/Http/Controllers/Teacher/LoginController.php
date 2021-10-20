@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -11,25 +11,25 @@ class LoginController extends Controller
 {
     use AuthenticatesUsers;
 
-    protected $redirectTo = '/manager';
+    protected $redirectTo = '/teacher';
 
     public function __construct()
     {
-        $this->middleware('guest:admin')->except('logout');
+        $this->middleware('guest:teacher')->except('logout');
     }
 
     public function showLoginForm()
     {
-        return view('admin.login');
+        return view('teacher.login');
     }
 
     protected function guard()
     {
-        return Auth::guard('admin');
+        return Auth::guard('teacher');
     }
 
     protected function loggedOut(Request $request)
     {
-        return redirect()->route('admin.loginShow');
+        return redirect()->route('teacher.loginShow');
     }
 }

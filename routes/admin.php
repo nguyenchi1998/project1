@@ -4,7 +4,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['as' => 'admin.'], function () {
     Route::group(['middleware' => 'auth:admin'], function () {
-        Route::get('', 'HomeController@index')->name('home');
+        Route::get('', 'HomeController@index')
+            ->name('home');
         Route::resource('subjects', 'SubjectController');
         Route::resource('teachers', 'TeacherController');
         Route::get('teachers/{id}/change-department', 'TeacherController@changeDepartmentShow')
@@ -16,15 +17,18 @@ Route::group(['as' => 'admin.'], function () {
         Route::put('teachers/{id}/choose-subject', 'TeacherController@chooseSubject')
             ->name('teachers.choose_subject');
         Route::resource('schedules', 'ScheduleController')->only(['index']);
-        Route::get('schedules/register/{id}', 'ScheduleController@registerScheduleShow')->name('schedules.registerShow');
-        Route::post('schedules/register/{id}', 'ScheduleController@registerSchedule')->name('schedules.register');
+        Route::get('schedules/register/{id}', 'ScheduleController@registerScheduleShow')
+            ->name('schedules.registerShow');
+        Route::post('schedules/register/{id}', 'ScheduleController@registerSchedule')
+            ->name('schedules.register');
         Route::resource('roles', 'RoleController');
         Route::resource('specializations', 'SpecializationController');
         Route::resource('classes', 'ClassController');
         Route::resource('grades', 'GradeController');
         Route::resource('schedule', 'ScheduleController');
         Route::group(['prefix' => 'request', 'as' => 'requests.'], function () {
-            Route::get('', 'RequestController@index')->name('index');
+            Route::get('', 'RequestController@index')
+                ->name('index');
             Route::post('/departments/approve', 'RequestController@approveDepartmentChange')
                 ->name('departments.approve');
             Route::post('/departments/reject', 'RequestController@approveDepartmentChange')
@@ -35,6 +39,6 @@ Route::group(['as' => 'admin.'], function () {
         ->name('loginShow');
     Route::post('login', 'LoginController@login')
         ->name('login');
-    Route::post('logout', 'LoginController@logout')->name('logout');
+    Route::post('logout', 'LoginController@logout')
+        ->name('logout');
 });
-
