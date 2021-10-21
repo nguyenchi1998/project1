@@ -2,29 +2,24 @@
 <html lang="en">
 
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>@yield('title')</title>
-    <!-- plugins:css -->
     <link rel="stylesheet" href="{{ asset('asset/css/materialdesignicons.min.css') }}">
     <link rel="stylesheet" href="{{ asset('asset/vendors/css/vendor.bundle.base.css') }}">
-    <!-- Layout styles -->
     <link rel="stylesheet" href="{{ asset('asset/css/style.css') }}">
-    <!-- End layout styles -->
     <link rel="shortcut icon" href="{{ asset('asset/images/favicon.ico') }}"/>
     @yield('css')
 </head>
 
 <body>
 <div class="container-scroller">
-    <!-- partial:partials/_navbar.html -->
     <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
         <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-            <a class="navbar-brand brand-logo" href="index.html">
+            <a class="navbar-brand brand-logo" href="{{ route('teacher.home') }}">
                 <img src="{{asset('asset/images/logo.svg') }}" alt="logo"/>
             </a>
-            <a class="navbar-brand brand-logo-mini" href="index.html"><img
+            <a class="navbar-brand brand-logo-mini" href="{{ route('teacher.home') }}"><img
                         src="{{ asset('asset/images/logo-mini.svg') }}" alt="logo"/></a>
         </div>
         <div class="navbar-menu-wrapper d-flex align-items-stretch">
@@ -181,9 +176,7 @@
             </button>
         </div>
     </nav>
-    <!-- partial -->
     <div class="container-fluid page-body-wrapper">
-        <!-- partial:partials/_sidebar.html -->
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
             <ul class="nav">
                 <li class="nav-item nav-profile">
@@ -191,7 +184,6 @@
                         <div class="nav-profile-image">
                             <img src="{{ asset(auth()->user()->avatar->path ?? '') }}" alt="profile">
                             <span class="login-status online"></span>
-                            <!--change to offline or busy as needed-->
                         </div>
                         <div class="nav-profile-text d-flex flex-column">
                             <span class="font-weight-bold mb-2">{{ auth()->user()->name }}</span>
@@ -200,72 +192,18 @@
                         <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
                     </a>
                 </li>
-                @can('isAdmin')
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.home') }}">
+                    <a class="nav-link" href="{{ route('teacher.home') }}">
                         <span class="menu-title">Dashboard</span>
                         <i class="mdi mdi-home menu-icon"></i>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('admin.requests.index')}}">
-                        <span class="menu-title">Requests</span>
-                        <i class="mdi mdi-contacts menu-icon"></i>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="{{route('admin.grades.index')}}">
-                        <span class="menu-title">Grades</span>
-                        <i class="mdi mdi-contacts menu-icon"></i>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{route('admin.subjects.index')}}">
-                        <span class="menu-title">Subjects</span>
-                        <i class="mdi mdi-contacts menu-icon"></i>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{route('admin.specializations.index')}}">
-                        <span class="menu-title">Specialization</span>
-                        <i class="mdi mdi-format-list-bulleted menu-icon"></i>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.classes.index') }}">
-                        <span class="menu-title">Class</span>
+                    <a class="nav-link" href="{{ route('teacher.schedules.index') }}">
+                        <span class="menu-title">Schedule</span>
                         <i class="mdi mdi-chart-bar menu-icon"></i>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.roles.index') }}">
-                        <span class="menu-title">Role</span>
-                        <i class="mdi mdi-table-large menu-icon"></i>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="collapse" href="#general-pages" aria-expanded="true"
-                       aria-controls="general-pages">
-                        <span class="menu-title">Schedule</span>
-                        <i class="menu-arrow"></i>
-                        <i class="mdi mdi-medical-bag menu-icon"></i>
-                    </a>
-                    <div class="collapse" id="general-pages">
-                        <ul class="nav flex-column sub-menu">
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('admin.schedules.index') }}">Class (Only for semester 1,2)</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.teachers.index') }}">
-                        <span class="menu-title">Teacher</span>
-                        <i class="mdi mdi-table-large menu-icon"></i>
-                    </a>
-                </li>
-                @endcan
             </ul>
         </nav>
         <!-- partial -->

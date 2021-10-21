@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Permission\Traits\HasRoles;
 
 class Student extends Authenticatable
 {
+    use HasRoles;
+
     protected $guarded = 'student';
 
     protected $fillable = [
