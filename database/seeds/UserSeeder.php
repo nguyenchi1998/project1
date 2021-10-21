@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Department;
 use App\Models\Media;
+use App\Models\Teacher;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
@@ -16,17 +18,12 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
+        $basePath = 'storage/app/public';
         $faker = Faker\Factory::create();
-        if (
-            !file_exists(
-                (
-                    'storage/app/public' . config('default.path.media.avatar.teacher')
-                )
-            )
-        ) {
+        if (!file_exists(($basePath . config('default.path.media.avatar.teacher')))) {
             mkdir('storage/app/public' . config('default.path.media.avatar.teacher'), 777, true);
         }
-        $path = $faker->image('storage/app/public' . config('default.path.media.avatar.teacher'), 200, 200);
+        $path = $faker->image($basePath . config('default.path.media.avatar.teacher'), 200, 200);
         $superAdmin = User::create([
             'name' => 'Super Admin',
             'gender' => 1,
@@ -35,39 +32,19 @@ class UserSeeder extends Seeder
             'password' => Hash::make(config('default.auth.password')),
             'address' => $faker->address(),
         ]);
-        $teacher = User::create([
-            'name' => 'Teacher Chi',
-            'gender' => 1,
-            'birthday' => Carbon::now(),
-            'email' => 'teacher@gmail.com',
-            'password' => Hash::make(config('default.auth.password')),
-            'address' => $faker->address(),
-        ]);
         $media = Media::create([
-            'path' => 'storage/' . str_replace('storage/app/public/', '', $path),
+            'path' => 'storage/' . str_replace($basePath . '/', '', $path),
         ]);
         $superAdmin->avatar()->save($media);
-        $teacher->avatar()->save($media);
         $superAdminRole = Role::findByName(config('common.roles.superAdmin.name'), 'admin');
         $adminRole = Role::findByName(config('common.roles.admin.name'), 'admin');
-        $teacherRole = Role::findByName(config('common.roles.teacher.name'), 'admin');
         $superAdmin->assignRole($superAdminRole);
-        $teacher->assignRole($teacherRole);
-        factory(User::class, 2)->create()->each(function ($user) use ($adminRole, $path) {
+        factory(User::class, 2)->create()->each(function ($user) use ($adminRole, $path, $basePath) {
             $media = Media::create([
-                'path' => 'storage/' . str_replace('storage/app/public/', '', $path),
+                'path' => 'storage/' . str_replace($basePath . '/', '', $path),
             ]);
             $user->avatar()->save($media);
             $user->assignRole($adminRole);
-        });
-        $departmentIds = \App\Models\Department::all()->pluck('id')->toArray();
-        factory(User::class, 10)->create()->each(function ($user) use ($teacherRole, $departmentIds, $path) {
-            $media = Media::create([
-                'path' => 'storage/' . str_replace('storage/app/public/', '', $path),
-            ]);
-            $user->avatar()->save($media);
-            $user->assignRole($teacherRole);
-            $user->update(['department_id' => $departmentIds[array_rand($departmentIds)]]);
         });
     }
 }

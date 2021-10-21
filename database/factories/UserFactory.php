@@ -2,6 +2,7 @@
 
 use Faker\Generator as Faker;
 
+/** @var Factory $factory */
 /*
 |--------------------------------------------------------------------------
 | Model Factories

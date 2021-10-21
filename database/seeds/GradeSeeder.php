@@ -16,7 +16,6 @@ class GradeSeeder extends Seeder
             'Khóa 1',
             'Khóa 2',
         ];
-
         foreach ($grades as $grade) {
             Grade::create([
                 'name' => $grade,

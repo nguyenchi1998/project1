@@ -12,3 +12,10 @@ if (!function_exists('get_guard')) {
         }
     }
 }
+
+if (!function_exists('getNameSchedule')) {
+    function getNameSchedule($id)
+    {
+        return array_flip(config('common.status.schedule'))[$id];
+    }
+}

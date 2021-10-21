@@ -26,8 +26,6 @@ class User extends Authenticatable
         'birthday',
         'address',
         'phone',
-        'department_id',
-        'next_department_id',
     ];
 
     /**
@@ -49,39 +47,8 @@ class User extends Authenticatable
         return in_array(config('common.roles.admin'), $this->getRoleNames()->toArray());
     }
 
-    public function scopeIsTeacher()
-    {
-        return in_array(config('common.roles.teacher'), $this->getRoleNames()->toArray());
-    }
-
-    public function schedules()
-    {
-        return $this->hasMany(Subject::class);
-    }
-
-    public function department()
-    {
-        return $this->belongsTo(Department::class);
-    }
-
-    public function nextDepartment()
-    {
-        return $this->belongsTo(Department::class, 'next_department_id');
-    }
-
     public function avatar()
     {
         return $this->morphOne(Media::class, 'mediable');
     }
-
-    public function subjects()
-    {
-        return $this->belongsToMany(Subject::class, 'subject_teacher', 'subject_id', 'teacher_id');
-    }
-
-    public function teacher()
-    {
-        return  $this->belongsTo(Teacher::class);
-    }
-
 }

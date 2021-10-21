@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\IDepartmentRepository;
-use App\Repositories\IUserRepository;
+use App\Repositories\ITeacherRepository;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -13,23 +13,22 @@ use Illuminate\Support\Facades\DB;
 class RequestController extends Controller
 {
     protected $departmentRepository;
-    protected $userRepository;
+    protected $teacherRepository;
 
-    public function __construct(IDepartmentRepository $departmentRepository, IUserRepository $userRepository)
+    public function __construct(IDepartmentRepository $departmentRepository, ITeacherRepository $teacherRepository)
     {
         $this->departmentRepository = $departmentRepository;
-        $this->userRepository = $userRepository;
+        $this->teacherRepository = $teacherRepository;
     }
 
     public function index()
     {
-
         $titleRequest = [
             'change' => 'Change Department',
             'upgrade' => 'Upgrade to Manager',
             'downgrade' => 'Downgrade to Member',
         ];
-        $moveDepartmenteTeachers = $this->userRepository->where('next_department_id', '!=', null)->get();
+        $moveDepartmenteTeachers = $this->teacherRepository->where('next_department_id', '!=', null)->get();
         if ($moveDepartmenteTeachers) {
             $moveDepartmenteTeachers->load(['department', 'nextDepartment']);
         }
@@ -61,7 +60,7 @@ class RequestController extends Controller
     public function approveDepartmentChange(Request $request)
     {
         $teacherId = $request->get('teacherId');
-        $teacher = $this->userRepository->find($teacherId);
+        $teacher = $this->teacherRepository->find($teacherId);
         if ($teacher) {
             $teacher->load('department', 'nextDepartment');
         }
@@ -114,7 +113,7 @@ class RequestController extends Controller
     public function rejectDepartmentChange(Request $request)
     {
         $teacherId = $request->get('teacherId');
-        $teacher = $this->userRepository->find($teacherId)->load(['department', 'nextDepartment']);
+        $teacher = $this->teacherRepository->find($teacherId)->load(['department', 'nextDepartment']);
         if ($teacher->nextDepartment->next_manager_id == $teacher->id) {
             $this->departmentRepository->update($teacher->nextDepartment->id, [
                 'next_manager_id' => null,

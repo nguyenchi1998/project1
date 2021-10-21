@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Repositories\IDepartmentRepository;
 use App\Repositories\IRoleRepository;
 use App\Repositories\ISubjectRepository;
-use App\Repositories\IUserRepository;
+use App\Repositories\ITeacherRepository;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -17,33 +17,30 @@ use ImageResize;
 class TeacherController extends Controller
 {
     private $departmentRepository;
-    private $userRepository;
+    private $teacherRepository;
     private $roleRepository;
-    private $subjectReposutory;
+    private $subjectRepository;
 
     public function __construct(
         IDepartmentRepository $departmentRepository,
-        IUserRepository       $userRepository,
+        ITeacherRepository    $teacherRrpository,
         IRoleRepository       $roleRepository,
         ISubjectRepository    $subjectRepository)
     {
         $this->departmentRepository = $departmentRepository;
-        $this->userRepository = $userRepository;
+        $this->teacherRepository = $teacherRrpository;
         $this->roleRepository = $roleRepository;
-        $this->subjectReposutory = $subjectRepository;
+        $this->subjectRepository = $subjectRepository;
     }
 
     public function index(Request $request)
     {
         $filter = $request->get('filter');
-        $teachers = $this->userRepository->model()
+        $teachers = $this->teacherRepository->model()
             ->when($filter && $filter != 'all', function ($query) use ($filter) {
                 $query->whereHas('department', function ($query) use ($filter) {
                     $query->whereId($filter);
                 });
-            })
-            ->wherehas('roles', function ($query) {
-                $query->whereName('teacher');
             })
             ->get()
             ->load(['roles:id,name', 'department', 'nextDepartment']);
@@ -64,12 +61,12 @@ class TeacherController extends Controller
     {
         try {
             DB::beginTransaction();
-            $teacher = $this->userRepository->create(array_merge($request->only([
+            $teacher = $this->teacherRepository->create(array_merge($request->only([
                 'name', 'email', 'phone', 'birthday', 'address', 'gender', 'department_id',
             ]), ['password' => Hash::make(config('default.auth.password'))]));
             $avatar = $request->file('avatar');
             $avatarFilename = $teacher->email . '.' . $request->file('avatar')->getClientOriginalExtension();
-            $path = $this->userRepository->saveImage(
+            $path = $this->teacherRepository->saveImage(
                 $avatar,
                 $avatarFilename,
                 storage_path(config('default.path.media.avatar.teacher')),
@@ -104,7 +101,7 @@ class TeacherController extends Controller
 
     public function edit($id)
     {
-        $teacher = $this->userRepository->find($id);
+        $teacher = $this->teacherRepository->find($id);
         if ($teacher) {
             $teacher->load('department');
         }
@@ -115,14 +112,14 @@ class TeacherController extends Controller
 
     public function update(Request $request, $id)
     {
-        $this->userRepository->update($id, $request->only(['name', 'gender', 'birthday', 'address', 'phone']));
+        $this->teacherRepository->update($id, $request->only(['name', 'gender', 'birthday', 'address', 'phone']));
 
         return redirect()->route('admin.teachers.index');
     }
 
     public function changeDepartmentShow($id)
     {
-        $teacher = $this->userRepository->find($id)->load('department');
+        $teacher = $this->teacherRepository->find($id)->load('department');
         $departments = $this->departmentRepository->all();
 
         return view('admin.teacher.change_department', compact('teacher', 'departments'));
@@ -134,7 +131,7 @@ class TeacherController extends Controller
         $isManager = $request->get('isManager');
         try {
             DB::beginTransaction();
-            $teacher = $this->userRepository->find($id)->load('department');
+            $teacher = $this->teacherRepository->find($id)->load('department');
             if ($teacher->next_department_id) {
                 return redirect()->back()->withErrors(['msg' => 'Teacher has department change, please contact to manager to handle']);
             }
@@ -145,7 +142,7 @@ class TeacherController extends Controller
                 ]);
             }
             if ($teacher->department_id != $departmentId) {
-                $this->userRepository->update($id, [
+                $this->teacherRepository->update($id, [
                     'next_department_id' => $departmentId,
                 ]);
             }
@@ -161,7 +158,7 @@ class TeacherController extends Controller
 
     public function chooseSubjectShow($id)
     {
-        $teacher = $this->userRepository->find($id)->load('department.specializations.specializationSubject');
+        $teacher = $this->teacherRepository->find($id)->load('department.specializations.specializationSubject');
         $teacherSubjects = $teacher->subjects->pluck('id')->toArray();
         $subjects = $teacher->department->specializations->reduce(function ($subjects, $specialization) {
             return array_merge($subjects, $specialization->subjects->toArray() ?? []);
@@ -174,7 +171,7 @@ class TeacherController extends Controller
     public function chooseSubject(Request $request, $id)
     {
         $subjectIds = $request->get('subject_id');
-        $teacher = $this->userRepository->find($id);
+        $teacher = $this->teacherRepository->find($id);
         $teacher->subjects()->sync($subjectIds);
 
         return redirect()->route('admin.teachers.index');

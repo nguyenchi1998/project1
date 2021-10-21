@@ -4,22 +4,23 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\IDepartmentRepository;
-use App\Repositories\IUserRepository;
+use App\Repositories\ITeacherRepository;
 
 class HomeController extends Controller
 {
     protected $departmentRepository;
-    protected $userRepository;
+    protected $teacherRepository;
 
-    public function __construct(IDepartmentRepository $departmentRepository, IUserRepository $userRepository)
+    public function __construct(IDepartmentRepository $departmentRepository, ITeacherRepository $teacherRepository)
     {
         $this->departmentRepository = $departmentRepository;
-        $this->userRepository = $userRepository;
+        $this->teacherRepository = $teacherRepository;
     }
 
     public function index()
     {
-        $moveDepartmenteTeachers = $this->userRepository->where('next_department_id', '!=', null)->get();
+        $moveDepartmenteTeachers = $this->teacherRepository->where('next_department_id', '!=', null)
+            ->get();
         if ($moveDepartmenteTeachers) {
             $moveDepartmenteTeachers->load(['department', 'nextDepartment']);
         }

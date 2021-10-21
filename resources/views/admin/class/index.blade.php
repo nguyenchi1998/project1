@@ -29,44 +29,51 @@
                         <div class="d-flex mb-4">
                             <a class="btn btn-primary" href="{{ route('admin.classes.create') }}">Create</a>
                         </div>
-                        <div class="table-responsive"><table class="table table-bordered">
-                            <thead>
-                            <tr>
-                                <th>Class</th>
-                                <th>Number Student</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($classes as $class)
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
                                 <tr>
-                                    <td>
-                                        {{ $class->name }}
-                                    </td>
-                                    <td>
-                                        {{ count($class->students) }}
-                                    </td>
-                                    <td width="100">
-                                        <div class="d-flex justify-content-between">
-                                            <div class="mr-3">
-                                                <a href="{{ route('admin.classes.show', $class->id) }}"
-                                                   class="btn btn-sm btn-info">Student</a>
-                                            </div>
-                                            <div class="mr-3">
-                                                <a href="{{ route('admin.classes.edit', $class->id) }}"
-                                                   class="btn btn-sm btn-warning">Edit</a>
-                                            </div>
-                                            <div>
-                                                <form action="">
-                                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </td>
+                                    <th>Class</th>
+                                    <th>Number Student</th>
+                                    <th></th>
                                 </tr>
-                            @endforeach
-                            </tbody>
-                        </table></div>
+                                </thead>
+                                <tbody>
+                                @forelse($classes as $class)
+                                    <tr>
+                                        <td>
+                                            {{ $class->name }}
+                                        </td>
+                                        <td>
+                                            {{ count($class->students) }}
+                                        </td>
+                                        <td width="100">
+                                            <div class="d-flex justify-content-between">
+                                                <div class="mr-3">
+                                                    <a href="{{ route('admin.classes.show', $class->id) }}"
+                                                       class="btn btn-sm btn-info">Student</a>
+                                                </div>
+                                                <div class="mr-3">
+                                                    <a href="{{ route('admin.classes.edit', $class->id) }}"
+                                                       class="btn btn-sm btn-warning">Edit</a>
+                                                </div>
+                                                <div>
+                                                    <form action="">
+                                                        <button type="submit" class="btn btn-sm btn-danger">Delete
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <div class="pt-3 d-flex justify-content-center">
+                                        <h4>Empty Data</h4>
+                                    </div>
+                                @endforelse
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
