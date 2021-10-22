@@ -76,7 +76,8 @@ class SpecializationController extends Controller
     {
         try {
             DB::beginTransaction();
-            $specialization = $this->specializationRepository->update($id, $request->only(['name', 'min_credit', 'total_semester']));
+            $this->specializationRepository->update($id, $request->only(['name', 'min_credit', 'total_semester']));
+            $specialization = $this->specializationRepository->find($id);
             $basicSubjects = $this->subjectRepository->where('type', '=', null)->get()->pluck('id')->toArray();
             $specialization->subjects()->sync(array_merge($basicSubjects, $request->get('subjects')));
             DB::commit();

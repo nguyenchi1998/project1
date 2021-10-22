@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\IDepartmentRepository;
 use App\Repositories\ISpecializationRepository;
 use App\Repositories\ISubjectRepository;
 use Exception;
@@ -12,14 +13,17 @@ use Illuminate\Support\Facades\DB;
 class SubjectController extends Controller
 {
     private $subjectRepository;
+    private $departmentRepository;
     private $specializationRepository;
 
     public function __construct(
         ISubjectRepository        $subjectRepository,
-        ISpecializationRepository $specializationRepository
+        ISpecializationRepository $specializationRepository,
+        IDepartmentRepository $departmentRepository
     )
     {
         $this->subjectRepository = $subjectRepository;
+        $this->departmentRepository = $departmentRepository;
         $this->specializationRepository = $specializationRepository;
     }
 
@@ -32,7 +36,7 @@ class SubjectController extends Controller
                 }, function ($query) use ($filter) {
                     $query->where('specializations.id', $filter);
                 });
-            }])->get();
+            }, 'department'])->get();
         $subjects = $subjects->map(function ($subject) {
             $specializations = array_map(function ($specialization) {
                 return $specialization['name'];
@@ -41,20 +45,20 @@ class SubjectController extends Controller
 
             return $subject;
         });
-        $specializations = $this->specializationRepository->all();
+        $departments = $this->departmentRepository->all();
 
-        return view('admin.subject.index', compact('subjects', 'specializations', 'filter'));
+        return view('admin.subject.index', compact('subjects', 'departments', 'filter'));
     }
 
     public function create()
     {
-        $specializations = $this->specializationRepository->all();
         $semesters = [];
         for ($i = 1; $i <= config('common.semester.max'); $i++) {
             $semesters[$i] = $i;
         }
+        $departments = $this->departmentRepository->all();
 
-        return view('admin.subject.create', compact('specializations', 'semesters'));
+        return view('admin.subject.create', compact('departments', 'semesters'));
     }
 
     public function store(Request $request)
@@ -67,7 +71,7 @@ class SubjectController extends Controller
                 'credit' => $request->get('credit'),
                 'semester' => $request->get('semester'),
                 'type' => $basic ? config('common.subject.type.basic') : config('common.subject.type.specialization'),
-                'force' => $basic ? config('common.subject.force.basic') : 0,
+                'department_id' => $request->get('department_id'),
             ]);
             if ($basic) {
                 $specializations = $this->specializationRepository->get('id');
@@ -112,6 +116,7 @@ class SubjectController extends Controller
             $this->subjectRepository->update($id, [
                 'name' => $request->get('name'),
                 'credit' => $request->get('credit'),
+                'department_id' => $request->get('department_id'),
             ]);
             $subject = $this->subjectRepository->find($id);
             $subject->specializations()->sync($request->get('specializations'));

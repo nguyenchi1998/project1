@@ -17,6 +17,7 @@ class CreateSpecializationSubjectTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('specialization_id');
             $table->unsignedInteger('subject_id');
+            $table->boolean('force')->default(config('common.subject.force'));
             $table->timestamps();
         });
     }

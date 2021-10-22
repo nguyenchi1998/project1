@@ -1,5 +1,5 @@
 @extends('layouts.manager')
-@section('title') Manager Grades @endsection
+@section('title') Manager Departments @endsection
 @section('breadcrumb')
     <div class="page-header">
         <h3 class="page-title">Create</h3>
@@ -7,7 +7,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Dashboard</a></li>
                 <li class="breadcrumb-item">
-                    <a href="{{ route('admin.grades.index') }}">Grades</a>
+                    <a href="{{ route('admin.departments.index') }}">Departments</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">Create</li>
             </ol>
@@ -19,7 +19,7 @@
         <div class="col-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    {{ Form::open(['url' =>route('admin.grades.store') , 'method' => 'POST']) }}
+                    {{ Form::open(['url' =>route('admin.departments.store') , 'method' => 'POST']) }}
                     <div class="form-group">
                         <label for="name">Name</label>
                         {{ Form::input('text', 'name', null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Enter name']) }}
@@ -32,5 +32,4 @@
         </div>
     </div>
 @endsection
-@section('script')
-@endsection
+@section('script') @endsection

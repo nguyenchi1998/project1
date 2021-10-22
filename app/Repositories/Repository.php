@@ -58,7 +58,7 @@ class Repository implements IRepository
         return $this->model->whereIn($key, $values);
     }
 
-    public function where($key, $operator , $value)
+    public function where($key, $operator, $value)
     {
         return $this->model->where($key, $operator, $value);
     }
@@ -84,5 +84,10 @@ class Repository implements IRepository
         })->save(config('default.path.media.avatar.teacher'), $fileName);
 
         return $img;
+    }
+
+    public function updateOrCreate($fiter, $array)
+    {
+        $this->model->updateOrCreate($fiter, $array);
     }
 }

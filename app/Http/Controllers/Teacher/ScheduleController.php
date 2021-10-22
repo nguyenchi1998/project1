@@ -3,17 +3,22 @@
 namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\IScheduleDetailRepository;
 use App\Repositories\IScheduleRepository;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ScheduleController extends Controller
 {
     protected $scheduleRepository;
+    protected $scheduleDetailsRepository;
 
-    public function __construct(IScheduleRepository $scheduleRepository)
+    public function __construct(IScheduleRepository $scheduleRepository, IScheduleDetailRepository $scheduleDetailsRepository)
     {
         $this->scheduleRepository = $scheduleRepository;
+        $this->scheduleDetailsRepository = $scheduleDetailsRepository;
     }
 
     public function index(Request $request)
@@ -66,9 +71,16 @@ class ScheduleController extends Controller
 
     public function mark(Request $request, $id)
     {
-        $schedule = $this->scheduleRepository->find($id)->load('scheduleDetails.student');
-        $scheduleDetails = $schedule->scheduleDetails;
-
-        return view('teacher.mark', compact('scheduleDetails', 'schedule'));
+        $schedule = $this->scheduleRepository->find($id)->load('subject');
+        foreach ($request->get('students') as $student) {
+            $this->scheduleDetailsRepository->updateOrCreate(
+                [
+                    'schedule_id' => $id,
+                    'student_id' => $student['student_id'],
+                    'subject_id' => $schedule->subject->id
+                ],
+                $student,
+            );
+        }
     }
 }

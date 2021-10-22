@@ -28,10 +28,10 @@ class SubjectSeeder extends Seeder
             ['name' => 'QS chung và chiến thuật, kỹ thuật bắn súng tiểu liên AK', 'type' => config('common.subject.type.basic')],
             ['name' => 'Tiếng Anh', 'type' => config('common.subject.type.basic')],
             ['name' => 'Kỹ thuật ghép nối máy tính', 'type' => config('common.subject.type.specialization')],
-            ['name' => 'Hệ nhúng','type' => config('common.subject.type.specialization')],
-            ['name' => 'Quản trị dự án công nghệ thông tin','type' => config('common.subject.type.specialization')],
-            ['name' => 'Thiết kế IC','type' => config('common.subject.type.specialization')],
-            ['name' => 'Kỹ thuật mô hình hóa và mô phỏng','type' => config('common.subject.type.specialization')],
+            ['name' => 'Hệ nhúng', 'type' => config('common.subject.type.specialization')],
+            ['name' => 'Quản trị dự án công nghệ thông tin', 'type' => config('common.subject.type.specialization')],
+            ['name' => 'Thiết kế IC', 'type' => config('common.subject.type.specialization')],
+            ['name' => 'Kỹ thuật mô hình hóa và mô phỏng', 'type' => config('common.subject.type.specialization')],
         ];
 
         foreach ($subjects as $subject) {
@@ -39,7 +39,8 @@ class SubjectSeeder extends Seeder
                 'name' => $subject['name'],
                 'type' => $subject['type'],
                 'semester' => 1,
-                'force' => isset($subject['type']) && $subject['type'] == config('common.subject.type.basic')
+                'force' => isset($subject['type']) && $subject['type'] == config('common.subject.type.basic'),
+                'department_id' => 1,
             ]);
         }
     }

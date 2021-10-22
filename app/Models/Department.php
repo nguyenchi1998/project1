@@ -15,7 +15,7 @@ class Department extends Model
 
     public function manager()
     {
-        return $this->hasOne(User::class, 'manager_id');
+        return $this->hasOne(Teacher::class, 'manager_id');
     }
 
     public function nextManager()
@@ -26,5 +26,10 @@ class Department extends Model
     public function specializations()
     {
         return $this->hasMany(Specialization::class);
+    }
+
+    public function teachers()
+    {
+        return $this->hasMany(Teacher::class);
     }
 }

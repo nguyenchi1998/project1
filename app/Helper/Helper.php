@@ -19,3 +19,12 @@ if (!function_exists('getNameSchedule')) {
         return array_flip(config('common.status.schedule'))[$id];
     }
 }
+
+if (!function_exists('chexkFinishMark')) {
+    function chexkFinishMark($marks)
+    {
+        return array_search(function ($value) {
+            return !empty($value['activity_mark']) && !empty($value['middle_mark']) && !empty($value['final_mark']);
+        }, $marks);
+    }
+}

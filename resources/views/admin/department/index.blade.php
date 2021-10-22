@@ -1,17 +1,18 @@
 @extends('layouts.manager')
 @section('title')
-    Manager Specializations
+    Manager Grades
 @endsection
 @section('breadcrumb')
     <div class="page-header">
-        <h3 class="page-title">Manager Specializations</h3>
+        <h3 class="page-title">Manager Departments</h3>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Dashboard</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Specializations</li>
+                <li class="breadcrumb-item active" aria-current="page">Departments</li>
             </ol>
         </nav>
-    </div>@endsection
+    </div>
+@endsection
 @section('main')
     <div class="row">
         <div class="col-lg-12 grid-margin stretch-card">
@@ -19,38 +20,29 @@
                 <div class="card-body">
                     <div class="d-flex mb-4 justify-content-between">
                         <div class="w-15"></div>
-                        <a class="btn btn-primary" href="{{ route('admin.specializations.create') }}">Create</a>
+                        <a class="btn btn-primary" href="{{ route('admin.departments.create') }}">Create</a>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-bordered">
                             <thead>
                             <tr>
                                 <th>Name</th>
-                                <th>Number Subject</th>
-                                <th>Min Credit</th>
-                                <th>Total Semester</th>
+                                <th>Specialization</th>
+                                <th>Teacher</th>
                                 <th></th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($specializations as $specialization)
+                            @foreach($departments as $department)
                                 <tr>
-                                    <td>
-                                        {{ $specialization->name }}
-                                    </td>
-                                    <td>
-                                        {{ count($specialization->subjects) }}
-                                    </td>
-                                    <td>
-                                        {{ $specialization->min_credit }}
-                                    </td>
-                                    <td>
-                                        {{ $specialization->total_semester }}
-                                    </td>
+                                    <td>{{ $department->name }}</td>
+                                    <td>{{ count($department->specializations) }}</td>
+                                    <td>{{ count($department->teachers) }}</td>
+
                                     <td width="100">
                                         <div class="d-flex justify-content-between">
                                             <div class="mr-3">
-                                                <a href="{{ route('admin.specializations.edit', $specialization->id) }}"
+                                                <a href="{{ route('admin.departments.edit', $department->id) }}"
                                                    class="btn btn-sm btn-warning">Edit</a>
                                             </div>
                                             <div>
@@ -71,5 +63,4 @@
     </div>
 @endsection
 @section('script')
-
 @endsection

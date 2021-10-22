@@ -22,6 +22,7 @@ class Student extends Authenticatable
         'can_register_credit',
         'grade_id',
         'class_id',
+        'department_id'
     ];
 
     public function class()
@@ -43,4 +44,6 @@ class Student extends Authenticatable
     {
         return $this->hasManyThrough(Schedule::class, Specialization::class);
     }
+
+
 }

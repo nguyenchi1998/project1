@@ -207,21 +207,26 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="{{ route('admin.roles.index') }}">
+                        <span class="menu-title">Role</span>
+                        <i class="mdi mdi-table-large menu-icon"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="{{route('admin.requests.index')}}">
-                        <span class="menu-title">Requests</span>
+                        <span class="menu-title">Request</span>
                         <i class="mdi mdi-contacts menu-icon"></i>
                     </a>
                 </li>
-
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('admin.grades.index')}}">
-                        <span class="menu-title">Grades</span>
+                        <span class="menu-title">Grade</span>
                         <i class="mdi mdi-contacts menu-icon"></i>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('admin.subjects.index')}}">
-                        <span class="menu-title">Subjects</span>
+                    <a class="nav-link" href="{{route('admin.departments.index')}}">
+                        <span class="menu-title">Department</span>
                         <i class="mdi mdi-contacts menu-icon"></i>
                     </a>
                 </li>
@@ -232,15 +237,15 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.classes.index') }}">
-                        <span class="menu-title">Class</span>
-                        <i class="mdi mdi-chart-bar menu-icon"></i>
+                    <a class="nav-link" href="{{route('admin.subjects.index')}}">
+                        <span class="menu-title">Subject</span>
+                        <i class="mdi mdi-contacts menu-icon"></i>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.roles.index') }}">
-                        <span class="menu-title">Role</span>
-                        <i class="mdi mdi-table-large menu-icon"></i>
+                    <a class="nav-link" href="{{ route('admin.classes.index') }}">
+                        <span class="menu-title">Class</span>
+                        <i class="mdi mdi-chart-bar menu-icon"></i>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -253,7 +258,7 @@
                     <div class="collapse" id="general-pages">
                         <ul class="nav flex-column sub-menu">
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('admin.schedules.index') }}">Class (Only for semester 1,2)</a>
+                                <a class="nav-link" href="{{ route('admin.schedules.index') }}">Class</a>
                             </li>
                         </ul>
                     </div>
@@ -264,12 +269,37 @@
                         <i class="mdi mdi-table-large menu-icon"></i>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('admin.students.index') }}">
+                        <span class="menu-title">Student</span>
+                        <i class="mdi mdi-table-large menu-icon"></i>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- partial -->
         <div class="main-panel">
-        @yield('main')
-        <!-- content-wrapper ends -->
+            <div class="content-wrapper">
+                @yield('breadcrumb')
+                @if($errors->any())
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Warning!</strong> {{ $errors->first() }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
+                @if(session()->has('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>Success!</strong> {{ session()->get('success') }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
+                @yield('main')
+            </div>
+            <!-- content-wrapper ends -->
             <!-- partial:../../partials/_footer.html -->
             <footer class="footer">
                 <div class="container-fluid clearfix">

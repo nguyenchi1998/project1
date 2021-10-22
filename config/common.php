@@ -14,13 +14,8 @@ return [
             'basic' => 0,
             'specialization' => 1,
         ],
-        'force' => [
-            'basic' => 1,
-            'specialization' => [
-                'forced' => 1,
-                'unforced' => 10,
-            ],
-        ],
+        'force' => 1,
+        'unforce' => 0,
     ],
     'status' => [
         'schedule' => [
