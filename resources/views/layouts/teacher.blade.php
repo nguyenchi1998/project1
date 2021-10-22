@@ -52,7 +52,7 @@
                         <a class="dropdown-item" href="#">
                             <i class="mdi mdi-cached mr-2 text-success"></i> Activity Log </a>
                         <div class="dropdown-divider"></div>
-                        {{ Form::open(['url' => route('admin.logout')]) }}
+                        {{ Form::open(['url' => route('teacher.logout')]) }}
                         <button class="dropdown-item">
                             <i class="mdi mdi-logout mr-2 text-primary"></i> Signout
                         </button>
@@ -76,7 +76,7 @@
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item preview-item">
                             <div class="preview-thumbnail">
-                                <img src="{{ asset('asset/images/faces/face4.js') }}" alt="image" class="profile-pic">
+                                <img src="{{ asset('asset/images/faces/face4.jpg') }}" alt="image" class="profile-pic">
                             </div>
                             <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
                                 <h6 class="preview-subject ellipsis mb-1 font-weight-normal">Mark send you a
@@ -87,7 +87,7 @@
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item preview-item">
                             <div class="preview-thumbnail">
-                                <img src="{{ asset('asset/images/faces/face2.js') }}" alt="image" class="profile-pic">
+                                <img src="{{ asset('asset/images/faces/face2.jpg') }}" alt="image" class="profile-pic">
                             </div>
                             <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
                                 <h6 class="preview-subject ellipsis mb-1 font-weight-normal">Cregh send you a
@@ -98,7 +98,7 @@
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item preview-item">
                             <div class="preview-thumbnail">
-                                <img src="{{ asset('asset/images/faces/face3.js') }}" alt="image" class="profile-pic">
+                                <img src="{{ asset('asset/images/faces/face3.jpg') }}" alt="image" class="profile-pic">
                             </div>
                             <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
                                 <h6 class="preview-subject ellipsis mb-1 font-weight-normal">Profile picture
@@ -240,6 +240,8 @@
 <script src="{{ asset('asset/js/dashboard.js') }}"></script>
 <script src="{{ asset('asset/js/todolist.js') }}"></script>
 <!-- End custom js for this page -->
+
+@yield('script')
 </body>
 
 </html>

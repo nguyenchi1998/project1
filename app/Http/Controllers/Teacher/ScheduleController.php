@@ -53,7 +53,8 @@ class ScheduleController extends Controller
 
     public function markShow(Request $request, $id)
     {
-        $schedule = $this->scheduleRepository->find($id)->load('scheduleDetails.student');
+        $schedule = $this->scheduleRepository->find($id)
+            ->load('scheduleDetails.student');
         $scheduleDetails = $schedule->scheduleDetails;
         $statusScheduleDetails = array_flip(config('common.status.scheduleDetail'));
         $statusScheduleDetails = array_map(function ($status) {

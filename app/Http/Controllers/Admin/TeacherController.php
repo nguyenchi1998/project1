@@ -17,9 +17,9 @@ use ImageResize;
 class TeacherController extends Controller
 {
     private $departmentRepository;
-    private $teacherRrpository;
+    private $teacherRepository;
     private $roleRepository;
-    private $subjectReposutory;
+    private $subjectRepository;
 
     public function __construct(
         IDepartmentRepository $departmentRepository,
@@ -28,9 +28,9 @@ class TeacherController extends Controller
         ISubjectRepository    $subjectRepository)
     {
         $this->departmentRepository = $departmentRepository;
-        $this->teacherRrpository = $teacherRrpository;
+        $this->teacherRepository = $teacherRrpository;
         $this->roleRepository = $roleRepository;
-        $this->subjectReposutory = $subjectRepository;
+        $this->subjectRepository = $subjectRepository;
     }
 
     public function index(Request $request)

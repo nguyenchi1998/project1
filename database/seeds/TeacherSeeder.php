@@ -5,6 +5,7 @@ use App\Models\Media;
 use App\Models\Teacher;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
 class TeacherSeeder extends Seeder
@@ -16,9 +17,10 @@ class TeacherSeeder extends Seeder
      */
     public function run()
     {
+        $basePath = 'storage/app/public';
         $faker = Faker\Factory::create();
-        if (!file_exists(('storage/app/public' . config('default.path.media.avatar.teacher')))) {
-            mkdir('storage/app/public' . config('default.path.media.avatar.teacher'), 777, true);
+        if (!file_exists(($basePath . config('default.path.media.avatar.teacher')))) {
+            mkdir($basePath . config('default.path.media.avatar.teacher'), 777, true);
         }
         $path = $faker->image('storage/app/public' . config('default.path.media.avatar.teacher'), 200, 200);
         $teacher = Teacher::create([
@@ -30,21 +32,25 @@ class TeacherSeeder extends Seeder
             'address' => $faker->address(),
         ]);
         $media = Media::create([
-            'path' => 'storage/' . str_replace('storage/app/public/', '', $path),
+            'path' => 'storage/' . str_replace($basePath . '/', '', $path),
         ]);
         $teacher->avatar()->save($media);
         $teacherRole = Role::findByName(config('common.roles.teacher.name'), 'teacher');
         $teacher->assignRole($teacherRole);
+        $teacher->update([
+            'department_id' => 1,
+        ]);
         $departmentIds = Department::all()->pluck('id')->toArray();
-        factory(Teacher::class, 5)->create()->each(function ($teacher) use ($teacherRole, $departmentIds, $path) {
-            $media = Media::create([
-                'path' => 'storage/' . str_replace('storage/app/public/', '', $path),
-            ]);
-            $teacher->avatar()->save($media);
-            $teacher->assignRole($teacherRole);
-            $teacher->update([
-                'department_id' => $departmentIds[array_rand($departmentIds)]
-            ]);
-        });
+        factory(Teacher::class, 5)->create()
+            ->each(function ($teacher) use ($teacherRole, $departmentIds, $path, $basePath) {
+                $media = Media::create([
+                    'path' => 'storage/' . str_replace($basePath . '/', '', $path),
+                ]);
+                $teacher->avatar()->save($media);
+                $teacher->assignRole($teacherRole);
+                $teacher->update([
+                    'department_id' => $departmentIds[array_rand($departmentIds)]
+                ]);
+            });
     }
 }
