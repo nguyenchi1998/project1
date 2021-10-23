@@ -40,7 +40,7 @@ Route::group(['as' => 'admin.'], function () {
 
         Route::resource('grades', 'GradeController');
 
-        Route::resource('schedule', 'ScheduleController');
+        Route::resource('schedules', 'ScheduleController');
 
         Route::resource('departments', 'DepartmentController');
 

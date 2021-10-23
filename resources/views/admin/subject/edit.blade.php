@@ -1,15 +1,15 @@
 @extends('layouts.manager')
-@section('title') Manager Subjects @endsection
+@section('title') Quản Lý Môn Học @endsection
 @section('breadcrumb')
     <div class="page-header">
-        <h3 class="page-title">Update</h3>
+        <h3 class="page-title">Sửa Đổi</h3>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
                 <li class="breadcrumb-item">
-                    <a href="{{ route('admin.subjects.index') }}">Subjects</a>
+                    <a href="{{ route('admin.subjects.index') }}">Danh Sách Môn Học</a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page">Update</li>
+                <li class="breadcrumb-item active" aria-current="page">Sửa Đổi</li>
             </ol>
         </nav>
     </div>@endsection
@@ -23,19 +23,19 @@
                     {{ Form::text('id',$subject->id, ['hidden'=>true]) }}
                     <div class="form-group">
                         <label for="name">Name</label>
-                        {{ Form::input('text', 'name', $subject->name, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Enter name']) }}
+                        {{ Form::input('text', 'name', $subject->name, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Môn Học']) }}
                     </div>
                     <div class="form-group">
                         <label for="credit">Credit</label>
-                        {{ Form::input('number', 'credit', $subject->credit, ['class' => 'form-control', 'id' => 'credit', 'placeholder' => 'Enter Credit', 'min' => 1]) }}
+                        {{ Form::input('number', 'credit', $subject->credit, ['class' => 'form-control', 'id' => 'credit', 'placeholder' => 'Sô Tín Chỉ', 'min' => 1]) }}
                     </div>
                     <div class="form-group">
-                        {{ Form::label('specialization', 'Specialization')}}
-                        @foreach($specializations as $key => $specialization)
+                        {{ Form::label('department', 'Khoa Viện')}}
+                        @foreach($departments as $key => $department)
                             <div class="form-check form-check-info">
                                 <label class="form-check-label">
-                                    {{ Form::checkbox('specializations[]', $specialization->id, in_array($specialization->id, $subject->specializations) ,  ['class'=>'form-check-input']) }}
-                                    {{ $specialization->name }}
+                                    {{ Form::radio('department_id', $department->id, $department->id == $subject->department_id, ['class'=>'form-check-input']) }}
+                                    {{ $department->name }}
                                     <i class="input-helper"></i>
                                 </label>
                             </div>
@@ -45,13 +45,13 @@
                         <div class="form-check form-check-primary">
                             <label class="form-check-label">
                                 {{ Form::checkbox('basic', config('common.subject.type.basic'), $subject->type == config('common.subject.type.basic'), ['class'=>'form-check-input']) }}
-                                Basic Subject
+                                Môn Cơ Bản
                                 <i class="input-helper"></i>
                             </label>
                         </div>
                     </div>
-                    {{Form::submit('Submit', ['class'=> 'btn btn-gradient-primary mr-2'])}}
-                    <a href="{{ route('admin.subjects.index') }}" class="btn btn-light">Cancel</a>
+                    {{Form::submit('Xác Nhận', ['class'=> 'btn btn-gradient-primary mr-2'])}}
+                    <a href="{{ route('admin.subjects.index') }}" class="btn btn-light">Huỷ Bỏ</a>
                     {{ Form::close()}}
                 </div>
             </div>

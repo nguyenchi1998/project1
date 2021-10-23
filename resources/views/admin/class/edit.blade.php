@@ -1,15 +1,15 @@
 @extends('layouts.manager')
-@section('title') Manager Classes @endsection
+@section('title') Quản Lý Lớp Học @endsection
 @section('breadcrumb')
     <div class="page-header">
-        <h3 class="page-title">Update</h3>
+        <h3 class="page-title">Sửa Đổi</h3>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
                 <li class="breadcrumb-item">
-                    <a href="{{ route('admin.specializations.index') }}">Classes</a>
+                    <a href="{{ route('admin.specializations.index') }}">Danh Sách Lớp Học</a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page">Update</li>
+                <li class="breadcrumb-item active" aria-current="page">Sửa Đổi</li>
             </ol>
         </nav>
     </div>
@@ -38,8 +38,8 @@
                             </div>
                         @endforeach
                     </div>
-                    {{Form::submit('Submit', ['class'=> 'btn btn-gradient-primary mr-2'])}}
-                    <a href="{{ route('admin.classes.index') }}" class="btn btn-light">Cancel</a>
+                    {{Form::submit('Xác Nhận', ['class'=> 'btn btn-gradient-primary mr-2'])}}
+                    <a href="{{ route('admin.classes.index') }}" class="btn btn-light">Huỷ Bỏ</a>
                     {{ Form::close()}}
                 </div>
             </div>

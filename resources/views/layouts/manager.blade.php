@@ -21,7 +21,7 @@
     <!-- partial:partials/_navbar.html -->
     <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
         <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-            <a class="navbar-brand brand-logo" href="index.html">
+            <a class="navbar-brand brand-logo" href="{{ route('admin.home') }}">
                 <img src="{{asset('asset/images/logo.svg') }}" alt="logo"/>
             </a>
             <a class="navbar-brand brand-logo-mini" href="index.html"><img
@@ -55,17 +55,17 @@
                     </a>
                     <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
                         <a class="dropdown-item" href="#">
-                            <i class="mdi mdi-cached mr-2 text-success"></i> Activity Log </a>
+                            <i class="mdi mdi-cached mr-2 text-success"></i>Nhật Ký Hoạt Động </a>
                         <div class="dropdown-divider"></div>
                         {{ Form::open(['url' => route('admin.logout')]) }}
                         <button class="dropdown-item">
-                            <i class="mdi mdi-logout mr-2 text-primary"></i> Signout
+                            <i class="mdi mdi-logout mr-2 text-primary"></i> Đăng Xuất
                         </button>
                         {{ Form::close() }}
                     </div>
                 </li>
                 <li class="nav-item d-none d-lg-block full-screen-link">
-                    <a class="nav-link">
+                    <a class="nav-link" href="#">
                         <i class="mdi mdi-fullscreen" id="fullscreen-button"></i>
                     </a>
                 </li>
@@ -81,7 +81,7 @@
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item preview-item">
                             <div class="preview-thumbnail">
-                                <img src="{{ asset('asset/images/faces/face4.js') }}" alt="image" class="profile-pic">
+                                <img src="{{ asset('asset/images/faces/face4.jpg') }}" alt="image" class="profile-pic">
                             </div>
                             <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
                                 <h6 class="preview-subject ellipsis mb-1 font-weight-normal">Mark send you a
@@ -92,7 +92,7 @@
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item preview-item">
                             <div class="preview-thumbnail">
-                                <img src="{{ asset('asset/images/faces/face2.js') }}" alt="image" class="profile-pic">
+                                <img src="{{ asset('asset/images/faces/face2.jpg') }}" alt="image" class="profile-pic">
                             </div>
                             <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
                                 <h6 class="preview-subject ellipsis mb-1 font-weight-normal">Cregh send you a
@@ -103,7 +103,7 @@
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item preview-item">
                             <div class="preview-thumbnail">
-                                <img src="{{ asset('asset/images/faces/face3.js') }}" alt="image" class="profile-pic">
+                                <img src="{{ asset('asset/images/faces/face3.jpg') }}" alt="image" class="profile-pic">
                             </div>
                             <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
                                 <h6 class="preview-subject ellipsis mb-1 font-weight-normal">Profile picture
@@ -145,7 +145,7 @@
                             </div>
                             <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
                                 <h6 class="preview-subject font-weight-normal mb-1">Settings</h6>
-                                <p class="text-gray ellipsis mb-0"> Update dashboard </p>
+                                <p class="text-gray ellipsis mb-0"> Update Bảng Điều Khiển </p>
                             </div>
                         </a>
                         <div class="dropdown-divider"></div>
@@ -195,83 +195,83 @@
                         </div>
                         <div class="nav-profile-text d-flex flex-column">
                             <span class="font-weight-bold mb-2">{{ auth()->user()->name }}</span>
-                            <span class="text-secondary text-small">Project Manager</span>
+                            <span class="text-secondary text-small text-capitalize">{{ get_guard() }}</span>
                         </div>
                         <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('admin.home') }}">
-                        <span class="menu-title">Dashboard</span>
+                        <span class="menu-title">Bảng Điều Khiển</span>
                         <i class="mdi mdi-home menu-icon"></i>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('admin.roles.index') }}">
-                        <span class="menu-title">Role</span>
+                        <span class="menu-title">Quản Lý Quyền</span>
                         <i class="mdi mdi-table-large menu-icon"></i>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('admin.requests.index')}}">
-                        <span class="menu-title">Request</span>
+                        <span class="menu-title">Quản Lý Yêu Cầu</span>
                         <i class="mdi mdi-contacts menu-icon"></i>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('admin.grades.index')}}">
-                        <span class="menu-title">Grade</span>
+                        <span class="menu-title">Quản Lý Niên Khoá</span>
                         <i class="mdi mdi-contacts menu-icon"></i>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('admin.departments.index')}}">
-                        <span class="menu-title">Department</span>
+                        <span class="menu-title">Quản Lý Khoa Viện</span>
                         <i class="mdi mdi-contacts menu-icon"></i>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('admin.specializations.index')}}">
-                        <span class="menu-title">Specialization</span>
+                        <span class="menu-title">Quản Lý Chuyên Ngành</span>
                         <i class="mdi mdi-format-list-bulleted menu-icon"></i>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('admin.subjects.index')}}">
-                        <span class="menu-title">Subject</span>
+                        <span class="menu-title">Quản Lý Môn Học</span>
                         <i class="mdi mdi-contacts menu-icon"></i>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('admin.classes.index') }}">
-                        <span class="menu-title">Class</span>
+                        <span class="menu-title">Quản Lý Lớp Học</span>
                         <i class="mdi mdi-chart-bar menu-icon"></i>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="collapse" href="#general-pages" aria-expanded="true"
                        aria-controls="general-pages">
-                        <span class="menu-title">Schedule</span>
+                        <span class="menu-title">Quản Lý Tín Chỉ</span>
                         <i class="menu-arrow"></i>
                         <i class="mdi mdi-medical-bag menu-icon"></i>
                     </a>
                     <div class="collapse" id="general-pages">
                         <ul class="nav flex-column sub-menu">
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('admin.schedules.index') }}">Class</a>
+                                <a class="nav-link" href="{{ route('admin.schedules.index') }}">Cho Lớp Học</a>
                             </li>
                         </ul>
                     </div>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('admin.teachers.index') }}">
-                        <span class="menu-title">Teacher</span>
+                        <span class="menu-title">Quản Lý Giảng Viên</span>
                         <i class="mdi mdi-table-large menu-icon"></i>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('admin.students.index') }}">
-                        <span class="menu-title">Student</span>
+                        <span class="menu-title">Quản Lý Sinh Viên</span>
                         <i class="mdi mdi-table-large menu-icon"></i>
                     </a>
                 </li>
@@ -327,7 +327,7 @@
 <script src="{{ asset('asset/js/misc.js') }}"></script>
 <!-- endinject -->
 <!-- Custom js for this page -->
-<script src="{{ asset('asset/js/dashboard.js') }}"></script>
+<script src="{{ asset('asset/js/Bảng Điều Khiển.js') }}"></script>
 <script src="{{ asset('asset/js/todolist.js') }}"></script>
 <!-- End custom js for this page -->
 </body>

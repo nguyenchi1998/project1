@@ -1,14 +1,14 @@
 @extends('layouts.manager')
 @section('title')
-    Manager Grades
+    Quản Lý Niên Khoá
 @endsection
 @section('breadcrumb')
     <div class="page-header">
-        <h3 class="page-title">Manager Grades</h3>
+        <h3 class="page-title">Danh Sách Niên Khoá</h3>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Dashboard</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Grades</li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Danh Sách Niên Khoá</li>
             </ol>
         </nav>
     </div>
@@ -20,14 +20,14 @@
                 <div class="card-body">
                     <div class="d-flex mb-4 justify-content-between">
                         <div class="w-15"></div>
-                        <a class="btn btn-primary" href="{{ route('admin.grades.create') }}">Create</a>
+                        <a class="btn btn-primary" href="{{ route('admin.grades.create') }}">Tạo mới</a>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-bordered">
                             <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Students</th>
+                                <th>Niên Khoá</th>
+                                <th>Tổng số sinh viên</th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -36,16 +36,20 @@
                                 <tr>
                                     <td>{{ $grade->name }}</td>
                                     <td>{{ count($grade->students) }}</td>
-
                                     <td width="100">
                                         <div class="d-flex justify-content-between">
                                             <div class="mr-3">
                                                 <a href="{{ route('admin.grades.edit', $grade->id) }}"
-                                                   class="btn btn-sm btn-warning">Edit</a>
+                                                   class="btn btn-sm btn-warning" data-toggle="tooltip"
+                                                   data-placement="top"
+                                                   title="Sửa Thông Tin"><i class="mdi mdi-grease-pencil"></i></a>
                                             </div>
                                             <div>
                                                 <form action="">
-                                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                                    <button type="submit" class="btn btn-sm btn-danger"
+                                                            data-toggle="tooltip" data-placement="top"
+                                                            title="Xoá Thông Tin">
+                                                        <i class="mdi mdi-delete"></i></button>
                                                 </form>
                                             </div>
                                         </div>

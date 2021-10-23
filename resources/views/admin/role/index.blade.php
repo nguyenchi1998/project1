@@ -1,14 +1,14 @@
 @extends('layouts.manager')
 @section('title')
-    Manager Roles
+    Quản Lý Quyền
 @endsection
 @section('breadcrumb')
     <div class="page-header">
-        <h3 class="page-title">Manager Roles</h3>
+        <h3 class="page-title">Danh Sách Quyền</h3>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Dashboard</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Roles</li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Danh Sách Quyền</li>
             </ol>
         </nav>
     </div>
@@ -22,8 +22,8 @@
                         <table class="table table-bordered">
                             <thead>
                             <tr>
-                                <th>Role</th>
-                                <th>Permissions</th>
+                                <th>Quyền</th>
+                                <th>Hành Động</th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -40,7 +40,9 @@
                                         <div class="d-flex justify-content-between">
                                             <div class="mr-3">
                                                 <a href="{{ route('admin.roles.edit', $role->id) }}"
-                                                   class="btn btn-sm btn-warning">Edit</a>
+                                                   class="btn btn-sm btn-warning" data-toggle="tooltip"
+                                                   data-placement="top"
+                                                   title="Sửa Thông Tin"><i class="mdi mdi-grease-pencil"></i></a>
                                             </div>
                                         </div>
                                     </td>

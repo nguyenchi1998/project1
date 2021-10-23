@@ -56,7 +56,6 @@ class TeacherController extends Controller
         return view('admin.teacher.create', compact('departments'));
     }
 
-
     public function store(Request $request)
     {
         try {

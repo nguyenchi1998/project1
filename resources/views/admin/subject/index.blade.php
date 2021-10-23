@@ -1,14 +1,14 @@
 @extends('layouts.manager')
 @section('title')
-    Manager Subjects
+    Quản Lý Môn Học
 @endsection
 @section('breadcrumb')
     <div class="page-header">
         <h3 class="page-title">Manager Subjects</h3>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Dashboard</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Subjects</li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Danh Sách Môn Học</li>
             </ol>
         </nav>
     </div>@endsection
@@ -22,26 +22,25 @@
                             <form action="{{route('admin.subjects.index')}}">
                                 <select class="form-control" name="filter" onchange="this.form.submit()">
                                     <option value="all"
-                                            @if(!$filter || $filter == 'all') selected="selected" @endif>All
-                                        Specialization
+                                            @if(!$filter || $filter == 'all') selected="selected" @endif>Tất Cả Khoa
+                                        Viện
                                     </option>
-                                    @foreach($specializations as $specialization)
-                                        <option value="{{ $specialization->id }}"
-                                                @if($filter && $filter == $specialization->id) selected="selected" @endif>{{ $specialization->name }}</option>
+                                    @foreach($departments as $department)
+                                        <option value="{{ $department->id }}"
+                                                @if($filter && $filter == $department->id) selected="selected" @endif>{{ $department->name }}</option>
                                     @endforeach
                                 </select>
                             </form>
                         </div>
-                        <a class="btn btn-primary" href="{{ route('admin.subjects.create') }}">Create</a>
+                        <a class="btn btn-primary" href="{{ route('admin.subjects.create') }}">Tạo mới</a>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-bordered">
                             <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Credit</th>
-                                <th>Force</th>
-                                <th>Department</th>
+                                <th>Môn Học</th>
+                                <th>Số Tín Chỉ</th>
+                                <th>Khoa Viện</th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -51,15 +50,10 @@
                                     <td>
                                         {{ $subject->name }}
                                         @if($subject->type == config('common.subject.type.basic'))
-                                            <span class="ml-2 badge bg-danger">Primary</span>
+                                            <span class="ml-2 badge bg-danger">Môn Cơ Bản</span>
                                         @endif
                                     </td>
                                     <td>{{ $subject->credit }}</td>
-                                    <td style="white-space:normal">
-                                        @if($subject->force)
-                                            Force
-                                        @endif
-                                    </td>
                                     <td style="white-space:normal">
                                         {{ $subject->department->name ?? '' }}
                                     </td>
@@ -67,11 +61,17 @@
                                         <div class="d-flex justify-content-between">
                                             <div class="mr-3">
                                                 <a href="{{ route('admin.subjects.edit', $subject->id) }}"
-                                                   class="btn btn-sm btn-warning">Edit</a>
+                                                   class="btn btn-sm btn-warning" data-toggle="tooltip"
+                                                   data-placement="top"
+                                                   title="Sửa Thông Tin"><i class="mdi mdi-grease-pencil"></i></a>
                                             </div>
                                             <div>
                                                 <form action="">
-                                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                                    <button type="submit" class="btn btn-sm btn-danger"
+                                                            data-toggle="tooltip" data-placement="top"
+                                                            title="Xoá Thông Tin">
+                                                        <i class="mdi mdi-delete"></i>
+                                                    </button>
                                                 </form>
                                             </div>
                                         </div>

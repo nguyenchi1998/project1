@@ -1,15 +1,15 @@
 @extends('layouts.manager')
-@section('title') Manager Teachers @endsection
+@section('title') Quản Lý Giảng Viên @endsection
 @section('breadcrumb')
     <div class="page-header">
-        <h3 class="page-title">Update Teacher</h3>
+        <h3 class="page-title">Chọn Môn Giảng Dạy</h3>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
                 <li class="breadcrumb-item">
-                    <a href="{{ route('admin.teachers.index') }}">Teachers</a>
+                    <a href="{{ route('admin.teachers.index') }}">Danh Sách Giảng Viên</a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page">Subject</li>
+                <li class="breadcrumb-item active" aria-current="page">Chọn Môn Giảng Dạy</li>
             </ol>
         </nav>
     </div>
@@ -23,12 +23,12 @@
                         <div class="form-row">
                             <div class="col-6">
                                 <div class="form-group">
-                                    <strong>Teacher</strong>:<span> {{ $teacher->name }}</span>
+                                    <strong>Giảng Viên</strong>:<span> {{ $teacher->name }}</span>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
-                                    <strong>Department:</strong> {{ $teacher->department->name }}
+                                    <strong>Khoa Viện:</strong> {{ $teacher->department->name }}
                                 </div>
                             </div>
                         </div>
@@ -36,7 +36,7 @@
                     {{ Form::open(['url' => route('admin.teachers.choose_subject', $teacher->id) , 'method' => 'POST']) }}
                     @method('PUT')
                     <div class="form-group">
-                        {{ Form::label('subject', 'Subject')}}
+                        {{ Form::label('subject', 'Môn Học')}}
                         @foreach($subjects as $key => $subject)
                             <div class="form-check form-check-info">
                                 <label class="form-check-label">
@@ -47,8 +47,8 @@
                             </div>
                         @endforeach
                     </div>
-                    {{Form::submit('Submit', ['class'=> 'btn btn-gradient-primary mr-2'])}}
-                    <a href="{{ route('admin.teachers.index') }}" class="btn btn-light">Cancel</a>
+                    {{Form::submit('Xác Nhận', ['class'=> 'btn btn-gradient-primary mr-2'])}}
+                    <a href="{{ route('admin.teachers.index') }}" class="btn btn-light">Huỷ Bỏ</a>
                     {{ Form::close()}}
                 </div>
             </div>

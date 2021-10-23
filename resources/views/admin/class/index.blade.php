@@ -1,14 +1,14 @@
 @extends('layouts.manager')
 @section('title')
-    Manager Classes
+    Quản Lý Lớp Học
 @endsection
 @section('breadcrumb')
     <div class="page-header">
         <h3 class="page-title">Manager Classes</h3>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Dashboard</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Classes</li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Danh Sách Lớp Học</li>
             </ol>
         </nav>
     </div>
@@ -22,7 +22,7 @@
                         <div class="w-15">
 
                         </div>
-                        <a class="btn btn-primary" href="{{ route('admin.classes.create') }}">Create</a>
+                        <a class="btn btn-primary" href="{{ route('admin.classes.create') }}">Tạo mới</a>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-bordered">
@@ -46,15 +46,21 @@
                                         <div class="d-flex justify-content-between">
                                             <div class="mr-3">
                                                 <a href="{{ route('admin.classes.show', $class->id) }}"
-                                                   class="btn btn-sm btn-info">Student</a>
+                                                   class="btn btn-sm btn-info" data-toggle="tooltip"
+                                                   data-placement="top"
+                                                   title="Danh Sách Sinh Viên"><i class="mdi mdi-account-multiple"></i></a>
                                             </div>
                                             <div class="mr-3">
                                                 <a href="{{ route('admin.classes.edit', $class->id) }}"
-                                                   class="btn btn-sm btn-warning">Edit</a>
+                                                   class="btn btn-sm btn-warning" data-toggle="tooltip"
+                                                   data-placement="top"
+                                                   title="Sửa Thông Tin"><i class="mdi mdi-grease-pencil"></i></a>
                                             </div>
                                             <div>
                                                 <form action="">
-                                                    <button type="submit" class="btn btn-sm btn-danger">Delete
+                                                    <button type="submit" class="btn btn-sm btn-danger"
+                                                            data-toggle="tooltip" data-placement="top"
+                                                            title="Xoá Thông Tin"><i class="mdi mdi-delete"></i>
                                                     </button>
                                                 </form>
                                             </div>

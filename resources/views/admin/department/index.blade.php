@@ -1,14 +1,14 @@
 @extends('layouts.manager')
 @section('title')
-    Manager Grades
+    Quản Lý Khoa Viện
 @endsection
 @section('breadcrumb')
     <div class="page-header">
-        <h3 class="page-title">Manager Departments</h3>
+        <h3 class="page-title">Danh Sách Khoa Viện</h3>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Dashboard</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Departments</li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Danh Sách Khoa Viện</li>
             </ol>
         </nav>
     </div>
@@ -20,15 +20,15 @@
                 <div class="card-body">
                     <div class="d-flex mb-4 justify-content-between">
                         <div class="w-15"></div>
-                        <a class="btn btn-primary" href="{{ route('admin.departments.create') }}">Create</a>
+                        <a class="btn btn-primary" href="{{ route('admin.departments.create') }}">Tạo mới</a>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-bordered">
                             <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Specialization</th>
-                                <th>Teacher</th>
+                                <th>Khoa Viện</th>
+                                <th>Số chuyên ngành</th>
+                                <th>Sô Giáo Viên</th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -43,11 +43,16 @@
                                         <div class="d-flex justify-content-between">
                                             <div class="mr-3">
                                                 <a href="{{ route('admin.departments.edit', $department->id) }}"
-                                                   class="btn btn-sm btn-warning">Edit</a>
+                                                   class="btn btn-sm btn-warning" data-toggle="tooltip"
+                                                   data-placement="top"
+                                                   title="Sửa Thông Tin"><i class="mdi mdi-grease-pencil"></i></a>
                                             </div>
                                             <div>
                                                 <form action="">
-                                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                                    <button type="submit" class="btn btn-sm btn-danger"
+                                                            data-toggle="tooltip" data-placement="top"
+                                                            title="Xoá Thông Tin"><i class="mdi mdi-delete"></i>
+                                                    </button>
                                                 </form>
                                             </div>
                                         </div>

@@ -1,15 +1,16 @@
 @extends('layouts.manager')
 @section('title')
-    Manager Schedules
+    Quản Lý Tín Chỉ
 @endsection
 @section('breadcrumb')
     <div class="page-header">
-        <h3 class="page-title">Manager Schedules</h3>
+        <h3 class="page-title">Đăng Ký</h3>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.schedules.index') }}">Danh Sách Tín Chỉ</a></li>
                 <li class="breadcrumb-item active" aria-current="page">
-                    Schedules
+                    Đăng Ký
                 </li>
             </ol>
         </nav>
@@ -24,12 +25,12 @@
                         <div class="form-row">
                             <div class="col-6">
                                 <div class="form-group">
-                                    <strong>Class</strong>:<span> {{ $class->name }}</span>
+                                    <strong>Lớp Học</strong>:<span> {{ $class->name }}</span>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
-                                    <strong>Specialization:</strong> {{ $class->specialization->name }}
+                                    <strong>Chuyên Ngành:</strong> {{ $class->specialization->name }}
                                 </div>
                             </div>
                         </div>
@@ -38,10 +39,10 @@
                         <table class="table table-bordered">
                             <thead>
                             <tr>
-                                <th>Subject</th>
-                                <th>Credit</th>
-                                <th>Start Time</th>
-                                <th>Teachers</th>
+                                <th>Môn Học</th>
+                                <th>Số Tín Chỉ</th>
+                                <th>Thời Gian Bắt Đầu</th>
+                                <th>Giảng Viên Dạy</th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -56,17 +57,17 @@
                                         {{ $subject->credit }}
                                     </td>
                                     <td>
-                                        {{ Form::date('start_time', null, ['placeholder'=> 'Choose teacher', 'class' => 'form-control form-control-sm', 'required' => true]) }}
+                                        {{ Form::date('start_time', null, ['class' => 'form-control form-control-sm', 'required' => true]) }}
                                     </td>
                                     <td>
-                                        {{ Form::select('teacher_id', $subject->teachers->pluck('name', 'id')->toArray(), null, ['placeholder'=> 'Choose teacher', 'class' => 'form-control form-control-sm']) }}
+                                        {{ Form::select('teacher_id', $subject->teachers->pluck('name', 'id')->toArray(), null, ['placeholder'=> 'Chọn Giảng Viên', 'class' => 'form-control form-control-sm']) }}
                                     </td>
                                     <td width="100">
                                         <div class="d-flex justify-content-between">
                                             <div class="mr-3">
                                                 {{ Form::text('class_id', $id, ['hidden' => true])}}
                                                 {{ Form::text('subject_id', $subject->id, ['hidden' => true])}}
-                                                {{ Form::submit('Register', ['class' => 'btn btn-success']) }}
+                                                {{ Form::submit('Đăng Ký', ['class' => 'btn btn-success']) }}
                                             </div>
                                         </div>
                                     </td>

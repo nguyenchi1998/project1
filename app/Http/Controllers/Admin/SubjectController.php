@@ -19,7 +19,7 @@ class SubjectController extends Controller
     public function __construct(
         ISubjectRepository        $subjectRepository,
         ISpecializationRepository $specializationRepository,
-        IDepartmentRepository $departmentRepository
+        IDepartmentRepository     $departmentRepository
     )
     {
         $this->subjectRepository = $subjectRepository;
@@ -31,12 +31,13 @@ class SubjectController extends Controller
     {
         $filter = $request->get('filter');
         $subjects = $this->subjectRepository->model()
-            ->with(['specializations' => function ($query) use ($filter) {
+            ->with(['department' => function ($query) use ($filter) {
                 $query->when(!$filter || $filter == 'all', function ($query) {
                 }, function ($query) use ($filter) {
-                    $query->where('specializations.id', $filter);
+                    $query->where('departments.id', $filter);
                 });
-            }, 'department'])->get();
+            }])
+            ->get();
         $subjects = $subjects->map(function ($subject) {
             $specializations = array_map(function ($specialization) {
                 return $specialization['name'];
@@ -63,32 +64,15 @@ class SubjectController extends Controller
 
     public function store(Request $request)
     {
-        try {
-            DB::beginTransaction();
-            $basic = $request->get('basic');
-            $subject = $this->subjectRepository->create([
-                'name' => $request->get('name'),
-                'credit' => $request->get('credit'),
-                'semester' => $request->get('semester'),
-                'type' => $basic ? config('common.subject.type.basic') : config('common.subject.type.specialization'),
-                'department_id' => $request->get('department_id'),
-            ]);
-            if ($basic) {
-                $specializations = $this->specializationRepository->get('id');
-            } else {
-                $specializations = $this->specializationRepository->whereIn('id', $request->get('specializations'))
-                    ->get()
-                    ->pluck('id');
-            }
-            $subject->specializations()->attach($specializations);
-            DB::commit();
+        $this->subjectRepository->create([
+            'name' => $request->get('name'),
+            'credit' => $request->get('credit'),
+            'semester' => $request->get('semester'),
+            'type' => $request->get('basic') ? config('common.subject.type.basic') : config('common.subject.type.specialization'),
+            'department_id' => $request->get('department_id'),
+        ]);
 
-            return redirect()->route('admin.subjects.index');
-        } catch (Exception $e) {
-            DB::rollBack();
-
-            return redirect()->back()->withErrors('Error');
-        }
+        return redirect()->route('admin.subjects.index');
     }
 
     public function show($id)
@@ -102,11 +86,10 @@ class SubjectController extends Controller
         if ($subject) {
             $subject = $subject->load('specializations');
         }
-        $subject['specializations'] = $subject->specializations->pluck('id')
-            ->toArray();
         $specializations = $this->specializationRepository->all();
+        $departments = $this->departmentRepository->all();
 
-        return view('admin.subject.edit', compact('subject', 'specializations'));
+        return view('admin.subject.edit', compact('subject', 'specializations', 'departments'));
     }
 
     public function update(Request $request, $id)

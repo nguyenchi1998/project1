@@ -8,7 +8,7 @@
             <h3 class="page-title">Manager Credits</h3>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="#">Bảng Điều Khiển</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Manager Credits</li>
                 </ol>
             </nav>

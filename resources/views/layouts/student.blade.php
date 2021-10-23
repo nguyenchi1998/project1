@@ -80,7 +80,7 @@
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item preview-item">
                             <div class="preview-thumbnail">
-                                <img src="{{ asset('asset/images/faces/face4.js') }}" alt="image" class="profile-pic">
+                                <img src="{{ asset('asset/images/faces/face4.jpg') }}" alt="image" class="profile-pic">
                             </div>
                             <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
                                 <h6 class="preview-subject ellipsis mb-1 font-weight-normal">Mark send you a
@@ -91,7 +91,7 @@
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item preview-item">
                             <div class="preview-thumbnail">
-                                <img src="{{ asset('asset/images/faces/face2.js') }}" alt="image" class="profile-pic">
+                                <img src="{{ asset('asset/images/faces/face2.jpg') }}" alt="image" class="profile-pic">
                             </div>
                             <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
                                 <h6 class="preview-subject ellipsis mb-1 font-weight-normal">Cregh send you a
@@ -102,7 +102,7 @@
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item preview-item">
                             <div class="preview-thumbnail">
-                                <img src="{{ asset('asset/images/faces/face3.js') }}" alt="image" class="profile-pic">
+                                <img src="{{ asset('asset/images/faces/face3.jpg') }}" alt="image" class="profile-pic">
                             </div>
                             <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
                                 <h6 class="preview-subject ellipsis mb-1 font-weight-normal">Profile picture
@@ -144,7 +144,7 @@
                             </div>
                             <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
                                 <h6 class="preview-subject font-weight-normal mb-1">Settings</h6>
-                                <p class="text-gray ellipsis mb-0"> Update dashboard </p>
+                                <p class="text-gray ellipsis mb-0"> Update Bảng Điều Khiển </p>
                             </div>
                         </a>
                         <div class="dropdown-divider"></div>
@@ -203,7 +203,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('home') }}">
-                        <span class="menu-title">Dashboard</span>
+                        <span class="menu-title">Bảng Điều Khiển</span>
                         <i class="mdi mdi-home menu-icon"></i>
                     </a>
                 </li>
@@ -252,7 +252,7 @@
 <script src="{{ asset('asset/js/misc.js') }}"></script>
 <!-- endinject -->
 <!-- Custom js for this page -->
-<script src="{{ asset('asset/js/dashboard.js') }}"></script>
+<script src="{{ asset('asset/js/Bảng Điều Khiển.js') }}"></script>
 <script src="{{ asset('asset/js/todolist.js') }}"></script>
 <!-- End custom js for this page -->
 </body>

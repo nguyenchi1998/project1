@@ -1,14 +1,14 @@
 @extends('layouts.manager')
 @section('title')
-    Manager Requests
+    Quản Lý Yêu Cầu
 @endsection
 @section('breadcrumb')
     <div class="page-header">
-        <h3 class="page-title">Manager Requests</h3>
+        <h3 class="page-title">Danh Sách Yêu Cầu</h3>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Dashboard</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Requests</li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Danh Sách Yêu Cầu</li>
             </ol>
         </nav>
     </div>@endsection
@@ -17,16 +17,16 @@
         <div class="col-md-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Department</h4>
+                    <h4 class="card-title">Yêu Cầu Về Khoa</h4>
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
                             <tr>
-                                <th>Title</th>
-                                <th>Teacher</th>
-                                <th>Seniority</th>
-                                <th>Old Department</th>
-                                <th>New Department</th>
+                                <th>Tiêu Đề</th>
+                                <th>Giảng Viên</th>
+                                <th>Thâm Niên</th>
+                                <th>Viện Cũ</th>
+                                <th>Viện Mới</th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -51,7 +51,7 @@
                                                       method="post">
                                                     @csrf
                                                     {{ Form::text('teacherId', $teacher->id, ['hidden'=> true]) }}
-                                                    <button class="btn btn-sm btn-success">Approve</button>
+                                                    <button class="btn btn-sm btn-success">Chấp Nhận</button>
                                                 </form>
                                             </div>
                                             <div>
@@ -59,7 +59,7 @@
                                                       method="post">
                                                     @csrf
                                                     {{ Form::text('teacherId', $teacher->id, ['hidden'=> true]) }}
-                                                    <button class="btn btn-sm btn-danger">Reject</button>
+                                                    <button class="btn btn-sm btn-danger">Từ Chối</button>
                                                 </form>
                                             </div>
                                         </div>

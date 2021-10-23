@@ -37,7 +37,7 @@ class ClassController extends Controller
         $students = $this->studentRepository->model()->has('class', '=', 0)->get();
 
         if (!count($students)) {
-            return redirect()->route('classes.index')
+            return redirect()->route('admin.classes.index')
                 ->withErrors(['msg' => 'All student has class']);
         }
 
@@ -58,7 +58,7 @@ class ClassController extends Controller
             ]);
             DB::commit();
 
-            return redirect()->route('students.index');
+            return redirect()->route('admin.classes.index');
         } catch (Exception $e) {
             DB::rollBack();
 
@@ -97,7 +97,7 @@ class ClassController extends Controller
             ]);
             DB::commit();
 
-            return redirect()->route('students.index');
+            return redirect()->route('admin.classes.index');
         } catch (Exception $e) {
             DB::rollBack();
 

@@ -1,15 +1,15 @@
 @extends('layouts.manager')
-@section('title') Manager Grades @endsection
+@section('title')Quản Lý Niên Khoá @endsection
 @section('breadcrumb')
     <div class="page-header">
-        <h3 class="page-title">Create</h3>
+        <h3 class="page-title">Tạo mới</h3>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
                 <li class="breadcrumb-item">
-                    <a href="{{ route('admin.grades.index') }}">Grades</a>
+                    <a href="{{ route('admin.grades.index') }}">Danh Sách Niên Khoá</a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page">Create</li>
+                <li class="breadcrumb-item active" aria-current="page">Tạo mới</li>
             </ol>
         </nav>
     </div>
@@ -21,11 +21,11 @@
                 <div class="card-body">
                     {{ Form::open(['url' =>route('admin.grades.store') , 'method' => 'POST']) }}
                     <div class="form-group">
-                        <label for="name">Name</label>
-                        {{ Form::input('text', 'name', null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Enter name']) }}
+                        <label for="name">Niên Khoá</label>
+                        {{ Form::input('text', 'name', null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Niên khoá']) }}
                     </div>
-                    {{Form::submit('Submit', ['class'=> 'btn btn-gradient-primary mr-2'])}}
-                    <a href="{{ route('admin.grades.index') }}" class="btn btn-light">Cancel</a>
+                    {{Form::submit('Xác Nhận', ['class'=> 'btn btn-gradient-primary mr-2'])}}
+                    <a href="{{ route('admin.grades.index') }}" class="btn btn-light">Huỷ Bỏ</a>
                     {{ Form::close()}}
                 </div>
             </div>

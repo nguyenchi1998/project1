@@ -1,15 +1,15 @@
 @extends('layouts.manager')
 @section('title')
-    Manager Schedules
+    Quản Lý Tín Chỉ
 @endsection
 @section('breadcrumb')
     <div class="page-header">
-        <h3 class="page-title">Manager Schedules</h3>
+        <h3 class="page-title">Quản Lý Tín Chỉ</h3>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
                 <li class="breadcrumb-item active" aria-current="page">
-                    Schedules
+                    Danh Sách Tín Chỉ
                 </li>
             </ol>
         </nav>
@@ -23,7 +23,7 @@
                     <div class="d-flex mb-4">
                         <div class="w-25">
                             <form action="">
-                                {{ Form::select('semester', $semesters, $semester ?? null, ['class' => 'form-control', 'placeholder' => 'Choose semester', 'onchange' => 'this.form.submit()']) }}
+                                {{ Form::select('semester', $semesters, $semester ?? null, ['class' => 'form-control', 'placeholder' => 'Chọn Kì Học', 'onchange' => 'this.form.submit()']) }}
                             </form>
                         </div>
                     </div>
@@ -31,12 +31,12 @@
                         <table class="table table-bordered">
                             <thead>
                             <tr>
-                                <th>Class</th>
-                                <th>Current Semester</th>
-                                <th>Specialization</th>
-                                <th>Students</th>
-                                <th>Uncredit Subjects</th>
-                                <th>Basic Subjects</th>
+                                <th>Lớp Học</th>
+                                <th>Kì Hiện Tại</th>
+                                <th>Chuyên Ngành</th>
+                                <th>Tổng Số Sinh Viên</th>
+                                <th>Số Môn Chưa Đăng Ký</th>
+                                <th>Số Môn Cơ Bản</th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -65,7 +65,9 @@
                                         <div class="d-flex justify-content-between">
                                             <div class="mr-3">
                                                 <a class="btn btn-sm btn-success"
-                                                   href="{{route('admin.schedules.registerShow', $class->id) }}">Register</a>
+                                                   href="{{route('admin.schedules.registerShow', $class->id) }}"
+                                                   data-toggle="tooltip" data-placement="top"
+                                                   title="Danh Sách Môn Tín Chỉ Còn Thiếu">Danh Sách Môn</a>
                                             </div>
                                         </div>
                                     </td>
