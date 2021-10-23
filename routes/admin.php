@@ -12,6 +12,8 @@ Route::group(['as' => 'admin.'], function () {
 
         Route::resource('teachers', 'TeacherController');
 
+        Route::resource('managers', 'ManagerController');
+
         Route::get('teachers/{id}/change-department', 'TeacherController@changeDepartmentShow')
             ->name('teachers.change_department_show');
 

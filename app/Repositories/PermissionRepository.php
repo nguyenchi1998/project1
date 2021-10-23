@@ -30,4 +30,9 @@ class PermissionRepository implements IPermissionRepository
     {
         return Permission::findByName($name);
     }
+
+    public function where($attribute, $value)
+    {
+        return Permission::where($attribute, $value);
+    }
 }

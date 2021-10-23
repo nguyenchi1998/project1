@@ -20,13 +20,12 @@ class ScheduleStudentController extends Controller
     protected $studentRepository;
 
     public function __construct(
-        IScheduleRepository       $scheduleRepository,
+        IScheduleRepository $scheduleRepository,
         ISpecializationRepository $specializationRepository,
-        ISubjectRepository        $subjectRepository,
-        IClassRepository          $classRepository,
-        IStudentRepository        $studentRepository
-    )
-    {
+        ISubjectRepository $subjectRepository,
+        IClassRepository $classRepository,
+        IStudentRepository $studentRepository
+    ) {
         $this->scheduleRepository = $scheduleRepository;
         $this->specializationRepository = $specializationRepository;
         $this->subjectRepository = $subjectRepository;
@@ -36,28 +35,6 @@ class ScheduleStudentController extends Controller
 
     public function index(Request $request)
     {
-//        $semesters = ['1' => 'Semester 1', '2' => 'Semester 2'];
-//        $semester = $request->get('semester');
-//        $classId = $request->get('class');
-//        $schedules = $this->scheduleRepository->all()->load('subject', 'teacher', 'scheduleDetails');
-//        $allClasses = $this->classRepository->where('semester', '<=', self::MAX_SEMESTER_GROUP_BY_CLASS)
-//            ->when($semester, function ($query) use ($semester) {
-//                $query->where('semester', $semester);
-//            })
-//            ->get()
-//            ->load('specialization.subjects');
-//        $basicSubjects = $this->subjectRepository->model()
-//            ->basicSubjects()->get();
-//        $scheduleClass = $this
-//            ->scheduleRepository->where('class_id', '!=', null)
-//            ->get()
-//            ->load('subject');
-//        $allClasses = $allClasses->map(function ($class) use ($scheduleClass, $basicSubjects) {
-//            $subjects = $scheduleClass->where('class_id', $class->id)->all();
-//            $specializationSubjects = $basicSubjects->diff($subjects);
-//            $class['unCreditSubjects'] = $specializationSubjects;
-//            return $class;
-//        });
         $filterClass = $request->get('filter_class');
         $keyword = $request->get('keyword');
         $students = $this->studentRepository->model()
@@ -80,9 +57,14 @@ class ScheduleStudentController extends Controller
 
     public function registerScheduleShow(Request $request, $id)
     {
-        $class = $this->classRepository->find($id)->load('specialization');
-        $basicSubjects = $this->subjectRepository->model()->basicSubjects()->get()->load('teachers');
-        $schedules = $this->scheduleRepository->where('class_id', ' = ', $id)->get()->load('subject');
+        $class = $this->classRepository->find($id)
+            ->load('specialization');
+        $basicSubjects = $this->subjectRepository->model()
+            ->basicSubjects()
+            ->get()
+            ->load('teachers');
+        $schedules = $this->scheduleRepository->where('class_id', ' = ', $id)
+            ->get()->load('subject');
         $scheduleSubjects = $schedules->map(function ($schedule) {
             return $schedule->subject;
         });
@@ -123,6 +105,5 @@ class ScheduleStudentController extends Controller
 
     public function studentCredits()
     {
-
     }
 }

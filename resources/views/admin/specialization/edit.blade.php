@@ -36,15 +36,19 @@
                     </div>
                     <div class="form-group">
                         {{ Form::label('subject', 'Subject')}}
-                        @foreach($subjects as $key => $subject)
-                            <div class="form-check form-check-info">
-                                <label class="form-check-label">
-                                    {{ Form::checkbox('subjects[]', $subject->id, in_array($subject->id, $specialization->subjects),  ['class'=>'form-check-input']) }}
-                                    {{ $subject->name }}
-                                    <i class="input-helper"></i>
-                                </label>
-                            </div>
-                        @endforeach
+                        <div class="row">
+                            @foreach($subjects as $key => $subject)
+                                <div class="col-sm">
+                                    <div class="form-check form-check-info" style="min-width: 500px">
+                                        <label class="form-check-label">
+                                            {{ Form::checkbox('subjects[]', $subject->id, in_array($subject->id, $specialization->subjects),  ['class'=>'form-check-input']) }}
+                                            {{ $subject->name }}
+                                            <i class="input-helper"></i>
+                                        </label>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
                     {{Form::submit('Xác Nhận', ['class'=> 'btn btn-gradient-primary mr-2'])}}
                     <a href="{{ route('admin.specializations.index') }}" class="btn btn-light">Huỷ Bỏ</a>

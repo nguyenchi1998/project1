@@ -22,8 +22,7 @@ class ClassController extends Controller
         IClassRepository          $classRepository,
         IStudentRepository        $studentRepository,
         ISpecializationRepository $specializationRepository
-    )
-    {
+    ) {
         $this->classRepository = $classRepository;
         $this->studentRepository = $studentRepository;
         $this->specializationRepository = $specializationRepository;
@@ -34,11 +33,12 @@ class ClassController extends Controller
         $filterSpecialization = $request->get('filter_specializaiton');
         $keyword = $request->get('keyword');
         $specializations = $this->specializationRepository->all();
-        $classes = $this->classRepository->model()->when($keyword, function ($query) use ($keyword) {
-            $query->where('name', 'like', '%' . $keyword . '%')
-                ->orWhere('phone', $keyword)
-                ->orWhere('email', 'like', '%' . $keyword . '%');
-        })
+        $classes = $this->classRepository->model()
+            ->when($keyword, function ($query) use ($keyword) {
+                $query->where('name', 'like', '%' . $keyword . '%')
+                    ->orWhere('phone', $keyword)
+                    ->orWhere('email', 'like', '%' . $keyword . '%');
+            })
             ->when($filterSpecialization && $filterSpecialization != 'all', function ($query) use ($filterSpecialization) {
                 $query->whereHas('specialization', function ($query) use ($filterSpecialization) {
                     $query->whereId($filterSpecialization);
@@ -50,7 +50,9 @@ class ClassController extends Controller
 
     public function create()
     {
-        $students = $this->studentRepository->model()->has('class', '=', 0)->get();
+        $students = $this->studentRepository->model()
+            ->has('class', '=', 0)
+            ->get();
         if (!count($students)) {
             return redirect()->route('admin.classes.index')
                 ->withErrors(['msg' => 'All student has class']);
@@ -77,7 +79,9 @@ class ClassController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
 
-            return redirect()->back()->withErrors(['msg' => 'System Error, please try later']);
+            return redirect()->back()->withErrors([
+                'msg' => 'System Error, please try later'
+            ]);
         }
     }
 
@@ -94,7 +98,9 @@ class ClassController extends Controller
     public function edit($id)
     {
         $class = $this->classRepository->find($id);
-        $studentsNotHasClass = $this->studentRepository->model()->has('class', '=', 0)->get();
+        $studentsNotHasClass = $this->studentRepository->model()
+            ->has('class', '=', 0)
+            ->get();
         $students = $studentsNotHasClass->merge($class->students);
 
         return view('admin.class.edit', compact('class', 'students'));
@@ -103,20 +109,19 @@ class ClassController extends Controller
 
     public function update(UpdateClass $request, $id)
     {
-        $students = $request->get('students');
         try {
             DB::beginTransaction();
-            $this->classRepository->update($id, $request->only(['name', 'specialization_id']));
-            $this->studentRepository->whereIn('id', $students)->update([
-                'class_id' => $id,
-            ]);
+            $this->classRepository->update($id, $request->only(['name']));
             DB::commit();
 
             return redirect()->route('admin.classes.index');
         } catch (Exception $e) {
             DB::rollBack();
 
-            return redirect()->back()->withErrors(['msg' => 'System Error, please try later']);
+            return redirect()->back()
+                ->withErrors([
+                    'msg' => 'System Error, please try later'
+                ]);
         }
     }
 

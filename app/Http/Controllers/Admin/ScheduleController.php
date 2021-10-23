@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 
 class ScheduleController extends Controller
 {
-    const MAX_SEMESTER_GROUP_BY_CLASS = 2;
+    const MAX_SEMESTER_REGISTER_GROUP_BY_CLASS = 2;
 
     protected $scheduleRepository;
     protected $specializationRepository;
@@ -23,13 +23,12 @@ class ScheduleController extends Controller
     protected $studentRepository;
 
     public function __construct(
-        IScheduleRepository       $scheduleRepository,
+        IScheduleRepository $scheduleRepository,
         ISpecializationRepository $specializationRepository,
-        ISubjectRepository        $subjectRepository,
-        IClassRepository          $classRepository,
-        IStudentRepository        $studentRepository
-    )
-    {
+        ISubjectRepository $subjectRepository,
+        IClassRepository $classRepository,
+        IStudentRepository $studentRepository
+    ) {
         $this->scheduleRepository = $scheduleRepository;
         $this->specializationRepository = $specializationRepository;
         $this->subjectRepository = $subjectRepository;
@@ -42,8 +41,9 @@ class ScheduleController extends Controller
         $semesters = ['1' => 'Semester 1', '2' => 'Semester 2'];
         $semester = $request->get('semester');
         $classId = $request->get('class');
-        $schedules = $this->scheduleRepository->all()->load('subject', 'teacher', 'scheduleDetails');
-        $allClasses = $this->classRepository->where('semester', '<=', self::MAX_SEMESTER_GROUP_BY_CLASS)
+        $schedules = $this->scheduleRepository->all()
+            ->load('subject', 'teacher', 'scheduleDetails');
+        $allClasses = $this->classRepository->where('semester', '<=', self::MAX_SEMESTER_REGISTER_GROUP_BY_CLASS)
             ->when($semester, function ($query) use ($semester) {
                 $query->where('semester', $semester);
             })

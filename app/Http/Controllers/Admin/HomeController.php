@@ -11,8 +11,10 @@ class HomeController extends Controller
     protected $departmentRepository;
     protected $teacherRepository;
 
-    public function __construct(IDepartmentRepository $departmentRepository, ITeacherRepository $teacherRepository)
-    {
+    public function __construct(
+        IDepartmentRepository $departmentRepository,
+        ITeacherRepository $teacherRepository
+    ) {
         $this->departmentRepository = $departmentRepository;
         $this->teacherRepository = $teacherRepository;
     }

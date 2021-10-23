@@ -24,7 +24,7 @@ Manager Schedules
     </div>
     @endif
     <div class="row">
-        <div class="col-lg-12 grid-margin stretch-card">
+        <div class="col-lg-12 stretch-card">
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex mb-4">
@@ -62,7 +62,7 @@ Manager Schedules
                                     </td>
                                     <td style="width: 150px">
                                         <div class="d-flex justify-content-center align-items-center">
-                                            @if($detail->status == config('common.status.schedule.inprogess'))
+                                            @if($detail->status == config('common.status.schedule.in_progress'))
                                             <a class="btn btn-sm btn-success" href="{{ route('teacher.schedules.attendanceShow', $detail->id) }}">Attendance</a>
                                             @elseif($detail->status == config('common.status.schedule.marking'))
                                             <a class="btn btn-sm btn-primary" href="{{ route('teacher.schedules.markShow', $detail->id) }}">Mark</a>

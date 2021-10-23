@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>@yield('title')</title>
     <link rel="stylesheet" href="{{ asset('asset/css/materialdesignicons.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('asset/vendors/css/vendor.bundle.base.css') }}">
     <link rel="stylesheet" href="{{ asset('asset/css/style.css') }}">
     <link rel="shortcut icon" href="{{ asset('asset/images/favicon.ico') }}"/>
     @yield('css')
@@ -14,14 +13,14 @@
 
 <body>
 <div class="container-scroller">
-    <!-- partial:partials/_navbar.html -->
     <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
         <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
             <a class="navbar-brand brand-logo" href="{{ route('admin.home') }}">
                 <img src="{{asset('asset/images/logo.svg') }}" alt="logo"/>
             </a>
-            <a class="navbar-brand brand-logo-mini" href="{{ route('admin.home') }}"><img
-                        src="{{ asset('asset/images/logo-mini.svg') }}" alt="logo"/></a>
+            <a class="navbar-brand brand-logo-mini" href="{{ route('admin.home') }}">
+                <img src="{{ asset('asset/images/logo-mini.svg') }}" alt="logo"/>
+            </a>
         </div>
         <div class="navbar-menu-wrapper d-flex align-items-stretch">
             <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -177,9 +176,7 @@
             </button>
         </div>
     </nav>
-    <!-- partial -->
     <div class="container-fluid page-body-wrapper">
-        <!-- partial:partials/_sidebar.html -->
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
             <ul class="nav">
                 <li class="nav-item nav-profile">
@@ -187,7 +184,6 @@
                         <div class="nav-profile-image">
                             <img src="{{ asset(auth()->user()->avatar->path ?? '') }}" alt="profile">
                             <span class="login-status online"></span>
-                            <!--change to offline or busy as needed-->
                         </div>
                         <div class="nav-profile-text d-flex flex-column">
                             <span class="font-weight-bold mb-2">{{ auth()->user()->name  ?? '' }}</span>
@@ -202,12 +198,20 @@
                         <i class="mdi mdi-home menu-icon"></i>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.roles.index') }}">
-                        <span class="menu-title">Quản Lý Quyền</span>
-                        <i class="mdi mdi-table-large menu-icon"></i>
-                    </a>
-                </li>
+                @can('isSuperAdmin')
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.roles.index') }}">
+                            <span class="menu-title">Quản Lý Quyền</span>
+                            <i class="mdi mdi-table-large menu-icon"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.managers.index') }}">
+                            <span class="menu-title">Quản Lý Quản Trị Viên</span>
+                            <i class="mdi mdi-table-large menu-icon"></i>
+                        </a>
+                    </li>
+                @endcan
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('admin.requests.index')}}">
                         <span class="menu-title">Quản Lý Yêu Cầu</span>

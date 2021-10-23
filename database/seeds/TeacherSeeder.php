@@ -17,12 +17,8 @@ class TeacherSeeder extends Seeder
      */
     public function run()
     {
-        $basePath = 'storage/app/public';
         $faker = Faker\Factory::create();
-        if (!file_exists(($basePath . config('default.path.media.avatar.teacher')))) {
-            mkdir($basePath . config('default.path.media.avatar.teacher'), 777, true);
-        }
-        $path = $faker->image('storage/app/public' . config('default.path.media.avatar.teacher'), 200, 200);
+        $path = $faker->image(storage_path(config('default.path.app_public')), 200, 200);
         $teacher = Teacher::create([
             'name' => 'Teacher Chi',
             'gender' => 1,
@@ -32,7 +28,7 @@ class TeacherSeeder extends Seeder
             'address' => $faker->address(),
         ]);
         $media = Media::create([
-            'path' => 'storage/' . str_replace($basePath . '/', '', $path),
+            'path' => str_replace(storage_path(config('default.path.app_public')), 'storage', $path),
         ]);
         $teacher->avatar()->save($media);
         $teacherRole = Role::findByName(config('common.roles.teacher.name'), 'teacher');
@@ -42,9 +38,9 @@ class TeacherSeeder extends Seeder
         ]);
         $departmentIds = Department::all()->pluck('id')->toArray();
         factory(Teacher::class, 5)->create()
-            ->each(function ($teacher) use ($teacherRole, $departmentIds, $path, $basePath) {
+            ->each(function ($teacher) use ($teacherRole, $departmentIds, $path) {
                 $media = Media::create([
-                    'path' => 'storage/' . str_replace($basePath . '/', '', $path),
+                    'path' => str_replace(storage_path(config('default.path.app_public')), 'storage', $path),
                 ]);
                 $teacher->avatar()->save($media);
                 $teacher->assignRole($teacherRole);

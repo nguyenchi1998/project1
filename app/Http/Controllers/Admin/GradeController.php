@@ -41,10 +41,6 @@ class GradeController extends Controller
         return redirect()->route('admin.grade.index');
     }
 
-    public function show($id)
-    {
-        //
-    }
 
     public function edit($id)
     {
@@ -63,7 +59,7 @@ class GradeController extends Controller
             return redirect()->route('admin.grade.index');
         }
 
-        return back();
+        return redirect()->back();
     }
 
     /**

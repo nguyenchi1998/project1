@@ -12,15 +12,14 @@ class PermissionSeeder extends Seeder
      */
     public function run()
     {
-        $actions = ['list', 'show', 'update', 'create', 'delete'];
-
-        $models = ['subject', 'mark', 'student', 'admin', 'schedule'];
-
-        foreach ($models as $model) {
-            foreach ($actions as $action) {
+        $roles = config('common.roles');
+        array_shift($roles);
+        foreach ($roles as $key => $value) {
+            foreach (config('common.permissions') as $key => $permission) {
                 Permission::create([
-                    'name' => strtolower($action) . '-' . strtolower($model),
-                    'guard_name' => 'web'
+                    'name' => $permission['name'],
+                    'display_name' => $permission['display_name'],
+                    'guard_name' => $value['guard'],
                 ]);
             }
         }

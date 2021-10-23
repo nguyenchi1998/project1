@@ -13,5 +13,7 @@ interface IRoleRepository
 
     public function findById($id);
 
-    public function findByName($name);
+    public function findByName($name, $guard);
+
+    public function assignPermissions($roleId, $permissions);
 }

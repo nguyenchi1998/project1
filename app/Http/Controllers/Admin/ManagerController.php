@@ -11,60 +11,46 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-class StudentController extends Controller
+class ManagerController extends Controller
 {
-    protected $studentRepository;
-    protected $classRepository;
-    protected $gradeRepository;
+    protected $managerRepository;
 
     public function __construct(
-        IStudentRepository $studentRepository,
-        IClassRepository   $classRepository,
-        IGradeRepository   $gradeRepository
+        IStudentRepository $managerRepository
     ) {
-        $this->studentRepository = $studentRepository;
-        $this->classRepository = $classRepository;
-        $this->gradeRepository = $gradeRepository;
+        $this->managerRepository = $managerRepository;
     }
 
     public function index(Request $request)
     {
-        $filterClass = $request->get('filter_class');
         $keyword = $request->get('keyword');
-        $students = $this->studentRepository->model()
+        $managers = $this->managerRepository->model()
             ->when($keyword, function ($query) use ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%')
                     ->orWhere('phone', $keyword)
                     ->orWhere('email', 'like', '%' . $keyword . '%');
             })
-            ->when($filterClass && $filterClass != 'all', function ($query) use ($filterClass) {
-                $query->whereHas('class', function ($query) use ($filterClass) {
-                    $query->whereId($filterClass);
-                });
-            })
             ->paginate(config('common.paginate'));
-        $classes = $this->classRepository->all();
 
-        return view('admin.student.index', compact('students', 'filterClass', 'classes', 'keyword'));
+        return view('admin.manager.index', compact('managers', 'keyword'));
     }
 
     public function create()
     {
-        $grades = $this->gradeRepository->all()->pluck('name', 'id')->toArray();
 
-        return view('admin.student.create', compact('grades'));
+        return view('admin.manager.create');
     }
 
     public function store(Request $request)
     {
         try {
             DB::beginTransaction();
-            $student = $this->studentRepository->create(array_merge($request->only([
-                'name', 'email', 'phone', 'birthday', 'address', 'gender', 'grade_id',
+            $student = $this->managerRepository->create(array_merge($request->only([
+                'name', 'email', 'phone', 'birthday', 'address', 'gender'
             ]), ['password' => Hash::make(config('default.auth.password'))]));
             $avatar = $request->file('avatar');
             $avatarFilename = $student->email . '.' . $avatar->getClientOriginalExtension();
-            $path = $this->studentRepository->saveImage(
+            $path = $this->managerRepository->saveImage(
                 $avatar,
                 $avatarFilename,
                 100,
@@ -73,13 +59,13 @@ class StudentController extends Controller
             $student->avatar()->create([
                 'path' => $path
             ]);
-            $studentRole = $this->roleRepository->findByName(
-                config('common.roles.student.name'),
-                config('common.roles.student.guard'));
-            $student->assignRole($studentRole);
+            $adminRole = $this->roleRepository->findByName(
+                config('common.roles.admin.name'),
+                config('common.roles.admin.guard'));
+            $student->assignRole($adminRole);
             DB::commit();
 
-            return redirect()->route('admin.students.index');
+            return redirect()->route('admin.managers.index');
         } catch (Exception $e) {
             DB::rollBack();
 
@@ -100,9 +86,9 @@ class StudentController extends Controller
 
     public function edit($id)
     {
-        $student = $this->studentRepository->find($id);
+        $manager = $this->managerRepository->find($id);
 
-        return view('admin.student.edit', compact('student'));
+        return view('admin.manager.edit', compact('manager'));
     }
 
     /**

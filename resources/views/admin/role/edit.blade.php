@@ -23,20 +23,24 @@
                     @method('PUT')
                     {{ Form::text('id', $role->id, ['hidden'=>true]) }}
                     <div class="form-group">
-                        <label for="name">Quyền</label>
-                        {{ Form::input('text', 'name', ucwords(str_replace('-', ' ', $role->name)), ['class' => 'form-control', 'id' => 'name', 'disabled' => true ,'placeholder' => 'Tên quyền']) }}
+                        Quyền: {{ ucwords(str_replace('-', ' ', $role->display_name)) }}
                     </div>
                     <div class="form-group">
                         {{ Form::label('permission', 'Hành Động')}}
-                        @foreach($permissions as $key => $permission)
-                            <div class="form-check form-check-info">
-                                <label class="form-check-label">
-                                    {{ Form::checkbox('permissions[]', $permission->id, in_array($permission->id, $role->permissions->pluck('id')->toArray()),  ['class'=>'form-check-input']) }}
-                                    {{ ucwords(str_replace('-', ' ', $permission->name)) }}
-                                    <i class="input-helper"></i>
-                                </label>
-                            </div>
-                        @endforeach
+                        <div class="row">
+                            @foreach($permissions as $key => $permission)
+                                <div class="col">
+                                    <div class="form-check form-check-info" style="min-width: 200px">
+                                        <label class="form-check-label">
+                                            {{ Form::checkbox('permissions[]', $permission->id, in_array($permission->id, $role->permissions->pluck('id')->toArray()), ['class'=>'form-check-input']) }}
+                                            {{ ucwords($permission->display_name) }}
+                                            <i class="input-helper"></i>
+                                        </label>
+                                    </div>
+                                </div>
+                            @endforeach
+
+                        </div>
                     </div>
                     {{Form::submit('Xác Nhận', ['class'=> 'btn btn-gradient-primary mr-2'])}}
                     <a href="{{ route('admin.classes.index') }}" class="btn btn-light">Huỷ Bỏ</a>

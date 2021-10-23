@@ -39,7 +39,7 @@ class User extends Authenticatable
 
     public function scopeIsSuperAdmin()
     {
-        return in_array(config('common.roles.superAdmin'), $this->getRoleNames()->toArray());
+        return in_array(config('common.roles.super_admin'), $this->getRoleNames()->toArray());
     }
 
     public function scopeIsAdmin()

@@ -12,11 +12,15 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        foreach (config('common.roles') as $key => $value) {
+        foreach (config('common.roles') as $key => $role) {
             Role::create([
-                'name' => $value['name'],
-                'guard_name' => $value['guard']
+                'name' => $role['name'],
+                'guard_name' => $role['guard'],
+                'display_name' => $role['display_name'],
             ]);
         }
+
+        Role::findById(1, config('common.roles.super_admin.guard'))
+            ->givePermissionTo(range(0, count(config('common.permissions'))));
     }
 }

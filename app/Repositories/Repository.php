@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
-use ImageResize;
+use Intervention\Image\Facades\Image;
 
 class Repository implements IRepository
 {
@@ -73,22 +73,19 @@ class Repository implements IRepository
         return $this->model;
     }
 
-    public function saveImage($file, $fileName, $path, $width = 100, $height = 100)
+    public function saveImage($file, $fileName, $width = 100, $height = 100, $publicPath = 'storage')
     {
-        if (!file_exists($path)) {
-            mkdir($path, 777, true);
-        }
-        $img = ImageResize::make($file->path());
-        $img->resize($width, $height, function ($constraint) {
-            $constraint->aspectRatio();
-        })->save(config('default.path.media.avatar.teacher'), $fileName);
+        $pathImage = $file->storeAs(config('default.path.public'), $fileName);
+        $path = str_replace(config('default.path.public'), '', $pathImage);
+        $img = Image::make(storage_path(config('default.path.app_public') . $path));
+        $img->resize($width, $height)->save(storage_path(config('default.path.app_public') . $path));
 
-        return $img;
+        return $publicPath . $path;
     }
 
-    public function updateOrCreate($fiter, $array)
+    public function updateOrCreate($filter, $array)
     {
-        $this->model->updateOrCreate($fiter, $array);
+        $this->model->updateOrCreate($filter, $array);
     }
 
     public function paginate()

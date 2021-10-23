@@ -12,16 +12,15 @@ use Illuminate\Support\Facades\DB;
 
 class SubjectController extends Controller
 {
-    private $subjectRepository;
-    private $departmentRepository;
-    private $specializationRepository;
+    protected $subjectRepository;
+    protected $departmentRepository;
+    protected $specializationRepository;
 
     public function __construct(
         ISubjectRepository        $subjectRepository,
         ISpecializationRepository $specializationRepository,
         IDepartmentRepository     $departmentRepository
-    )
-    {
+    ) {
         $this->subjectRepository = $subjectRepository;
         $this->departmentRepository = $departmentRepository;
         $this->specializationRepository = $specializationRepository;
@@ -31,12 +30,14 @@ class SubjectController extends Controller
     {
         $filter = $request->get('filter');
         $subjects = $this->subjectRepository->model()
-            ->with(['department' => function ($query) use ($filter) {
-                $query->when(!$filter || $filter == 'all', function ($query) {
-                }, function ($query) use ($filter) {
-                    $query->where('departments.id', $filter);
-                });
-            }])
+            ->with([
+                'department' => function ($query) use ($filter) {
+                    $query->when(!$filter || $filter == 'all', function ($query) {
+                    }, function ($query) use ($filter) {
+                        $query->where('departments.id', $filter);
+                    });
+                }
+            ])
             ->get();
         $subjects = $subjects->map(function ($subject) {
             $specializations = array_map(function ($specialization) {

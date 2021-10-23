@@ -25,8 +25,8 @@ class TeacherController extends Controller
         IDepartmentRepository $departmentRepository,
         ITeacherRepository    $teacherRrpository,
         IRoleRepository       $roleRepository,
-        ISubjectRepository    $subjectRepository)
-    {
+        ISubjectRepository    $subjectRepository
+    ) {
         $this->departmentRepository = $departmentRepository;
         $this->teacherRepository = $teacherRrpository;
         $this->roleRepository = $roleRepository;
@@ -64,18 +64,19 @@ class TeacherController extends Controller
                 'name', 'email', 'phone', 'birthday', 'address', 'gender', 'department_id',
             ]), ['password' => Hash::make(config('default.auth.password'))]));
             $avatar = $request->file('avatar');
-            $avatarFilename = $teacher->email . '.' . $request->file('avatar')->getClientOriginalExtension();
+            $avatarFilename = $teacher->email . '.' . $avatar->getClientOriginalExtension();
             $path = $this->teacherRepository->saveImage(
                 $avatar,
                 $avatarFilename,
-                storage_path(config('default.path.media.avatar.teacher')),
                 100,
-                10
+                100
             );
             $teacher->avatar()->create([
-                'path' => storage_path() . $avatarFilename
+                'path' => $path
             ]);
-            $teacherRole = $this->roleRepository->findByName(config('common.roles.teacher.name'));
+            $teacherRole = $this->roleRepository->findByName(
+                config('common.roles.teacher.name'),
+                config('common.roles.teacher.guard'));
             $teacher->assignRole($teacherRole);
             DB::commit();
 
@@ -83,7 +84,7 @@ class TeacherController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
 
-            return back();
+            return back()->withErrors(['msg' => $e->getMessage()]);
         }
     }
 

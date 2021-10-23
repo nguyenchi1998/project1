@@ -1,5 +1,5 @@
 @extends('layouts.manager')
-@section('title') Quản Lý Sinh Viên @endsection
+@section('title') Quản Lý Quản Trị Viên @endsection
 @section('breadcrumb')
     <div class="page-header">
         <h3 class="page-title">Tạo mới</h3>
@@ -7,7 +7,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
                 <li class="breadcrumb-item">
-                    <a href="{{ route('admin.students.index') }}">Danh Sách Sinh Viên</a>
+                    <a href="{{ route('admin.managers.index') }}">Danh Sách Quản Trị Viên</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">Tạo mới</li>
             </ol>
@@ -19,7 +19,7 @@
         <div class="col-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    {{ Form::open(['url' => route('admin.students.store') , 'method' => 'POST', 'files' => true]) }}
+                    {{ Form::open(['url' => route('admin.managers.store'), 'method' => 'POST', 'files' => true]) }}
                     <div class="form-group">
                         <label for="name">Họ Tên</label>
                         {{ Form::input('text', 'name', null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Họ tên']) }}
@@ -63,12 +63,8 @@
                         <label for="address">Địa chỉ</label>
                         {{ Form::input('text', 'address', null, ['class' => 'form-control', 'id' => 'credit', 'placeholder' => 'Đại chỉ liên hệ']) }}
                     </div>
-                    <div class="form-group">
-                        <label for="grade">Niên Khoá</label>
-                        {{ Form::select('grade_id', $grades, null, ['id'=> 'grade', 'class'=> 'form-control', 'placeholder' => 'Chọn niên khoá']) }}
-                    </div>
                     {{Form::submit('Xác Nhận', ['class'=> 'btn btn-gradient-primary mr-2'])}}
-                    <a href="{{ route('admin.students.index') }}" class="btn btn-light">Huỷ Bỏ</a>
+                    <a href="{{ route('admin.managers.index') }}" class="btn btn-light">Huỷ Bỏ</a>
                     {{ Form::close()}}
                 </div>
             </div>

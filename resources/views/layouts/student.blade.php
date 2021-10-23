@@ -175,9 +175,7 @@
             </button>
         </div>
     </nav>
-    <!-- partial -->
     <div class="container-fluid page-body-wrapper">
-        <!-- partial:partials/_sidebar.html -->
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
             <ul class="nav">
                 <li class="nav-item nav-profile">
@@ -185,7 +183,6 @@
                         <div class="nav-profile-image">
                             <img src="{{ asset(auth()->user()->avatar->path ?? '') }}" alt="profile">
                             <span class="login-status online"></span>
-                            <!--change to offline or busy as needed-->
                         </div>
                         <div class="nav-profile-text d-flex flex-column">
                             <span class="font-weight-bold mb-2">{{ auth()->user()->name ?? '' }}</span>
@@ -216,11 +213,8 @@
                 </li>
             </ul>
         </nav>
-        <!-- partial -->
         <div class="main-panel">
         @yield('main')
-        <!-- content-wrapper ends -->
-            <!-- partial:../../partials/_footer.html -->
             <footer class="footer">
                 <div class="container-fluid clearfix">
                     <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © bootstrapdash.com 2020</span>
@@ -228,28 +222,16 @@
                                 href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap admin templates </a> from Bootstrapdash.com</span>
                 </div>
             </footer>
-            <!-- partial -->
         </div>
-        <!-- main-panel ends -->
     </div>
-    <!-- page-body-wrapper ends -->
 </div>
-<!-- container-scroller -->
-<!-- plugins:js -->
 <script src="{{ asset('asset/vendors/js/vendor.bundle.base.js') }}"></script>
-<!-- endinject -->
-<!-- Plugin js for this page -->
 <script src="{{ asset('asset/vendors/chart.js/Chart.min.js') }}"></script>
-<!-- End plugin js for this page -->
-<!-- inject:js -->
 <script src="{{ asset('asset/js/off-canvas.js') }}"></script>
 <script src="{{ asset('asset/js/hoverable-collapse.js') }}"></script>
 <script src="{{ asset('asset/js/misc.js') }}"></script>
-<!-- endinject -->
-<!-- Custom js for this page -->
 <script src="{{ asset('asset/js/Bảng Điều Khiển.js') }}"></script>
 <script src="{{ asset('asset/js/todolist.js') }}"></script>
-<!-- End custom js for this page -->
 </body>
 
 </html>

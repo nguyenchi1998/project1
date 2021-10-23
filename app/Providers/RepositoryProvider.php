@@ -8,6 +8,7 @@ use App\Repositories\GradeRepository;
 use App\Repositories\IClassRepository;
 use App\Repositories\IDepartmentRepository;
 use App\Repositories\IGradeRepository;
+use App\Repositories\IManagerRepository;
 use App\Repositories\IPermissionRepository;
 use App\Repositories\IRoleRepository;
 use App\Repositories\IScheduleDetailRepository;
@@ -17,6 +18,7 @@ use App\Repositories\IStudentRepository;
 use App\Repositories\ISubjectRepository;
 use App\Repositories\ITeacherRepository;
 use App\Repositories\IUserRepository;
+use App\Repositories\ManagerRepository;
 use App\Repositories\PermissionRepository;
 use App\Repositories\RoleRepository;
 use App\Repositories\ScheduleDetailRepository;
@@ -43,6 +45,7 @@ class RepositoryProvider extends ServiceProvider
         IGradeRepository::class => GradeRepository::class,
         IScheduleDetailRepository::class => ScheduleDetailRepository::class,
         ITeacherRepository::class => TeacherRepository::class,
+        IManagerRepository::class => ManagerRepository::class,
     ];
 
     /**

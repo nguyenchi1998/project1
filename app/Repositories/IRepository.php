@@ -24,9 +24,9 @@ interface IRepository
 
     public function with($relation);
 
-    public function saveImage($file, $fileName, $path, $width = 100, $height = 100);
+    public function saveImage($file, $fileName, $width = 100, $height = 100, $publicPath = 'storage');
 
-    public function updateOrCreate($fiter, $array);
+    public function updateOrCreate($filter, $array);
 
     public function paginate();
 }

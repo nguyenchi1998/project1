@@ -19,7 +19,7 @@
         <div class="col-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    {{ Form::open(['url' => route('admin.teachers.store') , 'method' => 'POST', 'class' => "forms-sample", 'files' => true]) }}
+                    {{ Form::open(['url' => route('admin.teachers.store') , 'method' => 'POST', 'files' => true]) }}
                     <div class="form-group">
                         <label for="name">Họ Tên</label>
                         {{ Form::input('text', 'name', null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Enter name']) }}
@@ -33,14 +33,14 @@
                         <div class="form-inline">
                             <div class="form-check form-check-info">
                                 <label class="form-check-label">
-                                    {{ Form::radio('gender', 1, false ,  ['class'=>'form-check-input']) }}
+                                    {{ Form::radio('gender', 1, false , ['class'=>'form-check-input']) }}
                                     {{ 'Nam' }}
                                     <i class="input-helper"></i>
                                 </label>
                             </div>
                             <div class="ml-3 form-check form-check-info">
                                 <label class="form-check-label">
-                                    {{ Form::radio('gender', 0, false ,  ['class'=>'form-check-input']) }}
+                                    {{ Form::radio('gender', 0, false , ['class'=>'form-check-input']) }}
                                     {{ 'Nữ' }}
                                     <i class="input-helper"></i>
                                 </label>

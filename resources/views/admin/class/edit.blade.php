@@ -26,18 +26,6 @@
                         <label for="name">Name</label>
                         {{ Form::input('text', 'name', $class->name, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Enter name']) }}
                     </div>
-                    <div class="form-group">
-                        {{ Form::label('subject', 'Subject')}}
-                        @foreach($students as $key => $student)
-                            <div class="form-check form-check-info">
-                                <label class="form-check-label">
-                                    {{ Form::checkbox('students[]', $student->id, in_array($student->id, $class->students->pluck('id')->toArray()),  ['class'=>'form-check-input']) }}
-                                    {{ $student->name }}
-                                    <i class="input-helper"></i>
-                                </label>
-                            </div>
-                        @endforeach
-                    </div>
                     {{Form::submit('Xác Nhận', ['class'=> 'btn btn-gradient-primary mr-2'])}}
                     <a href="{{ route('admin.classes.index') }}" class="btn btn-light">Huỷ Bỏ</a>
                     {{ Form::close()}}

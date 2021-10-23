@@ -15,7 +15,6 @@ class DepartmentController extends Controller
         $this->departmentRepository = $departmentRepository;
     }
 
-
     public function index(Request $request)
     {
         $keyword = $request->get('keyword');
@@ -36,11 +35,6 @@ class DepartmentController extends Controller
         $this->departmentRepository->create($request->only('name'));
 
         return redirect()->route('admin.departments.index');
-    }
-
-    public function show($id)
-    {
-        //
     }
 
     public function edit($id)

@@ -15,13 +15,9 @@ class ClassSeeder extends Seeder
      */
     public function run()
     {
-        $basePath = 'storage/app/public';
         $classes = ['IT', 'CK', 'TT'];
         $faker = Faker\Factory::create();
-        if (!file_exists(($basePath . config('default.path.media.avatar.student')))) {
-            mkdir($basePath . config('default.path.media.avatar.student'), 777, true);
-        }
-        $path = $faker->image($basePath . config('default.path.media.avatar.student'), 200, 200);
+        $path = $faker->image(storage_path(config('default.path.app_public')), 200, 200);
         foreach ($classes as $class) {
             for ($i = 1; $i <= 3; $i++) {
                 $classInstance = Classs::create([
@@ -32,9 +28,9 @@ class ClassSeeder extends Seeder
                 factory(Student::class, 5)->create([
                     'class_id' => $classInstance->id,
                     'grade_id' => 1
-                ])->each(function ($student) use ($path, $basePath) {
+                ])->each(function ($student) use ($path) {
                     $media = Media::create([
-                        'path' => 'storage/' . str_replace($basePath . '/', '', $path),
+                        'path' => str_replace(storage_path(config('default.path.app_public')), 'storage', $path),
                     ]);
                     $student->avatar()->save($media);
                 });
@@ -44,9 +40,9 @@ class ClassSeeder extends Seeder
             'email' => 'student@gmail.com',
             'class_id' => 1,
             'grade_id' => 1,
-        ])->each(function ($student) use ($path, $basePath) {
+        ])->each(function ($student) use ($path) {
             $media = Media::create([
-                'path' => 'storage/' . str_replace($basePath . '/', '', $path),
+                'path' => str_replace(storage_path(config('default.path.app_public')), 'storage', $path),
             ]);
             $student->avatar()->save($media);
         });

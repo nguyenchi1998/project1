@@ -26,8 +26,13 @@ class RoleRepository implements IRoleRepository
         return Role::findById($id);
     }
 
-    public function findByName($name)
+    public function findByName($name, $guard)
     {
-        return Role::findByName($name);
+        return Role::findByName($name, $guard);
+    }
+
+    public function assignPermissions($roleId, $permissions)
+    {
+        return $this->findById($roleId)->givePermissionTo($permissions);
     }
 }
