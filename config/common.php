@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'paginate' => 5,
     'role' => [
         'admin' => 'admin',
     ],

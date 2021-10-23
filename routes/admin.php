@@ -56,6 +56,8 @@ Route::group(['as' => 'admin.'], function () {
             Route::post('/departments/reject', 'RequestController@approveDepartmentChange')
                 ->name('departments.reject');
         });
+
+        Route::resource('schedules/credits/students/','ScheduleStudentController', ['names' => 'schedules.credits.students']);
     });
 
     Route::get('login', 'LoginController@showLoginForm')

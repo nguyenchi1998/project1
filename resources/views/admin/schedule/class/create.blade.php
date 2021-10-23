@@ -62,7 +62,7 @@
                                     <td>
                                         {{ Form::select('teacher_id', $subject->teachers->pluck('name', 'id')->toArray(), null, ['placeholder'=> 'Chọn Giảng Viên', 'class' => 'form-control form-control-sm']) }}
                                     </td>
-                                    <td width="100">
+                                    <td style="width: 100px">
                                         <div class="d-flex justify-content-between">
                                             <div class="mr-3">
                                                 {{ Form::text('class_id', $id, ['hidden' => true])}}

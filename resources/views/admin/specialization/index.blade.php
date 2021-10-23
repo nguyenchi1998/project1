@@ -18,7 +18,17 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex mb-4 justify-content-between">
-                        <div class="w-15"></div>
+                        <div class="w-15">
+                            <form action="{{route('admin.departments.index')}}">
+                                <div class="d-flex justify-content-between">
+                                    <input type="search" name="keyword" value="{{ $keyword }}" class="form-control mr-2"
+                                           placeholder="Từ Khoá">
+                                    <button class="ml-2 btn btn-success" type="submit">
+                                        <i class="mdi mdi-grease-pencil"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                         <a class="btn btn-primary" href="{{ route('admin.specializations.create') }}">Tạo mới</a>
                     </div>
                     <div class="table-responsive">
@@ -26,6 +36,7 @@
                             <thead>
                             <tr>
                                 <th>Chuyên ngành</th>
+                                <th>Khoa Viện</th>
                                 <th>Số môn học</th>
                                 <th>Số tín chỉ tối thiểu</th>
                                 <th>Tổng số kì học</th>
@@ -33,10 +44,13 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($specializations as $specialization)
+                            @forelse($specializations as $specialization)
                                 <tr>
                                     <td>
                                         {{ $specialization->name }}
+                                    </td>
+                                    <td>
+                                        {{ $specialization->department->name ?? '' }}
                                     </td>
                                     <td>
                                         {{ count($specialization->subjects) }}
@@ -66,9 +80,16 @@
                                         </div>
                                     </td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <div class="pt-3 d-flex justify-content-center">
+                                    <h4>Empty Data</h4>
+                                </div>
+                            @endforelse
                             </tbody>
                         </table>
+                    </div>
+                    <div class="mt-2 d-flex justify-content-end">
+                        {{ $specializations->appends(['keyword' => $keyword])->links() }}
                     </div>
                 </div>
             </div>

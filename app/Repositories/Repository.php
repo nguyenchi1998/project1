@@ -90,4 +90,9 @@ class Repository implements IRepository
     {
         $this->model->updateOrCreate($fiter, $array);
     }
+
+    public function paginate()
+    {
+        return $this->model->paginate(config('common.paginate'));
+    }
 }

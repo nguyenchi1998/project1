@@ -159,10 +159,7 @@ class TeacherController extends Controller
     {
         $teacher = $this->teacherRepository->find($id)->load('department.specializations.specializationSubject');
         $teacherSubjects = $teacher->subjects->pluck('id')->toArray();
-        $subjects = $teacher->department->specializations->reduce(function ($subjects, $specialization) {
-            return array_merge($subjects, $specialization->subjects->toArray() ?? []);
-        }, []);
-        $subjects = collect($subjects)->unique('id');
+        $subjects = $teacher->department->subjects;
 
         return view('admin.teacher.choose_subject', compact('teacher', 'subjects', 'teacherSubjects'));
     }

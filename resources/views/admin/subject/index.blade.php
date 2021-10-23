@@ -4,7 +4,7 @@
 @endsection
 @section('breadcrumb')
     <div class="page-header">
-        <h3 class="page-title">Manager Subjects</h3>
+        <h3 class="page-title">Danh Sách Môn Học</h3>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
@@ -49,13 +49,12 @@
                                 <tr>
                                     <td>
                                         {{ $subject->name }}
-                                        @if($subject->type == config('common.subject.type.basic'))
-                                            <span class="ml-2 badge bg-danger">Môn Cơ Bản</span>
-                                        @endif
                                     </td>
-                                    <td>{{ $subject->credit }}</td>
-                                    <td style="white-space:normal">
-                                        {{ $subject->department->name ?? '' }}
+                                    <td>
+                                        {{ $subject->credit }}
+                                    </td>
+                                    <td>
+                                        {{ $subject->department->name }}
                                     </td>
                                     <td width="100">
                                         <div class="d-flex justify-content-between">

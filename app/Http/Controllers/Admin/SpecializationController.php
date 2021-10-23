@@ -14,23 +14,30 @@ class SpecializationController extends Controller
     protected $specializationRepository;
     protected $subjectRepository;
 
-    public function __construct(ISpecializationRepository $specializationRepository, ISubjectRepository $subjectRepository)
+    public function __construct(
+        ISpecializationRepository $specializationRepository,
+        ISubjectRepository        $subjectRepository
+    )
     {
         $this->specializationRepository = $specializationRepository;
         $this->subjectRepository = $subjectRepository;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $specializations = $this->specializationRepository->all()->load('subjects');
+        $keyword = $request->get('keyword');
+        $specializations = $this->specializationRepository->model()
+            ->with(['subjects', 'department'])
+            ->paginate(config('common.paginate'));
 
-        return view('admin.specialization.index', compact('specializations'));
+        return view('admin.specialization.index', compact('specializations', 'keyword'));
     }
 
 
     public function create()
     {
-        $subjects = $this->subjectRepository->where('type', '=', null)->get();
+        $subjects = $this->subjectRepository->where('type', '=', null)
+            ->get();
 
         return view('admin.specialization.create', compact('subjects'));
     }
@@ -41,8 +48,10 @@ class SpecializationController extends Controller
         try {
             DB::beginTransaction();
             $specialization = $this->specializationRepository->create($request->only(['name', 'min_credit', 'total_semester']));
-            $basicSubjects = $this->subjectRepository->where('type', '=', config('common.subject.type.basic'))->get()
-                ->pluck('id')->toArray();
+            $basicSubjects = $this->subjectRepository->where('type', '=', config('common.subject.type.basic'))
+                ->get()
+                ->pluck('id')
+                ->toArray();
             $subjects = $request->get('subjects');
             $specialization->subjects()->attach(array_merge($basicSubjects, $subjects));
             DB::commit();

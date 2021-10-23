@@ -27,4 +27,10 @@ class Specialization extends Model
         return $this->hasMany(Classs::class);
     }
 
+    public function department()
+
+    {
+        return $this->belongsTo(Department::class);
+    }
+
 }

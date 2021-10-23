@@ -19,16 +19,16 @@
         <div class="col-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <div class="mb-5">
+                    <div class="mb-3">
                         <div class="form-row">
                             <div class="col-6">
                                 <div class="form-group">
-                                    <strong>Giảng Viên</strong>:<span> {{ $teacher->name }}</span>
+                                    Giảng Viên: {{ $teacher->name }}
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
-                                    <strong>Khoa Viện:</strong> {{ $teacher->department->name }}
+                                    Khoa Viện: {{ $teacher->department->name }}
                                 </div>
                             </div>
                         </div>
@@ -36,7 +36,7 @@
                     {{ Form::open(['url' => route('admin.teachers.choose_subject', $teacher->id) , 'method' => 'POST']) }}
                     @method('PUT')
                     <div class="form-group">
-                        {{ Form::label('subject', 'Môn Học')}}
+                        {{ Form::label('subject', 'Môn Học Thuộc ' . $teacher->department->name)}}
                         @foreach($subjects as $key => $subject)
                             <div class="form-check form-check-info">
                                 <label class="form-check-label">

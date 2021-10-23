@@ -44,7 +44,12 @@
                             @foreach($class->students as $student)
                                 <tr>
                                     <td>
-                                        {{ $student->name }}
+                                        <div class="d-flex align-items-center">
+                                            <div class="mr-4">
+                                                <img src="{{ asset($student->avatar->path) }}" alt="avatar">
+                                            </div>
+                                            {{ $student->name }}
+                                        </div>
                                     </td>
                                     <td>
                                         {{ $student->phone }}

@@ -8,14 +8,11 @@ use App\Repositories\IScheduleRepository;
 use App\Repositories\ISpecializationRepository;
 use App\Repositories\IStudentRepository;
 use App\Repositories\ISubjectRepository;
-use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-class ScheduleController extends Controller
+class ScheduleStudentController extends Controller
 {
     const MAX_SEMESTER_GROUP_BY_CLASS = 2;
-
     protected $scheduleRepository;
     protected $specializationRepository;
     protected $subjectRepository;
@@ -39,43 +36,59 @@ class ScheduleController extends Controller
 
     public function index(Request $request)
     {
-        $semesters = ['1' => 'Semester 1', '2' => 'Semester 2'];
-        $semester = $request->get('semester');
-        $classId = $request->get('class');
-        $schedules = $this->scheduleRepository->all()->load('subject', 'teacher', 'scheduleDetails');
-        $allClasses = $this->classRepository->where('semester', '<=', self::MAX_SEMESTER_GROUP_BY_CLASS)
-            ->when($semester, function ($query) use ($semester) {
-                $query->where('semester', $semester);
+//        $semesters = ['1' => 'Semester 1', '2' => 'Semester 2'];
+//        $semester = $request->get('semester');
+//        $classId = $request->get('class');
+//        $schedules = $this->scheduleRepository->all()->load('subject', 'teacher', 'scheduleDetails');
+//        $allClasses = $this->classRepository->where('semester', '<=', self::MAX_SEMESTER_GROUP_BY_CLASS)
+//            ->when($semester, function ($query) use ($semester) {
+//                $query->where('semester', $semester);
+//            })
+//            ->get()
+//            ->load('specialization.subjects');
+//        $basicSubjects = $this->subjectRepository->model()
+//            ->basicSubjects()->get();
+//        $scheduleClass = $this
+//            ->scheduleRepository->where('class_id', '!=', null)
+//            ->get()
+//            ->load('subject');
+//        $allClasses = $allClasses->map(function ($class) use ($scheduleClass, $basicSubjects) {
+//            $subjects = $scheduleClass->where('class_id', $class->id)->all();
+//            $specializationSubjects = $basicSubjects->diff($subjects);
+//            $class['unCreditSubjects'] = $specializationSubjects;
+//            return $class;
+//        });
+        $filterClass = $request->get('filter_class');
+        $keyword = $request->get('keyword');
+        $students = $this->studentRepository->model()
+            ->whereHas('class', function ($query) use ($filterClass) {
+                $query->where('semester', ' > ', self::MAX_SEMESTER_GROUP_BY_CLASS)
+                    ->when($filterClass && $filterClass != 'all', function ($query) use ($filterClass) {
+                        $query->whereId($filterClass);
+                    });
             })
-            ->get()
-            ->load('specialization.subjects');
-        $basicSubjects = $this->subjectRepository->model()
-            ->basicSubjects()->get();
-        $scheduleClass = $this
-            ->scheduleRepository->where('class_id', '!=', null)
-            ->get()
-            ->load('subject');
-        $allClasses = $allClasses->map(function ($class) use ($scheduleClass, $basicSubjects) {
-            $subjects = $scheduleClass->where('class_id', $class->id)->all();
-            $specializationSubjects = $basicSubjects->diff($subjects);
-            $class['unCreditSubjects'] = $specializationSubjects;
-            return $class;
-        });
+            ->when($keyword, function ($query) use ($keyword) {
+                $query->where('name', 'like', '%' . $keyword . '%')
+                    ->orWhere('phone', $keyword)
+                    ->orWhere('email', 'like', '%' . $keyword . '%');
+            })
+            ->paginate(config('common.paginate'));
+        $classes = $this->classRepository->all();
 
-        return view('admin.schedule.class.index', compact('allClasses', 'basicSubjects', 'semester', 'semesters'));
+        return view('admin.schedule.student.index', compact('students', 'keyword', 'filterClass', 'classes'));
     }
 
     public function registerScheduleShow(Request $request, $id)
     {
         $class = $this->classRepository->find($id)->load('specialization');
         $basicSubjects = $this->subjectRepository->model()->basicSubjects()->get()->load('teachers');
-        $schedules = $this->scheduleRepository->where('class_id', '=', $id)->get()->load('subject');
+        $schedules = $this->scheduleRepository->where('class_id', ' = ', $id)->get()->load('subject');
         $scheduleSubjects = $schedules->map(function ($schedule) {
             return $schedule->subject;
         });
         $unCreditSubjects = $basicSubjects->diff($scheduleSubjects);
 
-        return view('admin.schedule.class.create', compact('unCreditSubjects', 'id', 'class'));
+        return view('admin . schedule .class.create', compact('unCreditSubjects', 'id', 'class'));
     }
 
     public function registerSchedule(Request $request, $id)
@@ -83,7 +96,7 @@ class ScheduleController extends Controller
         try {
             $subject = $this->subjectRepository->find($request->get('subject_id'));
             $this->scheduleRepository->create([
-                'name' => '[Class] ' . $subject->name,
+                'name' => '[class] ' . $subject->name,
                 'class_id' => $id,
                 'subject_id' => $request->get('subject_id'),
                 'start_time' => $request->get('start_time'),
@@ -99,12 +112,17 @@ class ScheduleController extends Controller
             });
             $schedule->scheduleDetails()->createMany($students);
 
-            return redirect()->route('admin.schedules.registerShow', $id)
+            return redirect()->route('admin . schedules . registerShow', $id)
                 ->with('success', 'Đăng ký tín chỉ thành công môn "' . $subject->name . '" cho lớp' . $class->name);
         } catch (Exception $e) {
             DB::rollBack();
 
             return back()->withErrors(['msg' => $e->getMessage()]);
         }
+    }
+
+    public function studentCredits()
+    {
+
     }
 }

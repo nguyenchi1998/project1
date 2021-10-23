@@ -2,28 +2,23 @@
 <html lang="en">
 
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>@yield('title')</title>
-    <!-- plugins:css -->
     <link rel="stylesheet" href="{{ asset('asset/css/materialdesignicons.min.css') }}">
     <link rel="stylesheet" href="{{ asset('asset/vendors/css/vendor.bundle.base.css') }}">
-    <!-- Layout styles -->
     <link rel="stylesheet" href="{{ asset('asset/css/style.css') }}">
-    <!-- End layout styles -->
     <link rel="shortcut icon" href="{{ asset('asset/images/favicon.ico') }}"/>
 </head>
 
 <body>
 <div class="container-scroller">
-    <!-- partial:partials/_navbar.html -->
     <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
         <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-            <a class="navbar-brand brand-logo" href="index.html">
+            <a class="navbar-brand brand-logo" href="{{ route('student.home') }}">
                 <img src="{{asset('asset/images/logo.svg') }}" alt="logo"/>
             </a>
-            <a class="navbar-brand brand-logo-mini" href="index.html"><img
+            <a class="navbar-brand brand-logo-mini" href="{{ route('student.home') }}"><img
                         src="{{ asset('asset/images/logo-mini.svg') }}" alt="logo"/></a>
         </div>
         <div class="navbar-menu-wrapper d-flex align-items-stretch">
@@ -45,11 +40,11 @@
                     <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown"
                        aria-expanded="false">
                         <div class="nav-profile-img">
-                            <img src="{{ asset(auth()->user()->avatar->path) }}" alt="image">
+                            <img src="{{ asset(auth()->user()->avatar->path ?? '') }}" alt="image">
                             <span class="availability-status online"></span>
                         </div>
                         <div class="nav-profile-text">
-                            <p class="mb-1 text-black">{{ auth()->user()->name }}</p>
+                            <p class="mb-1 text-black">{{ auth()->user()->name ?? '' }}</p>
                         </div>
                     </a>
                     <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
@@ -188,12 +183,12 @@
                 <li class="nav-item nav-profile">
                     <a href="#" class="nav-link">
                         <div class="nav-profile-image">
-                            <img src="{{ asset(auth()->user()->avatar->path) }}" alt="profile">
+                            <img src="{{ asset(auth()->user()->avatar->path ?? '') }}" alt="profile">
                             <span class="login-status online"></span>
                             <!--change to offline or busy as needed-->
                         </div>
                         <div class="nav-profile-text d-flex flex-column">
-                            <span class="font-weight-bold mb-2">{{ auth()->user()->name }}</span>
+                            <span class="font-weight-bold mb-2">{{ auth()->user()->name ?? '' }}</span>
                             <span class="text-secondary text-small text-uppercase">{{ get_guard() }}</span>
                         </div>
                         <div class="ml-1">

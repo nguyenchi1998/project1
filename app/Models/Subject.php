@@ -13,6 +13,7 @@ class Subject extends Model
         'credit',
         'force',
         'semester',
+        'department_id'
     ];
 
     public function basicSubjects()

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Repositories\IDepartmentRepository;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class DepartmentController extends Controller
 {
@@ -17,11 +16,14 @@ class DepartmentController extends Controller
     }
 
 
-    public function index()
+    public function index(Request $request)
     {
-        $departments = $this->departmentRepository->all()->load('teachers');
+        $keyword = $request->get('keyword');
+        $departments = $this->departmentRepository->where('name', 'like', '%' . $keyword . '%')
+            ->with('teachers')
+            ->paginate(config('common.paginate'));
 
-        return view('admin.department.index', compact('departments'));
+        return view('admin.department.index', compact('departments', 'keyword'));
     }
 
     public function create()

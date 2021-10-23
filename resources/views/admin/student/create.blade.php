@@ -1,5 +1,5 @@
 @extends('layouts.manager')
-@section('title') Quản Lý Giảng Viên @endsection
+@section('title') Quản Lý Sinh Viên @endsection
 @section('breadcrumb')
     <div class="page-header">
         <h3 class="page-title">Tạo mới</h3>
@@ -7,7 +7,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
                 <li class="breadcrumb-item">
-                    <a href="{{ route('admin.subjects.index') }}">Danh Sách Giảng Viên</a>
+                    <a href="{{ route('admin.students.index') }}">Danh Sách Sinh Viên</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">Tạo mới</li>
             </ol>
@@ -19,10 +19,10 @@
         <div class="col-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    {{ Form::open(['url' => route('admin.teachers.store') , 'method' => 'POST', 'class' => "forms-sample", 'files' => true]) }}
+                    {{ Form::open(['url' => route('admin.students.store') , 'method' => 'POST', 'files' => true]) }}
                     <div class="form-group">
                         <label for="name">Họ Tên</label>
-                        {{ Form::input('text', 'name', null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Enter name']) }}
+                        {{ Form::input('text', 'name', null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Họ tên']) }}
                     </div>
                     <div class="form-group">
                         <label for="name">Ảnh Đại Diện</label>
@@ -49,40 +49,30 @@
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>
-                        {{ Form::input('email', 'email', null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Enter Email']) }}
+                        {{ Form::input('email', 'email', null, ['class' => 'form-control', 'id' => 'email', 'placeholder' => 'Email']) }}
                     </div>
                     <div class="form-group">
                         <label for="phone">Số Điện Thoại</label>
-                        {{ Form::input('text', 'phone', null, ['class' => 'form-control', 'id' => 'name',  'placeholder' => 'Enter Phone']) }}
+                        {{ Form::input('text', 'phone', null, ['class' => 'form-control', 'id' => 'phone', 'placeholder' => 'Số điện thoại']) }}
                     </div>
                     <div class="form-group">
                         <label for="birthday">Ngày Sinh</label>
-                        {{ Form::input('date', 'birthday', null, ['class' => 'form-control', 'id' => 'credit', 'placeholder' => 'Enter Credit']) }}
+                        {{ Form::input('date', 'birthday', null, ['class' => 'form-control', 'id' => 'birthday']) }}
                     </div>
                     <div class="form-group">
                         <label for="address">Địa chỉ</label>
-                        {{ Form::input('text', 'address', null, ['class' => 'form-control', 'id' => 'credit', 'placeholder' => 'Enter Address']) }}
+                        {{ Form::input('text', 'address', null, ['class' => 'form-control', 'id' => 'credit', 'placeholder' => 'Đại chỉ liên hệ']) }}
                     </div>
                     <div class="form-group">
-                        <label for="experience">Kinh Nghiệm</label>
-                        {{ Form::textarea('experience', null, ['class' => ' form-control', 'id' => 'credit', 'placeholder' => 'Enter Address']) }}
+                        <label for="grade">Niên Khoá</label>
+                        {{ Form::select('grade', $grades, null, ['id'=> 'grade', 'class'=> 'form-control', 'placeholder' => 'Chọn niên khoá']) }}
                     </div>
-                    <div class="form-group">
-                        {{ Form::label('department', 'Khoa Viện')}}
-                        @foreach($departments as $key => $department)
-                            <div class="form-check form-check-info">
-                                <label class="form-check-label">
-                                    {{ Form::radio('department_id', $department->id, false, ['class'=>'form-check-input']) }}
-                                    {{ $department->name }}
-                                    <i class="input-helper"></i>
-                                </label>
-                            </div>
-                        @endforeach
-                        {{Form::submit('Xác Nhận', ['class'=> 'btn btn-gradient-primary mr-2'])}}
-                        <a href="{{ route('admin.teachers.index') }}" class="btn btn-light">Huỷ Bỏ</a>
-                        {{ Form::close()}}
-                    </div>
+                    {{Form::submit('Xác Nhận', ['class'=> 'btn btn-gradient-primary mr-2'])}}
+                    <a href="{{ route('admin.students.index') }}" class="btn btn-light">Huỷ Bỏ</a>
+                    {{ Form::close()}}
                 </div>
             </div>
+        </div>
+    </div>
 @endsection
 @section('script') @endsection

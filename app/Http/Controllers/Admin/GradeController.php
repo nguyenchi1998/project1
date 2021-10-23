@@ -16,11 +16,16 @@ class GradeController extends Controller
         $this->gradeRepository = $gradeRepository;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $grades = $this->gradeRepository->all()->load('students');
+        $keyword = $request->get('keyword');
+        $grades = $this->gradeRepository->model()
+            ->when($keyword, function ($query) use ($keyword) {
+                $query->where('name', 'like', '%' . $keyword . '%');
+            })
+            ->paginate(config('common.paginate'))->load('students');
 
-        return view('admin.grade.index', compact('grades'));
+        return view('admin.grade.index', compact('grades', 'keyword'));
     }
 
     public function create()
@@ -57,7 +62,7 @@ class GradeController extends Controller
         if ($success) {
             return redirect()->route('admin.grade.index');
         }
-        
+
         return back();
     }
 

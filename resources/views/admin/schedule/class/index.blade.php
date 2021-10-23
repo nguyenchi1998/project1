@@ -9,7 +9,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
                 <li class="breadcrumb-item active" aria-current="page">
-                    Danh Sách Tín Chỉ
+                    Danh Sách Tín Chỉ  Theo Lớp Học
                 </li>
             </ol>
         </nav>

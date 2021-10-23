@@ -1,18 +1,17 @@
 @extends('layouts.manager')
 @section('title')
-    Quản Lý Lớp Học
+    Quản Lý Sinh Viên
 @endsection
 @section('breadcrumb')
     <div class="page-header">
-        <h3 class="page-title">Manager Classes</h3>
+        <h3 class="page-title">Quản Lý Sinh Viên</h3>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Danh Sách Lớp Học</li>
+                <li class="breadcrumb-item active" aria-current="page">Danh Sách Sinh Viên</li>
             </ol>
         </nav>
-    </div>
-@endsection
+    </div>@endsection
 @section('main')
     <div class="row">
         <div class="col-lg-12 grid-margin stretch-card">
@@ -20,18 +19,18 @@
                 <div class="card-body">
                     <div class="d-flex mb-4 justify-content-between">
                         <div class="w-15">
-                            <form action="{{route('admin.classes.index')}}">
+                            <form action="{{route('admin.students.index')}}">
                                 <div class="d-flex justify-content-between">
                                     <input type="search" name="keyword" value="{{ $keyword }}" class="form-control mr-2"
                                            placeholder="Từ Khoá">
-                                    <select class="form-control" name="filter_specializaiton">
+                                    <select class="form-control" name="filter_class">
                                         <option value="all"
-                                                @if(!$filterSpecialization || $filterSpecialization == 'all') selected="selected" @endif>
-                                            Tất Cả Các Chuyên Ngành
+                                                @if(!$filterClass || $filterClass == 'all') selected="selected" @endif>
+                                            Tất Cả Các Lớp
                                         </option>
-                                        @foreach($specializations as $specialization)
-                                            <option value="{{ $specialization->id }}"
-                                                    @if($filterSpecialization && $filterSpecialization == $specialization->id) selected="selected" @endif>{{ $specialization->name }}</option>
+                                        @foreach($classes as $class)
+                                            <option value="{{ $class->id }}"
+                                                    @if($filterClass && $filterClass == $class->id) selected="selected" @endif>{{ $class->name }}</option>
                                         @endforeach
                                     </select>
                                     <button class="ml-2 btn btn-success" type="submit">
@@ -40,40 +39,55 @@
                                 </div>
                             </form>
                         </div>
-                        <a class="btn btn-primary" href="{{ route('admin.classes.create') }}">Tạo mới</a>
+                        <a class="btn btn-success" href="{{ route('admin.students.create') }}">Tạo mới</a>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-bordered">
                             <thead>
                             <tr>
-                                <th>Lớp Học</th>
-                                <th>Số Sinh Viên</th>
+                                <th>Sinh Viên</th>
+                                <th>Số Điện Thoại</th>
+                                <th>Giới Tính</th>
+                                <th>Ngày Sinh</th>
+                                <th>Địa Chỉ</th>
                                 <th>Chuyên Ngành</th>
+                                <th>Lớp</th>
                                 <th></th>
                             </tr>
                             </thead>
                             <tbody>
-                            @forelse($classes as $class)
+                            @forelse($students as $student)
                                 <tr>
                                     <td>
-                                        {{ $class->name }}
+                                        <div class="d-flex align-items-center">
+                                            <div class="mr-4">
+                                                <img src="{{ asset($student->avatar->path) }}" alt="avatar">
+                                            </div>
+                                            {{ $student->name }}
+                                        </div>
                                     </td>
                                     <td>
-                                        {{ count($class->students) }}
+                                        {{ $student->phone }}
                                     </td>
                                     <td>
-                                        {{ $class->specialization->name }}
+                                        {{ $student->gender ? 'Male' : 'Female' }}
+                                    </td>
+                                    <td>
+                                        {{ $student->birthday }}
+                                    </td>
+                                    <td>
+                                        {{ $student->address }}
+                                    </td>
+                                    <td>
+                                        {{ $student->class->specialization->name }}
+                                    </td>
+                                    <td>
+                                        {{ $student->class->name ?? '' }}
                                     </td>
                                     <td width="100">
                                         <div class="d-flex justify-content-between">
                                             <div class="mr-3">
-                                                <a href="{{ route('admin.classes.show', $class->id) }}"
-                                                   class="btn btn-sm btn-info" data-toggle="tooltip"
-                                                   data-placement="top"
-                                                   title="Danh Sách Sinh Viên"><i class="mdi mdi-account-multiple"></i></a>
-                                            </div>
-                                            <div class="mr-3">
-                                                <a href="{{ route('admin.classes.edit', $class->id) }}"
+                                                <a href="{{ route('admin.students.edit', $student->id) }}"
                                                    class="btn btn-sm btn-warning" data-toggle="tooltip"
                                                    data-placement="top"
                                                    title="Sửa Thông Tin"><i class="mdi mdi-grease-pencil"></i></a>
@@ -82,7 +96,8 @@
                                                 <form action="">
                                                     <button type="submit" class="btn btn-sm btn-danger"
                                                             data-toggle="tooltip" data-placement="top"
-                                                            title="Xoá Thông Tin"><i class="mdi mdi-delete"></i>
+                                                            title="Xoá Thông Tin">
+                                                        <i class="mdi mdi-delete"></i>
                                                     </button>
                                                 </form>
                                             </div>
@@ -98,7 +113,7 @@
                         </table>
                     </div>
                     <div class="mt-2 d-flex justify-content-end">
-                        {{ $classes->appends(['filter' => $filterSpecialization, 'keyword' => $keyword])->links() }}
+                        {{ $students->appends(['filter' => $filterClass, 'keyword' => $keyword])->links() }}
                     </div>
                 </div>
             </div>
@@ -106,4 +121,9 @@
     </div>
 @endsection
 @section('script')
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#list-subject').DataTable();
+        });
+    </script>
 @endsection
