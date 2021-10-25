@@ -22,7 +22,7 @@ class GradeController extends Controller
             ->when($keyword, function ($query) use ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%');
             })
-            ->paginate(config('common.paginate'))->load('students');
+            ->paginate(config('config.paginate'))->load('students');
 
         return view('admin.grade.index', compact('grades', 'keyword'));
     }

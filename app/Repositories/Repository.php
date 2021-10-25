@@ -90,6 +90,6 @@ class Repository implements IRepository
 
     public function paginate()
     {
-        return $this->model->paginate(config('common.paginate'));
+        return $this->model->paginate(config('config.paginate'));
     }
 }

@@ -29,7 +29,7 @@ class ManagerController extends Controller
                     ->orWhere('phone', $keyword)
                     ->orWhere('email', 'like', '%' . $keyword . '%');
             })
-            ->paginate(config('common.paginate'));
+            ->paginate(config('config.paginate'));
 
         return view('admin.manager.index', compact('managers', 'keyword'));
     }
@@ -58,8 +58,8 @@ class ManagerController extends Controller
                 'path' => $path
             ]);
             $adminRole = $this->roleRepository->findByName(
-                config('common.roles.admin.name'),
-                config('common.roles.admin.guard'));
+                config('config.roles.admin.name'),
+                config('config.roles.admin.guard'));
             $student->assignRole($adminRole);
             DB::commit();
 

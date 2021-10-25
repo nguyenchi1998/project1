@@ -42,14 +42,14 @@ class User extends Authenticatable
     public function scopeIsSuperAdmin()
     {
         return $this->whereHas('roles', function ($query) {
-            $query->whereName(config('common.roles.super_admin.name'));
+            $query->whereName(config('config.roles.super_admin.name'));
         });
     }
 
     public function scopeIsAdmin()
     {
         return $this->whereHas('roles', function ($query) {
-            $query->whereName(config('common.roles.admin.name'));
+            $query->whereName(config('config.roles.admin.name'));
         });
     }
 

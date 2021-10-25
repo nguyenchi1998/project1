@@ -38,7 +38,7 @@ class SubjectController extends Controller
                     });
                 }
             ])
-            ->paginate(config('common.paginate'));
+            ->paginate(config('config.paginate'));
         $departments = $this->departmentRepository->all();
 
         return view('admin.subject.index', compact('subjects', 'departments', 'filter'));
@@ -47,7 +47,7 @@ class SubjectController extends Controller
     public function create()
     {
         $semesters = [];
-        for ($i = 1; $i <= config('common.semester.max'); $i++) {
+        for ($i = 1; $i <= config('config.semester.max'); $i++) {
             $semesters[$i] = $i;
         }
         $departments = $this->departmentRepository->all();
@@ -61,7 +61,7 @@ class SubjectController extends Controller
             'name' => $request->get('name'),
             'credit' => $request->get('credit'),
             'semester' => $request->get('semester'),
-            'type' => $request->get('basic') ? config('common.subject.type.basic') : config('common.subject.type.specialization'),
+            'type' => $request->get('basic') ? config('config.subject.type.basic') : config('config.subject.type.specialization'),
             'department_id' => $request->get('department_id'),
         ]);
 

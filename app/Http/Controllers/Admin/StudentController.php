@@ -42,7 +42,7 @@ class StudentController extends Controller
                     $query->whereId($filterClass);
                 });
             })
-            ->paginate(config('common.paginate'));
+            ->paginate(config('config.paginate'));
         $classes = $this->classRepository->all();
 
         return view('admin.student.index', compact('students', 'filterClass', 'classes', 'keyword'));
@@ -74,8 +74,8 @@ class StudentController extends Controller
                 'path' => $path
             ]);
             $studentRole = $this->roleRepository->findByName(
-                config('common.roles.student.name'),
-                config('common.roles.student.guard'));
+                config('config.roles.student.name'),
+                config('config.roles.student.guard'));
             $student->assignRole($studentRole);
             DB::commit();
 

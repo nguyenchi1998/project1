@@ -22,9 +22,9 @@ class RedirectIfAuthenticated
     public function handle($request, Closure $next, $guard = null)
     {
         if (Auth::guard($guard)->check()) {
-            if ($guard == config('common.guard.admin')) {
+            if ($guard == config('config.guard.admin')) {
                 return redirect()->route('admin.home');
-            } elseif ($guard == config('common.guard.teacher')) {
+            } elseif ($guard == config('config.guard.teacher')) {
                 return redirect()->route('teacher.home');
             } else {
                 return redirect()->route('student.home');

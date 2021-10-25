@@ -44,7 +44,7 @@
                     <div class="form-group">
                         <div class="form-check form-check-primary">
                             <label class="form-check-label">
-                                {{ Form::checkbox('basic', config('common.subject.type.basic'), $subject->type == config('common.subject.type.basic'), ['class'=>'form-check-input']) }}
+                                {{ Form::checkbox('basic', config('config.subject.type.basic'), $subject->type == config('config.subject.type.basic'), ['class'=>'form-check-input']) }}
                                 Môn Cơ Bản
                                 <i class="input-helper"></i>
                             </label>

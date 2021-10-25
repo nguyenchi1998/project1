@@ -58,9 +58,9 @@ class Handler extends ExceptionHandler
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }
         $guard = array_get($exception->guards(), 0);
-        if ($guard == config('common.guard.admin')) {
+        if ($guard == config('config.guard.admin')) {
             $login = 'admin.loginShow';
-        } elseif ($guard == config('common.guard.teacher')) {
+        } elseif ($guard == config('config.guard.teacher')) {
             $login = 'teacher.loginShow';
         } else {
             $login = 'login';

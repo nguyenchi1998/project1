@@ -21,12 +21,12 @@ class Subject extends Model
 
     public function basicSubjects()
     {
-        return $this->whereType(config('common.subject.type.basic'));
+        return $this->whereType(config('config.subject.type.basic'));
     }
 
     public function specializationSubjects()
     {
-        return $this->where('type', '!=', config('common.subject.type.basic'));
+        return $this->where('type', '!=', config('config.subject.type.basic'));
     }
 
     public function specializations(): BelongsToMany

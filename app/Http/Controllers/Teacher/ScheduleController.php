@@ -27,7 +27,7 @@ class ScheduleController extends Controller
         $teacher = Auth::user();
         $states = array_map(function ($status) {
             return ucfirst($status);
-        }, array_flip(config('common.status.schedule')));
+        }, array_flip(config('config.status.schedule')));
         $schedules = $this->scheduleRepository->where('teacher_id', '=', $teacher->id)
             ->whereIn('status', array_flip($states))
             ->when(isset($status), function ($query) use ($status) {
@@ -63,7 +63,7 @@ class ScheduleController extends Controller
         $schedule = $this->scheduleRepository->find($id)
             ->load('scheduleDetails.student');
         $scheduleDetails = $schedule->scheduleDetails;
-        $statusScheduleDetails = array_flip(config('common.status.scheduleDetail'));
+        $statusScheduleDetails = array_flip(config('config.status.scheduleDetail'));
         $statusScheduleDetails = array_map(function ($status) {
             return ucfirst($status);
         }, $statusScheduleDetails);

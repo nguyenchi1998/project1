@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'max_semester_register_by_class' => 4,
+    'max_semester' => 16,
     'paginate' => 8,
     'role' => [
         'admin' => 'admin',

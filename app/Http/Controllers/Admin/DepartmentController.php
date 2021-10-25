@@ -20,7 +20,7 @@ class DepartmentController extends Controller
         $keyword = $request->get('keyword');
         $departments = $this->departmentRepository->where('name', 'like', '%' . $keyword . '%')
             ->with('teachers')
-            ->paginate(config('common.paginate'));
+            ->paginate(config('config.paginate'));
 
         return view('admin.department.index', compact('departments', 'keyword'));
     }

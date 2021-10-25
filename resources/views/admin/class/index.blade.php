@@ -45,6 +45,7 @@
                             <tr>
                                 <th>Lớp Học</th>
                                 <th>Số Sinh Viên</th>
+                                <th>Kỳ Hiện Tại</th>
                                 <th>Chuyên Ngành</th>
                                 <th></th>
                             </tr>
@@ -57,6 +58,9 @@
                                 </td>
                                 <td>
                                     {{ count($class->students) }}
+                                </td>
+                                <td>
+                                    {{ $class->semester }}
                                 </td>
                                 <td>
                                     {{ $class->specialization->name }}

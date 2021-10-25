@@ -65,7 +65,14 @@ Route::group(['as' => 'admin.'], function () {
                 ->name('departments.reject');
         });
 
-        Route::resource('schedules/credits/students/','ScheduleStudentController', ['names' => 'schedules.credits.students']);
+        Route::resource('schedules/credits/students/', 'ScheduleStudentController', ['names' => 'schedules.credits.students'])
+            ->only('index');
+
+        Route::get('schedules/credits/students/{id}', 'ScheduleStudentController@registerScheduleShow')
+            ->name('schedules.credits.students.registerScheduleShow');
+
+            Route::post('schedules/credits/students/{id}', 'ScheduleStudentController@registerSchedule')
+            ->name('schedules.credits.students.registerSchedule');
     });
 
     Route::get('login', 'LoginController@showLoginForm')
@@ -77,4 +84,3 @@ Route::group(['as' => 'admin.'], function () {
     Route::post('logout', 'LoginController@logout')
         ->name('logout');
 });
-    

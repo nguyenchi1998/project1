@@ -41,7 +41,7 @@
                             <thead>
                             <tr>
                                 <th>Môn Học</th>
-                                <th>Môn Cơ Sở</th>
+                                <th></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -59,7 +59,7 @@
                                     <td class="d-flex justify-content-center">
                                         <div class="form-check form-check-info">
                                             <label class="form-check-label">
-                                                {{ Form::checkbox('force', config('common.subject.force'), array_search('force', $subjectForce), ['class'=>'form-check-input']) }}
+                                                {{ Form::checkbox('force', config('config.subject.force'), checkForceSubject($subjectForce, $subject), ['class'=>'form-check-input']) }}
                                                 {{ 'Bắt Buộc' }}
                                                 <i class="input-helper"></i>
                                             </label>

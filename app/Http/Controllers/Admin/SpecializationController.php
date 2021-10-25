@@ -31,7 +31,7 @@ class SpecializationController extends Controller
         $keyword = $request->get('keyword');
         $specializations = $this->specializationRepository->model()
             ->with(['subjects', 'department'])
-            ->paginate(config('common.paginate'));
+            ->paginate(config('config.paginate'));
 
         return view('admin.specialization.index', compact('specializations', 'keyword'));
     }
@@ -64,11 +64,6 @@ class SpecializationController extends Controller
 
             return redirect()->back()->withErrors(['msg' => $e->getMessage()]);
         }
-    }
-
-    public function show($id)
-    {
-        //
     }
 
     public function edit($id)
@@ -115,10 +110,8 @@ class SpecializationController extends Controller
     {
 
         $specialization = $this->specializationRepository->find($id)->load('subjects');
-        $subjectForce = $specialization->subjects->map(function ($subject) use ($specialization) {
-            return [$subject->id => $subject->pivot->force];
-        })->toArray();
-        $subjects = $this->subjectRepository->where('type', '=', config('common.subject.type.specialization'))
+        $subjectForce = $specialization->subjects;
+        $subjects = $this->subjectRepository->where('type', '=', config('config.subject.type.specialization'))
             ->get();
 
         return view('admin.specialization.choose_subject', compact('specialization', 'subjects', 'subjectForce'));
@@ -126,14 +119,20 @@ class SpecializationController extends Controller
 
     public function chooseSubject(Request $request, $id)
     {
-//        try {
-        $subjectIds = $request->get('subjects');
-        $specialization = $this->specializationRepository->find($id);
-        $specialization->subjects()->sync($subjectIds);
+        try {
+            DB::beginTransaction();
+            $subjectIds = $request->get('subjects');
+            $specialization = $this->specializationRepository->find($id);
+            $specialization->subjects()->sync($subjectIds);
+            DB::commit();
 
-        return redirect()->route('admin.specializations.index');
-//        } catch (Exception $e) {
-//            return redirect()->back();
-//        }
+            return redirect()->route('admin.specializations.index');
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return redirect()->back()->withErrors([
+                'msg' => $e->getMessage(),
+            ]);
+        }
     }
 }

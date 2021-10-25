@@ -32,7 +32,7 @@ class MarkController extends Controller
         $semester = range(1, $class->semester);
         $subjects = $this->scheduleDetailRepository->where('student_id', '=', $student->id)
             ->whereHas('schedule', function ($query) {
-                $query->where('status', config('common.status.schedule.done'));
+                $query->where('status', config('config.status.schedule.done'));
             })
             ->get()->load(['subject', 'schedule']);
 

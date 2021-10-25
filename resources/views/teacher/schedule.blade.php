@@ -62,11 +62,11 @@ Manager Schedules
                                     </td>
                                     <td style="width: 150px">
                                         <div class="d-flex justify-content-center align-items-center">
-                                            @if($detail->status == config('common.status.schedule.in_progress'))
+                                            @if($detail->status == config('config.status.schedule.in_progress'))
                                             <a class="btn btn-sm btn-success" href="{{ route('teacher.schedules.attendanceShow', $detail->id) }}">Attendance</a>
-                                            @elseif($detail->status == config('common.status.schedule.marking'))
+                                            @elseif($detail->status == config('config.status.schedule.marking'))
                                             <a class="btn btn-sm btn-primary" href="{{ route('teacher.schedules.markShow', $detail->id) }}">Mark</a>
-                                            @if(chexkFinishMark($detail->scheduleDetails->toArray()))
+                                            @if(checkFinishMark($detail->scheduleDetails->toArray()))
                                             <div class="ml-1">
                                                 <a class="btn btn-sm btn-success" href="{{ route('teacher.schedules.markShow', $detail->id) }}">Finish</a></div>
                                             @endif()

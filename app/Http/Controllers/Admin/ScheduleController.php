@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 
 class ScheduleController extends Controller
 {
-    const MAX_SEMESTER_REGISTER_GROUP_BY_CLASS = 2;
+    const MAX_SEMESTER_REGISTER_BY_CLASS = 4;
 
     protected $scheduleRepository;
     protected $specializationRepository;
@@ -38,19 +38,22 @@ class ScheduleController extends Controller
 
     public function index(Request $request)
     {
-        $semesters = ['1' => 'Semester 1', '2' => 'Semester 2'];
+        $semesters = array_map(function ($item) {
+            return 'Kỳ ' . $item . ' - Năm ' . ($item <= 2 ? 1 : 2);
+        }, range(1, config('config.max_semester_register_by_class')));
         $semester = $request->get('semester');
         $classId = $request->get('class');
         $schedules = $this->scheduleRepository->all()
             ->load('subject', 'teacher', 'scheduleDetails');
-        $allClasses = $this->classRepository->where('semester', '<=', self::MAX_SEMESTER_REGISTER_GROUP_BY_CLASS)
+        $allClasses = $this->classRepository->where('semester', '<=', config('config.max_semester_register_by_class'))
             ->when($semester, function ($query) use ($semester) {
                 $query->where('semester', $semester);
             })
             ->get()
             ->load('specialization.subjects');
         $basicSubjects = $this->subjectRepository->model()
-            ->basicSubjects()->get();
+            ->basicSubjects()
+            ->get();
         $scheduleClass = $this
             ->scheduleRepository->where('class_id', '!=', null)
             ->get()
@@ -67,9 +70,15 @@ class ScheduleController extends Controller
 
     public function registerScheduleShow(Request $request, $id)
     {
-        $class = $this->classRepository->find($id)->load('specialization');
-        $basicSubjects = $this->subjectRepository->model()->basicSubjects()->get()->load('teachers');
-        $schedules = $this->scheduleRepository->where('class_id', '=', $id)->get()->load('subject');
+        $class = $this->classRepository->find($id)
+            ->load('specialization');
+        $basicSubjects = $this->subjectRepository->model()
+            ->basicSubjects()
+            ->get()
+            ->load('teachers');
+        $schedules = $this->scheduleRepository->where('class_id', '=', $id)
+            ->get()
+            ->load('subject');
         $scheduleSubjects = $schedules->map(function ($schedule) {
             return $schedule->subject;
         });
@@ -94,7 +103,8 @@ class ScheduleController extends Controller
                     'subject_id' => $request->get('subject_id'),
                 ])
                 ->first();
-            $class = $this->classRepository->find($id)->load('students');
+            $class = $this->classRepository->find($id)
+                ->load('students');
             $students = $class->students->map(function ($student) use ($schedule, $request) {
                 return [
                     'schedule_id' => $schedule->id,

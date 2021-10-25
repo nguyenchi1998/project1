@@ -30,7 +30,7 @@ class Specialization extends Model
 
     public function specializationSubject()
     {
-        return $this->subjects()->where('type', '!=', config('common.subject.type.basic'));
+        return $this->subjects()->where('type', '!=', config('config.subject.type.basic'));
     }
 
     public function classes()

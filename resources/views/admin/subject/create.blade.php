@@ -29,7 +29,7 @@
                     </div>
                     <div class="form-group">
                         {{ Form::label('semester', 'Kì Học')}}
-                        {{ Form::select('semester', $semesters , null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Kì Học', 'min' => 1, 'max' => config('common.semester.max')]) }}
+                        {{ Form::select('semester', $semesters , null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Kì Học', 'min' => 1, 'max' => config('config.semester.max')]) }}
                     </div>
                     <div class="form-group">
                         <label for="department">Khoa Viện</label>
@@ -46,7 +46,7 @@
                     <div class="form-group">
                         <div class="form-check form-check-primary">
                             <label class="form-check-label">
-                                {{ Form::checkbox('basic', config('common.subject.type.basic'), false, ['class'=>'form-check-input']) }}
+                                {{ Form::checkbox('basic', config('config.subject.type.basic'), false, ['class'=>'form-check-input']) }}
                                 Môn Cơ Bản
                                 <i class="input-helper"></i>
                             </label>
