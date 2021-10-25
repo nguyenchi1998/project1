@@ -23,6 +23,7 @@ class CreateScheduleDetailsTable extends Migration
             $table->unsignedInteger('final_mark')->nullable();
             $table->unsignedInteger('status')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -38,15 +38,7 @@ class SubjectController extends Controller
                     });
                 }
             ])
-            ->get();
-        $subjects = $subjects->map(function ($subject) {
-            $specializations = array_map(function ($specialization) {
-                return $specialization['name'];
-            }, $subject->specializations->toArray());
-            $subject['specializations'] = implode(',', $specializations);
-
-            return $subject;
-        });
+            ->paginate(config('common.paginate'));
         $departments = $this->departmentRepository->all();
 
         return view('admin.subject.index', compact('subjects', 'departments', 'filter'));
@@ -117,6 +109,11 @@ class SubjectController extends Controller
 
     public function destroy($id)
     {
-        //
+        $result = $this->subjectRepository->delete($id);
+
+        if ($result) {
+            return redirect()->route('admin.subjects.index');
+        }
+        return redirect()->route('admin.subjects.index')->withErrors(['msg' => 'Delete Error']);
     }
 }

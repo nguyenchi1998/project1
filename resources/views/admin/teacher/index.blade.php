@@ -122,9 +122,5 @@
     </div>
 @endsection
 @section('script')
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#list-subject').DataTable();
-        });
-    </script>
+
 @endsection

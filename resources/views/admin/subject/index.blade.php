@@ -40,12 +40,12 @@
                             <tr>
                                 <th>Môn Học</th>
                                 <th>Số Tín Chỉ</th>
-                                <th>Khoa Viện</th>
+                                <th>Khoa Viện Phụ Trách</th>
                                 <th></th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($subjects as $subject)
+                            @forelse($subjects as $subject)
                                 <tr>
                                     <td>
                                         {{ $subject->name }}
@@ -76,9 +76,16 @@
                                         </div>
                                     </td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <div class="pt-3 d-flex justify-content-center">
+                                    <h4>Empty Data</h4>
+                                </div>
+                            @endforelse
                             </tbody>
                         </table>
+                    </div>
+                    <div class="mt-2 d-flex justify-content-end">
+                        {{ $subjects->appends(['filter' => $filter])->links() }}
                     </div>
                 </div>
             </div>
@@ -86,9 +93,5 @@
     </div>
 @endsection
 @section('script')
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#list-subject').DataTable();
-        });
-    </script>
+
 @endsection

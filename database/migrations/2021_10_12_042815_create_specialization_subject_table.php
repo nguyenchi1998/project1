@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateSpecializationSubjectTable extends Migration
 {
@@ -19,6 +19,7 @@ class CreateSpecializationSubjectTable extends Migration
             $table->unsignedInteger('subject_id');
             $table->boolean('force')->default(config('common.subject.force'));
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

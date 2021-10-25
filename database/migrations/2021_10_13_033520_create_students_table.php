@@ -25,9 +25,9 @@ class CreateStudentsTable extends Migration
             $table->unsignedInteger('class_id')->nullable();
             $table->unsignedInteger('grade_id')->nullable();
             $table->boolean('can_register_credit')->default(false);
-            $table->softDeletes();
             $table->timestamps();
             $table->rememberToken();
+            $table->softDeletes();
         });
     }
 

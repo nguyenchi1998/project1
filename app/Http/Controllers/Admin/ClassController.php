@@ -43,7 +43,8 @@ class ClassController extends Controller
                 $query->whereHas('specialization', function ($query) use ($filterSpecialization) {
                     $query->whereId($filterSpecialization);
                 });
-            })->with('students')->paginate(config('common.paginate'));
+            })->with('students')
+            ->paginate(config('common.paginate'));
 
         return view('admin.class.index', compact('classes', 'filterSpecialization', 'keyword', 'specializations'));
     }

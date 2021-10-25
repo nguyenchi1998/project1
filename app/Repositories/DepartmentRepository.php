@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\Department;
-use App\Models\Schedule;
 
 class DepartmentRepository extends Repository implements IDepartmentRepository
 {

@@ -69,6 +69,13 @@
                                                    data-placement="top"
                                                    title="Sửa Thông Tin"><i class="mdi mdi-grease-pencil"></i></a>
                                             </div>
+                                            <div class="mr-3">
+                                                <a href="{{ route('admin.specializations.choose_subject_show', $specialization->id) }}"
+                                                   class="btn btn-sm btn-gradient-light" data-toggle="tooltip"
+                                                   data-placement="top"
+                                                   title="Chọn Môn Giảng Dạy"><i
+                                                            class="mdi mdi-book-open-page-variant"></i></a>
+                                            </div>
                                             <div>
                                                 <form action="">
                                                     <button type="submit" class="btn btn-sm btn-danger"

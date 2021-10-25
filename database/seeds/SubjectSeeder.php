@@ -39,7 +39,6 @@ class SubjectSeeder extends Seeder
                 'name' => $subject['name'],
                 'type' => $subject['type'],
                 'semester' => 1,
-                'force' => isset($subject['type']) && $subject['type'] == config('common.subject.type.basic'),
                 'department_id' => 1,
             ]);
         }

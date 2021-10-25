@@ -21,6 +21,7 @@ class CreateDepartmentsTable extends Migration
             $table->boolean('next_manager_status')
                 ->default(config('status.department.next_manager.pending'));
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

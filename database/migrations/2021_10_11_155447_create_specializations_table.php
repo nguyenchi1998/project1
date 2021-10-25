@@ -20,6 +20,7 @@ class CreateSpecializationsTable extends Migration
             $table->unsignedInteger('min_credit');
             $table->unsignedInteger('total_semester');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

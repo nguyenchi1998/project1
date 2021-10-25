@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateSubjectsTable extends Migration
 {
@@ -20,7 +20,6 @@ class CreateSubjectsTable extends Migration
             $table->unsignedInteger('semester');
             $table->unsignedInteger('department_id')->nullable();
             $table->string('type')->nullable();
-            $table->boolean('force')->default(true);
             $table->softDeletes();
             $table->timestamps();
         });

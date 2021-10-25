@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Repositories\IPermissionRepository;
 use App\Repositories\IRoleRepository;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class RoleController extends Controller
 {
@@ -44,16 +43,5 @@ class RoleController extends Controller
         $this->roleRepository->assignPermissions($id, $request->get('permissions'));
 
         return redirect()->route('admin.roles.index');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

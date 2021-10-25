@@ -30,8 +30,8 @@ class UpdateClass extends FormRequest
 
     public function messages()
     {
-       return [
-           'students.max' => 'Only max :max student in class',
-       ];
+        return [
+            'students.max' => 'Only max :max student in class',
+        ];
     }
 }

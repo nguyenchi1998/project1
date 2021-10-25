@@ -31,7 +31,7 @@
                             @foreach($roles as $role)
                                 <tr>
                                     <td>
-                                        {{ ucwords(str_replace('-', ' ', $role->name)) }}
+                                        {{ ucwords(str_replace('-', ' ', $role->display_name)) }}
                                     </td>
                                     <td>
                                         {{ count($role->permissions) }}

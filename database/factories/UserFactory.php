@@ -1,6 +1,7 @@
 <?php
 
 use Faker\Generator as Faker;
+use Illuminate\Support\Facades\Hash;
 
 /** @var Factory $factory */
 /*
@@ -21,7 +22,7 @@ $factory->define(App\Models\User::class, function (Faker $faker) {
         'gender' => $faker->numberBetween(0, 1),
         'birthday' => $faker->date,
         'phone' => $faker->phoneNumber,
-        'password' => \Illuminate\Support\Facades\Hash::make(config('default.auth.password')), // secret
+        'password' => Hash::make(config('default.auth.password')),
         'remember_token' => str_random(10),
         'address' => $faker->address(),
     ];

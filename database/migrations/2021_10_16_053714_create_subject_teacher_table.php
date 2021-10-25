@@ -18,6 +18,7 @@ class CreateSubjectTeacherTable extends Migration
             $table->unsignedInteger('subject_id')->nullable();
             $table->unsignedInteger('teacher_id')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

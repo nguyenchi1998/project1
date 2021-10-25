@@ -117,14 +117,13 @@ class StudentController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return Response
-     */
     public function destroy($id)
     {
-        //
+        $result = $this->studentRepository->delete($id);
+
+        if ($result) {
+            return redirect()->route('admin.students.index');
+        }
+        return redirect()->route('admin.students.index')->withErrors(['msg' => 'Delete Error']);
     }
 }

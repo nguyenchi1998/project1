@@ -18,8 +18,7 @@ class CreditController extends Controller
         IScheduleDetailRepository $scheduleDetailRepository,
         IClassRepository          $classRepository,
         ISubjectRepository        $subjectRepository
-    )
-    {
+    ) {
         $this->scheduleDetailRepository = $scheduleDetailRepository;
         $this->classRepository = $classRepository;
         $this->subjectRepository = $subjectRepository;

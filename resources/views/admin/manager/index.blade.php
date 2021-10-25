@@ -75,7 +75,10 @@
                                                    title="Sửa Thông Tin"><i class="mdi mdi-grease-pencil"></i></a>
                                             </div>
                                             <div>
-                                                <form action="">
+                                                <form method="post"
+                                                      action="{{ route('admin.managers.destroy', $manager->id) }}">
+                                                    @csrf
+                                                    @method('DELETE')
                                                     <button type="submit" class="btn btn-sm btn-danger"
                                                             data-toggle="tooltip" data-placement="top"
                                                             title="Xoá Thông Tin">
@@ -103,9 +106,5 @@
     </div>
 @endsection
 @section('script')
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#list-subject').DataTable();
-        });
-    </script>
+
 @endsection

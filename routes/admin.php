@@ -38,6 +38,12 @@ Route::group(['as' => 'admin.'], function () {
 
         Route::resource('specializations', 'SpecializationController');
 
+        Route::get('specializations/{id}/choose-subject', 'SpecializationController@chooseSubjectShow')
+            ->name('specializations.choose_subject_show');
+
+        Route::post('specializations/{id}/choose-subject', 'SpecializationController@chooseSubject')
+            ->name('specializations.choose_subject');
+
         Route::resource('classes', 'ClassController');
 
         Route::resource('grades', 'GradeController');

@@ -19,6 +19,7 @@ class CreateMediasTable extends Migration
             $table->unsignedInteger('mediable_id')->nullable();
             $table->string('mediable_type')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

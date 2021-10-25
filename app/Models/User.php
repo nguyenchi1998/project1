@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
@@ -10,6 +11,7 @@ class User extends Authenticatable
 {
     use Notifiable;
     use HasRoles;
+    use SoftDeletes;
 
     protected $guarded = 'admin';
 
@@ -39,12 +41,16 @@ class User extends Authenticatable
 
     public function scopeIsSuperAdmin()
     {
-        return in_array(config('common.roles.super_admin'), $this->getRoleNames()->toArray());
+        return $this->whereHas('roles', function ($query) {
+            $query->whereName(config('common.roles.super_admin.name'));
+        });
     }
 
     public function scopeIsAdmin()
     {
-        return in_array(config('common.roles.admin'), $this->getRoleNames()->toArray());
+        return $this->whereHas('roles', function ($query) {
+            $query->whereName(config('common.roles.admin.name'));
+        });
     }
 
     public function avatar()

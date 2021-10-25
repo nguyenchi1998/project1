@@ -187,7 +187,7 @@
                         </div>
                         <div class="nav-profile-text d-flex flex-column">
                             <span class="font-weight-bold mb-2">{{ auth()->user()->name  ?? '' }}</span>
-                            <span class="text-secondary text-small text-capitalize">{{ get_guard() }}</span>
+                            <span class="text-secondary text-small text-capitalize">{{ auth()->user()->roles()->first()->display_name ?? '' }}</span>
                         </div>
                         <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
                     </a>
@@ -211,13 +211,13 @@
                             <i class="mdi mdi-table-large menu-icon"></i>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('admin.requests.index')}}">
+                            <span class="menu-title">Quản Lý Yêu Cầu</span>
+                            <i class="mdi mdi-contacts menu-icon"></i>
+                        </a>
+                    </li>
                 @endcan
-                <li class="nav-item">
-                    <a class="nav-link" href="{{route('admin.requests.index')}}">
-                        <span class="menu-title">Quản Lý Yêu Cầu</span>
-                        <i class="mdi mdi-contacts menu-icon"></i>
-                    </a>
-                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('admin.grades.index')}}">
                         <span class="menu-title">Quản Lý Niên Khoá</span>
@@ -312,6 +312,7 @@
 <script src="{{ asset('asset/js/misc.js') }}"></script>
 <script src="{{ asset('asset/js/Bảng Điều Khiển.js') }}"></script>
 <script src="{{ asset('asset/js/todolist.js') }}"></script>
+@yield('script')
 </body>
 
 </html>

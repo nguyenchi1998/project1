@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Repositories\IClassRepository;
-use App\Repositories\IGradeRepository;
-use App\Repositories\IStudentRepository;
+use App\Repositories\IManagerRepository;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +14,7 @@ class ManagerController extends Controller
     protected $managerRepository;
 
     public function __construct(
-        IStudentRepository $managerRepository
+        IManagerRepository $managerRepository
     ) {
         $this->managerRepository = $managerRepository;
     }
@@ -25,6 +23,7 @@ class ManagerController extends Controller
     {
         $keyword = $request->get('keyword');
         $managers = $this->managerRepository->model()
+            ->isAdmin()
             ->when($keyword, function ($query) use ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%')
                     ->orWhere('phone', $keyword)
@@ -37,7 +36,6 @@ class ManagerController extends Controller
 
     public function create()
     {
-
         return view('admin.manager.create');
     }
 
@@ -69,7 +67,8 @@ class ManagerController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
 
-            return back()->withErrors(['msg' => $e->getMessage()]);
+            return redirect()->back()
+                ->withErrors(['msg' => $e->getMessage()]);
         }
     }
 
@@ -91,26 +90,43 @@ class ManagerController extends Controller
         return view('admin.manager.edit', compact('manager'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param int $id
-     * @return Response
-     */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            DB::beginTransaction();
+            $this->managerRepository->update($id, $request->only([
+                'name', 'email', 'phone', 'birthday', 'address', 'gender'
+            ]));
+            $student = $this->managerRepository->find($id);
+            $avatar = $request->file('avatar');
+            $avatarFilename = $request->get('email') . '.' . $avatar->getClientOriginalExtension();
+            $path = $this->managerRepository->saveImage(
+                $avatar,
+                $avatarFilename,
+                100,
+                100
+            );
+            $student->avatar()->create([
+                'path' => $path
+            ]);
+            DB::commit();
+
+            return redirect()->route('admin.managers.index');
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return redirect()->back()
+                ->withErrors(['msg' => $e->getMessage()]);
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return Response
-     */
     public function destroy($id)
     {
-        //
+        $result = $this->managerRepository->delete($id);
+
+        if ($result) {
+            return redirect()->route('admin.managers.index');
+        }
+        return redirect()->route('admin.managers.index')->withErrors(['msg' => 'Delete Error']);
     }
 }

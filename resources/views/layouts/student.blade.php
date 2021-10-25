@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{{ asset('asset/vendors/css/vendor.bundle.base.css') }}">
     <link rel="stylesheet" href="{{ asset('asset/css/style.css') }}">
     <link rel="shortcut icon" href="{{ asset('asset/images/favicon.ico') }}"/>
+    @yield('css')
 </head>
 
 <body>
@@ -232,6 +233,7 @@
 <script src="{{ asset('asset/js/misc.js') }}"></script>
 <script src="{{ asset('asset/js/Bảng Điều Khiển.js') }}"></script>
 <script src="{{ asset('asset/js/todolist.js') }}"></script>
+@yield('script')
 </body>
 
 </html>

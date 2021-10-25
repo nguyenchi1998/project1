@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Repositories\IGradeRepository;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class GradeController extends Controller
 {
@@ -62,14 +61,13 @@ class GradeController extends Controller
         return redirect()->back();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return Response
-     */
     public function destroy($id)
     {
-        //
+        $result = $this->gradeRepository->delete($id);
+
+        if ($result) {
+            return redirect()->route('admin.grades.index');
+        }
+        return redirect()->route('admin.grades.index')->withErrors(['msg' => 'Delete Error']);
     }
 }

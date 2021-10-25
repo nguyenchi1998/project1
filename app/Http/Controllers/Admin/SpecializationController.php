@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\IDepartmentRepository;
 use App\Repositories\ISpecializationRepository;
 use App\Repositories\ISubjectRepository;
 use Exception;
@@ -13,14 +14,16 @@ class SpecializationController extends Controller
 {
     protected $specializationRepository;
     protected $subjectRepository;
+    protected $departmentRepository;
 
     public function __construct(
         ISpecializationRepository $specializationRepository,
+        IDepartmentRepository     $departmentRepository,
         ISubjectRepository        $subjectRepository
-    )
-    {
+    ) {
         $this->specializationRepository = $specializationRepository;
         $this->subjectRepository = $subjectRepository;
+        $this->departmentRepository = $departmentRepository;
     }
 
     public function index(Request $request)
@@ -36,10 +39,9 @@ class SpecializationController extends Controller
 
     public function create()
     {
-        $subjects = $this->subjectRepository->where('type', '=', null)
-            ->get();
+        $departments = $this->departmentRepository->all()->pluck('name', 'id');
 
-        return view('admin.specialization.create', compact('subjects'));
+        return view('admin.specialization.create', compact('departments'));
     }
 
 
@@ -47,20 +49,20 @@ class SpecializationController extends Controller
     {
         try {
             DB::beginTransaction();
-            $specialization = $this->specializationRepository->create($request->only(['name', 'min_credit', 'total_semester']));
-            $basicSubjects = $this->subjectRepository->where('type', '=', config('common.subject.type.basic'))
-                ->get()
-                ->pluck('id')
-                ->toArray();
-            $subjects = $request->get('subjects');
-            $specialization->subjects()->attach(array_merge($basicSubjects, $subjects));
+            $this->specializationRepository->create($request->only([
+                'name',
+                'min_credit',
+                'total_semester',
+                'department_id',
+            ]));
+
             DB::commit();
 
             return redirect()->route('admin.specializations.index');
         } catch (Exception $e) {
             DB::rollBack();
 
-            return redirect()->back()->withErrors('Error');
+            return redirect()->back()->withErrors(['msg' => $e->getMessage()]);
         }
     }
 
@@ -101,6 +103,37 @@ class SpecializationController extends Controller
 
     public function destroy($id)
     {
-        //
+        $result = $this->specializationRepository->delete($id);
+
+        if ($result) {
+            return redirect()->route('admin.specializations.index');
+        }
+        return redirect()->route('admin.specializations.index')->withErrors(['msg' => 'Delete Error']);
+    }
+
+    public function chooseSubjectShow($id)
+    {
+
+        $specialization = $this->specializationRepository->find($id)->load('subjects');
+        $subjectForce = $specialization->subjects->map(function ($subject) use ($specialization) {
+            return [$subject->id => $subject->pivot->force];
+        })->toArray();
+        $subjects = $this->subjectRepository->where('type', '=', config('common.subject.type.specialization'))
+            ->get();
+
+        return view('admin.specialization.choose_subject', compact('specialization', 'subjects', 'subjectForce'));
+    }
+
+    public function chooseSubject(Request $request, $id)
+    {
+//        try {
+        $subjectIds = $request->get('subjects');
+        $specialization = $this->specializationRepository->find($id);
+        $specialization->subjects()->sync($subjectIds);
+
+        return redirect()->route('admin.specializations.index');
+//        } catch (Exception $e) {
+//            return redirect()->back();
+//        }
     }
 }

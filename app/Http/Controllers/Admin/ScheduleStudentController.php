@@ -20,11 +20,11 @@ class ScheduleStudentController extends Controller
     protected $studentRepository;
 
     public function __construct(
-        IScheduleRepository $scheduleRepository,
+        IScheduleRepository       $scheduleRepository,
         ISpecializationRepository $specializationRepository,
-        ISubjectRepository $subjectRepository,
-        IClassRepository $classRepository,
-        IStudentRepository $studentRepository
+        ISubjectRepository        $subjectRepository,
+        IClassRepository          $classRepository,
+        IStudentRepository        $studentRepository
     ) {
         $this->scheduleRepository = $scheduleRepository;
         $this->specializationRepository = $specializationRepository;
@@ -78,12 +78,17 @@ class ScheduleStudentController extends Controller
         try {
             $subject = $this->subjectRepository->find($request->get('subject_id'));
             $this->scheduleRepository->create([
-                'name' => '[class] ' . $subject->name,
+                'name' => '[Class] ' . $subject->name,
                 'class_id' => $id,
                 'subject_id' => $request->get('subject_id'),
                 'start_time' => $request->get('start_time'),
             ]);
-            $schedule = $this->scheduleRepository->model()->where(['class_id' => $id, 'subject_id' => $request->get('subject_id'),])->first();
+            $schedule = $this->scheduleRepository->model()
+                ->where([
+                    'class_id' => $id,
+                    'subject_id' => $request->get('subject_id'),
+                ])
+                ->first();
             $class = $this->classRepository->find($id)->load('students');
             $students = $class->students->map(function ($student) use ($schedule, $request) {
                 return [
@@ -101,9 +106,5 @@ class ScheduleStudentController extends Controller
 
             return back()->withErrors(['msg' => $e->getMessage()]);
         }
-    }
-
-    public function studentCredits()
-    {
     }
 }

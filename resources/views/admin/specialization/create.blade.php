@@ -23,31 +23,19 @@
                             {{ Form::open(['url' =>route('admin.specializations.store') , 'method' => 'POST']) }}
                             <div class="form-group">
                                 <label for="name">Chuyên Ngành</label>
-                                {{ Form::input('text', 'min_credit', null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Tên chuyên ngành']) }}
+                                {{ Form::input('text', 'name', null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Tên chuyên ngành']) }}
                             </div>
                             <div class="form-group">
                                 <label for="min_creddit">Số Tín Chỉ Tối Thiểu</label>
                                 {{ Form::input('number', 'min_credit', null, ['class' => 'form-control', 'id' => 'min_creddit', 'placeholder' => 'Số tín chỉ tối thiểu', 'min' => 0]) }}
                             </div>
                             <div class="form-group">
-                                <label for="min_creddit">Số Kì Học</label>
-                                {{ Form::input('number', 'max_semester', null, ['class' => 'form-control', 'id' => 'min_creddit', 'placeholder' => 'Số kì học', 'min' => 0]) }}
+                                <label for="total_semester">Số Kì Học</label>
+                                {{ Form::input('number', 'total_semester', null, ['class' => 'form-control', 'id' => 'total_semester', 'placeholder' => 'Số kì học', 'min' => 0]) }}
                             </div>
                             <div class="form-group">
-                                {{ Form::label('subject', 'Môn Học')}}
-                                <div class="row">
-                                    @foreach($subjects as $key => $subject)
-                                        <div class="col-sm">
-                                            <div class="form-check form-check-info">
-                                                <label class="form-check-label">
-                                                    {{ Form::checkbox('subjects[]', $subject->id, false,  ['class'=>'form-check-input']) }}
-                                                    {{ $subject->name }}
-                                                    <i class="input-helper"></i>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
+                                {{ Form::label('department', 'Khoa Viện') }}
+                                {{ Form::select('department_id', $departments, null, ['class' => 'form-control', 'id' => 'department', 'placeholder' => 'Chọn Khoa Viện']) }}
                             </div>
                             {{ Form::submit('Xác Nhận', ['class'=> 'btn btn-gradient-primary mr-2']) }}
                             <a href="{{ route('admin.specializations.index') }}" class="btn btn-light">Huỷ Bỏ</a>

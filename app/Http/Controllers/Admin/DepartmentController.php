@@ -53,6 +53,11 @@ class DepartmentController extends Controller
 
     public function destroy($id)
     {
-        //
+        $result = $this->departmentRepository->delete($id);
+
+        if ($result) {
+            return redirect()->route('admin.departmants.index');
+        }
+        return redirect()->route('admin.departments.index')->withErrors(['msg' => 'Delete Error']);
     }
 }
