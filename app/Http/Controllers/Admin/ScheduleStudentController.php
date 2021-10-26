@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Specialization;
 use App\Repositories\IClassRepository;
 use App\Repositories\IGradeRepository;
 use App\Repositories\IScheduleDetailRepository;
@@ -24,14 +23,15 @@ class ScheduleStudentController extends Controller
     protected $gradeRepository;
 
     public function __construct(
-        IScheduleRepository $scheduleRepository,
+        IScheduleRepository       $scheduleRepository,
         IScheduleDetailRepository $scheduleDetailRepository,
         ISpecializationRepository $specializationRepository,
-        ISubjectRepository $subjectRepository,
-        IClassRepository $classRepository,
-        IStudentRepository $studentRepository,
-        IGradeRepository $gradeRepository
-    ) {
+        ISubjectRepository        $subjectRepository,
+        IClassRepository          $classRepository,
+        IStudentRepository        $studentRepository,
+        IGradeRepository          $gradeRepository
+    )
+    {
         $this->scheduleRepository = $scheduleRepository;
         $this->specializationRepository = $specializationRepository;
         $this->subjectRepository = $subjectRepository;
@@ -57,6 +57,7 @@ class ScheduleStudentController extends Controller
                     ->orWhere('phone', $keyword)
                     ->orWhere('email', 'like', '%' . $keyword . '%');
             })
+
             ->paginate(config('config.paginate'));
         $grades = $this->gradeRepository->all()->pluck('name', 'id');
 
@@ -68,20 +69,16 @@ class ScheduleStudentController extends Controller
         $student = $this->studentRepository->find($id)
             ->load(['class.specialization', 'class.specialization.subjects' => function ($query) {
                 $query->where('type', '!=', config('config.subject.type.basic'));
-            }]);
-        $schedules = $this->scheduleRepository->where('class_id', ' = ', $id)
-            ->get()->load('subject');
-        $scheduleSubjects = $schedules->map(function ($schedule) {
-            return $schedule->subject;
-        });
-        $unCreditSubjects = $student->class->specialization->subjects->diff($scheduleSubjects);
+            }, 'scheduleDetails']);
+        $specializationSubjects = $student->class->specialization->subjects;
+        $scheduleDetails = $student->scheduleDetails->pluck('subject_id')->toArray();
 
-        return view('admin.schedule.student.create', compact('unCreditSubjects', 'student'));
+        return view('admin.schedule.student.create', compact('specializationSubjects', 'student', 'scheduleDetails'));
     }
 
     public function registerSchedule(Request $request, $id)
     {
-        $this->scheduleDetailRepository->createMany($request->get('subjects'));
+        $this->scheduleDetailRepository->updateOrCreateMany($request->get('subjects'));
 
         return redirect()->route('admin.schedules.credits.students.registerScheduleShow', $id)
             ->with('success', 'Đăng ký tín chỉ thành công cho sinh viên');

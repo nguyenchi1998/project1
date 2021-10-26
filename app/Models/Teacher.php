@@ -47,7 +47,7 @@ class Teacher extends Authenticatable
 
     public function schedules()
     {
-        return $this->hasMany(Subject::class);
+        return $this->hasMany(Schedule::class);
     }
 
     public function scopeIsTeacher()

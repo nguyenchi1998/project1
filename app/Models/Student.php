@@ -47,5 +47,10 @@ class Student extends Authenticatable
         return $this->hasManyThrough(Schedule::class, Specialization::class);
     }
 
+    public function scheduleDetails()
+    {
+        return $this->hasMany(ScheduleDetail::class);
+    }
+
 
 }

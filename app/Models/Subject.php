@@ -48,4 +48,5 @@ class Subject extends Model
     {
         return $this->belongsTo(Department::class);
     }
+
 }

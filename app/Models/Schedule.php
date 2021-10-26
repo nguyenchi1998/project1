@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Schedule extends Pivot
+class Schedule extends Model
 {
     use SoftDeletes;
 
@@ -19,6 +19,17 @@ class Schedule extends Pivot
         'end_time',
         'class_id',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function($schedule) {
+            $schedule->scheduleDetails()->update([
+                'schedule_id' => null,
+            ]);
+        });
+    }
 
     public function scheduleDetails()
     {

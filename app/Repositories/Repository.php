@@ -31,9 +31,13 @@ class Repository implements IRepository
         return $obj->update($array);
     }
 
-    public function delete($id)
-    {
+    public function delete($id, $force = false)
+    {dd($force);
         $obj = $this->find($id);
+        if ($force) {
+
+            return $obj->forceDelete();
+        }
 
         return $obj->delete();
     }
@@ -46,6 +50,13 @@ class Repository implements IRepository
     public function create($array)
     {
         return $this->model->create($array);
+    }
+
+    public function updateOrCreateMany($array)
+    {
+        foreach ($array as $item) {
+            $this->model->updateOrCreate($item, $item);
+        }
     }
 
     public function createMany($array)

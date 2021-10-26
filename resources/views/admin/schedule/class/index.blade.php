@@ -1,82 +1,94 @@
 @extends('layouts.manager')
 @section('title')
-Quản Lý Tín Chỉ
+    Quản Lý Tín Chỉ
 @endsection
 @section('breadcrumb')
-<div class="page-header">
-    <h3 class="page-title">Quản Lý Tín Chỉ</h3>
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
-            <li class="breadcrumb-item active" aria-current="page">
-                Danh Sách Tín Chỉ Theo Lớp Học
-            </li>
-        </ol>
-    </nav>
-</div>
+    <div class="page-header">
+        <h3 class="page-title">Quản Lý Lớp Tín Chỉ</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    Danh Sách Lớp Tín Chỉ
+                </li>
+            </ol>
+        </nav>
+    </div>
 @endsection
 @section('main')
-<div class="row">
-    <div class="col-lg-12 stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <div class="d-flex mb-4">
-                    <div class="w-25">
-                        <form action="">
-                            {{ Form::select('semester', $semesters, $semester ?? null, ['class' => 'form-control', 'placeholder' => 'Chọn Kì Học', 'onchange' => 'this.form.submit()']) }}
-                        </form>
+    <div class="row">
+        <div class="col-lg-12 stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex mb-4 justify-content-between">
+                        <div class="w-25">
+                            <form action="">
+                                {{ Form::select('status', $states, $status , ['class' => 'form-control', 'placeholder' => 'Chọn Trạng Thái', 'onchange' => 'this.form.submit()']) }}
+                            </form>
+                        </div>
+                        <a class="btn btn-success" href="{{ route('admin.schedules.create') }}">Tạo Mới</a>
                     </div>
-                </div>
-                <div class="table-responsive mb-3">
-                    <table class="table table-bordered">
-                        <thead>
+                    <div class="table-responsive mb-3">
+                        <table class="table table-bordered">
+                            <thead>
                             <tr>
-                                <th>Lớp Học</th>
-                                <th>Kì Hiện Tại</th>
-                                <th>Chuyên Ngành</th>
-                                <th>Tổng Số Sinh Viên</th>
-                                <th>Số Môn Chưa Đăng Ký</th>
-                                <th>Số Môn Cơ Bản</th>
+                                <th>Lớp Tín Chỉ</th>
+                                <th>Môn Học</th>
+                                <th>Thời Gian Bắt Đầu</th>
+                                <th>Giảng Viên</th>
+                                <th>Số Sinh Viên</th>
+                                <th>Trạng Thái</th>
                                 <th></th>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($allClasses as $class)
-                            <tr>
-                                <td>
-                                    {{ $class->name }}
-                                </td>
-                                <td>
-                                    {{ $class->semester }}
-                                </td>
-                                <td>
-                                    {{ $class->specialization->name }}
-                                </td>
-                                <td>
-                                    {{ count($class->students) }}
-                                </td>
-                                <td>
-                                    {{ count($class->unCreditSubjects) }}
-                                </td>
-                                <td>
-                                    {{ count($basicSubjects) }}
-                                </td>
-                                <td width="100">
-                                    <div class="d-flex justify-content-between">
-                                        <div class="mr-3">
-                                            <a class="btn btn-sm btn-success" href="{{route('admin.schedules.registerShow', $class->id) }}" data-toggle="tooltip" data-placement="top" title="Đăng Ký Tín Chỉ">
+                            </thead>
+                            <tbody>
+                            @forelse($schedules as $schedule)
+                                <tr>
+                                    <td>
+                                        {{ $schedule->name }}
+                                    </td>
+                                    <td>
+                                        {{ $schedule->subject->name }}
+                                    </td>
+                                    <td>
+                                        {{ $schedule->start_time }}
+                                    </td>
+                                    <td>
+                                        {{ $schedule->teacher->name ?? ''}}
+                                    </td>
+                                    <td>
+                                        {{ count($schedule->scheduleDetails) }}
+                                    </td>
+                                    <td>
+                                        {{ $states[$schedule->status] }}
+                                    </td>
+                                    <td  style="width: 100px">
+                                        <div class="d-flex justify-content-between">
+                                            <a class="mr-1 btn btn-sm btn-success"
+                                               href="#" data-toggle="tooltip" data-placement="top" title="">
                                                 <i class="mdi mdi-book-open-page-variant"></i>
                                             </a>
+                                            <form action="{{ route('admin.schedules.destroy', $schedule->id) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="mr-1 btn btn-sm btn-danger"
+                                                        href="#" data-toggle="tooltip" data-placement="top" title="Xóa lớp tín chỉ">
+                                                    <i class="mdi mdi-trash-can"></i>
+                                                </button>
+                                            </form>
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                                    </td>
+                                </tr>
+                            @empty
+                                <div class="pt-3 d-flex justify-content-center">
+                                    <h4>Empty Data</h4>
+                                </div>
+                            @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 @endsection @section('script') @endsection

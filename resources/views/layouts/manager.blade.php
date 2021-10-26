@@ -258,11 +258,14 @@
                     <div class="collapse" id="general-pages">
                         <ul class="nav flex-column sub-menu">
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('admin.schedules.index') }}">Cho Lớp Học</a>
+                                <a class="nav-link" href="{{ route('admin.schedules.index') }}">
+                                    Lớp Tín Chỉ
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('admin.schedules.credits.students.index') }}">Cho
-                                    Sinh Viên</a>
+                                <a class="nav-link" href="{{ route('admin.schedules.credits.students.index') }}">
+                                    Sinh Viên
+                                </a>
                             </li>
                         </ul>
                     </div>

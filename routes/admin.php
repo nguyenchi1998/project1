@@ -26,12 +26,9 @@ Route::group(['as' => 'admin.'], function () {
         Route::put('teachers/{id}/choose-subject', 'TeacherController@chooseSubject')
             ->name('teachers.choose_subject');
 
-        Route::resource('schedules', 'ScheduleController')->only(['index']);
+        Route::resource('schedules', 'ScheduleClassController')->only(['index', 'create', 'destroy']);
 
-        Route::get('schedules/register/{id}', 'ScheduleController@registerScheduleShow')
-            ->name('schedules.registerShow');
-
-        Route::post('schedules/register/{id}', 'ScheduleController@registerSchedule')
+        Route::post('schedules/store', 'ScheduleClassController@store')
             ->name('schedules.register');
 
         Route::resource('roles', 'RoleController');
@@ -47,8 +44,6 @@ Route::group(['as' => 'admin.'], function () {
         Route::resource('classes', 'ClassController');
 
         Route::resource('grades', 'GradeController');
-
-        Route::resource('schedules', 'ScheduleController');
 
         Route::resource('departments', 'DepartmentController');
 

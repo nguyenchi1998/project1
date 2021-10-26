@@ -10,7 +10,7 @@ interface IRepository
 
     public function update($id, $array);
 
-    public function delete($id);
+    public function delete($id, $force = false);
 
     public function get($key = '*');
 

@@ -42,6 +42,7 @@ Quản Lý Tín Chỉ
                         </div>
                     </div>
                 </div>
+
                 <div class="table-responsive mb-3">
                     {{ Form::open(['url' => route('admin.schedules.register', $student->id), 'method' => 'post']) }}
                     <table class="table table-bordered" id="subjects">
@@ -53,8 +54,7 @@ Quản Lý Tín Chỉ
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($unCreditSubjects as $subject)
-
+                            @foreach($specializationSubjects as $subject)
                             <tr>
                                 <td>
                                     {{ $subject->name }}
@@ -67,8 +67,7 @@ Quản Lý Tín Chỉ
                                 <td style="width: 100px">
                                     <div class="d-flex justify-content-between">
                                         <div class="mr-3">
-
-                                            {{ Form::checkbox('checked', $subject->id, (boolean)$subject->pivot->force, ['onclick' => (boolean)$subject->pivot->force ? 'return false' : 'return true'])  }}
+                                            {{ Form::checkbox('checked', $subject->id, $subject->pivot->force || in_array($subject->id, $scheduleDetails), ['onclick' => (boolean)$subject->pivot->force ? 'return false' : 'return true'])  }}
                                         </div>
                                     </div>
                                 </td>
@@ -112,7 +111,7 @@ Quản Lý Tín Chỉ
                 subjects,
             },
             success: function() {
-                window.location.href = "{{ route('admin.schedules.credits.students.registerScheduleShow', $student->id) }}"
+                window.location.href = "{{ route('admin.schedules.credits.students.index') }}"
             },
             error: function() {
                 alert('Error');
