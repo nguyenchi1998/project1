@@ -56,7 +56,7 @@
                                         {{ Form::select('teacher_id', $scheduleDetail['subject']['teachers'], null, ['placeholder'=> 'Chọn Giảng Viên', 'class' => 'form-control form-control-sm']) }}
                                     </td>
                                     <td style="width: 100px" align="center">
-                                        <button class="btn btn-sm btn-success"><i class="mdi mdi-plus"></i></button>
+                                        <button class="btn btn-sm btn-outline-success"><i class="mdi mdi-plus"></i></button>
                                     </td>
                                 </tr>
                                 {{ Form::close() }}

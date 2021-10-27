@@ -25,7 +25,7 @@
                         {{ Form::input('text', 'name', null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Tên lớp']) }}
                     </div>
                     <div class="form-group">
-                        {{ Form::label('subject', 'Sinh Viên')}}
+                        {{ Form::label('subject', 'Sinh Viên') }}
                         @foreach($students as $key => $student)
                             <div class="form-check form-check-info">
                                 <label class="form-check-label">

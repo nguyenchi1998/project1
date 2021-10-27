@@ -29,7 +29,7 @@
                         {{ Form::file('avatar', ['class' =>'form-control', 'id' => 'avatar']) }}
                     </div>
                     <div class="form-group ">
-                        {{ Form::label('gender', 'Giới Tính')}}
+                        {{ Form::label('gender', 'Giới Tính') }}
                         <div class="form-inline">
                             <div class="form-check form-check-info">
                                 <label class="form-check-label">
@@ -67,9 +67,9 @@
                         <label for="grade">Niên Khoá</label>
                         {{ Form::select('grade_id', $grades, null, ['id'=> 'grade', 'class'=> 'form-control', 'placeholder' => 'Chọn niên khoá']) }}
                     </div>
-                    {{Form::submit('Xác Nhận', ['class'=> 'btn btn-gradient-primary mr-2'])}}
+                    {{Form::submit('Xác Nhận', ['class'=> 'btn btn-gradient-primary mr-2']) }}
                     <a href="{{ route('admin.students.index') }}" class="btn btn-light">Huỷ Bỏ</a>
-                    {{ Form::close()}}
+                    {{ Form::close() }}
                 </div>
             </div>
         </div>

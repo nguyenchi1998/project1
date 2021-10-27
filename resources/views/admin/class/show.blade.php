@@ -67,7 +67,7 @@
                                         <div class="d-flex justify-content-between">
                                             <div>
                                                 <form action="">
-                                                    <button type="submit" class="btn btn-sm btn-danger"
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger"
                                                             data-toggle="tooltip" data-placement="top"
                                                             title="Xoá Sinh Viên Khỏi Lớp">Remove
                                                     </button>

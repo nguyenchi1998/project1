@@ -71,9 +71,9 @@
                         </table>
                     </div>
                     <div class="mt-2">
-                        {{Form::submit('Xác Nhận', ['id' => 'submit', 'class'=> 'btn btn-gradient-primary mr-2'])}}
+                        {{Form::submit('Xác Nhận', ['id' => 'submit', 'class'=> 'btn btn-gradient-primary mr-2']) }}
                         <a href="{{ route('admin.specializations.index') }}" class="btn btn-light">Huỷ Bỏ</a>
-                        {{ Form::close()}}
+                        {{ Form::close() }}
                     </div>
                 </div>
             </div>

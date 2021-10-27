@@ -3,19 +3,19 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-    <link rel="stylesheet" type="text/css" href="{{asset('css/bootstrap.min.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('css/font-awesome.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{asset('css/font-awesome.css') }}">
     <title>Đăng nhập</title>
     <style></style>
 </head>
 <body class="cm-login">
 
 <div class="text-center" style="padding:70px 0 30px 0;background:#fff;border-bottom:1px solid #ddd">
-    <img src="{{asset('img/img.png')}}" width="700" height="150">
+    <img src="{{asset('img/img.png') }}" width="700" height="150">
 </div>
 @if(Session::has('alert'))
     <script type="text/javascript">
-        alert('{{Session::get('alert')}}');
+        alert('{{Session::get('alert') }}');
     </script>
 @endif
 <div class="text-center">

@@ -19,16 +19,16 @@ Quản lý chuyên ngành
             <div class="card-body">
                 <div class="d-flex mb-4 justify-content-between">
                     <div class="w-15">
-                        <form action="{{route('admin.departments.index')}}">
+                        <form action="{{ route('admin.departments.index') }}">
                             <div class="d-flex justify-content-between">
                                 <input type="search" name="keyword" value="{{ $keyword }}" class="form-control mr-2" placeholder="Từ Khoá">
-                                <button class="ml-2 btn btn-success" type="submit">
+                                <button class="ml-2 btn btn-outline-success" type="submit">
                                     <i class="mdi mdi-grease-pencil"></i>
                                 </button>
                             </div>
                         </form>
                     </div>
-                    <a class="btn btn-primary" href="{{ route('admin.specializations.create') }}">Tạo mới</a>
+                    <a class="btn btn-outline-success" href="{{ route('admin.specializations.create') }}">Tạo mới</a>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-bordered">
@@ -63,7 +63,7 @@ Quản lý chuyên ngành
                                 <td width="100">
                                     <div class="d-flex justify-content-between">
                                         <div class="mr-3">
-                                            <a href="{{ route('admin.specializations.edit', $specialization->id) }}" class="btn btn-sm btn-warning" data-toggle="tooltip" data-placement="top" title="Sửa Thông Tin"><i class="mdi mdi-grease-pencil"></i></a>
+                                            <a href="{{ route('admin.specializations.edit', $specialization->id) }}" class="btn btn-sm btn-outline-warning" data-toggle="tooltip" data-placement="top" title="Sửa Thông Tin"><i class="mdi mdi-grease-pencil"></i></a>
                                         </div>
                                         <div class="mr-3">
                                             <a href="{{ route('admin.specializations.choose_subject_show', $specialization->id) }}" class="btn btn-sm btn-gradient-light" data-toggle="tooltip" data-placement="top" title="Chọn Môn Giảng Dạy">
@@ -71,7 +71,7 @@ Quản lý chuyên ngành
                                         </div>
                                         <div>
                                             <form action="">
-                                                <button type="submit" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="Xoá Thông Tin"><i class="mdi mdi-delete"></i>
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" data-toggle="tooltip" data-placement="top" title="Xoá Thông Tin"><i class="mdi mdi-delete"></i>
                                                 </button>
                                             </form>
                                         </div>

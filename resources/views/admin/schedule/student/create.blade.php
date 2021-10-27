@@ -58,7 +58,7 @@ Quản Lý Tín Chỉ
                             <tr>
                                 <td>
                                     {{ $subject->name }}
-                                    {{ Form::text('subject_id', $subject->id, ['hidden' => true])}}
+                                    {{ Form::text('subject_id', $subject->id, ['hidden' => true]) }}
                                 </td>
                                 <td>
                                     {{ $subject->credit }}
@@ -74,7 +74,7 @@ Quản Lý Tín Chỉ
                             </tr>
                             @endforeach
                             <tr align="right">
-                                <td colspan="3">{{ Form::submit('Register', ['id' => 'submit', 'class' => 'btn btn-sm btn-info']) }}</td>
+                                <td colspan="3">{{ Form::submit('Register', ['id' => 'submit', 'class' => 'btn btn-sm btn-outline-info']) }}</td>
                             </tr>
                         </tbody>
                     </table>

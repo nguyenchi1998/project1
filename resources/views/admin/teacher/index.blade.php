@@ -19,7 +19,7 @@
                 <div class="card-body">
                     <div class="d-flex mb-4 justify-content-between">
                         <div class="w-15">
-                            <form action="{{route('admin.teachers.index')}}">
+                            <form action="{{ route('admin.teachers.index') }}">
                                 <select class="form-control" name="filter" onchange="this.form.submit()">
                                     <option value="all"
                                             @if(!$filter || $filter == 'all') selected="selected" @endif>
@@ -32,7 +32,7 @@
                                 </select>
                             </form>
                         </div>
-                        <a class="btn btn-primary" href="{{ route('admin.teachers.create') }}">Tạo mới</a>
+                        <a class="btn btn-outline-success" href="{{ route('admin.teachers.create') }}">Tạo mới</a>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-bordered">
@@ -80,7 +80,7 @@
                                         <div class="d-flex justify-content-between">
                                             <div class="mr-3">
                                                 <a href="{{ route('admin.teachers.edit', $teacher->id) }}"
-                                                   class="btn btn-sm btn-warning" data-toggle="tooltip"
+                                                   class="btn btn-sm btn-outline-warning" data-toggle="tooltip"
                                                    data-placement="top"
                                                    title="Sửa Thông Tin"><i class="mdi mdi-grease-pencil"></i></a>
                                             </div>
@@ -94,7 +94,7 @@
                                             <div class="mr-3">
                                                 <button disabled="disabled"
                                                         href="{{ route('admin.teachers.change_department_show', $teacher->id) }}"
-                                                        class="btn btn-sm btn-info" data-toggle="tooltip"
+                                                        class="btn btn-sm btn-outline-info" data-toggle="tooltip"
                                                         data-placement="top"
                                                         title="Chuyển Khoa Viện"><i
                                                             class="mdi mdi-account-switch"></i>
@@ -102,7 +102,7 @@
                                             </div>
                                             <div>
                                                 <form action="">
-                                                    <button type="submit" class="btn btn-sm btn-danger"
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger"
                                                             data-toggle="tooltip" data-placement="top"
                                                             title="Xoá Thông Tin">
                                                         <i class="mdi mdi-delete"></i>

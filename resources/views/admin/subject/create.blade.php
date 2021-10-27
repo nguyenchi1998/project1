@@ -20,15 +20,15 @@
                 <div class="card-body">
                     {{ Form::open(['url' =>route('admin.subjects.store') , 'method' => 'POST']) }}
                     <div class="form-group">
-                        {{ Form::label('name', 'Môn Học')}}
+                        {{ Form::label('name', 'Môn Học') }}
                         {{ Form::input('text', 'name', null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Môn Học']) }}
                     </div>
                     <div class="form-group">
-                        {{ Form::label('credit', 'Số Tín Chỉ')}}
+                        {{ Form::label('credit', 'Số Tín Chỉ') }}
                         {{ Form::input('number', 'credit', null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Số Tín Chỉ', 'min' => 1]) }}
                     </div>
                     <div class="form-group">
-                        {{ Form::label('semester', 'Kì Học')}}
+                        {{ Form::label('semester', 'Kì Học') }}
                         {{ Form::select('semester', $semesters , null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Kì Học', 'min' => 1, 'max' => config('config.semester.max')]) }}
                     </div>
                     <div class="form-group">
@@ -52,9 +52,9 @@
                             </label>
                         </div>
                     </div>
-                    {{Form::submit('Xác Nhận', ['class'=> 'btn btn-gradient-primary mr-2'])}}
+                    {{Form::submit('Xác Nhận', ['class'=> 'btn btn-gradient-primary mr-2']) }}
                     <a href="{{ route('admin.subjects.index') }}" class="btn btn-light">Huỷ Bỏ</a>
-                    {{ Form::close()}}
+                    {{ Form::close() }}
                 </div>
             </div>
         </div>

@@ -212,32 +212,32 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('admin.requests.index')}}">
+                        <a class="nav-link" href="{{ route('admin.requests.index') }}">
                             <span class="menu-title">Quản Lý Yêu Cầu</span>
                             <i class="mdi mdi-contacts menu-icon"></i>
                         </a>
                     </li>
                 @endcan
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('admin.grades.index')}}">
+                    <a class="nav-link" href="{{ route('admin.grades.index') }}">
                         <span class="menu-title">Quản Lý Niên Khoá</span>
                         <i class="mdi mdi-contacts menu-icon"></i>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('admin.departments.index')}}">
+                    <a class="nav-link" href="{{ route('admin.departments.index') }}">
                         <span class="menu-title">Quản Lý Khoa Viện</span>
                         <i class="mdi mdi-contacts menu-icon"></i>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('admin.specializations.index')}}">
+                    <a class="nav-link" href="{{ route('admin.specializations.index') }}">
                         <span class="menu-title">Quản Lý Chuyên Ngành</span>
                         <i class="mdi mdi-format-list-bulleted menu-icon"></i>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('admin.subjects.index')}}">
+                    <a class="nav-link" href="{{ route('admin.subjects.index') }}">
                         <span class="menu-title">Quản Lý Môn Học</span>
                         <i class="mdi mdi-contacts menu-icon"></i>
                     </a>

@@ -24,9 +24,9 @@
                         <label for="name">Khoa Viện</label>
                         {{ Form::input('text', 'name', $department->name, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Enter tên khoa/viện']) }}
                     </div>
-                    {{Form::submit('Xác Nhận', ['class'=> 'btn btn-gradient-primary mr-2'])}}
+                    {{Form::submit('Xác Nhận', ['class'=> 'btn btn-gradient-primary mr-2']) }}
                     <a href="{{ route('admin.grades.index') }}" class="btn btn-light">Huỷ Bỏ</a>
-                    {{ Form::close()}}
+                    {{ Form::close() }}
                 </div>
             </div>
         </div>

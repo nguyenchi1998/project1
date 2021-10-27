@@ -30,7 +30,7 @@
                         {{ Form::input('number', 'credit', $subject->credit, ['class' => 'form-control', 'id' => 'credit', 'placeholder' => 'Sô Tín Chỉ', 'min' => 1]) }}
                     </div>
                     <div class="form-group">
-                        {{ Form::label('department', 'Khoa Viện')}}
+                        {{ Form::label('department', 'Khoa Viện') }}
                         @foreach($departments as $key => $department)
                             <div class="form-check form-check-info">
                                 <label class="form-check-label">
@@ -50,9 +50,9 @@
                             </label>
                         </div>
                     </div>
-                    {{Form::submit('Xác Nhận', ['class'=> 'btn btn-gradient-primary mr-2'])}}
+                    {{Form::submit('Xác Nhận', ['class'=> 'btn btn-gradient-primary mr-2']) }}
                     <a href="{{ route('admin.subjects.index') }}" class="btn btn-light">Huỷ Bỏ</a>
-                    {{ Form::close()}}
+                    {{ Form::close() }}
                 </div>
             </div>
         </div>

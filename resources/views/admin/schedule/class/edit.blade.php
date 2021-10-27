@@ -27,7 +27,7 @@
                         {{ Form::input('text', 'name', $class->name, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Enter name']) }}
                     </div>
                     <div class="form-group">
-                        {{ Form::label('subject', 'Subject')}}
+                        {{ Form::label('subject', 'Subject') }}
                         @foreach($students as $key => $student)
                             <div class="form-check form-check-info">
                                 <label class="form-check-label">
@@ -38,9 +38,9 @@
                             </div>
                         @endforeach
                     </div>
-                    {{Form::submit('Xác Nhận', ['class'=> 'btn btn-gradient-primary mr-2'])}}
+                    {{Form::submit('Xác Nhận', ['class'=> 'btn btn-gradient-primary mr-2']) }}
                     <a href="{{ route('admin.classes.index') }}" class="btn btn-light">Huỷ Bỏ</a>
-                    {{ Form::close()}}
+                    {{ Form::close() }}
                 </div>
             </div>
         </div>

@@ -71,7 +71,7 @@
                                 </tbody>
                             </table>
                             <div class="mt-3 d-flex justify-content-end">
-                                <button class="btn btn-sm btn-success" id="submit">Submit</button>
+                                <button class="btn btn-sm btn-outline-success" id="submit">Submit</button>
                             </div>
                         </div>
                     </div>

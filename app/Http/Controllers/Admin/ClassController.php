@@ -8,6 +8,7 @@ use App\Repositories\IClassRepository;
 use App\Repositories\ISpecializationRepository;
 use App\Repositories\IStudentRepository;
 use Exception;
+use GuzzleHttp\Psr7\Query;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -124,6 +125,18 @@ class ClassController extends Controller
                     'msg' => 'System Error, please try later'
                 ]);
         }
+    }
+
+    public function nextSemester()
+    {
+        $this->classRepository->model()
+            ->whereHas('specialization', function ($query) {
+                $query->where('total_semester', '>', DB::raw('classes.semester'));
+            })->update([
+                'semester' => DB::raw('classes.semester + 1'),
+            ]);
+
+        return redirect()->route('admin.classes.index');
     }
 
     /**

@@ -12,13 +12,10 @@ class GradeSeeder extends Seeder
      */
     public function run()
     {
-        $grades = [
-            'Khóa 1',
-            'Khóa 2',
-        ];
-        foreach ($grades as $grade) {
+
+        foreach (range(1, 20) as $grade) {
             Grade::create([
-                'name' => $grade,
+                'name' => 'Khóa ' . $grade,
             ]);
         }
     }

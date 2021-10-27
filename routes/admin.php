@@ -43,6 +43,8 @@ Route::group(['as' => 'admin.'], function () {
 
         Route::resource('classes', 'ClassController');
 
+        Route::post('classes/next-semester', 'ClassController@nextSemester')->name('classes.next_semester');
+
         Route::resource('grades', 'GradeController');
 
         Route::resource('departments', 'DepartmentController');

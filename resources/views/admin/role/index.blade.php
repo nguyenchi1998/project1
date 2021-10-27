@@ -40,7 +40,7 @@
                                         <div class="d-flex justify-content-between">
                                             <div class="mr-3">
                                                 <a href="{{ route('admin.roles.edit', $role->id) }}"
-                                                   class="btn btn-sm btn-warning" data-toggle="tooltip"
+                                                   class="btn btn-sm btn-outline-warning" data-toggle="tooltip"
                                                    data-placement="top"
                                                    title="Sửa Thông Tin"><i class="mdi mdi-grease-pencil"></i></a>
                                             </div>

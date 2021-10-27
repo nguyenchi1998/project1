@@ -51,7 +51,7 @@
                                                       method="post">
                                                     @csrf
                                                     {{ Form::text('teacherId', $teacher->id, ['hidden'=> true]) }}
-                                                    <button class="btn btn-sm btn-success">Chấp Nhận</button>
+                                                    <button class="btn btn-sm btn-outline-success">Chấp Nhận</button>
                                                 </form>
                                             </div>
                                             <div>
@@ -59,7 +59,7 @@
                                                       method="post">
                                                     @csrf
                                                     {{ Form::text('teacherId', $teacher->id, ['hidden'=> true]) }}
-                                                    <button class="btn btn-sm btn-danger">Từ Chối</button>
+                                                    <button class="btn btn-sm btn-outline-danger">Từ Chối</button>
                                                 </form>
                                             </div>
                                         </div>

@@ -31,7 +31,7 @@
                         {{ Form::file('avatar', ['class' =>'form-control']) }}
                     </div>
                     <div class="form-group ">
-                        {{ Form::label('gender', 'Giới Tính')}}
+                        {{ Form::label('gender', 'Giới Tính') }}
                         <div class="form-inline">
                             <div class="form-check form-check-info">
                                 <label class="form-check-label">
@@ -62,9 +62,9 @@
                         {{ Form::input('date', 'birthday', $manager->birthday, ['class' => 'form-control', 'id' => 'credit']) }}
                     </div>
 
-                    {{Form::submit('Xác Nhận', ['class'=> 'btn btn-gradient-primary mr-2'])}}
+                    {{Form::submit('Xác Nhận', ['class'=> 'btn btn-gradient-primary mr-2']) }}
                     <a href="{{ route('admin.managers.index') }}" class="btn btn-light">Huỷ Bỏ</a>
-                    {{ Form::close()}}
+                    {{ Form::close() }}
                 </div>
             </div>
         </div>

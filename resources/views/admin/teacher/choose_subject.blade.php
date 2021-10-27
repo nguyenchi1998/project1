@@ -36,7 +36,7 @@
                     {{ Form::open(['url' => route('admin.teachers.choose_subject', $teacher->id) , 'method' => 'POST']) }}
                     @method('PUT')
                     <div class="form-group">
-                        {{ Form::label('subject', 'Môn Học Thuộc ' . $teacher->department->name)}}
+                        {{ Form::label('subject', 'Môn Học Thuộc ' . $teacher->department->name) }}
                         @foreach($subjects as $key => $subject)
                             <div class="form-check form-check-info">
                                 <label class="form-check-label">
@@ -47,9 +47,9 @@
                             </div>
                         @endforeach
                     </div>
-                    {{Form::submit('Xác Nhận', ['class'=> 'btn btn-gradient-primary mr-2'])}}
+                    {{Form::submit('Xác Nhận', ['class'=> 'btn btn-gradient-primary mr-2']) }}
                     <a href="{{ route('admin.teachers.index') }}" class="btn btn-light">Huỷ Bỏ</a>
-                    {{ Form::close()}}
+                    {{ Form::close() }}
                 </div>
             </div>
         </div>

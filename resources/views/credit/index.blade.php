@@ -66,8 +66,8 @@
                                         </td>
                                         <td width="100">
                                             <div class="d-flex justify-content-between">
-                                                {{ Form::open(['url' => route('credits.destroy', $credit->id)])}}
-                                                    {{ Form::submit('Cancel', ['class' => 'btn btn-sm btn-danger']) }}
+                                                {{ Form::open(['url' => route('credits.destroy', $credit->id)]) }}
+                                                    {{ Form::submit('Cancel', ['class' => 'btn btn-sm btn-outline-danger']) }}
                                                 {{ Form::close() }}
                                             </div>
                                         </td>

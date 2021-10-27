@@ -29,7 +29,7 @@
                         {{ Form::file('avatar', ['class' =>'form-control']) }}
                     </div>
                     <div class="form-group ">
-                        {{ Form::label('gender', 'Giới Tính')}}
+                        {{ Form::label('gender', 'Giới Tính') }}
                         <div class="form-inline">
                             <div class="form-check form-check-info">
                                 <label class="form-check-label">
@@ -68,7 +68,7 @@
                         {{ Form::textarea('experience', null, ['class' => ' form-control', 'id' => 'credit', 'placeholder' => 'Enter Address']) }}
                     </div>
                     <div class="form-group">
-                        {{ Form::label('department', 'Khoa Viện')}}
+                        {{ Form::label('department', 'Khoa Viện') }}
                         @foreach($departments as $key => $department)
                             <div class="form-check form-check-info">
                                 <label class="form-check-label">
@@ -78,9 +78,9 @@
                                 </label>
                             </div>
                         @endforeach
-                        {{Form::submit('Xác Nhận', ['class'=> 'btn btn-gradient-primary mr-2'])}}
+                        {{Form::submit('Xác Nhận', ['class'=> 'btn btn-gradient-primary mr-2']) }}
                         <a href="{{ route('admin.teachers.index') }}" class="btn btn-light">Huỷ Bỏ</a>
-                        {{ Form::close()}}
+                        {{ Form::close() }}
                     </div>
                 </div>
             </div>

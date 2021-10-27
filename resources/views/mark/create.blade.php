@@ -84,7 +84,7 @@
                                 @endforeach
                                 <tr>
                                     <td colspan="3"></td>
-                                    <td>{{ Form::submit('Register', ['class' => 'btn btn-sm btn-info']) }}</td>
+                                    <td>{{ Form::submit('Register', ['class' => 'btn btn-sm btn-outline-info']) }}</td>
                                 </tr>
                                 </tbody>
                             </table>

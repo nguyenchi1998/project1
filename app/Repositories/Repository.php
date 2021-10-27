@@ -32,7 +32,7 @@ class Repository implements IRepository
     }
 
     public function delete($id, $force = false)
-    {dd($force);
+    {
         $obj = $this->find($id);
         if ($force) {
 

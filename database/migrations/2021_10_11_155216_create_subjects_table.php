@@ -16,7 +16,7 @@ class CreateSubjectsTable extends Migration
         Schema::create('subjects', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->unsignedInteger('credit')->default(3);
+            $table->unsignedInteger('credit');
             $table->unsignedInteger('semester');
             $table->unsignedInteger('department_id')->nullable();
             $table->string('type')->nullable();

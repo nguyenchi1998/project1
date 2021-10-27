@@ -26,7 +26,7 @@
                                 {{ Form::select('status', $states, $status , ['class' => 'form-control', 'placeholder' => 'Chọn Trạng Thái', 'onchange' => 'this.form.submit()']) }}
                             </form>
                         </div>
-                        <a class="btn btn-success" href="{{ route('admin.schedules.create') }}">Tạo Mới</a>
+                        <a class="btn btn-outline-success" href="{{ route('admin.schedules.create') }}">Tạo Mới</a>
                     </div>
                     <div class="table-responsive mb-3">
                         <table class="table table-bordered">
@@ -64,14 +64,14 @@
                                     </td>
                                     <td  style="width: 100px">
                                         <div class="d-flex justify-content-between">
-                                            <a class="mr-1 btn btn-sm btn-success"
+                                            <a class="mr-1 btn btn-sm btn-outline-success"
                                                href="#" data-toggle="tooltip" data-placement="top" title="">
                                                 <i class="mdi mdi-book-open-page-variant"></i>
                                             </a>
                                             <form action="{{ route('admin.schedules.destroy', $schedule->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button class="mr-1 btn btn-sm btn-danger"
+                                                <button class="mr-1 btn btn-sm btn-outline-danger"
                                                         href="#" data-toggle="tooltip" data-placement="top" title="Xóa lớp tín chỉ">
                                                     <i class="mdi mdi-trash-can"></i>
                                                 </button>

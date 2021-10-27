@@ -26,7 +26,7 @@
                         Quyền: {{ ucwords(str_replace('-', ' ', $role->display_name)) }}
                     </div>
                     <div class="form-group">
-                        {{ Form::label('permission', 'Hành Động')}}
+                        {{ Form::label('permission', 'Hành Động') }}
                         <div class="row">
                             @foreach($permissions as $key => $permission)
                                 <div class="col">
@@ -42,9 +42,9 @@
 
                         </div>
                     </div>
-                    {{Form::submit('Xác Nhận', ['class'=> 'btn btn-gradient-primary mr-2'])}}
+                    {{Form::submit('Xác Nhận', ['class'=> 'btn btn-gradient-primary mr-2']) }}
                     <a href="{{ route('admin.classes.index') }}" class="btn btn-light">Huỷ Bỏ</a>
-                    {{ Form::close()}}
+                    {{ Form::close() }}
                 </div>
             </div>
         </div>

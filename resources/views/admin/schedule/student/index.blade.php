@@ -21,13 +21,13 @@
                 <div class="card-body">
                     <div class="d-flex mb-4 justify-content-between">
                         <div class="w-15">
-                            <form action="{{route('admin.schedules.credits.students.index')}}">
+                            <form action="{{ route('admin.schedules.credits.students.index') }}">
                                 <div class="d-flex justify-content-between">
                                     <input type="search" name="keyword" value="{{ $keyword }}" class="form-control mr-2"
                                            placeholder="Từ Khoá">
                                     {{ Form::select('semester', $semesters, $semester ?? null, ['class' => 'form-control mr-2', 'placeholder' => 'Chọn Kì Học', 'onchange' => 'this.form.submit()']) }}
                                     {{ Form::select('grade-filter', $grades, $filterGrade ?? null, ['class' => 'form-control', 'placeholder' => 'Tất Cả Khóa', 'onchange' => 'this.form.submit()']) }}
-                                    <button class="ml-2 btn btn-success" type="submit">
+                                    <button class="ml-2 btn btn-outline-success" type="submit">
                                         <i class="mdi mdi-grease-pencil"></i>
                                     </button>
                                 </div>
@@ -72,7 +72,7 @@
                                         <div class="d-flex justify-content-between">
                                             <div class="mr-3">
                                                 <a href="{{ route('admin.schedules.credits.students.registerScheduleShow', $student->id) }}"
-                                                   class="btn btn-sm btn-warning" data-toggle="tooltip"
+                                                   class="btn btn-sm btn-outline-warning" data-toggle="tooltip"
                                                    data-placement="top" title="Đăng Ký Tín Chỉ">
                                                     <i class="mdi mdi-book-open-page-variant"></i>
                                                 </a>

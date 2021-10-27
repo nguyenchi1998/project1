@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Classs;
+use App\Models\Grade;
 use App\Models\Media;
 use App\Models\Specialization;
 use App\Models\Student;
@@ -30,7 +31,7 @@ class ClassSeeder extends Seeder
                 ]);
                 factory(Student::class, 5)->create([
                     'class_id' => $classInstance->id,
-                    'grade_id' => 1
+                    'grade_id' => $faker->randomElement(Grade::all()->pluck('id')->toArray()),
                 ])->each(function ($student) use ($path, $studentRole) {
                     $media = Media::create([
                         'path' => str_replace(storage_path(config('default.path.app_public')), 'storage', $path),
@@ -43,7 +44,7 @@ class ClassSeeder extends Seeder
         factory(Student::class)->create([
             'email' => 'student@gmail.com',
             'class_id' => $faker->randomElement(range(1, 10)),
-            'grade_id' => 1,
+            'grade_id' => $faker->randomElement(Grade::all()->pluck('id')->toArray()),
         ])->each(function ($student) use ($path, $studentRole) {
             $media = Media::create([
                 'path' => str_replace(storage_path(config('default.path.app_public')), 'storage', $path),

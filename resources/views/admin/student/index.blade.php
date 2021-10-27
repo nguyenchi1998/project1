@@ -19,7 +19,7 @@
                 <div class="card-body">
                     <div class="d-flex mb-4 justify-content-between">
                         <div class="w-15">
-                            <form action="{{route('admin.students.index')}}">
+                            <form action="{{ route('admin.students.index') }}">
                                 <div class="d-flex justify-content-between">
                                     <input type="search" name="keyword" value="{{ $keyword }}" class="form-control mr-2"
                                            placeholder="Từ Khoá">
@@ -33,13 +33,13 @@
                                                     @if($filterClass && $filterClass == $class->id) selected="selected" @endif>{{ $class->name }}</option>
                                         @endforeach
                                     </select>
-                                    <button class="ml-2 btn btn-success" type="submit">
+                                    <button class="ml-2 btn btn-outline-success" type="submit">
                                         <i class="mdi mdi-grease-pencil"></i>
                                     </button>
                                 </div>
                             </form>
                         </div>
-                        <a class="btn btn-success" href="{{ route('admin.students.create') }}">Tạo mới</a>
+                        <a class="btn btn-outline-success" href="{{ route('admin.students.create') }}">Tạo mới</a>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-bordered">
@@ -88,13 +88,13 @@
                                         <div class="d-flex justify-content-between">
                                             <div class="mr-3">
                                                 <a href="{{ route('admin.students.edit', $student->id) }}"
-                                                   class="btn btn-sm btn-warning" data-toggle="tooltip"
+                                                   class="btn btn-sm btn-outline-warning" data-toggle="tooltip"
                                                    data-placement="top"
                                                    title="Sửa Thông Tin"><i class="mdi mdi-grease-pencil"></i></a>
                                             </div>
                                             <div>
                                                 <form action="">
-                                                    <button type="submit" class="btn btn-sm btn-danger"
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger"
                                                             data-toggle="tooltip" data-placement="top"
                                                             title="Xoá Thông Tin">
                                                         <i class="mdi mdi-delete"></i>

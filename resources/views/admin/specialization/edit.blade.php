@@ -35,7 +35,7 @@
                         {{ Form::input('number', 'max_semester', $specialization->total_semester, ['class' => 'form-control', 'id' => 'max_semester', 'placeholder' => 'Số Kì Học', 'min' => 0]) }}
                     </div>
                     <div class="form-group">
-                        {{ Form::label('subject', 'Subject')}}
+                        {{ Form::label('subject', 'Subject') }}
                         <div class="row">
                             @foreach($subjects as $key => $subject)
                                 <div class="col-sm">
@@ -50,9 +50,9 @@
                             @endforeach
                         </div>
                     </div>
-                    {{Form::submit('Xác Nhận', ['class'=> 'btn btn-gradient-primary mr-2'])}}
+                    {{Form::submit('Xác Nhận', ['class'=> 'btn btn-gradient-primary mr-2']) }}
                     <a href="{{ route('admin.specializations.index') }}" class="btn btn-light">Huỷ Bỏ</a>
-                    {{ Form::close()}}
+                    {{ Form::close() }}
                 </div>
             </div>
         </div>
