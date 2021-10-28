@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\StartSchedule;
+use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -25,8 +26,20 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-         $schedule->command('class_credit:start')
-                  ->daily();
+        $schedule->command('class_credit:start')
+            ->daily();
+        $schedule->command('credit:open')
+            ->daily()
+            ->when(function () {
+                return $this->compareDate(config('default.credit.open_register')[0])
+                    || $this->compareDate(config('default.credit.open_register')[1]);
+            });
+    }
+
+    private function compareDate($date)
+    {
+        return Carbon::createFromFormat('d/m/y', Carbon::createFromFormat('d/m', $date)->format('d/m/y'))
+            ->eq(Carbon::createFromFormat('d/m/y', Carbon::now()->format('d/m/y')));
     }
 
     /**

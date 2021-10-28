@@ -20,7 +20,7 @@
 @endif
 <div class="text-center">
 
-    <h1 class="text-info">Hệ thống quản lí điểm(Admin Login)</h1>
+    <h1 class="text-info">Hệ thống quản lí điểm</h1>
 </div>
 
 <div class="col-sm-6 col-md-4 col-lg-3" style="margin:40px auto; float:none;">
@@ -32,13 +32,13 @@
                     <div class="input-group-addon"><i class="fa fa-fw fa-user"></i></div>
 
                     <input type="email" name="email" required class="form-control" autofocus
-                           placeholder="Email">
+                           placeholder="Email" value="admin@gmail.com">
                 </div>
             </div>
             <div class="form-group">
                 <div class="input-group">
                     <div class="input-group-addon"><i class="fa fa-fw fa-lock"></i></div>
-                    <input type="password" name="password" required class="form-control" placeholder="Mật khẩu">
+                    <input type="password" name="password" required class="form-control" placeholder="Mật khẩu" value="123456">
                 </div>
             </div>
         </div>

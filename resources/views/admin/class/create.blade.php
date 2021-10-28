@@ -7,7 +7,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
                 <li class="breadcrumb-item">
-                    <a href="{{ route('admin.subjects.index') }}">Quản lý Lớp Học</a>
+                    <a href="{{ route('admin.classes.index') }}">Quản lý Lớp Học</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">Tạo mới</li>
             </ol>

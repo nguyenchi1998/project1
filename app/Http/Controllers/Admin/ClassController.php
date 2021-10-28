@@ -8,9 +8,7 @@ use App\Repositories\IClassRepository;
 use App\Repositories\ISpecializationRepository;
 use App\Repositories\IStudentRepository;
 use Exception;
-use GuzzleHttp\Psr7\Query;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
 class ClassController extends Controller
@@ -23,7 +21,8 @@ class ClassController extends Controller
         IClassRepository          $classRepository,
         IStudentRepository        $studentRepository,
         ISpecializationRepository $specializationRepository
-    ) {
+    )
+    {
         $this->classRepository = $classRepository;
         $this->studentRepository = $studentRepository;
         $this->specializationRepository = $specializationRepository;
@@ -129,24 +128,52 @@ class ClassController extends Controller
 
     public function nextSemester()
     {
-        $this->classRepository->model()
-            ->whereHas('specialization', function ($query) {
-                $query->where('total_semester', '>', DB::raw('classes.semester'));
-            })->update([
-                'semester' => DB::raw('classes.semester + 1'),
-            ]);
+        try {
+            DB::beginTransaction();
+            $resultClass = $this->classRepository->model()
+                ->whereHas('specialization', function ($query) {
+                    $query->where('total_semester', '>', DB::raw('classes.semester'));
+                })->update([
+                    'semester' => DB::raw('classes.semester + 1'),
+                ]);
+            $resultStudent = $this->studentRepository->model()
+                ->query()
+                ->update([
+                    'can_register_credit' => config('config.can_register_credit'),
+                ]);
+            if ($resultClass && $resultStudent) {
+                DB::commit();
 
-        return redirect()->route('admin.classes.index');
+                return redirect()->route('admin.classes.index')
+                    ->with('success', 'Chuyển kỳ và mở đăng kí tín chỉ cho sinh viên thành công');
+            }
+            throw new Exception();
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return redirect()->route('admin.classes.index')
+                ->withErrors(['msg' => 'Chuyển kỳ và mở đăng kí tín chỉ cho sinh viên thất bại']);
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return Response
-     */
+    public function removeStudent(Request $request)
+    {
+        $rs = $this->studentRepository->update($request->get('student_id'), [
+            'class_id' => null,
+        ]);
+        if ($rs) {
+            return back()->with('msg', 'Xóa sinh viên thành công');
+        }
+        return back()->withErrors(['msg' => 'Xóa sinh viên thất bại']);
+    }
+
     public function destroy($id)
     {
-        //
+        $result = $this->classRepository->delete($id);
+
+        if ($result) {
+            return redirect()->route('admin.classes.index')->with('msg', 'Xóa Lớp Thành Công');
+        }
+        return redirect()->route('admin.classes.index')->withErrors(['msg' => 'Xóa Lớp Thất Bại']);
     }
 }

@@ -39,7 +39,7 @@ Manager Schedules
                         <h4>{{ getNameSchedule($key) }}</h4>
                     </div>
                     <div class="table-responsive mb-3">
-                        <table class="table table-bordered">
+                        <table class="table table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th>Class</th>

@@ -23,13 +23,14 @@
                     <div class="d-flex mb-4 justify-content-between">
                         <div class="w-25">
                             <form action="">
-                                {{ Form::select('status', $states, $status , ['class' => 'form-control', 'placeholder' => 'Chọn Trạng Thái', 'onchange' => 'this.form.submit()']) }}
+                                {{ Form::select('status', $states, $status , ['class' => 'form-control form-control-sm', 'placeholder' => 'Chọn Trạng Thái', 'onchange' => 'this.form.submit()']) }}
                             </form>
                         </div>
-                        <a class="btn btn-outline-success" href="{{ route('admin.schedules.create') }}">Tạo Mới</a>
+                        <a class="btn d-flex align-items-center btn-sm btn-outline-success"
+                           href="{{ route('admin.schedules.create') }}">Tạo Mới</a>
                     </div>
-                    <div class="table-responsive mb-3">
-                        <table class="table table-bordered">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
                             <thead>
                             <tr>
                                 <th>Lớp Tín Chỉ</th>
@@ -62,17 +63,19 @@
                                     <td>
                                         {{ $states[$schedule->status] }}
                                     </td>
-                                    <td  style="width: 100px">
+                                    <td style="width: 100px">
                                         <div class="d-flex justify-content-between">
                                             <a class="mr-1 btn btn-sm btn-outline-success"
                                                href="#" data-toggle="tooltip" data-placement="top" title="">
                                                 <i class="mdi mdi-book-open-page-variant"></i>
                                             </a>
-                                            <form action="{{ route('admin.schedules.destroy', $schedule->id) }}" method="POST">
+                                            <form action="{{ route('admin.schedules.destroy', $schedule->id) }}"
+                                                  method="POST">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="mr-1 btn btn-sm btn-outline-danger"
-                                                        href="#" data-toggle="tooltip" data-placement="top" title="Xóa lớp tín chỉ">
+                                                        href="#" data-toggle="tooltip" data-placement="top"
+                                                        title="Xóa lớp tín chỉ">
                                                     <i class="mdi mdi-trash-can"></i>
                                                 </button>
                                             </form>

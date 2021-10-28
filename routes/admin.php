@@ -8,9 +8,9 @@ Route::group(['as' => 'admin.'], function () {
         Route::get('', 'HomeController@index')
             ->name('home');
 
-        Route::resource('subjects', 'SubjectController');
+        Route::resource('subjects', 'SubjectController')->except('show');
 
-        Route::resource('teachers', 'TeacherController');
+        Route::resource('teachers', 'TeacherController')->except('show');
 
         Route::resource('managers', 'ManagerController');
 
@@ -43,7 +43,11 @@ Route::group(['as' => 'admin.'], function () {
 
         Route::resource('classes', 'ClassController');
 
-        Route::post('classes/next-semester', 'ClassController@nextSemester')->name('classes.next_semester');
+        Route::post('classes/{id}/remove-student', 'ClassController@removeStudent')
+            ->name('classes.remove_student');
+
+        Route::post('classes/next-semester', 'ClassController@nextSemester')
+            ->name('classes.next_semester');
 
         Route::resource('grades', 'GradeController');
 
@@ -68,7 +72,7 @@ Route::group(['as' => 'admin.'], function () {
         Route::get('schedules/credits/students/{id}', 'ScheduleStudentController@registerScheduleShow')
             ->name('schedules.credits.students.registerScheduleShow');
 
-            Route::post('schedules/credits/students/{id}', 'ScheduleStudentController@registerSchedule')
+        Route::post('schedules/credits/students/{id}', 'ScheduleStudentController@registerSchedule')
             ->name('schedules.credits.students.registerSchedule');
     });
 

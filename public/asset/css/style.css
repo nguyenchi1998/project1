@@ -4526,6 +4526,11 @@ pre code {
     }
 }
 
+.table-scroll {
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
 .table-responsive {
     display: block;
     width: 100%;

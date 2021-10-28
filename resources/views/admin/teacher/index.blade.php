@@ -20,7 +20,8 @@
                     <div class="d-flex mb-4 justify-content-between">
                         <div class="w-15">
                             <form action="{{ route('admin.teachers.index') }}">
-                                <select class="form-control" name="filter" onchange="this.form.submit()">
+                                <select class="form-control form-control-sm" name="filter"
+                                        onchange="this.form.submit()">
                                     <option value="all"
                                             @if(!$filter || $filter == 'all') selected="selected" @endif>
                                         Tất cả các viện
@@ -32,10 +33,11 @@
                                 </select>
                             </form>
                         </div>
-                        <a class="btn btn-outline-success" href="{{ route('admin.teachers.create') }}">Tạo mới</a>
+                        <a class="btn btn-sm d-flex align-items-center btn-outline-success"
+                           href="{{ route('admin.teachers.create') }}">Tạo mới</a>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-bordered">
+                        <table class="table table-bordered table-hover">
                             <thead>
                             <tr>
                                 <th>Giảng Viên</th>
@@ -79,12 +81,6 @@
                                     <td width="100">
                                         <div class="d-flex justify-content-between">
                                             <div class="mr-3">
-                                                <a href="{{ route('admin.teachers.edit', $teacher->id) }}"
-                                                   class="btn btn-sm btn-outline-warning" data-toggle="tooltip"
-                                                   data-placement="top"
-                                                   title="Sửa Thông Tin"><i class="mdi mdi-grease-pencil"></i></a>
-                                            </div>
-                                            <div class="mr-3">
                                                 <a href="{{ route('admin.teachers.choose_subject_show', $teacher->id) }}"
                                                    class="btn btn-sm btn-gradient-light" data-toggle="tooltip"
                                                    data-placement="top"
@@ -92,16 +88,22 @@
                                                             class="mdi mdi-book-open-page-variant"></i></a>
                                             </div>
                                             <div class="mr-3">
-                                                <button disabled="disabled"
-                                                        href="{{ route('admin.teachers.change_department_show', $teacher->id) }}"
-                                                        class="btn btn-sm btn-outline-info" data-toggle="tooltip"
-                                                        data-placement="top"
-                                                        title="Chuyển Khoa Viện"><i
-                                                            class="mdi mdi-account-switch"></i>
-                                                </button>
+                                                <a disabled="disabled"
+                                                   href="{{ route('admin.teachers.change_department_show', $teacher->id) }}"
+                                                   class="btn btn-sm btn-outline-info" data-toggle="tooltip"
+                                                   data-placement="top"
+                                                   title="Chuyển Khoa Viện"><i
+                                                            class="mdi mdi-account-convert"></i>
+                                                </a>
+                                            </div>
+                                            <div class="mr-3">
+                                                <a href="{{ route('admin.teachers.edit', $teacher->id) }}"
+                                                   class="btn btn-sm btn-outline-warning" data-toggle="tooltip"
+                                                   data-placement="top"
+                                                   title="Sửa Thông Tin"><i class="mdi mdi-grease-pencil"></i></a>
                                             </div>
                                             <div>
-                                                <form action="">
+                                                <form action="{{ route('admin.teachers.detroy', $teacher->id) }}">
                                                     <button type="submit" class="btn btn-sm btn-outline-danger"
                                                             data-toggle="tooltip" data-placement="top"
                                                             title="Xoá Thông Tin">

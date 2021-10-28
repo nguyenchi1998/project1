@@ -68,11 +68,6 @@ class SubjectController extends Controller
         return redirect()->route('admin.subjects.index');
     }
 
-    public function show($id)
-    {
-        //
-    }
-
     public function edit($id)
     {
         $subject = $this->subjectRepository->find($id);

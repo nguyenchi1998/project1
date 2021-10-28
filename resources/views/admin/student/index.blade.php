@@ -21,9 +21,10 @@
                         <div class="w-15">
                             <form action="{{ route('admin.students.index') }}">
                                 <div class="d-flex justify-content-between">
-                                    <input type="search" name="keyword" value="{{ $keyword }}" class="form-control mr-2"
+                                    <input type="search" name="keyword" value="{{ $keyword }}"
+                                           class="form-control form-control-sm mr-2"
                                            placeholder="Từ Khoá">
-                                    <select class="form-control" name="filter_class">
+                                    <select class="form-control form-control-sm" name="filter_class">
                                         <option value="all"
                                                 @if(!$filterClass || $filterClass == 'all') selected="selected" @endif>
                                             Tất Cả Các Lớp
@@ -33,16 +34,17 @@
                                                     @if($filterClass && $filterClass == $class->id) selected="selected" @endif>{{ $class->name }}</option>
                                         @endforeach
                                     </select>
-                                    <button class="ml-2 btn btn-outline-success" type="submit">
-                                        <i class="mdi mdi-grease-pencil"></i>
+                                    <button class="ml-2 btn-sm btn btn-outline-success" type="submit">
+                                        <i class="mdi mdi-account-search"></i>
                                     </button>
                                 </div>
                             </form>
                         </div>
-                        <a class="btn btn-outline-success" href="{{ route('admin.students.create') }}">Tạo mới</a>
+                        <a class="btn btn-sm d-flex align-items-center btn-outline-success"
+                           href="{{ route('admin.students.create') }}">Tạo mới</a>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-bordered">
+                        <table class="table table-bordered table-hover">
                             <thead>
                             <tr>
                                 <th>Sinh Viên</th>

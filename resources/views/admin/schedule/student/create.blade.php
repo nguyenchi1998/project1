@@ -45,7 +45,7 @@ Quản Lý Tín Chỉ
 
                 <div class="table-responsive mb-3">
                     {{ Form::open(['url' => route('admin.schedules.register', $student->id), 'method' => 'post']) }}
-                    <table class="table table-bordered" id="subjects">
+                    <table class="table table-bordered table-hover" id="subjects">
                         <thead>
                             <tr>
                                 <th>Môn Học</th>

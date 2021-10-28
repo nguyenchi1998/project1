@@ -22,18 +22,18 @@
                         <div class="w-15">
                             <form action="{{ route('admin.departments.index') }}">
                                 <div class="d-flex justify-content-between">
-                                    <input type="search" name="keyword" value="{{ $keyword }}" class="form-control mr-2"
+                                    <input type="search" name="keyword" value="{{ $keyword }}" class="form-control mr-2 form-control-sm"
                                            placeholder="Từ Khoá">
-                                    <button class="ml-2 btn btn-outline-success" type="submit">
-                                        <i class="mdi mdi-grease-pencil"></i>
+                                    <button class="ml-2 btn-sm btn btn-outline-success" type="submit">
+                                        <i class="mdi mdi-search-web"></i>
                                     </button>
                                 </div>
                             </form>
                         </div>
-                        <a class="btn btn-outline-success" href="{{ route('admin.departments.create') }}">Tạo mới</a>
+                        <a class="btn btn-sm d-flex align-items-center btn-outline-success" href="{{ route('admin.departments.create') }}">Tạo mới</a>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-bordered">
+                        <table class="table table-bordered table-hover">
                             <thead>
                             <tr>
                                 <th>Khoa Viện</th>

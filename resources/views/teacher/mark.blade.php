@@ -41,7 +41,7 @@
                             {{ Form::close() }}
                         </div>
                         <div class="table-responsive mb-3">
-                            <table class="table table-bordered" id="mark">
+                            <table class="table table-bordered table-hover" id="mark">
                                 <thead>
                                 <tr>
                                     <th>Student</th>

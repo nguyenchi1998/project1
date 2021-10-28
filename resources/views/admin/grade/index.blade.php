@@ -22,17 +22,17 @@
                         <div class="w-15">
                             <form action="{{ route('admin.grades.index') }}">
                                 <div class="d-flex justify-content-between">
-                                    <input type="search" name="keyword" value="{{ $keyword }}" class="form-control mr-2" placeholder="Từ Khoá">
-                                    <button class="ml-2 btn btn-outline-success" type="submit">
-                                        <i class="mdi mdi-grease-pencil"></i>
+                                    <input type="search" name="keyword" value="{{ $keyword }}" class="form-control form-control-sm mr-2" placeholder="Từ Khoá">
+                                    <button class="ml-2 btn-sm btn btn-outline-success" type="submit">
+                                        <i class="mdi mdi-search-web"></i>
                                     </button>
                                 </div>
                             </form>
                         </div>
-                        <a class="btn btn-outline-success" href="{{ route('admin.grades.create') }}">Tạo mới</a>
+                        <a class="btn btn-sm align-items-center d-flex btn-outline-success" href="{{ route('admin.grades.create') }}">Tạo mới</a>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-bordered">
+                        <table class="table table-bordered table-hover">
                             <thead>
                             <tr>
                                 <th>Niên Khoá</th>

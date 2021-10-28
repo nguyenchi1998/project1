@@ -23,11 +23,11 @@
                         <div class="w-15">
                             <form action="{{ route('admin.schedules.credits.students.index') }}">
                                 <div class="d-flex justify-content-between">
-                                    <input type="search" name="keyword" value="{{ $keyword }}" class="form-control mr-2"
+                                    <input type="search" name="keyword" value="{{ $keyword }}" class="form-control form-control-sm mr-2"
                                            placeholder="Từ Khoá">
-                                    {{ Form::select('semester', $semesters, $semester ?? null, ['class' => 'form-control mr-2', 'placeholder' => 'Chọn Kì Học', 'onchange' => 'this.form.submit()']) }}
-                                    {{ Form::select('grade-filter', $grades, $filterGrade ?? null, ['class' => 'form-control', 'placeholder' => 'Tất Cả Khóa', 'onchange' => 'this.form.submit()']) }}
-                                    <button class="ml-2 btn btn-outline-success" type="submit">
+                                    {{ Form::select('semester', $semesters, $semester ?? null, ['class' => 'form-control form-control-sm mr-2', 'placeholder' => 'Chọn Kì Học', 'onchange' => 'this.form.submit()']) }}
+                                    {{ Form::select('grade-filter', $grades, $filterGrade ?? null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Tất Cả Khóa', 'onchange' => 'this.form.submit()']) }}
+                                    <button class="ml-2 btn-sm btn btn-outline-success" type="submit">
                                         <i class="mdi mdi-grease-pencil"></i>
                                     </button>
                                 </div>
@@ -35,7 +35,7 @@
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-bordered">
+                        <table class="table table-bordered table-hover">
                             <thead>
                             <tr>
                                 <th>Sinh Viên</th>

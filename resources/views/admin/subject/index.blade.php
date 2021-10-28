@@ -20,7 +20,8 @@
                     <div class="d-flex mb-4 justify-content-between">
                         <div class="w-15">
                             <form action="{{ route('admin.subjects.index') }}">
-                                <select class="form-control" name="filter" onchange="this.form.submit()">
+                                <select class="form-control form-control-sm" name="filter"
+                                        onchange="this.form.submit()">
                                     <option value="all"
                                             @if(!$filter || $filter == 'all') selected="selected" @endif>Tất Cả Khoa
                                         Viện
@@ -32,10 +33,11 @@
                                 </select>
                             </form>
                         </div>
-                        <a class="btn btn-outline-success" href="{{ route('admin.subjects.create') }}">Tạo mới</a>
+                        <a class="btn btn-sm d-flex align-items-center btn-outline-success"
+                           href="{{ route('admin.subjects.create') }}">Tạo mới</a>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-bordered">
+                        <table class="table table-bordered table-hover">
                             <thead>
                             <tr>
                                 <th>Môn Học</th>
@@ -56,7 +58,7 @@
                                     <td>
                                         {{ $subject->department->name }}
                                     </td>
-                                    <td width="100">
+                                    <td style="width: 100px">
                                         <div class="d-flex justify-content-between">
                                             <div class="mr-3">
                                                 <a href="{{ route('admin.subjects.edit', $subject->id) }}"
@@ -65,7 +67,7 @@
                                                    title="Sửa Thông Tin"><i class="mdi mdi-grease-pencil"></i></a>
                                             </div>
                                             <div>
-                                                <form action="">
+                                                <form action="{{ route('admin.subjects.destroy', $subject->id) }}">
                                                     <button type="submit" class="btn btn-sm btn-outline-danger"
                                                             data-toggle="tooltip" data-placement="top"
                                                             title="Xoá Thông Tin">

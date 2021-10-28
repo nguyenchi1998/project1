@@ -35,7 +35,7 @@
                             <a class="btn btn-primary" href="{{ route('credits.create') }}">Register</a>
                         </div>
                         <div class="table-responsive">
-                            <table class="table table-bordered">
+                            <table class="table table-bordered table-hover">
                                 <thead>
                                 <tr>
                                     <th>Class</th>

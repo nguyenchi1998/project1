@@ -206,18 +206,41 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.managers.index') }}">
-                            <span class="menu-title">Quản Lý Quản Trị Viên</span>
-                            <i class="mdi mdi-table-large menu-icon"></i>
-                        </a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="{{ route('admin.requests.index') }}">
                             <span class="menu-title">Quản Lý Yêu Cầu</span>
                             <i class="mdi mdi-contacts menu-icon"></i>
                         </a>
                     </li>
                 @endcan
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="collapse" href="#manager-human" aria-expanded="true"
+                       aria-controls="general-pages">
+                        <span class="menu-title">Quản Lý Nhân Lực</span>
+                        <i class="menu-arrow"></i>
+                        <i class="mdi mdi-account menu-icon"></i>
+                    </a>
+                    <div class="collapse" id="manager-human">
+                        <ul class="nav flex-column sub-menu">
+                            @can('isSuperAdmin')
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('admin.managers.index') }}">
+                                    Quản Lý Quản Trị Viên
+                                </a>
+                            </li>
+                            @endcan
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('admin.teachers.index') }}">
+                                    Quản Lý Giảng Viên
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('admin.students.index') }}">
+                                    Quản Lý Sinh Viên
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('admin.grades.index') }}">
                         <span class="menu-title">Quản Lý Niên Khoá</span>
@@ -249,13 +272,13 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="collapse" href="#general-pages" aria-expanded="true"
+                    <a class="nav-link" data-toggle="collapse" href="#manager-credit" aria-expanded="true"
                        aria-controls="general-pages">
                         <span class="menu-title">Quản Lý Tín Chỉ</span>
                         <i class="menu-arrow"></i>
                         <i class="mdi mdi-medical-bag menu-icon"></i>
                     </a>
-                    <div class="collapse" id="general-pages">
+                    <div class="collapse" id="manager-credit">
                         <ul class="nav flex-column sub-menu">
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('admin.schedules.index') }}">
@@ -270,18 +293,7 @@
                         </ul>
                     </div>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.teachers.index') }}">
-                        <span class="menu-title">Quản Lý Giảng Viên</span>
-                        <i class="mdi mdi-table-large menu-icon"></i>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.students.index') }}">
-                        <span class="menu-title">Quản Lý Sinh Viên</span>
-                        <i class="mdi mdi-table-large menu-icon"></i>
-                    </a>
-                </li>
+
             </ul>
         </nav>
         <div class="main-panel">

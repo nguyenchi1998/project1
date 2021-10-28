@@ -1,5 +1,6 @@
 @extends('layouts.manager')
 @section('title') Quản Lý Chuyên Ngành @endsection
+
 @section('breadcrumb')
     <div class="page-header">
         <h3 class="page-title">Chọn Môn Chuyên Ngành</h3>
@@ -33,14 +34,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive table-scroll">
                         {{ Form::open(['url' => route('admin.specializations.choose_subject', $specialization->id) , 'method' => 'POST']) }}
-
                         @method('PUT')
-                        <table class="table table-bordered" id="subjects">
+                        <table class="table table-bordered table-hover" id="subjects">
                             <thead>
                             <tr>
                                 <th>Môn Học</th>
+                                <th>Số Tín Chỉ</th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -48,7 +49,7 @@
                             @foreach($subjects as $key => $subject)
                                 <tr>
                                     <td>
-                                        <div class="form-check form-check-info" style="min-width: 400px">
+                                        <div class="form-check form-check-info m-0" style="min-width: 400px">
                                             <label class="form-check-label">
                                                 {{ Form::checkbox('subject_id', $subject->id, in_array($subject->id, $specialization->subjects->pluck('id')->toArray()),  ['class'=>'form-check-input']) }}
                                                 {{ $subject->name }}
@@ -56,8 +57,11 @@
                                             </label>
                                         </div>
                                     </td>
+                                    <td>
+                                        {{ $subject->credit }}
+                                    </td>
                                     <td class="d-flex justify-content-center">
-                                        <div class="form-check form-check-info">
+                                        <div class="form-check form-check-info m-0">
                                             <label class="form-check-label">
                                                 {{ Form::checkbox('force', config('config.subject.force'), checkForceSubject($subjectForce, $subject), ['class'=>'form-check-input']) }}
                                                 {{ 'Bắt Buộc' }}
@@ -70,7 +74,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="mt-2">
+                    <div class="mt-3">
                         {{Form::submit('Xác Nhận', ['id' => 'submit', 'class'=> 'btn btn-gradient-primary mr-2']) }}
                         <a href="{{ route('admin.specializations.index') }}" class="btn btn-light">Huỷ Bỏ</a>
                         {{ Form::close() }}

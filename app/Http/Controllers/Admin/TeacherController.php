@@ -26,7 +26,8 @@ class TeacherController extends Controller
         ITeacherRepository    $teacherRrpository,
         IRoleRepository       $roleRepository,
         ISubjectRepository    $subjectRepository
-    ) {
+    )
+    {
         $this->departmentRepository = $departmentRepository;
         $this->teacherRepository = $teacherRrpository;
         $this->roleRepository = $roleRepository;
@@ -86,17 +87,6 @@ class TeacherController extends Controller
 
             return back()->withErrors(['msg' => $e->getMessage()]);
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     public function edit($id)
@@ -181,6 +171,7 @@ class TeacherController extends Controller
         if ($result) {
             return redirect()->route('admin.teachers.index');
         }
-        return redirect()->route('admin.teachers.index')->withErrors(['msg' => 'Delete Error']);
+        return redirect()->route('admin.teachers.index')
+            ->withErrors(['msg' => 'Delete Error']);
     }
 }

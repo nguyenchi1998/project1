@@ -35,6 +35,7 @@ return [
         ],
     ],
     'can_register_credit' => 1,
+    'can_not_register_credit' => 0,
     'semester' => [
         'default' => 1,
         'max' => 6,

@@ -8,7 +8,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
-                <li class="breadcrumb-item " aria-current="page"><a href="">Danh Sách Lớp Học</a></li>
+                <li class="breadcrumb-item " aria-current="page"><a href="{{ route('admin.classes.index') }}">Danh Sách Lớp Học</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Danh Sách Sinh Viên</li>
             </ol>
         </nav>
@@ -26,10 +26,10 @@
                     </div>
                     <div class="d-flex mb-4 justify-content-between">
                         <div class="w-15"></div>
-                        <a class="btn btn-primary" href="{{ route('admin.classes.create') }}">Thêm Sinh Viên</a>
+                        <a class="btn btn-outline-success btn-sm" href="{{ route('admin.classes.create') }}">Thêm Sinh Viên</a>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-bordered">
+                        <table class="table table-bordered table-hover">
                             <thead>
                             <tr>
                                 <th>Student</th>
@@ -66,7 +66,10 @@
                                     <td width="100">
                                         <div class="d-flex justify-content-between">
                                             <div>
-                                                <form action="">
+                                                <form action="{{ route('admin.classes.remove_student', $class->id) }}"
+                                                      method="POST">
+                                                    @csrf()
+                                                    {{ Form::text('student_id', $student->id, ['hidden' => true]) }}
                                                     <button type="submit" class="btn btn-sm btn-outline-danger"
                                                             data-toggle="tooltip" data-placement="top"
                                                             title="Xoá Sinh Viên Khỏi Lớp">Remove
