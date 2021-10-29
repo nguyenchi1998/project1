@@ -18,7 +18,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex mb-4 justify-content-between">
-                        <div class="w-15">
+                        <div class="">
                             <form action="{{ route('admin.departments.index') }}">
                                 <div class="d-flex justify-content-between">
                                     <input type="search" name="keyword" value="{{ $keyword }}"
@@ -34,14 +34,14 @@
                     </div>
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover">
-                            <thead>
+                            <thead class="sticky-top bg-gradient-primary ">
                             <tr>
-                                <th>Chuyên ngành</th>
-                                <th>Khoa Viện</th>
-                                <th>Số môn học</th>
-                                <th>Số tín chỉ tối thiểu</th>
-                                <th>Tổng số kì học</th>
-                                <th></th>
+                                <th class="text text-white">Chuyên ngành</th>
+                                <th class="text text-white">Khoa Viện</th>
+                                <th class="text text-white">Số môn học</th>
+                                <th class="text text-white">Số tín chỉ tối thiểu</th>
+                                <th class="text text-white">Tổng số kì học</th>
+                                <th class="text text-white"></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -62,28 +62,41 @@
                                     <td>
                                         {{ $specialization->total_semester }}
                                     </td>
-                                    <td width="100">
-                                        <div class="d-flex justify-content-between">
-                                            <div class="mr-3">
-                                                <a href="{{ route('admin.specializations.choose_subject_show', $specialization->id) }}"
-                                                   class="btn btn-sm btn-gradient-light" data-toggle="tooltip"
-                                                   data-placement="top" title="Chọn Môn Giảng Dạy">
-                                                    <i class="mdi mdi-book-open-page-variant"></i></a>
-                                            </div>
-                                            <div class="mr-3">
-                                                <a href="{{ route('admin.specializations.edit', $specialization->id) }}"
-                                                   class="btn btn-sm btn-outline-warning" data-toggle="tooltip"
-                                                   data-placement="top" title="Sửa Thông Tin"><i
-                                                            class="mdi mdi-grease-pencil"></i></a>
-                                            </div>
-                                            <div>
-                                                <form action="">
+                                    <td width="100" >
+                                        <div class="d-flex justify-content-center">
+                                            @if($specialization->deleted_at)
+                                                <form action="{{ route('admin.specializations.restore', $specialization->id) }}"
+                                                      method="POST">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                            data-toggle="tooltip" data-placement="top"
+                                                            title="Khôi Phục Thông Tin"><i
+                                                                class="mdi mdi-restore"></i>
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <div class="mr-3">
+                                                    <a href="{{ route('admin.specializations.choose_subject_show', $specialization->id) }}"
+                                                       class="btn btn-sm btn-gradient-light" data-toggle="tooltip"
+                                                       data-placement="top" title="Chọn Môn Giảng Dạy">
+                                                        <i class="mdi mdi-book-open-page-variant"></i></a>
+                                                </div>
+                                                <div class="mr-3">
+                                                    <a href="{{ route('admin.specializations.edit', $specialization->id) }}"
+                                                       class="btn btn-sm btn-outline-warning" data-toggle="tooltip"
+                                                       data-placement="top" title="Sửa Thông Tin"><i
+                                                                class="mdi mdi-grease-pencil"></i></a>
+                                                </div>
+                                                <form action="{{ route('admin.specializations.destroy', $specialization->id) }}"
+                                                      method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
                                                     <button type="submit" class="btn btn-sm btn-outline-danger"
                                                             data-toggle="tooltip" data-placement="top"
                                                             title="Xoá Thông Tin"><i class="mdi mdi-delete"></i>
                                                     </button>
                                                 </form>
-                                            </div>
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>

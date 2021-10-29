@@ -18,22 +18,12 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex mb-4 justify-content-between">
-                        <div class="w-15">
+                        <div class="">
                             <form action="{{ route('admin.classes.index') }}">
                                 <div class="d-flex justify-content-between">
                                     <input type="search" name="keyword" value="{{ $keyword }}"
                                            class="form-control form-control-sm mr-2" placeholder="Từ Khoá">
-                                    <select class="form-control form-control-sm" name="filter_specializaiton">
-                                        <option value="all"
-                                                @if (!$filterSpecialization || $filterSpecialization=='all') selected="selected" @endif>
-                                            Tất Cả Các Chuyên Ngành
-                                        </option>
-                                        @foreach($specializations as $specialization)
-                                            <option value="{{ $specialization->id }}"
-                                                    @if($filterSpecialization && $filterSpecialization==$specialization->id) selected="selected" @endif>{{
-                                        $specialization->name }}</option>
-                                        @endforeach
-                                    </select>
+                                    {{ Form::select('specializaiton-filter', $specializations, $filterSpecialization, ['class' => 'form-control form-control-sm', 'onchange' => 'this.form.submit()', 'placeholder' => 'Tất Cả Chuyên Ngành']) }}
                                     <button class="ml-2 btn btn-sm btn-outline-success" type="submit">
                                         <i class="mdi mdi-search-web"></i>
                                     </button>
@@ -53,13 +43,13 @@
                     </div>
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover">
-                            <thead>
+                            <thead class="sticky-top bg-gradient-primary ">
                             <tr>
-                                <th>Lớp Học</th>
-                                <th>Số Sinh Viên</th>
-                                <th>Kỳ Hiện Tại</th>
-                                <th>Chuyên Ngành</th>
-                                <th></th>
+                                <th class="text text-white">Lớp Học</th>
+                                <th class="text text-white">Số Sinh Viên</th>
+                                <th class="text text-white">Kỳ Hiện Tại</th>
+                                <th class="text text-white">Chuyên Ngành</th>
+                                <th class="text text-white"></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -75,7 +65,7 @@
                                         {{ $class->semester }}
                                     </td>
                                     <td>
-                                        {{ $class->specialization->name }}
+                                        {{ $class->specialization->name ?? '' }}
                                     </td>
                                     <td style="width: 100px">
                                         <div class="d-flex justify-content-between">

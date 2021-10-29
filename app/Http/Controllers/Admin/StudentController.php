@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Repositories\IClassRepository;
 use App\Repositories\IGradeRepository;
 use App\Repositories\IStudentRepository;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -29,7 +30,7 @@ class StudentController extends Controller
 
     public function index(Request $request)
     {
-        $filterClass = $request->get('filter_class');
+        $classFilter = $request->get('class-filter');
         $keyword = $request->get('keyword');
         $students = $this->studentRepository->model()
             ->when($keyword, function ($query) use ($keyword) {
@@ -37,15 +38,15 @@ class StudentController extends Controller
                     ->orWhere('phone', $keyword)
                     ->orWhere('email', 'like', '%' . $keyword . '%');
             })
-            ->when($filterClass && $filterClass != 'all', function ($query) use ($filterClass) {
-                $query->whereHas('class', function ($query) use ($filterClass) {
-                    $query->whereId($filterClass);
+            ->when($classFilter, function ($query) use ($classFilter) {
+                $query->whereHas('class', function ($query) use ($classFilter) {
+                    $query->whereId($classFilter);
                 });
             })
             ->paginate(config('config.paginate'));
-        $classes = $this->classRepository->all();
+        $classes = $this->classRepository->all()->pluck('id')->toArray();
 
-        return view('admin.student.index', compact('students', 'filterClass', 'classes', 'keyword'));
+        return view('admin.student.index', compact('students', 'classFilter', 'classes', 'keyword'));
     }
 
     public function create()
@@ -75,28 +76,19 @@ class StudentController extends Controller
             ]);
             $studentRole = $this->roleRepository->findByName(
                 config('config.roles.student.name'),
-                config('config.roles.student.guard'));
+                config('config.roles.student.guard')
+            );
             $student->assignRole($studentRole);
             DB::commit();
 
-            return redirect()->route('admin.students.index');
+            return $this->successRouteRedirect('admin.students.index');
         } catch (Exception $e) {
             DB::rollBack();
 
-            return back()->withErrors(['msg' => $e->getMessage()]);
+            return $this->failRouteRedirect();
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
     public function edit($id)
     {
@@ -114,7 +106,38 @@ class StudentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            DB::beginTransaction();
+            $student = $this->studentRepository->find($id)
+                ->load('avatar');
+            $student->update($request->only([
+                'name', 'email', 'phone', 'birthday', 'address', 'gender', 'grade_id',
+            ]));
+            if ($request->file('avatar')) {
+                $imageDeleted = $this->studentRepository->deleteImage($student->avatar->path);
+                if (!$imageDeleted) {
+                    throw new Exception('Error delete old image');
+                }
+                $avatar = $request->file('avatar');
+                $avatarFilename = $student->email . '.' . $avatar->getClientOriginalExtension();
+                $path = $this->studentRepository->saveImage(
+                    $avatar,
+                    $avatarFilename,
+                    100,
+                    100
+                );
+                $student->avatar()->update([
+                    'path' => $path
+                ]);
+            }
+            DB::commit();
+
+            return $this->successRouteRedirect('admin.students.index');
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return $this->failRouteRedirect($e->getMessage());
+        }
     }
 
     public function destroy($id)
@@ -122,8 +145,19 @@ class StudentController extends Controller
         $result = $this->studentRepository->delete($id);
 
         if ($result) {
-            return redirect()->route('admin.students.index');
+            return $this->successRouteRedirect('admin.students.index');
         }
-        return redirect()->route('admin.students.index')->withErrors(['msg' => 'Delete Error']);
+
+        return $this->failRouteRedirect();
+    }
+
+    public function restore($id)
+    {
+        $result = $this->studentRepository->restore($id);
+        if ($result) {
+            return $this->successRouteRedirect('admin.students.index');
+        }
+
+        return $this->failRouteRedirect();
     }
 }

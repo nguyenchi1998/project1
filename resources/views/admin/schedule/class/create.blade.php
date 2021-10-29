@@ -21,22 +21,21 @@
         <div class="col-lg-12 stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <div class="mb-5">
-                    </div>
+                    
                     <div class="table-responsive mb-3">
 
                         <table class="table table-bordered table-hover">
-                            <thead>
+                            <thead class="sticky-top bg-gradient-primary ">
                             <tr>
-                                <th>Môn Học</th>
-                                <th>Số sinh viên đăng ký</th>
-                                <th>Ngày Bắt Đầu</th>
-                                <th>Giảng Viên Dạy</th>
-                                <th></th>
+                                <th class="text text-white">Môn Học</th>
+                                <th class="text text-white">Số sinh viên đăng ký</th>
+                                <th class="text text-white">Ngày Bắt Đầu</th>
+                                <th class="text text-white">Giảng Viên Dạy</th>
+                                <th class="text text-white"></th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($scheduleDetails as  $scheduleDetail)
+                            @forelse($scheduleDetails as  $scheduleDetail)
                                 {{ Form::open(['url' => route('admin.schedules.register')]) }}
                                 <tr>
                                     <td>
@@ -60,7 +59,11 @@
                                     </td>
                                 </tr>
                                 {{ Form::close() }}
-                            @endforeach
+                            @empty
+                                <div class="pt-3 d-flex justify-content-center">
+                                    <h4>Empty Data</h4>
+                                </div>
+                            @endforelse
                             </tbody>
                         </table>
 

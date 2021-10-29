@@ -16,10 +16,10 @@
 <div class="container-scroller">
     <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
         <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-            <a class="navbar-brand brand-logo" href="{{ route('student.home') }}">
+            <a class="navbar-brand brand-logo" href="{{ route('home') }}">
                 <img src="{{asset('asset/images/logo.svg') }}" alt="logo"/>
             </a>
-            <a class="navbar-brand brand-logo-mini" href="{{ route('student.home') }}"><img
+            <a class="navbar-brand brand-logo-mini" href="{{ route('home') }}"><img
                         src="{{ asset('asset/images/logo-mini.svg') }}" alt="logo"/></a>
         </div>
         <div class="navbar-menu-wrapper d-flex align-items-stretch">
@@ -41,7 +41,7 @@
                     <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown"
                        aria-expanded="false">
                         <div class="nav-profile-img">
-                            <img src="{{ asset(auth()->user()->avatar->path ?? '') }}" alt="image">
+                            <img src="{{ assetStorage(auth()->user()->avatar->path ?? '') }}" alt="image">
                             <span class="availability-status online"></span>
                         </div>
                         <div class="nav-profile-text">
@@ -182,7 +182,7 @@
                 <li class="nav-item nav-profile">
                     <a href="#" class="nav-link">
                         <div class="nav-profile-image">
-                            <img src="{{ asset(auth()->user()->avatar->path ?? '') }}" alt="profile">
+                            <img src="{{ assetStorage(auth()->user()->avatar->path ?? '') }}" alt="profile">
                             <span class="login-status online"></span>
                         </div>
                         <div class="nav-profile-text d-flex flex-column">
@@ -215,14 +215,26 @@
             </ul>
         </nav>
         <div class="main-panel">
-        @yield('main')
-            <footer class="footer">
-                <div class="container-fluid clearfix">
-                    <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © bootstrapdash.com 2020</span>
-                    <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a
-                                href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap admin templates </a> from Bootstrapdash.com</span>
-                </div>
-            </footer>
+            <div class="content-wrapper">
+                @yield('breadcrumb')
+                @if($errors->any())
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Warning!</strong> {{ $errors->first() }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
+                @if(session()->has('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>Success!</strong> {{ session()->get('success') }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
+                @yield('main')
+            </div>
         </div>
     </div>
 </div>

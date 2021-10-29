@@ -20,7 +20,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex mb-4 justify-content-between">
-                        <div class="w-15">
+                        <div class="">
                             <form action="{{ route('admin.schedules.credits.students.index') }}">
                                 <div class="d-flex justify-content-between">
                                     <input type="search" name="keyword" value="{{ $keyword }}" class="form-control form-control-sm mr-2"
@@ -36,15 +36,15 @@
                     </div>
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover">
-                            <thead>
+                            <thead class="sticky-top bg-gradient-primary ">
                             <tr>
-                                <th>Sinh Viên</th>
-                                <th>Khoá</th>
-                                <th>Lớp</th>
-                                <th>Kỳ Hiện Tại</th>
-                                <th>Số Môn Đã Đăng Ký</th>
-                                <th>Chuyên Ngành</th>
-                                <th></th>
+                                <th class="text text-white">Sinh Viên</th>
+                                <th class="text text-white">Khoá</th>
+                                <th class="text text-white">Lớp</th>
+                                <th class="text text-white">Kỳ Hiện Tại</th>
+                                <th class="text text-white">Số Môn Đã Đăng Ký</th>
+                                <th class="text text-white">Chuyên Ngành</th>
+                                <th class="text text-white"></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -72,7 +72,7 @@
                                         <div class="d-flex justify-content-between">
                                             <div class="mr-3">
                                                 <a href="{{ route('admin.schedules.credits.students.registerScheduleShow', $student->id) }}"
-                                                   class="btn btn-sm btn-outline-warning" data-toggle="tooltip"
+                                                   class="btn btn-sm btn-outline-success" data-toggle="tooltip"
                                                    data-placement="top" title="Đăng Ký Tín Chỉ">
                                                     <i class="mdi mdi-book-open-page-variant"></i>
                                                 </a>

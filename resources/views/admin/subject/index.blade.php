@@ -18,19 +18,9 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex mb-4 justify-content-between">
-                        <div class="w-15">
+                        <div class="">
                             <form action="{{ route('admin.subjects.index') }}">
-                                <select class="form-control form-control-sm" name="filter"
-                                        onchange="this.form.submit()">
-                                    <option value="all"
-                                            @if(!$filter || $filter == 'all') selected="selected" @endif>Tất Cả Khoa
-                                        Viện
-                                    </option>
-                                    @foreach($departments as $department)
-                                        <option value="{{ $department->id }}"
-                                                @if($filter && $filter == $department->id) selected="selected" @endif>{{ $department->name }}</option>
-                                    @endforeach
-                                </select>
+                                {{ Form::select('filter', $departments, $filter, ['class' => 'form-control form-control-sm', 'onchange' => 'this.form.submit()', 'placeholder' => 'Tất cả khoa viện']) }}
                             </form>
                         </div>
                         <a class="btn btn-sm d-flex align-items-center btn-outline-success"
@@ -38,12 +28,12 @@
                     </div>
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover">
-                            <thead>
+                            <thead class="sticky-top bg-gradient-primary ">
                             <tr>
-                                <th>Môn Học</th>
-                                <th>Số Tín Chỉ</th>
-                                <th>Khoa Viện Phụ Trách</th>
-                                <th></th>
+                                <th class="text text-white">Môn Học</th>
+                                <th class="text text-white">Số Tín Chỉ</th>
+                                <th class="text text-white">Khoa Viện Phụ Trách</th>
+                                <th class="text text-white"></th>
                             </tr>
                             </thead>
                             <tbody>

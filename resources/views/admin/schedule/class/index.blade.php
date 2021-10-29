@@ -31,15 +31,15 @@
                     </div>
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover">
-                            <thead>
+                            <thead class="sticky-top bg-gradient-primary ">
                             <tr>
-                                <th>Lớp Tín Chỉ</th>
-                                <th>Môn Học</th>
-                                <th>Thời Gian Bắt Đầu</th>
-                                <th>Giảng Viên</th>
-                                <th>Số Sinh Viên</th>
-                                <th>Trạng Thái</th>
-                                <th></th>
+                                <th class="text text-white">Lớp Tín Chỉ</th>
+                                <th class="text text-white">Môn Học</th>
+                                <th class="text text-white">Thời Gian Bắt Đầu</th>
+                                <th class="text text-white">Giảng Viên</th>
+                                <th class="text text-white">Số Sinh Viên</th>
+                                <th class="text text-white">Trạng Thái</th>
+                                <th class="text text-white"></th>
                             </tr>
                             </thead>
                             <tbody>

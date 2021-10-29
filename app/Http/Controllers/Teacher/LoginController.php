@@ -20,6 +20,8 @@ class LoginController extends Controller
 
     public function showLoginForm()
     {
+        Auth::guard('admin')->logout();
+        Auth::guard('student')->logout();
         return view('teacher.login');
     }
 

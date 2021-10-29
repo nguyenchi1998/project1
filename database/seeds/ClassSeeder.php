@@ -34,7 +34,7 @@ class ClassSeeder extends Seeder
                     'grade_id' => $faker->randomElement(Grade::all()->pluck('id')->toArray()),
                 ])->each(function ($student) use ($path, $studentRole) {
                     $media = Media::create([
-                        'path' => str_replace(storage_path(config('default.path.app_public')), 'storage', $path),
+                        'path' => str_replace(storage_path(config('default.path.app_public')), '', $path),
                     ]);
                     $student->assignRole($studentRole);
                     $student->avatar()->save($media);
@@ -47,7 +47,7 @@ class ClassSeeder extends Seeder
             'grade_id' => $faker->randomElement(Grade::all()->pluck('id')->toArray()),
         ])->each(function ($student) use ($path, $studentRole) {
             $media = Media::create([
-                'path' => str_replace(storage_path(config('default.path.app_public')), 'storage', $path),
+                'path' => str_replace(storage_path(config('default.path.app_public')), '', $path),
             ]);
             $student->avatar()->save($media);
             $student->assignRole($studentRole);

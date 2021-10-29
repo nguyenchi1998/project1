@@ -15,8 +15,6 @@ use Illuminate\Support\Facades\DB;
 
 class ScheduleClassController extends Controller
 {
-    const MAX_SEMESTER_REGISTER_BY_CLASS = 4;
-
     protected $scheduleRepository;
     protected $specializationRepository;
     protected $subjectRepository;
@@ -31,8 +29,7 @@ class ScheduleClassController extends Controller
         ISubjectRepository        $subjectRepository,
         IClassRepository          $classRepository,
         IStudentRepository        $studentRepository
-    )
-    {
+    ) {
         $this->scheduleRepository = $scheduleRepository;
         $this->specializationRepository = $specializationRepository;
         $this->subjectRepository = $subjectRepository;
@@ -101,12 +98,11 @@ class ScheduleClassController extends Controller
                     'schedule_id' => $schedule->id,
                 ]);
 
-            return redirect()->route('admin.schedules.index')
-                ->with('success', 'Tạo Lớp Tín Chỉ Môn "' . $subject->name . '" Thành Công');
+            return $this->successRouteRedirect('admin.schedules.index');
         } catch (Exception $e) {
             DB::rollBack();
 
-            return back()->withErrors(['msg' => $e->getMessage()]);
+            return $this->failRouteRedirect();
         }
     }
 
@@ -115,6 +111,16 @@ class ScheduleClassController extends Controller
         $schedule = $this->scheduleRepository->find($id);
         $this->scheduleRepository->delete($id, $schedule->status == config('config.status.schedule.new'));
 
-        return redirect()->route('admin.schedules.index');
+        return $this->successRouteRedirect('admin.schedules.index');
+    }
+
+    public function restore($id)
+    {
+        $result = $this->scheduleRepository->restore($id);
+        if ($result) {
+            return $this->successRouteRedirect('admin.schedules.index');
+        }
+
+        return $this->failRouteRedirect();
     }
 }

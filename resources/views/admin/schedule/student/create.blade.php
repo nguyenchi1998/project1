@@ -39,6 +39,9 @@ Quản Lý Tín Chỉ
                             <div class="form-group">
                                 <strong>Chuyên Ngành:</strong> {{ $student->class->specialization->name }}
                             </div>
+                            <div class="form-group">
+                                <strong>Kỳ Học:</strong> {{ $student->class->semester }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -46,11 +49,11 @@ Quản Lý Tín Chỉ
                 <div class="table-responsive mb-3">
                     {{ Form::open(['url' => route('admin.schedules.register', $student->id), 'method' => 'post']) }}
                     <table class="table table-bordered table-hover" id="subjects">
-                        <thead>
+                        <thead class="sticky-top bg-gradient-primary ">
                             <tr>
-                                <th>Môn Học</th>
-                                <th>Số Tín Chỉ</th>
-                                <th></th>
+                                <th class="text text-white">Môn Học</th>
+                                <th class="text text-white">Số Tín Chỉ</th>
+                                <th class="text text-white"></th>
                             </tr>
                         </thead>
                         <tbody>

@@ -43,6 +43,7 @@ class ScheduleStudentController extends Controller
 
     public function index(Request $request)
     {
+        $filterGrade = $request->get('semester-filter');
         $filterGrade = $request->get('grade-filter');
         $keyword = $request->get('keyword');
         $semesters = array_map(function ($item) {
@@ -78,9 +79,11 @@ class ScheduleStudentController extends Controller
 
     public function registerSchedule(Request $request, $id)
     {
+        if (!$request->get('subjects') || !count($request->get('subjects'))) {
+            return $this->failRouteRedirect();
+        } 
         $this->scheduleDetailRepository->updateOrCreateMany($request->get('subjects'));
 
-        return redirect()->route('admin.schedules.credits.students.registerScheduleShow', $id)
-            ->with('success', 'Đăng ký tín chỉ thành công cho sinh viên');
+        return $this->successRouteRedirect('admin.schedules.credits.students.registerScheduleShow', $id);
     }
 }

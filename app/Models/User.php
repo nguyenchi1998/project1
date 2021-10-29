@@ -57,4 +57,14 @@ class User extends Authenticatable
     {
         return $this->morphOne(Media::class, 'mediable');
     }
+
+    public function hasAdminRole()
+    {
+        return $this->hasRole(config('config.roles.admin.name'), config('config.roles.admin.guard'));
+    }
+
+    public function hasSuperAdminRole()
+    {
+        return $this->hasRole(config('config.roles.super-admin.name'), config('config.roles.super-admin.guard'));
+    }
 }

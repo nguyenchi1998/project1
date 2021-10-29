@@ -1,6 +1,17 @@
 <?php
 
 return [
+    'gender' => [
+        'male' => [
+            'value' => 0,
+            'name' => 'Nam'
+        ],
+        'female' => [
+            'value' => 1,
+            'name' => 'Nữ'
+        ],
+    ],
+    'format_date_show' => 'd/m/Y',
     'max_semester_register_by_class' => 4,
     'max_semester' => 16,
     'paginate' => 8,

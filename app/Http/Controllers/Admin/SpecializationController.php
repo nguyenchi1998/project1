@@ -29,7 +29,7 @@ class SpecializationController extends Controller
     public function index(Request $request)
     {
         $keyword = $request->get('keyword');
-        $specializations = $this->specializationRepository->model()
+        $specializations = $this->specializationRepository->withTrashedModel()
             ->with(['subjects', 'department'])
             ->paginate(config('config.paginate'));
 
@@ -58,11 +58,11 @@ class SpecializationController extends Controller
 
             DB::commit();
 
-            return redirect()->route('admin.specializations.index');
+            return $this->successRouteRedirect('admin.specializations.index');
         } catch (Exception $e) {
             DB::rollBack();
 
-            return redirect()->back()->withErrors(['msg' => $e->getMessage()]);
+            return $this->failRouteRedirect();
         }
     }
 
@@ -72,27 +72,26 @@ class SpecializationController extends Controller
         if ($specialization) {
             $specialization = $specialization->load('subjects');
         }
-        $specialization['subjects'] = $specialization->subjects->pluck('id')->toArray();
-        $subjects = $this->subjectRepository->all();
 
-        return view('admin.specialization.edit', compact('specialization', 'subjects'));
+        return view('admin.specialization.edit', compact('specialization'));
     }
 
     public function update(Request $request, $id)
     {
         try {
             DB::beginTransaction();
-            $this->specializationRepository->update($id, $request->only(['name', 'min_credit', 'total_semester']));
-            $specialization = $this->specializationRepository->find($id);
-            $basicSubjects = $this->subjectRepository->where('type', '=', null)->get()->pluck('id')->toArray();
-            $specialization->subjects()->sync(array_merge($basicSubjects, $request->get('subjects')));
+            $this->specializationRepository->update($id, $request->only([
+                'name',
+                'min_credit',
+                'total_semester'
+            ]));
             DB::commit();
 
-            return redirect()->route('admin.specializations.index');
+            return $this->successRouteRedirect('admin.specializations.index');
         } catch (Exception $e) {
             DB::rollBack();
 
-            return redirect()->back()->withErrors('Error');
+            return $this->failRouteRedirect();
         }
     }
 
@@ -101,20 +100,38 @@ class SpecializationController extends Controller
         $result = $this->specializationRepository->delete($id);
 
         if ($result) {
-            return redirect()->route('admin.specializations.index');
+            return $this->successRouteRedirect('admin.specializations.index');
         }
-        return redirect()->route('admin.specializations.index')->withErrors(['msg' => 'Delete Error']);
+        return $this->failRouteRedirect();
+    }
+
+
+    public function restore($id)
+    {
+        $result = $this->specializationRepository->restore($id);
+        if ($result) {
+            return $this->successRouteRedirect('admin.specializations.index');
+        }
+
+        return $this->failRouteRedirect();
     }
 
     public function chooseSubjectShow($id)
     {
-
         $specialization = $this->specializationRepository->find($id)->load('subjects');
-        $subjectForce = $specialization->subjects;
+        $specializationSubject = $specialization->subjects->pluck('id')->toArray();
         $subjects = $this->subjectRepository->where('type', '=', config('config.subject.type.specialization'))
             ->get();
 
-        return view('admin.specialization.choose_subject', compact('specialization', 'subjects', 'subjectForce'));
+        $subjects = $subjects->map(function ($subject) use ($specialization) {
+            $subject['semester'] = $specialization->subjects->first(function ($subjectItem) use ($subject, $specialization) {
+                return $specialization->subjects->contains('id', $subject->id) && $subjectItem->id ==  $subject->id;
+            })->pivot->semester ?? null;
+            return $subject;
+        })
+        ->sortByDesc('semester');
+
+        return view('admin.specialization.choose_subject', compact('specialization', 'subjects', 'specializationSubject'));
     }
 
     public function chooseSubject(Request $request, $id)
@@ -126,13 +143,11 @@ class SpecializationController extends Controller
             $specialization->subjects()->sync($subjectIds);
             DB::commit();
 
-            return redirect()->route('admin.specializations.index');
+            return $this->successRouteRedirect('admin.specializations.index');
         } catch (Exception $e) {
             DB::rollBack();
 
-            return redirect()->back()->withErrors([
-                'msg' => $e->getMessage(),
-            ]);
+            return $this->failRouteRedirect();
         }
     }
 }

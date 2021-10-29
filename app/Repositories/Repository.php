@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 
 class Repository implements IRepository
@@ -84,6 +85,12 @@ class Repository implements IRepository
         return $this->model;
     }
 
+    public function withTrashedModel()
+    {
+        return $this->model->withTrashed()->orderBy('deleted_at', 'asc')
+            ->orderBy('id', 'desc');
+    }
+
     public function saveImage($file, $fileName, $width = 100, $height = 100, $publicPath = 'storage')
     {
         $pathImage = $file->storeAs(config('default.path.public'), $fileName);
@@ -91,7 +98,12 @@ class Repository implements IRepository
         $img = Image::make(storage_path(config('default.path.app_public') . $path));
         $img->resize($width, $height)->save(storage_path(config('default.path.app_public') . $path));
 
-        return $publicPath . $path;
+        return $path;
+    }
+
+    public function deleteImage($fileName)
+    {
+        return unlink(storage_path(config('default.path.app_public') .  $fileName));
     }
 
     public function updateOrCreate($filter, $array)
@@ -102,5 +114,10 @@ class Repository implements IRepository
     public function paginate()
     {
         return $this->model->paginate(config('config.paginate'));
+    }
+
+    public function restore($id)
+    {
+        return $this->model->where('id', $id)->restore();
     }
 }

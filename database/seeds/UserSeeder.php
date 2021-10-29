@@ -29,7 +29,7 @@ class UserSeeder extends Seeder
             'address' => $faker->address(),
         ]);
         $media = Media::create([
-            'path' => str_replace(storage_path(config('default.path.app_public')), 'storage', $path),
+            'path' => str_replace(storage_path(config('default.path.app_public')), '', $path),
         ]);
         $superAdmin->avatar()->save($media);
         $superAdminRole = Role::findByName(config('config.roles.super_admin.name'), config('config.roles.admin.name'));
@@ -37,7 +37,7 @@ class UserSeeder extends Seeder
         $superAdmin->assignRole($superAdminRole);
         factory(User::class, 2)->create()->each(function ($user) use ($adminRole, $path) {
             $media = Media::create([
-                'path' => str_replace(storage_path(config('default.path.app_public')), 'storage', $path),
+                'path' => str_replace(storage_path(config('default.path.app_public')), '', $path),
             ]);
             $user->avatar()->save($media);
             $user->assignRole($adminRole);

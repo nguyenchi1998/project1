@@ -19,7 +19,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex mb-4 justify-content-between">
-                        <div class="w-15">
+                        <div class="">
                             <form action="{{ route('admin.grades.index') }}">
                                 <div class="d-flex justify-content-between">
                                     <input type="search" name="keyword" value="{{ $keyword }}" class="form-control form-control-sm mr-2" placeholder="Từ Khoá">
@@ -33,11 +33,11 @@
                     </div>
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover">
-                            <thead>
+                            <thead class="sticky-top bg-gradient-primary ">
                             <tr>
-                                <th>Niên Khoá</th>
-                                <th>Tổng số sinh viên</th>
-                                <th></th>
+                                <th class="text text-white">Niên Khoá</th>
+                                <th class="text text-white">Tổng số sinh viên</th>
+                                <th class="text text-white"></th>
                             </tr>
                             </thead>
                             <tbody>

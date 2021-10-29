@@ -14108,7 +14108,7 @@ code {
 }
 
 .page-header {
-    margin: 0 0 0.5rem 0;
+    margin: 0.5rem 0 0.5rem 0;
 }
 
 .page-header .breadcrumb {
@@ -18583,7 +18583,7 @@ dl li {
 /* Layouts */
 
 .navbar.fixed-top+.page-body-wrapper {
-    padding-top: 70px;
+    padding-top: 50px;
 }
 
 @media (min-width: 992px) {

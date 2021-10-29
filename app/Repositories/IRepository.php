@@ -12,6 +12,10 @@ interface IRepository
 
     public function delete($id, $force = false);
 
+    public function withTrashedModel();
+
+    public function restore($id);
+
     public function get($key = '*');
 
     public function create($array);
@@ -26,7 +30,13 @@ interface IRepository
 
     public function saveImage($file, $fileName, $width = 100, $height = 100, $publicPath = 'storage');
 
+    public function deleteImage($fileName);
+
     public function updateOrCreate($filter, $array);
 
     public function paginate();
+
+    public function updateOrCreateMany($array);
+
+    public function model();
 }

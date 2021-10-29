@@ -41,7 +41,7 @@
                     <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown"
                        aria-expanded="false">
                         <div class="nav-profile-img">
-                            <img src="{{ asset(auth()->user()->avatar->path ?? '') }}" alt="image">
+                            <img src="{{ assetStorage(auth()->user()->avatar->path ?? '') }}" alt="image">
                             <span class="availability-status online"></span>
                         </div>
                         <div class="nav-profile-text">
@@ -182,7 +182,7 @@
                 <li class="nav-item nav-profile">
                     <a href="#" class="nav-link">
                         <div class="nav-profile-image">
-                            <img src="{{ asset(auth()->user()->avatar->path ?? '') }}" alt="profile">
+                            <img src="{{ assetStorage(auth()->user()->avatar->path ?? '') }}" alt="profile">
                             <span class="login-status online"></span>
                         </div>
                         <div class="nav-profile-text d-flex flex-column">

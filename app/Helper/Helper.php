@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 if (!function_exists('get_guard')) {
@@ -38,5 +39,20 @@ if (!function_exists('checkForceSubject')) {
             return $item->id == $subjectCheck->id
                 && $item->pivot->force == 1;
         });
+    }
+}
+
+
+if (!function_exists('formatDateShow')) {
+    function formatDateShow($date)
+    {
+        return Carbon::createFromDate($date)->format(config('config.format_date_show'));
+    }
+}
+
+if (!function_exists('assetStorage')) {
+    function assetStorage($path)
+    {
+        return asset('storage' . $path);
     }
 }

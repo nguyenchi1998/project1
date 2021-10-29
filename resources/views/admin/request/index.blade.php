@@ -20,14 +20,14 @@
                     <h4 class="card-title">Yêu Cầu Về Khoa</h4>
                     <div class="table-responsive">
                         <table class="table">
-                            <thead>
+                            <thead class="sticky-top bg-gradient-primary ">
                             <tr>
-                                <th>Tiêu Đề</th>
-                                <th>Giảng Viên</th>
-                                <th>Thâm Niên</th>
-                                <th>Viện Cũ</th>
-                                <th>Viện Mới</th>
-                                <th></th>
+                                <th class="text text-white">Tiêu Đề</th>
+                                <th class="text text-white">Giảng Viên</th>
+                                <th class="text text-white">Thâm Niên</th>
+                                <th class="text text-white">Viện Cũ</th>
+                                <th class="text text-white">Viện Mới</th>
+                                <th class="text text-white"></th>
                             </tr>
                             </thead>
                             <tbody>

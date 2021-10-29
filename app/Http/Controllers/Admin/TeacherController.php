@@ -9,7 +9,6 @@ use App\Repositories\ISubjectRepository;
 use App\Repositories\ITeacherRepository;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use ImageResize;
@@ -26,8 +25,7 @@ class TeacherController extends Controller
         ITeacherRepository    $teacherRrpository,
         IRoleRepository       $roleRepository,
         ISubjectRepository    $subjectRepository
-    )
-    {
+    ) {
         $this->departmentRepository = $departmentRepository;
         $this->teacherRepository = $teacherRrpository;
         $this->roleRepository = $roleRepository;
@@ -77,7 +75,8 @@ class TeacherController extends Controller
             ]);
             $teacherRole = $this->roleRepository->findByName(
                 config('config.roles.teacher.name'),
-                config('config.roles.teacher.guard'));
+                config('config.roles.teacher.guard')
+            );
             $teacher->assignRole($teacherRole);
             DB::commit();
 
@@ -148,8 +147,12 @@ class TeacherController extends Controller
 
     public function chooseSubjectShow($id)
     {
-        $teacher = $this->teacherRepository->find($id)->load('department.specializations.specializationSubject');
-        $teacherSubjects = $teacher->subjects->pluck('id')->toArray();
+        $teacher = $this->teacherRepository->find($id)
+            ->load(['subjects' => function ($query) {
+                $query->orderBy('name');
+            }, 'department']);
+        $teacherSubjects = $teacher->subjects->pluck('id')
+            ->toArray();
         $subjects = $teacher->department->subjects;
 
         return view('admin.teacher.choose_subject', compact('teacher', 'subjects', 'teacherSubjects'));
@@ -173,5 +176,15 @@ class TeacherController extends Controller
         }
         return redirect()->route('admin.teachers.index')
             ->withErrors(['msg' => 'Delete Error']);
+    }
+
+    public function restore($id)
+    {
+        $result = $this->teacherRepository->restore($id);
+        if ($result) {
+            return $this->successRouteRedirect('admin.teachers.index');
+        }
+
+        return $this->failRouteRedirect();
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Subject extends Model
@@ -26,12 +25,12 @@ class Subject extends Model
 
     public function specializationSubjects()
     {
-        return $this->where('type', '!=', config('config.subject.type.basic'));
+        return $this->whereType(config('config.subject.type.specialization'));
     }
 
-    public function specializations(): BelongsToMany
+    public function specializations()
     {
-        return $this->belongsToMany(Specialization::class);
+        return $this->belongsToMany(Specialization::class)->withPivot(['semester', 'force']);
     }
 
     public function schedules()

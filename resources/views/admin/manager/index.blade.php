@@ -18,7 +18,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex mb-4 justify-content-between">
-                        <div class="w-15">
+                        <div class="">
                             <form action="{{ route('admin.managers.index') }}">
                                 <div class="d-flex justify-content-between">
                                     <input type="search" name="keyword" value="{{ $keyword }}" class="form-control form-control-sm mr-2"
@@ -33,14 +33,15 @@
                     </div>
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover">
-                            <thead>
+                            <thead class="sticky-top bg-gradient-primary ">
                             <tr>
-                                <th>Quản Trị Viên</th>
-                                <th>Số Điện Thoại</th>
-                                <th>Giới Tính</th>
-                                <th>Ngày Sinh</th>
-                                <th>Địa Chỉ</th>
-                                <th></th>
+                                <th class="text text-white">Quản Trị Viên</th>
+                                <th class="text text-white">Email</th>
+                                <th class="text text-white">Số Điện Thoại</th>
+                                <th class="text text-white">Giới Tính</th>
+                                <th class="text text-white">Ngày Sinh</th>
+                                <th class="text text-white">Địa Chỉ</th>
+                                <th class="text text-white"></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -49,10 +50,13 @@
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <div class="mr-4">
-                                                <img src="{{ asset($manager->avatar->path) }}" alt="avatar">
+                                                <img src="{{ assetStorage($manager->avatar->path) }}" alt="avatar">
                                             </div>
                                             {{ $manager->name }}
                                         </div>
+                                    </td>
+                                    <td>
+                                        {{ $manager->email }}
                                     </td>
                                     <td>
                                         {{ $manager->phone }}

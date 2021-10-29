@@ -43,6 +43,6 @@ class RoleController extends Controller
     {
         $this->roleRepository->assignPermissions($id, $request->get('permissions'));
 
-        return redirect()->route('admin.roles.index');
+        return $this->successRouteRedirect('admin.roles.index');
     }
 }

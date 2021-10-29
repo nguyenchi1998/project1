@@ -40,12 +40,12 @@ Manager Schedules
                     </div>
                     <div class="table-responsive mb-3">
                         <table class="table table-bordered table-hover">
-                            <thead>
+                            <thead class="sticky-top bg-gradient-primary ">
                                 <tr>
-                                    <th>Class</th>
-                                    <th>Start time</th>
-                                    <th>Students</th>
-                                    <th></th>
+                                    <th class="text text-white">Class</th>
+                                    <th class="text text-white">Start time</th>
+                                    <th class="text text-white">Students</th>
+                                    <th class="text text-white"></th>
                                 </tr>
                             </thead>
                             <tbody>

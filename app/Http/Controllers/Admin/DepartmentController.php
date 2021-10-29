@@ -34,7 +34,7 @@ class DepartmentController extends Controller
     {
         $this->departmentRepository->create($request->only('name'));
 
-        return redirect()->route('admin.departments.index');
+        return $this->successRouteRedirect('admin.departmants.index');
     }
 
     public function edit($id)
@@ -48,7 +48,7 @@ class DepartmentController extends Controller
     {
         $this->departmentRepository->update($id, $request->only('name'));
 
-        return redirect()->route('admin.departments.index');
+        return $this->successRouteRedirect('admin.departmants.index');
     }
 
     public function destroy($id)
@@ -56,8 +56,18 @@ class DepartmentController extends Controller
         $result = $this->departmentRepository->delete($id);
 
         if ($result) {
-            return redirect()->route('admin.departmants.index');
+            return $this->successRouteRedirect('admin.departmants.index');
         }
-        return redirect()->route('admin.departments.index')->withErrors(['msg' => 'Delete Error']);
+        return $this->failRouteRedirect();
+    }
+
+    public function restore($id)
+    {
+        $result = $this->departmentRepository->restore($id);
+        if ($result) {
+            return $this->successRouteRedirect('admin.departmants.index');
+        }
+
+        return $this->failRouteRedirect();
     }
 }

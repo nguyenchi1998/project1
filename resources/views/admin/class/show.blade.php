@@ -25,19 +25,19 @@
                         </div>
                     </div>
                     <div class="d-flex mb-4 justify-content-between">
-                        <div class="w-15"></div>
+                        <div class=""></div>
                         <a class="btn btn-outline-success btn-sm" href="{{ route('admin.classes.create') }}">Thêm Sinh Viên</a>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover">
-                            <thead>
+                            <thead class="sticky-top bg-gradient-primary ">
                             <tr>
-                                <th>Student</th>
-                                <th>Phone</th>
-                                <th>Gender</th>
-                                <th>Birthday</th>
-                                <th>Address</th>
-                                <th></th>
+                                <th class="text text-white">Student</th>
+                                <th class="text text-white">Phone</th>
+                                <th class="text text-white">Gender</th>
+                                <th class="text text-white">Birthday</th>
+                                <th class="text text-white">Address</th>
+                                <th class="text text-white"></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -46,7 +46,7 @@
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <div class="mr-4">
-                                                <img src="{{ asset($student->avatar->path) }}" alt="avatar">
+                                                <img src="{{ assetStorage($student->avatar->path) }}" alt="avatar">
                                             </div>
                                             {{ $student->name }}
                                         </div>

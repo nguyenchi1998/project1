@@ -28,7 +28,7 @@ class TeacherSeeder extends Seeder
             'address' => $faker->address(),
         ]);
         $media = Media::create([
-            'path' => str_replace(storage_path(config('default.path.app_public')), 'storage', $path),
+            'path' => str_replace(storage_path(config('default.path.app_public')), '', $path),
         ]);
         $teacher->avatar()->save($media);
         $teacherRole = Role::findByName(config('config.roles.teacher.name'), config('config.roles.teacher.name'));
@@ -40,7 +40,7 @@ class TeacherSeeder extends Seeder
         factory(Teacher::class, 5)->create()
             ->each(function ($teacher) use ($teacherRole, $departmentIds, $path) {
                 $media = Media::create([
-                    'path' => str_replace(storage_path(config('default.path.app_public')), 'storage', $path),
+                    'path' => str_replace(storage_path(config('default.path.app_public')), '', $path),
                 ]);
                 $teacher->avatar()->save($media);
                 $teacher->assignRole($teacherRole);

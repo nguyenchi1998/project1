@@ -341,7 +341,7 @@ class DepartmentSeeder extends Seeder
                 'name' => $department['name'],
             ]);
             foreach ($department['specializations'] as $specialization) {
-                $specialization =  Specialization::create([
+                $specialization = Specialization::create([
                     'name' => $specialization,
                     'department_id' => $departmentInstance->id,
                     'min_credit' => 30,
@@ -361,15 +361,21 @@ class DepartmentSeeder extends Seeder
             ]);
         }
         Specialization::all()->each(function ($specialization) use ($faker) {
-            $specialization->subjects()->sync(
-                $faker->randomElements(
-                    Subject::whereType(config('config.subject.type.specialization'))
-                        ->get()
-                        ->pluck('id')
-                        ->toArray(),
-                    8
-                )
-            );
+            $subjects = array_reduce($faker->randomElements(
+                Subject::whereType(config('config.subject.type.specialization'))
+                    ->get()
+                    ->pluck('id')
+                    ->toArray(),
+                8
+            ), function (&$carry, $item) use ($faker) {
+                return $carry[] = [
+                    $item => [
+                        'force' => $faker->randomElement([0, 1]),
+                        'semester' => $faker->randomElement(range(5, 9))
+                    ]
+                ];
+            }, []);
+            $specialization->subjects()->sync($subjects);
         });
     }
 }

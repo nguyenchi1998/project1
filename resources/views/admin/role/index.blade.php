@@ -20,11 +20,11 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover">
-                            <thead>
+                            <thead class="sticky-top bg-gradient-primary ">
                             <tr>
-                                <th>Quyền</th>
-                                <th>Hành Động</th>
-                                <th></th>
+                                <th class="text text-white">Quyền</th>
+                                <th class="text text-white">Hành Động</th>
+                                <th class="text text-white"></th>
                             </tr>
                             </thead>
                             <tbody>

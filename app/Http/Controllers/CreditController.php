@@ -18,7 +18,8 @@ class CreditController extends Controller
         IScheduleDetailRepository $scheduleDetailRepository,
         IClassRepository          $classRepository,
         ISubjectRepository        $subjectRepository
-    ) {
+    )
+    {
         $this->scheduleDetailRepository = $scheduleDetailRepository;
         $this->classRepository = $classRepository;
         $this->subjectRepository = $subjectRepository;
@@ -28,8 +29,10 @@ class CreditController extends Controller
     {
         $semesterFilter = $request->semester;
         $student = Auth::user();
-        $class = $this->classRepository->find($student->class_id)->load('specialization');
-        $semester = range(1, $class->specialization->total_semester);
+        $class = $this->classRepository->find($student->class_id);
+        $semester = array_map(function ($item) {
+            return 'Kỳ ' . $item;
+        }, range(1, $class->specialization->total_semester));
         $credits = $this->scheduleDetailRepository->where('student_id', '=', $student->id)
             ->where('status', '=', null)
             ->get();
@@ -43,12 +46,14 @@ class CreditController extends Controller
     public function create(Request $request)
     {
         $student = Auth::user();
-        $class = $this->classRepository->find($student->class_id)->load('specialization');
+        $class = $this->classRepository->find($student->class_id)
+            ->load('specialization');
         $subjects = $this->subjectRepository->model()
             ->specializationSubjects()
             ->whereHas('specializations', function ($query) use ($class) {
-                $query->where('specialization_id', '=', $class->specialization->id);
-            })->get();
+                $query->where('specializations.id', $class->specialization_id);
+            })
+            ->get();
         $filter = $request->get('filter');
         $student = Auth::user();
 

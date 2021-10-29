@@ -30,20 +30,19 @@ class ClassController extends Controller
 
     public function index(Request $request)
     {
-        $filterSpecialization = $request->get('filter_specializaiton');
+        $filterSpecialization = $request->get('specializaiton-filter');
         $keyword = $request->get('keyword');
-        $specializations = $this->specializationRepository->all();
-        $classes = $this->classRepository->model()
+        $specializations = $this->specializationRepository->all()->pluck('name', 'id')->toArray();
+        $classes = $this->classRepository->withTrashedModel()
             ->when($keyword, function ($query) use ($keyword) {
-                $query->where('name', 'like', '%' . $keyword . '%')
-                    ->orWhere('phone', $keyword)
-                    ->orWhere('email', 'like', '%' . $keyword . '%');
+                $query->where('name', 'like', '%' . $keyword . '%');
             })
-            ->when($filterSpecialization && $filterSpecialization != 'all', function ($query) use ($filterSpecialization) {
+            ->when($filterSpecialization, function ($query) use ($filterSpecialization) {
                 $query->whereHas('specialization', function ($query) use ($filterSpecialization) {
-                    $query->whereId($filterSpecialization);
+                    $query->where('id', $filterSpecialization);
                 });
-            })->with('students')
+            })
+            ->with(['students', 'specialization'])
             ->paginate(config('config.paginate'));
 
         return view('admin.class.index', compact('classes', 'filterSpecialization', 'keyword', 'specializations'));
@@ -55,13 +54,11 @@ class ClassController extends Controller
             ->has('class', '=', 0)
             ->get();
         if (!count($students)) {
-            return redirect()->route('admin.classes.index')
-                ->withErrors(['msg' => 'All student has class']);
+            return $this->failRouteRedirect('All student has class');
         }
 
         return view('admin.class.create', compact('students'));
     }
-
 
     public function store(Request $request)
     {
@@ -76,13 +73,11 @@ class ClassController extends Controller
             ]);
             DB::commit();
 
-            return redirect()->route('admin.classes.index');
+            return $this->successRouteRedirect('admin.classes.index');
         } catch (Exception $e) {
             DB::rollBack();
 
-            return redirect()->back()->withErrors([
-                'msg' => 'System Error, please try later'
-            ]);
+            return $this->failRouteRedirect();
         }
     }
 
@@ -115,14 +110,11 @@ class ClassController extends Controller
             $this->classRepository->update($id, $request->only(['name']));
             DB::commit();
 
-            return redirect()->route('admin.classes.index');
+            return $this->successRouteRedirect('admin.classes.index');
         } catch (Exception $e) {
             DB::rollBack();
 
-            return redirect()->back()
-                ->withErrors([
-                    'msg' => 'System Error, please try later'
-                ]);
+            return $this->failRouteRedirect();
         }
     }
 
@@ -144,15 +136,13 @@ class ClassController extends Controller
             if ($resultClass && $resultStudent) {
                 DB::commit();
 
-                return redirect()->route('admin.classes.index')
-                    ->with('success', 'Chuyển kỳ và mở đăng kí tín chỉ cho sinh viên thành công');
+                return $this->successRouteRedirect('admin.classes.index');
             }
             throw new Exception();
         } catch (Exception $e) {
             DB::rollBack();
 
-            return redirect()->route('admin.classes.index')
-                ->withErrors(['msg' => 'Chuyển kỳ và mở đăng kí tín chỉ cho sinh viên thất bại']);
+            return $this->failRouteRedirect();
         }
     }
 
@@ -172,8 +162,18 @@ class ClassController extends Controller
         $result = $this->classRepository->delete($id);
 
         if ($result) {
-            return redirect()->route('admin.classes.index')->with('msg', 'Xóa Lớp Thành Công');
+            return $this->successRouteRedirect('admin.classes.index');
         }
-        return redirect()->route('admin.classes.index')->withErrors(['msg' => 'Xóa Lớp Thất Bại']);
+        return $this->failRouteRedirect();;
+    }
+
+    public function restore($id)
+    {
+        $result = $this->classRepository->restore($id);
+        if ($result) {
+            return $this->successRouteRedirect('admin.classes.index');
+        }
+
+        return $this->failRouteRedirect();
     }
 }

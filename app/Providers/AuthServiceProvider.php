@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Schedule;
+use App\Policies\SchedulePolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -13,7 +15,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'App\Model' => 'App\Policies\ModelPolicy',
+        Schedule::class => SchedulePolicy::class,
     ];
 
     /**
@@ -24,6 +26,7 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
+
         Gate::before(function ($user) {
             return $user->hasRole(config('config.roles.super_admin.name'));
         });

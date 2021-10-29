@@ -37,7 +37,7 @@ class GradeController extends Controller
     {
         $this->gradeRepository->create($request->only(['name',]));
 
-        return redirect()->route('admin.grade.index');
+        return $this->successRouteRedirect('admin.grades.index');
     }
 
 
@@ -55,10 +55,10 @@ class GradeController extends Controller
             $request->only(['name',])
         );
         if ($success) {
-            return redirect()->route('admin.grade.index');
+            return $this->successRouteRedirect('admin.grades.index');
         }
 
-        return redirect()->back();
+        return $this->failRouteRedirect();
     }
 
     public function destroy($id)
@@ -66,8 +66,18 @@ class GradeController extends Controller
         $result = $this->gradeRepository->delete($id);
 
         if ($result) {
-            return redirect()->route('admin.grades.index');
+            return $this->successRouteRedirect('admin.grades.index');
         }
-        return redirect()->route('admin.grades.index')->withErrors(['msg' => 'Delete Error']);
+        return $this->failRouteRedirect();
+    }
+
+    public function restore($id)
+    {
+        $result = $this->gradeRepository->restore($id);
+        if ($result) {
+            return $this->successRouteRedirect('admin.grades.index');
+        }
+
+        return $this->failRouteRedirect();
     }
 }

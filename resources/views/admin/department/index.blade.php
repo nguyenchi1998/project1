@@ -19,7 +19,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex mb-4 justify-content-between">
-                        <div class="w-15">
+                        <div class="">
                             <form action="{{ route('admin.departments.index') }}">
                                 <div class="d-flex justify-content-between">
                                     <input type="search" name="keyword" value="{{ $keyword }}" class="form-control mr-2 form-control-sm"
@@ -34,12 +34,12 @@
                     </div>
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover">
-                            <thead>
+                            <thead class="sticky-top bg-gradient-primary ">
                             <tr>
-                                <th>Khoa Viện</th>
-                                <th>Số chuyên ngành</th>
-                                <th>Sô Giáo Viên</th>
-                                <th></th>
+                                <th class="text text-white">Khoa Viện</th>
+                                <th class="text text-white">Số chuyên ngành</th>
+                                <th class="text text-white">Sô Giáo Viên</th>
+                                <th class="text text-white"></th>
                             </tr>
                             </thead>
                             <tbody>

@@ -12,7 +12,7 @@ Route::group(['as' => 'admin.'], function () {
 
         Route::resource('teachers', 'TeacherController')->except('show');
 
-        Route::resource('managers', 'ManagerController');
+        Route::resource('managers', 'ManagerController')->except('show');
 
         Route::get('teachers/{id}/change-department', 'TeacherController@changeDepartmentShow')
             ->name('teachers.change_department_show');
@@ -35,6 +35,8 @@ Route::group(['as' => 'admin.'], function () {
 
         Route::resource('specializations', 'SpecializationController');
 
+        Route::post('specializations/{id}/restore', 'SpecializationController@restore')->name('specializations.restore');
+
         Route::get('specializations/{id}/choose-subject', 'SpecializationController@chooseSubjectShow')
             ->name('specializations.choose_subject_show');
 
@@ -53,7 +55,7 @@ Route::group(['as' => 'admin.'], function () {
 
         Route::resource('departments', 'DepartmentController');
 
-        Route::resource('students', 'StudentController');
+        Route::resource('students', 'StudentController')->except('show');
 
         Route::group(['prefix' => 'requests', 'as' => 'requests.'], function () {
             Route::get('', 'RequestController@index')

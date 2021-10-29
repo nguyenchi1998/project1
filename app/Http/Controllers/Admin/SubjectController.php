@@ -20,7 +20,8 @@ class SubjectController extends Controller
         ISubjectRepository        $subjectRepository,
         ISpecializationRepository $specializationRepository,
         IDepartmentRepository     $departmentRepository
-    ) {
+    )
+    {
         $this->subjectRepository = $subjectRepository;
         $this->departmentRepository = $departmentRepository;
         $this->specializationRepository = $specializationRepository;
@@ -29,17 +30,15 @@ class SubjectController extends Controller
     public function index(Request $request)
     {
         $filter = $request->get('filter');
-        $subjects = $this->subjectRepository->model()
-            ->with([
-                'department' => function ($query) use ($filter) {
-                    $query->when(!$filter || $filter == 'all', function ($query) {
-                    }, function ($query) use ($filter) {
-                        $query->where('departments.id', $filter);
-                    });
-                }
-            ])
+        $subjects = $this->subjectRepository->withTrashedModel()
+            ->when($filter, function ($query) use ($filter) {
+                $query->whereHas('department', function ($query) use ($filter) {
+                    $query->where('id', $filter);
+                });
+            })
+            ->with('department')
             ->paginate(config('config.paginate'));
-        $departments = $this->departmentRepository->all();
+        $departments = $this->departmentRepository->all()->pluck('name', 'id')->toArray();
 
         return view('admin.subject.index', compact('subjects', 'departments', 'filter'));
     }
@@ -110,5 +109,15 @@ class SubjectController extends Controller
             return redirect()->route('admin.subjects.index');
         }
         return redirect()->route('admin.subjects.index')->withErrors(['msg' => 'Delete Error']);
+    }
+
+    public function restore($id)
+    {
+        $result = $this->subjectRepository->restore($id);
+        if ($result) {
+            return $this->successRouteRedirect('admin.subjects.index');
+        }
+
+        return $this->failRouteRedirect();
     }
 }

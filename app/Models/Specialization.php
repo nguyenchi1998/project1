@@ -6,6 +6,7 @@ use App\Scopes\LastEloquentScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+
 class Specialization extends Model
 {
     use SoftDeletes;
@@ -20,17 +21,11 @@ class Specialization extends Model
     protected static function boot()
     {
         parent::boot();
-        self::addGlobalScope(new LastEloquentScope());
     }
 
     public function subjects()
     {
-        return $this->belongsToMany(Subject::class)->withPivot('force');
-    }
-
-    public function specializationSubject()
-    {
-        return $this->subjects()->where('type', '!=', config('config.subject.type.basic'));
+        return $this->belongsToMany(Subject::class)->withPivot(['semester', 'force']);
     }
 
     public function classes()

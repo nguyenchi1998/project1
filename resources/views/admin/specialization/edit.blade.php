@@ -32,23 +32,7 @@
                     </div>
                     <div class="form-group">
                         <label for="max_semester">Số Kì Học</label>
-                        {{ Form::input('number', 'max_semester', $specialization->total_semester, ['class' => 'form-control', 'id' => 'max_semester', 'placeholder' => 'Số Kì Học', 'min' => 0]) }}
-                    </div>
-                    <div class="form-group">
-                        {{ Form::label('subject', 'Subject') }}
-                        <div class="row">
-                            @foreach($subjects as $key => $subject)
-                                <div class="col-sm">
-                                    <div class="form-check form-check-info" style="min-width: 500px">
-                                        <label class="form-check-label">
-                                            {{ Form::checkbox('subjects[]', $subject->id, in_array($subject->id, $specialization->subjects),  ['class'=>'form-check-input']) }}
-                                            {{ $subject->name }}
-                                            <i class="input-helper"></i>
-                                        </label>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
+                        {{ Form::input('number', 'total_semester', $specialization->total_semester, ['class' => 'form-control', 'id' => 'max_semester', 'placeholder' => 'Số Kì Học', 'min' => 0]) }}
                     </div>
                     {{Form::submit('Xác Nhận', ['class'=> 'btn btn-gradient-primary mr-2']) }}
                     <a href="{{ route('admin.specializations.index') }}" class="btn btn-light">Huỷ Bỏ</a>

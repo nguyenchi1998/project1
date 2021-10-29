@@ -56,11 +56,11 @@
                         {{ Form::open(['url' => route('credits.store'), 'method' => 'post']) }}
                         <div class="table-responsive">
                             <table class="table table-bordered table-hover">
-                                <thead>
+                                <thead class="sticky-top bg-gradient-primary ">
                                 <tr>
-                                    <th>Subject</th>
-                                    <th>Credit</th>
-                                    <th>Force</th>
+                                    <th class="text text-white">Subject</th>
+                                    <th class="text text-white">Credit</th>
+                                    <th class="text text-white">Force</th>
                                 </tr>
                                 </thead>
                                 <tbody>

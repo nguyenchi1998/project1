@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\IManagerRepository;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -63,24 +64,12 @@ class ManagerController extends Controller
             $student->assignRole($adminRole);
             DB::commit();
 
-            return redirect()->route('admin.managers.index');
+            return $this->successRouteRedirect('admin.managers.index');
         } catch (Exception $e) {
             DB::rollBack();
 
-            return redirect()->back()
-                ->withErrors(['msg' => $e->getMessage()]);
+            return $this->failRouteRedirect();
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     public function edit($id)
@@ -111,12 +100,11 @@ class ManagerController extends Controller
             ]);
             DB::commit();
 
-            return redirect()->route('admin.managers.index');
+            return $this->successRouteRedirect('admin.managers.index');
         } catch (Exception $e) {
             DB::rollBack();
 
-            return redirect()->back()
-                ->withErrors(['msg' => $e->getMessage()]);
+            return $this->failRouteRedirect();
         }
     }
 
@@ -125,8 +113,18 @@ class ManagerController extends Controller
         $result = $this->managerRepository->delete($id);
 
         if ($result) {
-            return redirect()->route('admin.managers.index');
+            return $this->successRouteRedirect('admin.managers.index');
         }
-        return redirect()->route('admin.managers.index')->withErrors(['msg' => 'Delete Error']);
+        return $this->failRouteRedirect();
+    }
+
+    public function restore($id)
+    {
+        $result = $this->managerRepository->restore($id);
+        if ($result) {
+            return $this->successRouteRedirect('admin.managers.index');
+        }
+
+        return $this->failRouteRedirect();
     }
 }

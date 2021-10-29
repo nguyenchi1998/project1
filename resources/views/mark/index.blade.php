@@ -18,7 +18,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex mb-4 justify-content-between">
-                            <div class="w-15">
+                            <div class="">
                                 <form action="">
                                     {{ Form::select('semester', $semester, $semesterFilter, ['placeholder' => 'Choose Semester','class' =>'form-control', 'onchange' => 'this.form.submit()']) }}
                                 </form>
@@ -26,14 +26,14 @@
                         </div>
                         <div class="table-responsive">
                             <table class="table table-bordered table-hover">
-                                <thead>
+                                <thead class="sticky-top bg-gradient-primary ">
                                 <tr>
-                                    <th>Subject</th>
-                                    <th>Acticity Mark</th>
-                                    <th>Middle Mark</th>
-                                    <th>Final Mark</th>
-                                    <th>Status</th>
-                                    <th></th>
+                                    <th class="text text-white">Subject</th>
+                                    <th class="text text-white">Acticity Mark</th>
+                                    <th class="text text-white">Middle Mark</th>
+                                    <th class="text text-white">Final Mark</th>
+                                    <th class="text text-white">Status</th>
+                                    <th class="text text-white"></th>
                                 </tr>
                                 </thead>
                                 <tbody>
