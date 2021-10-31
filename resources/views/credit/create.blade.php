@@ -1,7 +1,4 @@
 @extends('layouts.student')
-@section('title')
-    Manager Credits
-@endsection
 @section('main')
     <div class="content-wrapper">
         <div class="page-header">
@@ -54,13 +51,13 @@
                             {{ Form::close() }}
                         </div>
                         {{ Form::open(['url' => route('credits.store'), 'method' => 'post']) }}
-                        <div class="table-responsive">
+                        <div class="table-responsive table-scroll">
                             <table class="table table-bordered table-hover">
-                                <thead class="sticky-top bg-gradient-primary ">
+                                <thead>
                                 <tr>
-                                    <th class="text text-white">Subject</th>
-                                    <th class="text text-white">Credit</th>
-                                    <th class="text text-white">Force</th>
+                                    <th>Subject</th>
+                                    <th>Credit</th>
+                                    <th>Force</th>
                                 </tr>
                                 </thead>
                                 <tbody>

@@ -1,17 +1,15 @@
 @extends('layouts.manager')
-@section('title')
-Quản Lý Giảng Viên
-@endsection
 @section('breadcrumb')
-<div class="page-header">
-    <h3 class="page-title">Quản Lý Giảng Viên</h3>
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Danh Sách Giảng Viên</li>
-        </ol>
-    </nav>
-</div>@endsection
+<div class="col-sm-6">
+    <h1 class="m-0">Quản Lý Giảng Viên</h1>
+</div>
+<div class="col-sm-6">
+    <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"><a href="#">Bảng Điều Khiển</a></li>
+        <li class="breadcrumb-item active">Danh Sách Giảng Viên</li>
+    </ol>
+</div>
+@endsection
 @section('main')
 <div class="row">
     <div class="col-lg-12 stretch-card">
@@ -25,25 +23,27 @@ Quản Lý Giảng Viên
                                     Tất cả các viện
                                 </option>
                                 @foreach($departments as $department)
-                                <option value="{{ $department->id }}" @if($filter && $filter==$department->id) selected="selected" @endif>{{ $department->name }}</option>
+                                <option value="{{ $department->id }}" @if($filter && $filter==$department->id)
+                                    selected="selected" @endif>{{
+                                    $department->name }}</option>
                                 @endforeach
                             </select>
                         </form>
                     </div>
                     <a class="btn btn-sm d-flex align-items-center btn-outline-success" href="{{ route('admin.teachers.create') }}">Tạo mới</a>
                 </div>
-                <div class="table-responsive">
+                <div class="table-responsive table-scroll">
                     <table class="table table-bordered table-hover">
-                        <thead class="sticky-top bg-gradient-primary ">
+                        <thead>
                             <tr>
-                                <th class="text text-white">Giảng Viên</th>
-                                <th class="text text-white">Email</th>
-                                <th class="text text-white">Số Điện Thoại</th>
-                                <th class="text text-white">Giới Tính</th>
-                                <th class="text text-white">Ngày Sinh</th>
-                                <th class="text text-white">Địa Chỉ</th>
-                                <th class="text text-white">Khoa Viện</th>
-                                <th class="text text-white"></th>
+                                <th>Giảng Viên</th>
+                                <th>Email</th>
+                                <th>Số Điện Thoại</th>
+                                <th>Giới Tính</th>
+                                <th>Ngày Sinh</th>
+                                <th>Địa Chỉ</th>
+                                <th>Khoa Viện</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -52,7 +52,7 @@ Quản Lý Giảng Viên
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <div class="mr-4">
-                                            <img src="{{ assetStorage($teacher->avatar->path) }}" alt="avatar">
+                                            <img class="img-circle elevation-2 img-avatar" src="{{ assetStorage($teacher->avatar->path) }}" alt="avatar">
                                         </div>
                                         {{ $teacher->name }}
                                     </div>
@@ -73,27 +73,29 @@ Quản Lý Giảng Viên
                                     {{ $teacher->address }}
                                 </td>
                                 <td>
-                                    {{ $teacher->department->name }}
-                                    @if($teacher->department->manager_id == $teacher->id)
-                                    <strong class="text text-danger ">(Manager)</strong>
-                                    @endif
+                                    {{ $teacher->department->name }} @if($teacher->department->manager_id == $teacher->id)
+                                    <strong class="text text-danger ">(Manager)</strong> @endif
                                 </td>
                                 <td width="100">
                                     <div class="d-flex justify-content-between">
-                                        <div class="mr-3">
-                                            <a href="{{ route('admin.teachers.choose_subject_show', $teacher->id) }}" class="btn btn-sm btn-gradient-light" data-toggle="tooltip" data-placement="top" title="Chọn Môn Giảng Dạy"><i class="mdi mdi-book-open-page-variant"></i></a>
+                                        <div class="mr-2">
+                                            <a href="{{ route('admin.teachers.choose_subject_show', $teacher->id) }}" class="btn btn-sm btn-outline-info" data-toggle="tooltip" data-placement="top" title="Chọn Môn Giảng Dạy">
+                                                <i class="fa fa-book"></i></a>
                                         </div>
-                                        <div class="mr-3 d-none">
-                                            <a href="{{ route('admin.teachers.change_department_show', $teacher->id) }}" class="btn btn-sm btn-outline-info" data-toggle="tooltip" data-placement="top" title="Chuyển Khoa Viện"><i class="mdi mdi-account-convert"></i>
+                                        <div class="mr-2">
+                                            <a href="{{ route('admin.teachers.change_department_show', $teacher->id) }}" class="btn btn-sm btn-outline-info" data-toggle="tooltip" data-placement="top" title="Chuyển Khoa Viện">
+                                                <i class="fa fa-user-cog"></i>
                                             </a>
                                         </div>
-                                        <div class="mr-3">
-                                            <a href="{{ route('admin.teachers.edit', $teacher->id) }}" class="btn btn-sm btn-outline-warning" data-toggle="tooltip" data-placement="top" title="Sửa Thông Tin"><i class="mdi mdi-grease-pencil"></i></a>
+                                        <div class="mr-2">
+                                            <a href="{{ route('admin.teachers.edit', $teacher->id) }}" class="btn btn-sm btn-outline-warning" data-toggle="tooltip" data-placement="top" title="Sửa">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
                                         </div>
                                         <div>
                                             <form action="{{ route('admin.teachers.destroy', $teacher->id) }}">
-                                                <button type="submit" class="btn btn-sm btn-outline-danger" data-toggle="tooltip" data-placement="top" title="Xoá Thông Tin">
-                                                    <i class="mdi mdi-delete"></i>
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" data-toggle="tooltip" data-placement="top" title="Xoá">
+                                                    <i class="fa fa-trash"></i>
                                                 </button>
                                             </form>
                                         </div>
@@ -108,7 +110,4 @@ Quản Lý Giảng Viên
         </div>
     </div>
 </div>
-@endsection
-@section('script')
-
-@endsection
+@endsection @section('script') @endsection

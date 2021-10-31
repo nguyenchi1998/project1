@@ -26,10 +26,38 @@ Route::group(['as' => 'admin.'], function () {
         Route::put('teachers/{id}/choose-subject', 'TeacherController@chooseSubject')
             ->name('teachers.choose_subject');
 
-        Route::resource('schedules', 'ScheduleClassController')->only(['index', 'create', 'destroy']);
+        Route::resource('schedules', 'ScheduleController')
+            ->only(['index', 'create', 'destroy']);
 
-        Route::post('schedules/store', 'ScheduleClassController@store')
+        Route::post('schedules/store', 'ScheduleController@store')
             ->name('schedules.register');
+
+        Route::get('schedules/{id}/choose-time', 'ScheduleController@scheduleTimeShow')
+            ->name('schedules.scheduleTimeShow');
+
+        Route::post('schedules/{id}/choose-time', 'ScheduleController@scheduleTime')
+            ->name('schedules.scheduleTime');
+
+        Route::get('schedules/students', 'ScheduleStudentController@index')
+            ->name('schedules.students.index');
+
+        Route::get('schedules/students/{id}', 'ScheduleStudentController@registerScheduleShow')
+            ->name('schedules.students.registerScheduleShow');
+
+        Route::post('schedules/students/{id}', 'ScheduleStudentController@registerSchedule')
+            ->name('schedules.students.registerSchedule');
+
+        Route::post('schedules/students/status', 'ScheduleStudentController@registerCreditStatus')
+            ->name('schedules.students.status');
+
+        Route::get('schedules/class', 'ScheduleClassController@index')
+            ->name('schedules.class.index');
+
+        Route::get('schedules/class/{id}', 'ScheduleClassController@registerScheduleShow')
+            ->name('schedules.class.registerScheduleShow');
+
+        Route::post('schedules/class/{id}', 'ScheduleClassController@registerSchedule')
+            ->name('schedules.class.registerSchedule');
 
         Route::resource('roles', 'RoleController');
 
@@ -43,13 +71,12 @@ Route::group(['as' => 'admin.'], function () {
         Route::post('specializations/{id}/choose-subject', 'SpecializationController@chooseSubject')
             ->name('specializations.choose_subject');
 
-        Route::resource('classes', 'ClassController');
+        Route::resource('classes', 'ClassController')->except('show');
+
+        Route::get('classes/{id}/students', 'ClassController@studentsShow')->name('classes.students');
 
         Route::post('classes/{id}/remove-student', 'ClassController@removeStudent')
             ->name('classes.remove_student');
-
-        Route::post('classes/next-semester', 'ClassController@nextSemester')
-            ->name('classes.next_semester');
 
         Route::resource('grades', 'GradeController');
 
@@ -67,15 +94,6 @@ Route::group(['as' => 'admin.'], function () {
             Route::post('/departments/reject', 'RequestController@approveDepartmentChange')
                 ->name('departments.reject');
         });
-
-        Route::resource('schedules/credits/students/', 'ScheduleStudentController', ['names' => 'schedules.credits.students'])
-            ->only('index');
-
-        Route::get('schedules/credits/students/{id}', 'ScheduleStudentController@registerScheduleShow')
-            ->name('schedules.credits.students.registerScheduleShow');
-
-        Route::post('schedules/credits/students/{id}', 'ScheduleStudentController@registerSchedule')
-            ->name('schedules.credits.students.registerSchedule');
     });
 
     Route::get('login', 'LoginController@showLoginForm')
@@ -84,6 +102,6 @@ Route::group(['as' => 'admin.'], function () {
     Route::post('login', 'LoginController@login')
         ->name('login');
 
-    Route::post('logout', 'LoginController@logout')
+    Route::get('logout', 'LoginController@logout')
         ->name('logout');
 });

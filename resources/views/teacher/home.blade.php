@@ -1,7 +1,4 @@
 @extends('layouts.teacher')
-@section('title')
-    Manager Schedules
-@endsection
 @section('main')
     <div class="content-wrapper">
         <div class="page-header">

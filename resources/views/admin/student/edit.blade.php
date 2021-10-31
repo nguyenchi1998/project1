@@ -1,17 +1,14 @@
 @extends('layouts.manager')
-@section('title') Quản Lý Giảng Viên @endsection
 @section('breadcrumb')
-<div class="page-header">
-    <h3 class="page-title">Sửa Đổi</h3>
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
-            <li class="breadcrumb-item">
-                <a href="{{ route('admin.subjects.index') }}">Danh Sách Giảng Viên</a>
-            </li>
-            <li class="breadcrumb-item active" aria-current="page">Sửa Đổi</li>
-        </ol>
-    </nav>
+<div class="col-sm-6">
+    <h1 class="m-0">Quản Lý Sinh Viên</h1>
+</div>
+<div class="col-sm-6">
+    <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
+        <li class="breadcrumb-item"> <a href="{{ route('admin.students.index') }}">Danh Sách Sinh Viên</a></li>
+        <li class="breadcrumb-item active">Sửa Đổi</li>
+    </ol>
 </div>
 @endsection
 @section('main')
@@ -65,9 +62,11 @@
                     <label for="address">Địa chỉ</label>
                     {{ Form::input('text', 'address', $student->address, ['class' => 'form-control', 'id' => 'credit', 'placeholder' => 'Đại chỉ liên hệ']) }}
                 </div>
-                {{Form::submit('Xác Nhận', ['class'=> 'btn btn-gradient-primary mr-2']) }}
-                <a href="{{ route('admin.students.index') }}" class="btn btn-light">Huỷ Bỏ</a>
-                {{ Form::close() }}
+                <div class="mt-2">
+                    {{Form::submit('Xác Nhận', ['class'=> 'btn btn-outline-success mr-2']) }}
+                    <a href="{{ route('admin.students.index') }}" class="btn btn-outline-dark">Huỷ Bỏ</a>
+                    {{ Form::close() }}
+                </div>
             </div>
         </div>
     </div>

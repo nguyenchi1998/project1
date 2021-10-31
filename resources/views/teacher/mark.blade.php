@@ -1,7 +1,4 @@
 @extends('layouts.teacher')
-@section('title')
-Manager Schedules
-@endsection
 @section('main')
 <div class="content-wrapper">
     <div class="page-header">
@@ -42,12 +39,12 @@ Manager Schedules
                     </div>
                     <div class="table-responsive mb-3">
                         <table class="table table-bordered table-hover" id="mark">
-                            <thead class="sticky-top bg-gradient-primary ">
+                            <thead>
                                 <tr>
-                                    <th class="text text-white">Student</th>
-                                    <th class="text text-white">Activity mark</th>
-                                    <th class="text text-white">Middle mark</th>
-                                    <th class="text text-white">Final mark</th>
+                                    <th>Student</th>
+                                    <th>Activity mark</th>
+                                    <th>Middle mark</th>
+                                    <th>Final mark</th>
                                 </tr>
                             </thead>
                             <tbody>

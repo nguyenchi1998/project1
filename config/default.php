@@ -12,5 +12,6 @@ return [
         'open_register' => [
             '29/10', '01/08'
         ]
-    ]
+    ],
+    'avatar_size' => '35',
 ];

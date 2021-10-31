@@ -44,24 +44,25 @@ class ManagerController extends Controller
     {
         try {
             DB::beginTransaction();
-            $student = $this->managerRepository->create(array_merge($request->only([
+            $manager = $this->managerRepository->create(array_merge($request->only([
                 'name', 'email', 'phone', 'birthday', 'address', 'gender'
             ]), ['password' => Hash::make(config('default.auth.password'))]));
             $avatar = $request->file('avatar');
-            $avatarFilename = $student->email . '.' . $avatar->getClientOriginalExtension();
+            $avatarFilename = $manager->email . '.' . $avatar->getClientOriginalExtension();
             $path = $this->managerRepository->saveImage(
                 $avatar,
                 $avatarFilename,
-                100,
-                100
+                config('default.avatar_size'),
+                config('default.avatar_size')
             );
-            $student->avatar()->create([
+            $manager->avatar()->create([
                 'path' => $path
             ]);
             $adminRole = $this->roleRepository->findByName(
                 config('config.roles.admin.name'),
-                config('config.roles.admin.guard'));
-            $student->assignRole($adminRole);
+                config('config.roles.admin.guard')
+            );
+            $manager->assignRole($adminRole);
             DB::commit();
 
             return $this->successRouteRedirect('admin.managers.index');
@@ -83,19 +84,19 @@ class ManagerController extends Controller
     {
         try {
             DB::beginTransaction();
-            $this->managerRepository->update($id, $request->only([
+            $manager = $this->managerRepository->find($id);
+            $manager->update($id, $request->only([
                 'name', 'email', 'phone', 'birthday', 'address', 'gender'
             ]));
-            $student = $this->managerRepository->find($id);
             $avatar = $request->file('avatar');
             $avatarFilename = $request->get('email') . '.' . $avatar->getClientOriginalExtension();
             $path = $this->managerRepository->saveImage(
                 $avatar,
                 $avatarFilename,
-                100,
-                100
+                config('default.avatar_size'),
+                config('default.avatar_size')
             );
-            $student->avatar()->create([
+            $manager->avatar()->create([
                 'path' => $path
             ]);
             DB::commit();

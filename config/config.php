@@ -51,6 +51,8 @@ return [
         'default' => 1,
         'max' => 6,
     ],
+    'start_semester' => 1,
+    'max_credit_register' => 20,
     'limit' => [
         'studentInClass' => 20,
     ],

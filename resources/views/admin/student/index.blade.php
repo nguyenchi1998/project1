@@ -1,17 +1,15 @@
 @extends('layouts.manager')
-@section('title')
-Quản Lý Sinh Viên
-@endsection
 @section('breadcrumb')
-<div class="page-header">
-    <h3 class="page-title">Quản Lý Sinh Viên</h3>
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Danh Sách Sinh Viên</li>
-        </ol>
-    </nav>
-</div>@endsection
+<div class="col-sm-6">
+    <h1 class="m-0">Quản Lý Sinh Viên</h1>
+</div>
+<div class="col-sm-6">
+    <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
+        <li class="breadcrumb-item active">Danh Sách Sinh Viên</li>
+    </ol>
+</div>
+@endsection
 @section('main')
 <div class="row">
     <div class="col-lg-12 stretch-card">
@@ -23,26 +21,24 @@ Quản Lý Sinh Viên
                             <div class="d-flex justify-content-between">
                                 <input type="search" name="keyword" value="{{ $keyword }}" class="form-control form-control-sm mr-2" placeholder="Từ Khoá">
                                 {{ Form::select('class-filter', $classes, $classFilter, ['class' => 'form-control form-control-sm mr-2', 'placeholder' => 'Từ Khoá']) }}
-                                <button class="ml-2 btn-sm btn btn-outline-success" type="submit">
-                                    <i class="mdi mdi-account-search"></i>
+                                <button class="ml-2 btn-sm btn btn-outline-info" type="submit">
+                                    <i class="fa fa-search"></i>
                                 </button>
                             </div>
                         </form>
                     </div>
                     <a class="btn btn-sm d-flex align-items-center btn-outline-success" href="{{ route('admin.students.create') }}">Tạo mới</a>
                 </div>
-                <div class="table-responsive">
+                <div class="table-responsive table-scroll">
                     <table class="table table-bordered table-hover">
-                        <thead class="sticky-top bg-gradient-primary ">
+                        <thead>
                             <tr>
-                                <th class="text text-white">Sinh Viên</th>
-                                <th class="text text-white">Email</th>
-                                <th class="text text-white">Số Điện Thoại</th>
-                                <th class="text text-white">Giới Tính</th>
-                                <th class="text text-white">Ngày Sinh</th>
-                                <th class="text text-white">Địa Chỉ</th>
-                                <th class="text text-white">Lớp</th>
-                                <th class="text text-white"></th>
+                                <th>Sinh Viên</th>
+                                <th>Email</th>
+                                <th>Số Điện Thoại</th>
+                                <th>Ngày Sinh</th>
+                                <th>Lớp</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -50,8 +46,8 @@ Quản Lý Sinh Viên
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <div class="mr-4">
-                                            <img src="{{ assetStorage($student->avatar->path) }}" alt="avatar">
+                                        <div class="mr-2">
+                                            <img class="img-circle elevation-2 img-avatar" src="{{ assetStorage($student->avatar->path) }}" alt="avatar">
                                         </div>
                                         {{ $student->name }}
                                     </div>
@@ -63,17 +59,7 @@ Quản Lý Sinh Viên
                                     {{ $student->phone }}
                                 </td>
                                 <td>
-                                    @if (config('config.gender.male.value') == $student->gender) 
-                                    {{ config('config.gender.male.name') }}
-                                    @else
-                                    {{ config('config.gender.female.name') }}
-                                    @endif
-                                </td>
-                                <td>
                                     {{ formatDateShow($student->birthday) }}
-                                </td>
-                                <td>
-                                    {{ $student->address }}
                                 </td>
                                 <td>
                                     {{ $student->class->name ?? '' }}
@@ -81,12 +67,14 @@ Quản Lý Sinh Viên
                                 <td width="100">
                                     <div class="d-flex justify-content-between">
                                         <div class="mr-2">
-                                            <a href="{{ route('admin.students.edit', $student->id) }}" class="btn btn-sm btn-outline-warning" data-toggle="tooltip" data-placement="top" title="Sửa Thông Tin"><i class="mdi mdi-grease-pencil"></i></a>
+                                            <a href="{{ route('admin.students.edit', $student->id) }}" class="btn btn-sm btn-outline-warning" data-toggle="tooltip" data-placement="top" title="Sửa"><i class="fa fa-edit"></i></a>
                                         </div>
                                         <div>
-                                            <form action="">
-                                                <button type="submit" class="btn btn-sm btn-outline-danger" data-toggle="tooltip" data-placement="top" title="Xoá Thông Tin">
-                                                    <i class="mdi mdi-delete"></i>
+                                            <form action="{{ route('admin.students.destroy', $student->id) }}" method="post">
+                                                @method('DELETe')
+                                                @csrf()
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" data-toggle="tooltip" data-placement="top" title="Xoá">
+                                                    <i class="fa fa-trash"></i>
                                                 </button>
                                             </form>
                                         </div>
@@ -101,7 +89,7 @@ Quản Lý Sinh Viên
                         </tbody>
                     </table>
                 </div>
-                <div class="mt-2 d-flex justify-content-end">
+                <div class="mt-3 d-flex justify-content-end">
                     {{ $students->appends(['class-filter' => $classFilter, 'keyword' => $keyword])->links() }}
                 </div>
             </div>

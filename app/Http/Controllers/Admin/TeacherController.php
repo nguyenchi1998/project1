@@ -67,8 +67,8 @@ class TeacherController extends Controller
             $path = $this->teacherRepository->saveImage(
                 $avatar,
                 $avatarFilename,
-                100,
-                100
+                config('default.avatar_size'),
+                config('default.avatar_size')
             );
             $teacher->avatar()->create([
                 'path' => $path
@@ -101,7 +101,27 @@ class TeacherController extends Controller
 
     public function update(Request $request, $id)
     {
-        $this->teacherRepository->update($id, $request->only(['name', 'gender', 'birthday', 'address', 'phone']));
+        $teacher = $this->teacherRepository->find($id)
+            ->load('avatar');
+        $teacher->update($id, $request->only(['name', 'gender', 'birthday', 'address', 'phone']));
+
+        if ($request->file('avatar')) {
+            $imageDeleted = $this->teacherRepository->deleteImage($teacher->avatar->path);
+            if (!$imageDeleted) {
+                throw new Exception('Error delete old image');
+            }
+            $avatar = $request->file('avatar');
+            $avatarFilename = $teacher->email . '.' . $avatar->getClientOriginalExtension();
+            $path = $this->studentRepository->saveImage(
+                $avatar,
+                $avatarFilename,
+                config('default.avatar_size'),
+                config('default.avatar_size')
+            );
+            $teacher->avatar()->update([
+                'path' => $path
+            ]);
+        }
 
         return redirect()->route('admin.teachers.index');
     }

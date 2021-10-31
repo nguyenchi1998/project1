@@ -1,18 +1,14 @@
 @extends('layouts.manager')
-@section('title') Quản Lý Chuyên Ngành @endsection
-
 @section('breadcrumb')
-<div class="page-header">
-    <h3 class="page-title">Chọn Môn Chuyên Ngành</h3>
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
-            <li class="breadcrumb-item">
-                <a href="{{ route('admin.specializations.index') }}">Danh Sách Chuyên Ngành</a>
-            </li>
-            <li class="breadcrumb-item active" aria-current="page">Chọn Môn Chuyên Ngành</li>
-        </ol>
-    </nav>
+<div class="col-sm-6">
+    <h1 class="m-0">Quản Lý Chuyên Ngành</h1>
+</div>
+<div class="col-sm-6">
+    <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"><a href="#">Bảng Điều Khiển</a></li>
+        <li class="breadcrumb-item"> <a href="#">Danh Sách Chuyên Ngành</a></li>
+        <li class="breadcrumb-item active">Chọn Môn Giảng Dạy</li>
+    </ol>
 </div>
 @endsection
 @section('main')
@@ -38,12 +34,12 @@
                     {{ Form::open(['url' => route('admin.specializations.choose_subject', $specialization->id) , 'method' => 'POST']) }}
                     @method('PUT')
                     <table class="table table-bordered" id="subjects">
-                        <thead class="sticky-top bg-gradient-primary ">
+                        <thead>
                             <tr>
-                                <th class="text text-white">Môn Học</th>
-                                <th class="text text-white">Kỳ Học</th>
-                                <th class="text text-white">Số Tín Chỉ</th>
-                                <th class="text text-white"></th>
+                                <th>Môn Học</th>
+                                <th>Kỳ Học</th>
+                                <th>Số Tín Chỉ</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -52,14 +48,14 @@
                                 <td>
                                     <div class="form-check form-check-info m-0" style="min-width: 400px">
                                         <label class="form-check-label">
-                                            {{ Form::checkbox('subject_id', $subject->id, in_array($subject->id, $specializationSubject),  ['class'=>'form-check-input']) }}
+                                            {{ Form::checkbox('subject_id', $subject->id, in_array($subject->id, $specializationSubject),  ['class'=>'form-check-input selectedSubject']) }}
                                             {{ $subject->name }}
                                             <i class="input-helper"></i>
                                         </label>
                                     </div>
                                 </td>
                                 <td style="width: 150px">
-                                    {{ Form::input('number', 'semester', $subject['semester'] ?? null, ['class'=> 'form-control form-control-sm']) }}
+                                    {{ Form::input('number', 'semester', $subject['semester'] ?? null, ['class'=> 'form-control form-control-sm', 'disabled'=> true]) }}
                                 </td>
                                 <td style="width: 150px" class="text-center">
                                     {{ $subject->credit }}
@@ -78,9 +74,9 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="mt-3">
-                    {{Form::submit('Xác Nhận', ['id' => 'submit', 'class'=> 'btn btn-gradient-primary mr-2']) }}
-                    <a href="{{ route('admin.specializations.index') }}" class="btn btn-light">Huỷ Bỏ</a>
+                <div class="mt-2">
+                    {{Form::submit('Xác Nhận', ['id' => 'submit', 'class'=> 'btn btn-outline-success mr-2']) }}
+                    <a href="{{ route('admin.specializations.index') }}" class="btn btn-outline-dark">Huỷ Bỏ</a>
                     {{ Form::close() }}
                 </div>
             </div>
@@ -121,6 +117,12 @@
                 alert('Error');
             }
         });
-    })
+    });
+    $(document).on('change', '.selectedSubject', function(event) {
+        $(event.target).closest('tr')
+            .find('td:eq(1)')
+            .find('input')
+            .attr('disabled', !this.checked)
+    });
 </script>
 @endsection

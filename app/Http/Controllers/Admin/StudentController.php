@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Repositories\IClassRepository;
 use App\Repositories\IGradeRepository;
+use App\Repositories\IRoleRepository;
 use App\Repositories\IStudentRepository;
 use Exception;
 use Illuminate\Http\Request;
@@ -17,15 +18,18 @@ class StudentController extends Controller
     protected $studentRepository;
     protected $classRepository;
     protected $gradeRepository;
+    protected $roleRepository;
 
     public function __construct(
         IStudentRepository $studentRepository,
         IClassRepository   $classRepository,
-        IGradeRepository   $gradeRepository
+        IGradeRepository   $gradeRepository,
+        IRoleRepository   $roleRepository
     ) {
         $this->studentRepository = $studentRepository;
         $this->classRepository = $classRepository;
         $this->gradeRepository = $gradeRepository;
+        $this->roleRepository = $roleRepository;
     }
 
     public function index(Request $request)
@@ -85,7 +89,7 @@ class StudentController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
 
-            return $this->failRouteRedirect();
+            return $this->failRouteRedirect($e->getMessage());
         }
     }
 
@@ -123,8 +127,8 @@ class StudentController extends Controller
                 $path = $this->studentRepository->saveImage(
                     $avatar,
                     $avatarFilename,
-                    100,
-                    100
+                    config('default.avatar_size'),
+                    config('default.avatar_size')
                 );
                 $student->avatar()->update([
                     'path' => $path

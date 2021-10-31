@@ -1,7 +1,5 @@
 @extends('layouts.student')
-@section('title')
-    Manager Credits
-@endsection
+
 @section('breadcrumb')
     <div class="page-header">
         <h3 class="page-title">Đăng Ký Tín Chỉ</h3>
@@ -26,16 +24,16 @@
                         </div>
                         <a class="btn btn-sm d-flex align-items-center btn-outline-success" href="{{ route('credits.create') }}">Đăng Ký</a>
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive table-scroll">
                         <table class="table table-bordered table-hover">
-                            <thead class="sticky-top bg-gradient-primary ">
+                            <thead>
                             <tr>
-                                <th class="text text-white">Lớp Học</th>
-                                <th class="text text-white">Thời Gian Bắt Đầu</th>
-                                <th class="text text-white">Môn Học</th>
-                                <th class="text text-white">Tín Chỉ</th>
-                                <th class="text text-white">Trạng Thái</th>
-                                <th class="text text-white"></th>
+                                <th>Lớp Học</th>
+                                <th>Thời Gian Bắt Đầu</th>
+                                <th>Môn Học</th>
+                                <th>Tín Chỉ</th>
+                                <th>Trạng Thái</th>
+                                <th></th>
                             </tr>
                             </thead>
                             <tbody>

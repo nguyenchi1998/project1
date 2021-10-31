@@ -18,11 +18,10 @@ class ClassController extends Controller
     protected $specializationRepository;
 
     public function __construct(
-        IClassRepository          $classRepository,
-        IStudentRepository        $studentRepository,
+        IClassRepository $classRepository,
+        IStudentRepository $studentRepository,
         ISpecializationRepository $specializationRepository
-    )
-    {
+    ) {
         $this->classRepository = $classRepository;
         $this->studentRepository = $studentRepository;
         $this->specializationRepository = $specializationRepository;
@@ -32,7 +31,9 @@ class ClassController extends Controller
     {
         $filterSpecialization = $request->get('specializaiton-filter');
         $keyword = $request->get('keyword');
-        $specializations = $this->specializationRepository->all()->pluck('name', 'id')->toArray();
+        $specializations = $this->specializationRepository->all()
+            ->pluck('name', 'id')
+            ->toArray();
         $classes = $this->classRepository->withTrashedModel()
             ->when($keyword, function ($query) use ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%');
@@ -81,7 +82,7 @@ class ClassController extends Controller
         }
     }
 
-    public function show($id)
+    public function studentsShow($id)
     {
         $class = $this->classRepository->find($id);
         if ($class) {
@@ -111,34 +112,6 @@ class ClassController extends Controller
             DB::commit();
 
             return $this->successRouteRedirect('admin.classes.index');
-        } catch (Exception $e) {
-            DB::rollBack();
-
-            return $this->failRouteRedirect();
-        }
-    }
-
-    public function nextSemester()
-    {
-        try {
-            DB::beginTransaction();
-            $resultClass = $this->classRepository->model()
-                ->whereHas('specialization', function ($query) {
-                    $query->where('total_semester', '>', DB::raw('classes.semester'));
-                })->update([
-                    'semester' => DB::raw('classes.semester + 1'),
-                ]);
-            $resultStudent = $this->studentRepository->model()
-                ->query()
-                ->update([
-                    'can_register_credit' => config('config.can_register_credit'),
-                ]);
-            if ($resultClass && $resultStudent) {
-                DB::commit();
-
-                return $this->successRouteRedirect('admin.classes.index');
-            }
-            throw new Exception();
         } catch (Exception $e) {
             DB::rollBack();
 

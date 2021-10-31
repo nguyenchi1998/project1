@@ -1,23 +1,18 @@
 @extends('layouts.manager')
-@section('title')
-Quản Lý Tín Chỉ
-@endsection
 @section('breadcrumb')
-<div class="page-header">
-    <h3 class="page-title">Đăng Ký</h3>
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a href="{{ route('admin.home') }}">Bảng Điều Khiển</a>
-            </li>
-            <li class="breadcrumb-item">
-                <a href="{{ route('admin.schedules.credits.students.index') }}">Danh Sách Sinh Viên Đăng Ký Tín Chỉ</a>
-            </li>
-            <li class="breadcrumb-item active" aria-current="page">
-                Đăng Ký
-            </li>
-        </ol>
-    </nav>
+<div class="col-sm-6">
+    <h1 class="m-0">Quản Lý Tín Chỉ</h1>
+</div>
+<div class="col-sm-6">
+    <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
+        <li class="breadcrumb-item active">
+            <a href="{{ route('admin.schedules.students.index') }}">Danh Sách Sinh Viên</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            Đăng Ký
+        </li>
+    </ol>
 </div>
 @endsection
 @section('main')
@@ -25,7 +20,7 @@ Quản Lý Tín Chỉ
     <div class="col-lg-12 stretch-card">
         <div class="card">
             <div class="card-body">
-                <div class="mb-5">
+                <div class="mb-2">
                     <div class="form-row">
                         <div class="col-6">
                             <div class="form-group">
@@ -49,11 +44,11 @@ Quản Lý Tín Chỉ
                 <div class="table-responsive mb-3">
                     {{ Form::open(['url' => route('admin.schedules.register', $student->id), 'method' => 'post']) }}
                     <table class="table table-bordered table-hover" id="subjects">
-                        <thead class="sticky-top bg-gradient-primary ">
+                        <thead>
                             <tr>
-                                <th class="text text-white">Môn Học</th>
-                                <th class="text text-white">Số Tín Chỉ</th>
-                                <th class="text text-white"></th>
+                                <th>Môn Học</th>
+                                <th>Số Tín Chỉ</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -67,12 +62,8 @@ Quản Lý Tín Chỉ
                                     {{ $subject->credit }}
                                     {{ Form::text('student_id', $student->id, ['hidden' => true]) }}
                                 </td>
-                                <td style="width: 100px">
-                                    <div class="d-flex justify-content-between">
-                                        <div class="mr-3">
-                                            {{ Form::checkbox('checked', $subject->id, $subject->pivot->force || in_array($subject->id, $scheduleDetails), ['onclick' => (boolean)$subject->pivot->force ? 'return false' : 'return true'])  }}
-                                        </div>
-                                    </div>
+                                <td class="text-center">
+                                    {{ Form::checkbox('checked', $subject->id, $subject->pivot->force || in_array($subject->id, $scheduleDetails), ['onclick' => (boolean)$subject->pivot->force ? 'return false' : 'return true', 'class' => 'selectSubject'])  }}
                                 </td>
                             </tr>
                             @endforeach
@@ -107,19 +98,28 @@ Quản Lý Tín Chỉ
                 ]
         });
         $.ajax({
-            url: "{{ route('admin.schedules.credits.students.registerSchedule', $student->id) }}",
+            url: "{{ route('admin.schedules.students.registerSchedule', $student->id) }}",
             method: 'post',
             data: {
                 _token: "{{ csrf_token() }}",
                 subjects,
             },
             success: function() {
-                window.location.href = "{{ route('admin.schedules.credits.students.index') }}"
+                window.location.href = "{{ route('admin.schedules.students.index') }}"
             },
             error: function() {
                 alert('Error');
             }
         });
-    })
+    });
+
+    // $(document).on('change', '.selectSubject', function(event) {
+    //     event.preventDefault();
+
+    //     let subjects = $('#subjects').find('tbody tr:not(:last-child)').filter(function(index, tr) {
+    //         return $(tr).find('' + 'td:eq(2)').find('input').is(':checked');
+    //     }).toArray();
+    //     $('#submit').attr('disabled', !subjects.length)
+    // })
 </script>
 @endsection

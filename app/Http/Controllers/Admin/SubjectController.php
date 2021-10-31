@@ -9,6 +9,7 @@ use App\Repositories\ISubjectRepository;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PDO;
 
 class SubjectController extends Controller
 {
@@ -20,8 +21,7 @@ class SubjectController extends Controller
         ISubjectRepository        $subjectRepository,
         ISpecializationRepository $specializationRepository,
         IDepartmentRepository     $departmentRepository
-    )
-    {
+    ) {
         $this->subjectRepository = $subjectRepository;
         $this->departmentRepository = $departmentRepository;
         $this->specializationRepository = $specializationRepository;
@@ -29,26 +29,29 @@ class SubjectController extends Controller
 
     public function index(Request $request)
     {
-        $filter = $request->get('filter');
+        $departmentFilter = $request->get('department-filter');
+        $typeFilter = $request->get('type-filter');
+        $types = array_map(function ($item) {
+            return ucfirst($item);
+        }, array_flip(config('config.subject.type')));
         $subjects = $this->subjectRepository->withTrashedModel()
-            ->when($filter, function ($query) use ($filter) {
-                $query->whereHas('department', function ($query) use ($filter) {
-                    $query->where('id', $filter);
+            ->when($typeFilter != null, function ($query) use ($typeFilter) {
+                $query->where('type', $typeFilter);
+            })
+            ->when($departmentFilter, function ($query) use ($departmentFilter) {
+                $query->whereHas('department', function ($query) use ($departmentFilter) {
+                    $query->where('id', $departmentFilter);
                 });
             })
             ->with('department')
             ->paginate(config('config.paginate'));
         $departments = $this->departmentRepository->all()->pluck('name', 'id')->toArray();
 
-        return view('admin.subject.index', compact('subjects', 'departments', 'filter'));
+        return view('admin.subject.index', compact('subjects', 'types', 'departments', 'departmentFilter', 'typeFilter'));
     }
 
     public function create()
     {
-        $semesters = [];
-        for ($i = 1; $i <= config('config.semester.max'); $i++) {
-            $semesters[$i] = $i;
-        }
         $departments = $this->departmentRepository->all();
 
         return view('admin.subject.create', compact('departments', 'semesters'));
@@ -59,7 +62,6 @@ class SubjectController extends Controller
         $this->subjectRepository->create([
             'name' => $request->get('name'),
             'credit' => $request->get('credit'),
-            'semester' => $request->get('semester'),
             'type' => $request->get('basic') ? config('config.subject.type.basic') : config('config.subject.type.specialization'),
             'department_id' => $request->get('department_id'),
         ]);
@@ -98,16 +100,15 @@ class SubjectController extends Controller
 
             return redirect()->back();
         }
-
     }
 
     public function destroy($id)
     {
         $result = $this->subjectRepository->delete($id);
-
         if ($result) {
             return redirect()->route('admin.subjects.index');
         }
+
         return redirect()->route('admin.subjects.index')->withErrors(['msg' => 'Delete Error']);
     }
 

@@ -1,7 +1,4 @@
 @extends('layouts.student')
-@section('title')
-    Student Marks
-@endsection
 @section('main')
     <div class="content-wrapper">
         <div class="page-header">
@@ -24,16 +21,16 @@
                                 </form>
                             </div>
                         </div>
-                        <div class="table-responsive">
+                        <div class="table-responsive table-scroll">
                             <table class="table table-bordered table-hover">
-                                <thead class="sticky-top bg-gradient-primary ">
+                                <thead>
                                 <tr>
-                                    <th class="text text-white">Subject</th>
-                                    <th class="text text-white">Acticity Mark</th>
-                                    <th class="text text-white">Middle Mark</th>
-                                    <th class="text text-white">Final Mark</th>
-                                    <th class="text text-white">Status</th>
-                                    <th class="text text-white"></th>
+                                    <th>Subject</th>
+                                    <th>Acticity Mark</th>
+                                    <th>Middle Mark</th>
+                                    <th>Final Mark</th>
+                                    <th>Status</th>
+                                    <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>

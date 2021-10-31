@@ -1,0 +1,146 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Repositories\IClassRepository;
+use App\Repositories\IScheduleDetailRepository;
+use App\Repositories\IScheduleRepository;
+use App\Repositories\ISpecializationRepository;
+use App\Repositories\IStudentRepository;
+use App\Repositories\ISubjectRepository;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class ScheduleController extends Controller
+{
+    protected $scheduleRepository;
+    protected $specializationRepository;
+    protected $subjectRepository;
+    protected $classRepository;
+    protected $studentRepository;
+    protected $scheduleDetailRepository;
+
+    public function __construct(
+        IScheduleRepository       $scheduleRepository,
+        IScheduleDetailRepository $scheduleDetailRepository,
+        ISpecializationRepository $specializationRepository,
+        ISubjectRepository        $subjectRepository,
+        IClassRepository          $classRepository,
+        IStudentRepository        $studentRepository
+    ) {
+        $this->scheduleRepository = $scheduleRepository;
+        $this->specializationRepository = $specializationRepository;
+        $this->subjectRepository = $subjectRepository;
+        $this->classRepository = $classRepository;
+        $this->studentRepository = $studentRepository;
+        $this->scheduleDetailRepository = $scheduleDetailRepository;
+    }
+
+    public function index(Request $request)
+    {
+        $hasScheduleDetails = count($this->calculateScheduleDetails());
+        $status = $request->get('status');
+        $states = array_map(function ($item) {
+            return ucfirst($item);
+        }, array_flip(config('config.status.schedule')));
+        $schedules = $this->scheduleRepository->model()
+            ->when($status, function ($query) use ($status) {
+                $query->where('status', $status);
+            })
+            ->get()
+            ->load('subject', 'teacher', 'scheduleDetails');
+
+        return view('admin.schedule.index', compact('states', 'schedules', 'status', 'hasScheduleDetails'));
+    }
+
+    public function create()
+    {
+        $scheduleDetails  = $this->calculateScheduleDetails();
+
+        return view('admin.schedule.create', compact('scheduleDetails'));
+    }
+
+    protected function calculateScheduleDetails()
+    {
+        $scheduleDetails = $this->scheduleDetailRepository->model()
+            ->doesntHave('schedule')
+            ->get()
+            ->load('subject.teachers')
+            ->reduce(function (&$subjects, $scheduleDetail) {
+                if (isset($subjects[$scheduleDetail->subject_id])) {
+                    $subjects[$scheduleDetail->subject_id] = [
+                        'subject' => $scheduleDetail->subject->toArray(),
+                        'schedule_details' => array_merge($subjects[$scheduleDetail->subject_id]['schedule_details'], [$scheduleDetail->id])
+                    ];
+                } else {
+                    $subjects[$scheduleDetail->subject_id] = [
+                        'subject' => $scheduleDetail->subject->toArray(),
+                        'schedule_details' => [$scheduleDetail->id],
+                    ];
+                }
+                return $subjects;
+            }, []);
+        $scheduleDetails = array_map(function ($item) {
+            $item['subject']['teachers'] = collect($item['subject']['teachers'])->pluck('name', 'id');
+
+            return $item;
+        }, $scheduleDetails);
+
+        return $scheduleDetails;
+    }
+
+    public function store(Request $request)
+    {
+        try {
+            $subject = $this->subjectRepository->find($request->get('subject_id'));
+            $schedule = $this->scheduleRepository->create(array_merge([
+                $request->only(['subject_id', 'start_time', 'end_time', 'teacher_id'])
+            ], ['name' => 'Lớp tín chỉ môn ' . $subject->name,]));
+            $this->scheduleDetailRepository->model()
+                ->whereIn('id', $request->get('schedule_details'))
+                ->update([
+                    'schedule_id' => $schedule->id,
+                ]);
+
+            return $this->successRouteRedirect('admin.schedules.index');
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return $this->failRouteRedirect();
+        }
+    }
+
+    public function destroy($id)
+    {
+        $schedule = $this->scheduleRepository->find($id);
+        $this->scheduleRepository->delete($id, $schedule->status == config('config.status.schedule.new'));
+
+        return $this->successRouteRedirect('admin.schedules.index');
+    }
+
+    public function restore($id)
+    {
+        $result = $this->scheduleRepository->restore($id);
+        if ($result) {
+            return $this->successRouteRedirect('admin.schedules.index');
+        }
+
+        return $this->failRouteRedirect();
+    }
+
+    public function scheduleTimeShow($id)
+    {
+        $schedule = $this->scheduleRepository->find($id);
+
+        return view('admin.schedule.schedule_time', compact('schedule'));
+    }
+
+    public function scheduleTime(Request $request, $id)
+    {
+        $this->scheduleRepository->update($id, [
+            'schedule_time' => json_encode($request->timeschedules)
+        ]);
+    }
+}

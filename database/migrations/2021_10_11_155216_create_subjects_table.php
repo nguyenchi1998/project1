@@ -17,7 +17,6 @@ class CreateSubjectsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->unsignedInteger('credit');
-            $table->unsignedInteger('semester');
             $table->unsignedInteger('department_id')->nullable();
             $table->string('type')->nullable();
             $table->softDeletes();

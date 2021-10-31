@@ -32,7 +32,7 @@ class CreditController extends Controller
         $class = $this->classRepository->find($student->class_id);
         $semester = array_map(function ($item) {
             return 'Kỳ ' . $item;
-        }, range(1, $class->specialization->total_semester));
+        }, range(config('config.start_semester'), $class->specialization->total_semester));
         $credits = $this->scheduleDetailRepository->where('student_id', '=', $student->id)
             ->where('status', '=', null)
             ->get();

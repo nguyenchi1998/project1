@@ -18,6 +18,7 @@ class Schedule extends Model
         'start_time',
         'end_time',
         'class_id',
+        'schedule_time'
     ];
 
     protected static function boot()

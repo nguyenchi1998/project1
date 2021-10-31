@@ -91,8 +91,9 @@ class Repository implements IRepository
             ->orderBy('id', 'desc');
     }
 
-    public function saveImage($file, $fileName, $width = 100, $height = 100, $publicPath = 'storage')
+    public function saveImage($file, $fileName, $width, $height , $publicPath = 'storage')
     {
+        dd($width);
         $pathImage = $file->storeAs(config('default.path.public'), $fileName);
         $path = str_replace(config('default.path.public'), '', $pathImage);
         $img = Image::make(storage_path(config('default.path.app_public') . $path));
