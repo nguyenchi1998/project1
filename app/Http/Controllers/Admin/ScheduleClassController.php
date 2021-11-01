@@ -25,13 +25,13 @@ class ScheduleClassController extends Controller
     protected $gradeRepository;
 
     public function __construct(
-        IScheduleRepository $scheduleRepository,
+        IScheduleRepository       $scheduleRepository,
         IScheduleDetailRepository $scheduleDetailRepository,
         ISpecializationRepository $specializationRepository,
-        ISubjectRepository $subjectRepository,
-        IClassRepository $classRepository,
-        IStudentRepository $studentRepository,
-        IGradeRepository $gradeRepository
+        ISubjectRepository        $subjectRepository,
+        IClassRepository          $classRepository,
+        IStudentRepository        $studentRepository,
+        IGradeRepository          $gradeRepository
     ) {
         $this->scheduleRepository = $scheduleRepository;
         $this->specializationRepository = $specializationRepository;
@@ -58,10 +58,10 @@ class ScheduleClassController extends Controller
             ->paginate(config('config.paginate'));
         $classes->getCollection()->transform(function ($class) {
             $class['can_register'] = $class->schedules->reduce(function ($total, $schedule) {
-                $total += $schedule->subject->credit;
+                    $total += $schedule->subject->credit;
 
-                return $total;
-            }, 0) < config('config.max_credit_register');
+                    return $total;
+                }, 0) < config('config.max_credit_register');
             return $class;
         });
         $grades = $this->gradeRepository->all()->pluck('name', 'id');
@@ -77,7 +77,10 @@ class ScheduleClassController extends Controller
             ->get();
         $scheduleDetails = $this->scheduleRepository->model()
             ->where('class_id', $id)
-            ->get();
+            ->get()
+            ->map(function ($scheduleDetail) {
+                return $scheduleDetail->subject;
+            });
         $subjects = $basicSubject->diff($scheduleDetails);
 
         return view('admin.schedule.class.create', compact('subjects', 'class'));
@@ -85,5 +88,20 @@ class ScheduleClassController extends Controller
 
     public function registerSchedule(Request $request, $id)
     {
+        $class = $this->classRepository->find($id);
+        $students = $class->students;
+        $subjects = $this->subjectRepository->whereIn('id', $request->get('subjects'))
+            ->get()
+            ->map(function ($subject) use ($class) {
+                $item['class_id'] = $class->id;
+                $item['name'] = 'Lớp Tín Chỉ Môn ' . $subject->name;
+                $item['subject_id'] = $subject->id;
+
+                return $item;
+            })->toArray();
+        foreach ($subjects as $subject) {
+            $schedule = $this->scheduleRepository->create($subject);
+            $schedule->scheduleDetails()->saveMany($students);
+        }
     }
 }

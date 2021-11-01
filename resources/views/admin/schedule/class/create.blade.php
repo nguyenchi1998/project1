@@ -87,14 +87,12 @@
         let subjects = [];
         $('#subjects').find('tbody tr:not(:last-child)').each(function(index, tr) {
             let subject_id = $(tr).find('' + 'td:eq(0)').find('input').val();
-            let student_id = $(tr).find('' + 'td:eq(1)').find('input').val();
             let selected = $(tr).find('' + 'td:eq(2)').find('input').is(':checked');
             if (selected)
                 subjects = [
                     ...subjects,
                     {
-                        subject_id,
-                        student_id,
+                        subject_id
                     }
                 ]
         });
@@ -106,7 +104,7 @@
                 subjects,
             },
             success: function() {
-                window.location.href = "{{ route('admin.schedules.class.index') }}"
+{{--                window.location.href = "{{ route('admin.schedules.class.index') }}"--}}
             },
             error: function() {
                 alert('Error');
