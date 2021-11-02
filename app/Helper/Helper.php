@@ -32,17 +32,6 @@ if (!function_exists('checkFinishMark')) {
     }
 }
 
-if (!function_exists('checkForceSubject')) {
-    function checkForceSubject($subjects, $subjectCheck)
-    {
-        return $subjects->contains(function ($item) use ($subjectCheck) {
-            return $item->id == $subjectCheck->id
-                && $item->pivot->force == 1;
-        });
-    }
-}
-
-
 if (!function_exists('formatDateShow')) {
     function formatDateShow($date)
     {

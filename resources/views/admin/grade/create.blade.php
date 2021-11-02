@@ -21,7 +21,7 @@
                     <label for="name">Niên Khoá</label>
                     {{ Form::input('text', 'name', null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Niên khoá']) }}
                 </div>
-                <div class="mt-2">
+                <div class="mt-3">
                     {{Form::submit('Xác Nhận', ['class'=> 'btn btn-outline-success mr-2']) }}
                     <a href="{{ route('admin.grades.index') }}" class="btn btn-outline-dark">Huỷ Bỏ</a>
                     {{ Form::close() }}

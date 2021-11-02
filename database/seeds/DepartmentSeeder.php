@@ -360,21 +360,34 @@ class DepartmentSeeder extends Seeder
             ]);
         }
         Specialization::all()->each(function ($specialization) use ($faker) {
-            $subjects = array_reduce($faker->randomElements(
+            $subjects = [];
+            foreach (Subject::whereType(config('config.subject.type.basic'))
+                ->get()
+                ->pluck('id')
+                ->toArray()
+                as $subject) {
+                $subjects[$subject] =  [
+                    'force' => config('config.subject.force'),
+                    'semester' => $faker->randomElement(
+                        range(config('config.start_semester'), config('config.max_semester_register_by_class'))
+                    )
+                ];
+            }
+            $specialization->subjects()->attach($subjects);
+            $subjects = [];
+            foreach ($faker->randomElements(
                 Subject::whereType(config('config.subject.type.specialization'))
                     ->get()
                     ->pluck('id')
                     ->toArray(),
                 8
-            ), function (&$carry, $item) use ($faker) {
-                return $carry[] = [
-                    $item => [
-                        'force' => $faker->randomElement([0, 1]),
-                        'semester' => $faker->randomElement(range(5, 9))
-                    ]
+            ) as $subject) {
+                $subjects[$subject] = [
+                    'force' => $faker->randomElement([0, 1]),
+                    'semester' => $faker->randomElement(range(5, 9))
                 ];
-            }, []);
-            $specialization->subjects()->sync($subjects);
+            };
+            $specialization->subjects()->attach($subjects);
         });
     }
 }

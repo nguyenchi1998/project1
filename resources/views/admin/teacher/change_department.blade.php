@@ -41,7 +41,7 @@
                         </label>
                     </div>
                 </div>
-                <div class="mt-2">
+                <div class="mt-3">
                     {{Form::submit('Xác Nhận', ['class'=> 'btn btn-outline-success mr-2']) }}
                     <a href="{{ route('admin.teachers.index') }}" class="btn btn-outline-dark">Huỷ Bỏ</a>
                     {{ Form::close() }}

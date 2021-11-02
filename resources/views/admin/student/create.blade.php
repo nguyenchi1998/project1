@@ -64,7 +64,7 @@
                     <label for="grade">Niên Khoá</label>
                     {{ Form::select('grade_id', $grades, old('grade_id'), ['id'=> 'grade', 'class'=> 'form-control', 'placeholder' => 'Chọn niên khoá']) }}
                 </div>
-                <div class="mt-2">
+                <div class="mt-3">
                     {{Form::submit('Xác Nhận', ['class'=> 'btn btn-outline-success mr-2']) }}
                     <a href="{{ route('admin.students.index') }}" class="btn btn-outline-dark">Huỷ Bỏ</a>
                     {{ Form::close() }}

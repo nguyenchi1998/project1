@@ -7,7 +7,7 @@
     <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
         <li class="breadcrumb-item active">
-            <a href="{{ route('admin.schedules.class.index') }}">Danh Sách Lớp Học</a>
+            <a href="{{ route('admin.schedules.classes.index') }}">Danh Sách Lớp Học</a>
         </li>
         <li class="breadcrumb-item active" aria-current="page">
             Đăng Ký
@@ -44,7 +44,7 @@
                     </div>
                 </div>
 
-                <div class="table-responsive mb-3">
+                <div class="table-responsive mb-3 table-scroll">
                     <table class="table table-bordered table-hover" id="subjects">
                         <thead>
                             <tr>
@@ -54,7 +54,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($subjects as $subject)
+                            @foreach($basicSubject as $subject)
                             <tr>
                                 <td>
                                     {{ $subject->name }}
@@ -65,15 +65,15 @@
                                     {{ Form::text('credit[]', $subject->credit, ['hidden' => true]) }}
                                 </td>
                                 <td class="text-center">
-                                    {{ Form::checkbox('checked', $subject->id, false, ['class' => 'selectSubject'])  }}
+                                    {{ Form::checkbox('checked', $subject->id, in_array($subject->id, $scheduleSubjects), ['class' => 'selectSubject'])  }}
                                 </td>
                             </tr>
                             @endforeach
-                            <tr align="right">
-                                <td colspan="3">{{ Form::submit('Register', ['id' => 'submit', 'class' => 'btn btn-sm btn-outline-info']) }}</td>
-                            </tr>
                         </tbody>
                     </table>
+                </div>
+                <div class="d-flex justify-content-end">
+                    {{ Form::submit('Register', ['id' => 'submit', 'class' => 'btn btn-sm btn-outline-info']) }}
                 </div>
             </div>
         </div>
@@ -97,14 +97,14 @@
                 ]
         });
         $.ajax({
-            url: "{{ route('admin.schedules.class.registerSchedule', $class->id) }}",
+            url: "{{ route('admin.schedules.classes.registerSchedule', $class->id) }}",
             method: 'post',
             data: {
                 _token: "{{ csrf_token() }}",
                 subjects,
             },
             success: function() {
-{{--                window.location.href = "{{ route('admin.schedules.class.index') }}"--}}
+                window.location.href = "{{ route('admin.schedules.classes.index') }}"
             },
             error: function() {
                 alert('Error');

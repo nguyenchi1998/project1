@@ -33,7 +33,7 @@
                     {{ Form::label('department', 'Khoa Viện') }}
                     {{ Form::select('department_id', $departments, null, ['class' => 'form-control', 'id' => 'department', 'placeholder' => 'Chọn Khoa Viện']) }}
                 </div>
-                <div class="mt-2">
+                <div class="mt-3">
                     {{ Form::submit('Xác Nhận', ['class'=> 'btn btn-outline-success mr-2']) }}
                     <a href="{{ route('admin.specializations.index') }}" class="btn btn-outline-dark">Huỷ Bỏ</a>
                     {{ Form::close() }}

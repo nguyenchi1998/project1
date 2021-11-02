@@ -24,8 +24,9 @@ class StudentController extends Controller
         IStudentRepository $studentRepository,
         IClassRepository   $classRepository,
         IGradeRepository   $gradeRepository,
-        IRoleRepository   $roleRepository
-    ) {
+        IRoleRepository    $roleRepository
+    )
+    {
         $this->studentRepository = $studentRepository;
         $this->classRepository = $classRepository;
         $this->gradeRepository = $gradeRepository;
@@ -48,7 +49,7 @@ class StudentController extends Controller
                 });
             })
             ->paginate(config('config.paginate'));
-        $classes = $this->classRepository->all()->pluck('id')->toArray();
+        $classes = $this->classRepository->all()->pluck('name', 'id');
 
         return view('admin.student.index', compact('students', 'classFilter', 'classes', 'keyword'));
     }

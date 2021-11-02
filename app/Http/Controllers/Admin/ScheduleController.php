@@ -29,7 +29,8 @@ class ScheduleController extends Controller
         ISubjectRepository        $subjectRepository,
         IClassRepository          $classRepository,
         IStudentRepository        $studentRepository
-    ) {
+    )
+    {
         $this->scheduleRepository = $scheduleRepository;
         $this->specializationRepository = $specializationRepository;
         $this->subjectRepository = $subjectRepository;
@@ -50,14 +51,14 @@ class ScheduleController extends Controller
                 $query->where('status', $status);
             })
             ->get()
-            ->load('subject', 'teacher', 'scheduleDetails');
+            ->load('subject.teachers', 'teacher', 'scheduleDetails');
 
         return view('admin.schedule.index', compact('states', 'schedules', 'status', 'hasScheduleDetails'));
     }
 
     public function create()
     {
-        $scheduleDetails  = $this->calculateScheduleDetails();
+        $scheduleDetails = $this->calculateScheduleDetails();
 
         return view('admin.schedule.create', compact('scheduleDetails'));
     }
@@ -82,13 +83,11 @@ class ScheduleController extends Controller
                 }
                 return $subjects;
             }, []);
-        $scheduleDetails = array_map(function ($item) {
+        return array_map(function ($item) {
             $item['subject']['teachers'] = collect($item['subject']['teachers'])->pluck('name', 'id');
 
             return $item;
         }, $scheduleDetails);
-
-        return $scheduleDetails;
     }
 
     public function store(Request $request)
@@ -114,8 +113,7 @@ class ScheduleController extends Controller
 
     public function destroy($id)
     {
-        $schedule = $this->scheduleRepository->find($id);
-        $this->scheduleRepository->delete($id, $schedule->status == config('config.status.schedule.new'));
+        $schedule = $this->scheduleRepository->delete($id);
 
         return $this->successRouteRedirect('admin.schedules.index');
     }
@@ -142,5 +140,19 @@ class ScheduleController extends Controller
         $this->scheduleRepository->update($id, [
             'schedule_time' => json_encode($request->timeschedules)
         ]);
+    }
+
+    public function setTeacher(Request $request, $id)
+    {
+        $this->scheduleRepository->update($id, $request->only('teacher_id'));
+
+        return $this->successRouteRedirect('admin.schedules.index');
+    }
+
+    public function startSchedule(Request $request, $id)
+    {
+        $this->scheduleRepository->update($id, $request->only('status'));
+
+        return $this->successRouteRedirect('admin.schedules.index');
     }
 }

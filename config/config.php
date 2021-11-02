@@ -34,7 +34,7 @@ return [
     'status' => [
         'schedule' => [
             'new' => 0,
-            'inprogess' => 1,
+            'inprogress' => 1,
             'finish' => 2,
             'marking' => 3,
             'done' => 4,

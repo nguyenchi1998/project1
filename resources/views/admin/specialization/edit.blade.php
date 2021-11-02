@@ -31,7 +31,7 @@
                     <label for="max_semester">Số Kì Học</label>
                     {{ Form::input('number', 'total_semester', $specialization->total_semester, ['class' => 'form-control', 'id' => 'max_semester', 'placeholder' => 'Số Kì Học', 'min' => 0]) }}
                 </div>
-                <div class="mt-2">
+                <div class="mt-3">
                     {{Form::submit('Xác Nhận', ['class'=> 'btn btn-outline-success mr-2']) }}
                     <a href="{{ route('admin.specializations.index') }}" class="btn btn-outline-dark">Huỷ Bỏ</a>
                     {{ Form::close() }}

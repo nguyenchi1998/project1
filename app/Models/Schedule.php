@@ -18,17 +18,16 @@ class Schedule extends Model
         'start_time',
         'end_time',
         'class_id',
-        'schedule_time'
+        'schedule_time',
+        'status',
     ];
 
     protected static function boot()
     {
         parent::boot();
 
-        static::deleting(function($schedule) {
-            $schedule->scheduleDetails()->update([
-                'schedule_id' => null,
-            ]);
+        static::deleting(function ($schedule) {
+            $schedule->scheduleDetails()->delete();
         });
     }
 

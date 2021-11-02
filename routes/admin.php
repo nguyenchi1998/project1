@@ -8,11 +8,14 @@ Route::group(['as' => 'admin.'], function () {
         Route::get('', 'HomeController@index')
             ->name('home');
 
-        Route::resource('subjects', 'SubjectController')->except('show');
+        Route::resource('subjects', 'SubjectController')
+            ->except('show');
 
-        Route::resource('teachers', 'TeacherController')->except('show');
+        Route::resource('teachers', 'TeacherController')
+            ->except('show');
 
-        Route::resource('managers', 'ManagerController')->except('show');
+        Route::resource('managers', 'ManagerController')
+            ->except('show');
 
         Route::get('teachers/{id}/change-department', 'TeacherController@changeDepartmentShow')
             ->name('teachers.change_department_show');
@@ -28,6 +31,12 @@ Route::group(['as' => 'admin.'], function () {
 
         Route::resource('schedules', 'ScheduleController')
             ->only(['index', 'create', 'destroy']);
+
+        Route::post('schedules/{id}/teacher', 'ScheduleController@setTeacher')
+            ->name('schedules.teacher');
+
+        Route::post('schedules/{id}/start', 'ScheduleController@startSchedule')
+            ->name('schedules.start');
 
         Route::post('schedules/store', 'ScheduleController@store')
             ->name('schedules.register');
@@ -51,19 +60,21 @@ Route::group(['as' => 'admin.'], function () {
             ->name('schedules.students.status');
 
         Route::get('schedules/class', 'ScheduleClassController@index')
-            ->name('schedules.class.index');
+            ->name('schedules.classes.index');
 
         Route::get('schedules/class/{id}', 'ScheduleClassController@registerScheduleShow')
-            ->name('schedules.class.registerScheduleShow');
+            ->name('schedules.classes.registerScheduleShow');
 
         Route::post('schedules/class/{id}', 'ScheduleClassController@registerSchedule')
-            ->name('schedules.class.registerSchedule');
+            ->name('schedules.classes.registerSchedule');
 
-        Route::resource('roles', 'RoleController');
+        Route::resource('roles', 'RoleController')
+            ->only(['index', 'update', 'edit']);
 
         Route::resource('specializations', 'SpecializationController');
 
-        Route::post('specializations/{id}/restore', 'SpecializationController@restore')->name('specializations.restore');
+        Route::post('specializations/{id}/restore', 'SpecializationController@restore')
+            ->name('specializations.restore');
 
         Route::get('specializations/{id}/choose-subject', 'SpecializationController@chooseSubjectShow')
             ->name('specializations.choose_subject_show');
@@ -71,9 +82,11 @@ Route::group(['as' => 'admin.'], function () {
         Route::post('specializations/{id}/choose-subject', 'SpecializationController@chooseSubject')
             ->name('specializations.choose_subject');
 
-        Route::resource('classes', 'ClassController')->except('show');
+        Route::resource('classes', 'ClassController')
+            ->except('show');
 
-        Route::get('classes/{id}/students', 'ClassController@studentsShow')->name('classes.students');
+        Route::get('classes/{id}/students', 'ClassController@studentsShow')
+            ->name('classes.students');
 
         Route::post('classes/{id}/remove-student', 'ClassController@removeStudent')
             ->name('classes.remove_student');
@@ -82,7 +95,8 @@ Route::group(['as' => 'admin.'], function () {
 
         Route::resource('departments', 'DepartmentController');
 
-        Route::resource('students', 'StudentController')->except('show');
+        Route::resource('students', 'StudentController')
+            ->except('show');
 
         Route::group(['prefix' => 'requests', 'as' => 'requests.'], function () {
             Route::get('', 'RequestController@index')

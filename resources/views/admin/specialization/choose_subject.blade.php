@@ -6,7 +6,7 @@
 <div class="col-sm-6">
     <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"><a href="#">Bảng Điều Khiển</a></li>
-        <li class="breadcrumb-item"> <a href="#">Danh Sách Chuyên Ngành</a></li>
+        <li class="breadcrumb-item"><a href="#">Danh Sách Chuyên Ngành</a></li>
         <li class="breadcrumb-item active">Chọn Môn Giảng Dạy</li>
     </ol>
 </div>
@@ -37,8 +37,9 @@
                         <thead>
                             <tr>
                                 <th>Môn Học</th>
-                                <th>Kỳ Học</th>
                                 <th>Số Tín Chỉ</th>
+                                <th>Loại</th>
+                                <th>Kỳ Học</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -48,24 +49,25 @@
                                 <td>
                                     <div class="form-check form-check-info m-0" style="min-width: 400px">
                                         <label class="form-check-label">
-                                            {{ Form::checkbox('subject_id', $subject->id, in_array($subject->id, $specializationSubject),  ['class'=>'form-check-input selectedSubject']) }}
+                                            {{ Form::checkbox('subject_id', $subject->id, $subject['choose'], ['class'=>'form-check-input selectedSubject', 'disabled' => $subject['can_not_edit']]) }}
                                             {{ $subject->name }}
-                                            <i class="input-helper"></i>
                                         </label>
                                     </div>
-                                </td>
-                                <td style="width: 150px">
-                                    {{ Form::input('number', 'semester', $subject['semester'] ?? null, ['class'=> 'form-control form-control-sm', 'disabled'=> true]) }}
                                 </td>
                                 <td style="width: 150px" class="text-center">
                                     {{ $subject->credit }}
                                 </td>
+                                <td style="width: 150px" class="text-center">
+                                    {{ $subject->type ? 'Chuyên Ngành' : 'Cơ Bản' }}
+                                </td>
+                                <td style="width: 150px">
+                                    {{ Form::select('semester', $subject->type  == config('config.subject.type.basic') ? $basicSemesters : $specializationSemesters, $subject['semester'], ['class'=> 'form-control form-control-sm semester', 'placeholder' => 'Chọn kỳ học', 'disabled' => $subject['can_not_edit']]) }}
+                                </td>
                                 <td style="width: 150px">
                                     <div class="form-check form-check-info m-0">
                                         <label class="form-check-label">
-                                            {{ Form::checkbox('force', config('config.subject.force'), checkForceSubject($specialization->subjects, $subject), ['class'=>'form-check-input']) }}
+                                            {{ Form::checkbox('force', config('config.subject.force'), $subject['force'], ['class'=>'form-check-input', 'disabled' => $subject['can_not_edit']]) }}
                                             {{ 'Bắt Buộc' }}
-                                            <i class="input-helper"></i>
                                         </label>
                                     </div>
                                 </td>
@@ -74,7 +76,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="mt-2">
+                <div class="mt-3">
                     {{Form::submit('Xác Nhận', ['id' => 'submit', 'class'=> 'btn btn-outline-success mr-2']) }}
                     <a href="{{ route('admin.specializations.index') }}" class="btn btn-outline-dark">Huỷ Bỏ</a>
                     {{ Form::close() }}
@@ -91,7 +93,7 @@
         let subjects = [];
         $('#subjects').find('tbody tr').each(function(index, tr) {
             let subject_id = $(tr).find('' + 'td:first-child').find('input').val();
-            let semester = $(tr).find('' + 'td:eq(1)').find('input').val();
+            let semester = $(tr).find('' + 'td:eq(3)').find('.semester option:selected').val();
             let selected = $(tr).find('' + 'td:first-child').find('input').is(':checked');
             let force = $(tr).find('' + 'td:last-child').find('input').is(':checked');
             if (selected)
@@ -103,6 +105,7 @@
                     }
                 }
         });
+        console.log(subjects);
         $.ajax({
             url: "{{ route('admin.specializations.choose_subject', $specialization->id) }}",
             method: 'post',
@@ -119,10 +122,18 @@
         });
     });
     $(document).on('change', '.selectedSubject', function(event) {
-        $(event.target).closest('tr')
-            .find('td:eq(1)')
+        let target = $(event.target).closest('tr')
+        target.find('td:eq(3)')
             .find('input')
             .attr('disabled', !this.checked)
+        target.find('td:eq(4)')
+            .find('input')
+            .attr('disabled', !this.checked)
+        if (!this.checked) {
+            target.find('td:eq(4)')
+                .find('input')
+                .prop('checked', this.checked);
+        }
     });
 </script>
 @endsection

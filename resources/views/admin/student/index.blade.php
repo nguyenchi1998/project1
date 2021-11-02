@@ -20,7 +20,7 @@
                         <form action="{{ route('admin.students.index') }}">
                             <div class="d-flex justify-content-between">
                                 <input type="search" name="keyword" value="{{ $keyword }}" class="form-control form-control-sm mr-2" placeholder="Từ Khoá">
-                                {{ Form::select('class-filter', $classes, $classFilter, ['class' => 'form-control form-control-sm mr-2', 'placeholder' => 'Từ Khoá']) }}
+                                {{ Form::select('class-filter', $classes, $classFilter, ['class' => 'form-control form-control-sm mr-2', 'placeholder' => 'Chọn Lớp Học']) }}
                                 <button class="ml-2 btn-sm btn btn-outline-info" type="submit">
                                     <i class="fa fa-search"></i>
                                 </button>

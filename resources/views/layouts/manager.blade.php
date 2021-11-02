@@ -186,7 +186,7 @@
                         <a href="#" class="d-block text-capitalize">{{ auth()->user()->name ?? get_guard() }}</a>
                     </div>
                 </div>
-                <nav class="mt-2">
+                <nav class="mt-3">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <li class="nav-item">
                             <a href="{{ route('admin.home') }}" class="nav-link">
@@ -304,7 +304,7 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('admin.schedules.class.index') }}" class="nav-link">
+                                    <a href="{{ route('admin.schedules.classes.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Theo Lớp (Năm 1, 2)</p>
                                     </a>

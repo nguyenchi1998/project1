@@ -118,20 +118,34 @@ class SpecializationController extends Controller
 
     public function chooseSubjectShow($id)
     {
-        $specialization = $this->specializationRepository->find($id)->load('subjects');
-        $specializationSubject = $specialization->subjects->pluck('id')->toArray();
-        $subjects = $this->subjectRepository->where('type', '=', config('config.subject.type.specialization'))
-            ->get();
 
+        $specialization = $this->specializationRepository->find($id)->load('subjects');
+        $specializationSubjects = $specialization->subjects->pluck('id')->toArray();
+        $startSemester = config('config.start_semester');
+        $basicSemesters = [];
+        $specializationSemesters = [];
+        for ($i = $startSemester; $i <= $specialization->total_semester; $i++) {
+            if ($i <= config('config.max_semester_register_by_class')) {
+                $basicSemesters[$i] = 'Kì ' . $i;
+            } else {
+                $specializationSemesters[$i] = 'Kì ' . $i;
+            }
+        }
+        $subjects = $this->subjectRepository->all();
         $subjects = $subjects->map(function ($subject) use ($specialization) {
+            $subject['can_not_edit'] = $subject->type == config('config.subject.type.basic');
+            $subject['choose'] = $specialization->subjects->contains($subject->id);
+            $subject['force'] =  $specialization->subjects->contains(function ($item) use ($subject) {
+                return $item->id == $subject->id
+                    && $item->pivot->force == config('config.subject.force');
+            });
             $subject['semester'] = $specialization->subjects->first(function ($subjectItem) use ($subject, $specialization) {
                 return $specialization->subjects->contains('id', $subject->id) && $subjectItem->id ==  $subject->id;
             })->pivot->semester ?? null;
             return $subject;
-        })
-        ->sortByDesc('semester');
+        })->sortBy('type');
 
-        return view('admin.specialization.choose_subject', compact('specialization', 'subjects', 'specializationSubject'));
+        return view('admin.specialization.choose_subject', compact('specialization', 'subjects', 'specializationSubjects', 'basicSemesters', 'specializationSemesters'));
     }
 
     public function chooseSubject(Request $request, $id)
