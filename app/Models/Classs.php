@@ -36,4 +36,9 @@ class Classs extends Model
     {
         return $this->hasManyThrough(Subject::class, Schedule::class);
     }
+
+    public function newbieClass()
+    {
+        return $this->where('semester', '<=', config('config.max_semester_register_by_class'));
+    }
 }

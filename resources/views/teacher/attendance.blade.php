@@ -23,21 +23,21 @@
                     <div class="form-row">
                         <div class="col-6">
                             <div class="form-group">
-                                Name: {{ $schedule->name }}
+                                Lớp Học: {{ $schedule->name }}
                             </div>
                             <div class="form-group">
-                                Subject: {{ $schedule->subject->name }}
+                                Môn Học: {{ $schedule->subject->name }}
                             </div>
                             <div class="form-group">
-                                Teacher: {{ $schedule->teacher->name }}
+                                Giáo Viên: {{ $schedule->teacher->name }}
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group">
-                                Students: {{ count($scheduleDetails) }}
+                                Số Sinh Viên: {{ count($scheduleDetails) }}
                             </div>
                             <div class="form-group">
-                                Date: {{ now()->format('d/m/yy') }}
+                                Ngày: {{ now()->format('d/m/yy') }}
                             </div>
                         </div>
                     </div>
@@ -47,7 +47,7 @@
                     <table class="table table-bordered table-hover">
                         <thead>
                         <tr>
-                            <th>Student</th>
+                            <th>Sinh Viên</th>
                             <th></th>
                         </tr>
                         </thead>

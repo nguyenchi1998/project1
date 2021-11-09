@@ -39,9 +39,7 @@
                                 <th>Giảng Viên</th>
                                 <th>Email</th>
                                 <th>Số Điện Thoại</th>
-                                <th>Giới Tính</th>
                                 <th>Ngày Sinh</th>
-                                <th>Địa Chỉ</th>
                                 <th>Khoa Viện</th>
                                 <th></th>
                             </tr>
@@ -52,7 +50,7 @@
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <div class="mr-4">
-                                            <img class="img-circle elevation-2 img-avatar" src="{{ assetStorage($teacher->avatar->path) }}" alt="avatar">
+                                            <img class="img-circle img-avatar" src="{{ assetStorage($teacher->avatar->path) }}" alt="avatar">
                                         </div>
                                         {{ $teacher->name }}
                                     </div>
@@ -64,13 +62,7 @@
                                     {{ $teacher->phone }}
                                 </td>
                                 <td>
-                                    {{ $teacher->gender ? 'Male' : 'Female' }}
-                                </td>
-                                <td>
                                     {{ $teacher->birthday }}
-                                </td>
-                                <td>
-                                    {{ $teacher->address }}
                                 </td>
                                 <td>
                                     {{ $teacher->department->name }} @if($teacher->department->manager_id == $teacher->id)
@@ -82,11 +74,11 @@
                                             <a href="{{ route('admin.teachers.choose_subject_show', $teacher->id) }}" class="btn btn-sm btn-outline-info" data-toggle="tooltip" data-placement="top" title="Chọn Môn Giảng Dạy">
                                                 <i class="fa fa-book"></i></a>
                                         </div>
-                                        <div class="mr-2">
+                                        <!-- <div class="mr-2">
                                             <a href="{{ route('admin.teachers.change_department_show', $teacher->id) }}" class="btn btn-sm btn-outline-info" data-toggle="tooltip" data-placement="top" title="Chuyển Khoa Viện">
                                                 <i class="fa fa-user-cog"></i>
                                             </a>
-                                        </div>
+                                        </div> -->
                                         <div class="mr-2">
                                             <a href="{{ route('admin.teachers.edit', $teacher->id) }}" class="btn btn-sm btn-outline-warning" data-toggle="tooltip" data-placement="top" title="Sửa">
                                                 <i class="fa fa-edit"></i>

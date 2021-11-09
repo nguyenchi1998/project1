@@ -70,21 +70,9 @@
                     <label for="experience">Kinh Nghiệm</label>
                     {{ Form::textarea('experience', null, ['class' => ' form-control', 'id' => 'experience', 'placeholder' => 'Miêu tả về kinh nghiệm công viện']) }}
                 </div>
-                <div class="form-group">
-                    {{ Form::label('department', 'Khoa Viện') }}
-                    @foreach($departments as $key => $department)
-                    <div class="form-check form-check-info">
-                        <label class="form-check-label">
-                            {{ Form::radio('department_id', $department->id, false, ['class'=>'form-check-input']) }}
-                            {{ $department->name }}
-                            <i class="input-helper"></i>
-                        </label>
-                    </div>
-                    @endforeach
-                    {{Form::submit('Xác Nhận', ['class'=> 'btn btn-outline-success mr-2']) }}
-                    <a href="{{ route('admin.teachers.index') }}" class="btn btn-outline-dark">Huỷ Bỏ</a>
-                    {{ Form::close() }}
-                </div>
+                {{Form::submit('Xác Nhận', ['class'=> 'btn btn-outline-success mr-2']) }}
+                <a href="{{ route('admin.teachers.index') }}" class="btn btn-outline-dark">Huỷ Bỏ</a>
+                {{ Form::close() }}
             </div>
         </div>
         @endsection

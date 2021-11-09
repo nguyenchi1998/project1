@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Manager | HUST</title>
+    <link rel="icon" type="image/png" href="{{ asset('favicon.ico') }}"/>
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
@@ -306,7 +307,7 @@
                                 <li class="nav-item">
                                     <a href="{{ route('admin.schedules.classes.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Theo Lớp (Năm 1, 2)</p>
+                                        <p>Theo Lớp (4 Kì Đầu))</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">

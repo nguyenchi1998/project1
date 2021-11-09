@@ -29,8 +29,7 @@ class ScheduleController extends Controller
         ISubjectRepository        $subjectRepository,
         IClassRepository          $classRepository,
         IStudentRepository        $studentRepository
-    )
-    {
+    ) {
         $this->scheduleRepository = $scheduleRepository;
         $this->specializationRepository = $specializationRepository;
         $this->subjectRepository = $subjectRepository;
@@ -46,14 +45,24 @@ class ScheduleController extends Controller
         $states = array_map(function ($item) {
             return ucfirst($item);
         }, array_flip(config('config.status.schedule')));
-        $schedules = $this->scheduleRepository->model()
+        $classSchedules = $this->scheduleRepository->model()
+            ->classSchedule()
             ->when($status, function ($query) use ($status) {
                 $query->where('status', $status);
             })
+            ->orderBy('status')
+            ->get()
+            ->load('subject.teachers', 'teacher', 'scheduleDetails');
+        $freeSchedules = $this->scheduleRepository->model()
+            ->freeSchedule()
+            ->when($status, function ($query) use ($status) {
+                $query->where('status', $status);
+            })
+            ->orderBy('status')
             ->get()
             ->load('subject.teachers', 'teacher', 'scheduleDetails');
 
-        return view('admin.schedule.index', compact('states', 'schedules', 'status', 'hasScheduleDetails'));
+        return view('admin.schedule.index', compact('states', 'classSchedules', 'freeSchedules',  'status', 'hasScheduleDetails'));
     }
 
     public function create()
@@ -151,8 +160,24 @@ class ScheduleController extends Controller
 
     public function startSchedule(Request $request, $id)
     {
-        $this->scheduleRepository->update($id, $request->only('status'));
+        try {
+            $schedule =  $this->scheduleRepository->find($id)->load('class.students');
+            if ($schedule->status) {
+                $students = $schedule->class->students->map(function ($student) use ($schedule) {
+                    $item['student_id'] = $student->id;
+                    $item['subject_id'] = $schedule->subject_id;
+                    $item['schedule_id'] = $schedule->id;
+                    return $item;
+                })->toArray();
+                $schedule->update($request->only('status'));
+                $schedule->scheduleDetails()->createMany($students);
+            }
 
-        return $this->successRouteRedirect('admin.schedules.index');
+            return $this->successRouteRedirect('admin.schedules.index');
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return $this->failRouteRedirect();
+        }
     }
 }

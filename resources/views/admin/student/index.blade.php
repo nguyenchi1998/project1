@@ -47,7 +47,7 @@
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <div class="mr-2">
-                                            <img class="img-circle elevation-2 img-avatar" src="{{ assetStorage($student->avatar->path) }}" alt="avatar">
+                                            <img class="img-circle img-avatar" src="{{ assetStorage($student->avatar->path) }}" alt="avatar">
                                         </div>
                                         {{ $student->name }}
                                     </div>
@@ -71,7 +71,7 @@
                                         </div>
                                         <div>
                                             <form action="{{ route('admin.students.destroy', $student->id) }}" method="post">
-                                                @method('DELETe')
+                                                @method('DELETE')
                                                 @csrf()
                                                 <button type="submit" class="btn btn-sm btn-outline-danger" data-toggle="tooltip" data-placement="top" title="Xoá">
                                                     <i class="fa fa-trash"></i>

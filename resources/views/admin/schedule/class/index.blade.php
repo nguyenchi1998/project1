@@ -6,7 +6,7 @@
     <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
-            <li class="breadcrumb-item active">Danh Sách Sinh Viên</li>
+            <li class="breadcrumb-item active">Danh Sách Lớp</li>
         </ol>
     </div>
 @endsection
@@ -79,7 +79,7 @@
                         </table>
                     </div>
                     <div class="mt-3 d-flex justify-content-end">
-                        {{ $classes->appends(['grade-filter' => $gradeFilter, 'specalization-filter' => $specalizationFilter, 'semester-filter' => $semesterFilter, 'keyword' => $keyword])->links() }}
+                        {{ $classes->appends(['specalization-filter' => $specalizationFilter, 'semester-filter' => $semesterFilter, 'keyword' => $keyword])->links() }}
                     </div>
                 </div>
             </div>

@@ -41,23 +41,23 @@ Route::group(['as' => 'admin.'], function () {
         Route::post('schedules/store', 'ScheduleController@store')
             ->name('schedules.register');
 
-        Route::get('schedules/{id}/choose-time', 'ScheduleController@scheduleTimeShow')
-            ->name('schedules.scheduleTimeShow');
+        // Route::get('schedules/{id}/choose-time', 'ScheduleController@scheduleTimeShow')
+        //     ->name('schedules.scheduleTimeShow');
 
-        Route::post('schedules/{id}/choose-time', 'ScheduleController@scheduleTime')
-            ->name('schedules.scheduleTime');
+        // Route::post('schedules/{id}/choose-time', 'ScheduleController@scheduleTime')
+        //     ->name('schedules.scheduleTime');
 
         Route::get('schedules/students', 'ScheduleStudentController@index')
             ->name('schedules.students.index');
+
+        Route::post('schedules/students/status', 'ScheduleStudentController@registerCreditStatus')
+            ->name('schedules.students.status');
 
         Route::get('schedules/students/{id}', 'ScheduleStudentController@registerScheduleShow')
             ->name('schedules.students.registerScheduleShow');
 
         Route::post('schedules/students/{id}', 'ScheduleStudentController@registerSchedule')
             ->name('schedules.students.registerSchedule');
-
-        Route::post('schedules/students/status', 'ScheduleStudentController@registerCreditStatus')
-            ->name('schedules.students.status');
 
         Route::get('schedules/class', 'ScheduleClassController@index')
             ->name('schedules.classes.index');

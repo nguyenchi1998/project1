@@ -134,6 +134,7 @@ class SpecializationController extends Controller
         $subjects = $this->subjectRepository->all();
         $subjects = $subjects->map(function ($subject) use ($specialization) {
             $subject['can_not_edit'] = $subject->type == config('config.subject.type.basic');
+            $subject['isBasic'] = $subject->type == config('config.subject.type.basic');
             $subject['choose'] = $specialization->subjects->contains($subject->id);
             $subject['force'] =  $specialization->subjects->contains(function ($item) use ($subject) {
                 return $item->id == $subject->id
@@ -143,7 +144,8 @@ class SpecializationController extends Controller
                 return $specialization->subjects->contains('id', $subject->id) && $subjectItem->id ==  $subject->id;
             })->pivot->semester ?? null;
             return $subject;
-        })->sortBy('type');
+        })
+            ->sortBy('type');
 
         return view('admin.specialization.choose_subject', compact('specialization', 'subjects', 'specializationSubjects', 'basicSemesters', 'specializationSemesters'));
     }
