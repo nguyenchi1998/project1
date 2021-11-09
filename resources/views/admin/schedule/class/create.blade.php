@@ -43,8 +43,7 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="table-responsive mb-3 table-scroll">
+                <div class="table-responsive table-scroll">
                     <table class="table table-bordered table-hover" id="subjects">
                         <thead>
                             <tr>
@@ -72,8 +71,8 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="d-flex justify-content-end">
-                    {{ Form::submit('Register', ['id' => 'submit', 'class' => 'btn btn-sm btn-outline-info']) }}
+                <div class="mt-3 d-flex justify-content-end">
+                    {{ Form::submit('Đăng Ký', ['id' => 'submit', 'class' => 'btn btn-sm btn-outline-info']) }}
                 </div>
             </div>
         </div>
@@ -82,12 +81,12 @@
 @endsection
 @section('script')
 <script>
-    $(document).on('click', '#submit', function(event) {
+    jQuery(document).on('click', '#submit', function(event) {
         event.preventDefault();
         let subjects = [];
-        $('#subjects').find('tbody tr:not(:last-child)').each(function(index, tr) {
-            let subject_id = $(tr).find('' + 'td:eq(0)').find('input').val();
-            let selected = $(tr).find('' + 'td:eq(2)').find('input').is(':checked');
+        jQuery('#subjects').find('tbody tr:not(:last-child)').each(function(index, tr) {
+            let subject_id = jQuery(tr).find('' + 'td:eq(0)').find('input').val();
+            let selected = jQuery(tr).find('' + 'td:eq(2)').find('input').is(':checked');
             if (selected)
                 subjects = [
                     ...subjects,
@@ -112,21 +111,21 @@
         });
     });
 
-    $(document).on('change', '.selectSubject', function(event) {
+    jQuery(document).on('change', '.selectSubject', function(event) {
         event.preventDefault();
-        let total = $('#subjects').find('tbody tr:not(:last-child)').filter(function(index, tr) {
-            return $(tr).find('' + 'td:eq(2)').find('input').is(':checked');
+        let total = jQuery('#subjects').find('tbody tr:not(:last-child)').filter(function(index, tr) {
+            return jQuery(tr).find('' + 'td:eq(2)').find('input').is(':checked');
         }).toArray().reduce(function(total, tr) {
-            return total += Number($(tr).find('' + 'td:eq(1)').find('input').val());
+            return total += Number(jQuery(tr).find('' + 'td:eq(1)').find('input').val());
         }, 0);
-        $('#total_credit').text(total)
-        if (total > parseInt($('#max_credit_register').text(), 10)) {
-            $('#warning').removeClass('d-none')
+        jQuery('#total_credit').text(total)
+        if (total > parseInt(jQuery('#max_credit_register').text(), 10)) {
+            jQuery('#warning').removeClass('d-none')
 
         } else {
-            $('#warning').addClass('d-none')
+            jQuery('#warning').addClass('d-none')
         }
-        $('#submit').attr('disabled', total > parseInt($('#max_credit_register').text(), 10))
+        jQuery('#submit').attr('disabled', total > parseInt(jQuery('#max_credit_register').text(), 10))
     })
 </script>
 @endsection

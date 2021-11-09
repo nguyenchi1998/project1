@@ -29,7 +29,7 @@
                     <a class="btn btn-sm d-flex align-items-center btn-outline-success" href="{{ route('admin.specializations.create') }}">Tạo mới</a>
                 </div>
                 <div class="table-responsive table-scroll">
-                    <table class="table table-bordered table-hover ">
+                    <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
                                 <th>Lớp Học</th>

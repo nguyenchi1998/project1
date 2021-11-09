@@ -40,7 +40,7 @@ class CreditController extends Controller
             $credits->load(['subject', 'schedule']);
         }
 
-        return view('credit.index', compact('credits', 'semester', 'semesterFilter'));
+        return view('student.credit.index', compact('credits', 'semester', 'semesterFilter'));
     }
 
     public function create(Request $request)
@@ -57,7 +57,7 @@ class CreditController extends Controller
         $filter = $request->get('filter');
         $student = Auth::user();
 
-        return view('credit.create', compact('filter', 'student', 'subjects'));
+        return view('student.credit.create', compact('filter', 'student', 'subjects'));
     }
 
     public function store(Request $request)

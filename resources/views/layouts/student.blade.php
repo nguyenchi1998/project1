@@ -3,249 +3,300 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>@yield('title')</title>
-    <link rel="stylesheet" href="{{ asset('asset/css/materialdesignicons.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('asset/vendors/css/vendor.bundle.base.css') }}">
-    <link rel="stylesheet" href="{{ asset('asset/css/style.css') }}">
-    <link rel="shortcut icon" href="{{ asset('asset/images/favicon.ico') }}"/>
-    @yield('css')
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Manager | HUST</title>
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href="{{ asset('plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="{{ asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
+    <!-- JQVMap -->
+    <link rel="stylesheet" href="{{ asset('plugins/jqvmap/jqvmap.min.css') }}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="{{ asset('plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}">
+    <!-- summernote -->
+    <link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.min.css') }}">
+    <!-- custom -->
+    <link rel="stylesheet" href="{{ asset('dist/css/custom.css') }}">
 </head>
 
-<body>
-<div class="container-scroller">
-    <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-            <a class="navbar-brand brand-logo" href="{{ route('home') }}">
-                <img src="{{asset('asset/images/logo.svg') }}" alt="logo"/>
-            </a>
-            <a class="navbar-brand brand-logo-mini" href="{{ route('home') }}"><img
-                        src="{{ asset('asset/images/logo-mini.svg') }}" alt="logo"/></a>
-        </div>
-        <div class="navbar-menu-wrapper d-flex align-items-stretch">
-            <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
-                <span class="mdi mdi-menu"></span>
-            </button>
-            <div class="search-field d-none d-md-block">
-                <form class="d-flex align-items-center h-100" action="#">
-                    <div class="input-group">
-                        <div class="input-group-prepend bg-transparent">
-                            <i class="input-group-text border-0 mdi mdi-magnify"></i>
-                        </div>
-                        <input type="text" class="form-control bg-transparent border-0" placeholder="Search projects">
-                    </div>
-                </form>
-            </div>
-            <ul class="navbar-nav navbar-nav-right">
-                <li class="nav-item nav-profile dropdown">
-                    <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown"
-                       aria-expanded="false">
-                        <div class="nav-profile-img">
-                            <img src="{{ assetStorage(auth()->user()->avatar->path ?? '') }}" alt="image">
-                            <span class="availability-status online"></span>
-                        </div>
-                        <div class="nav-profile-text">
-                            <p class="mb-1 text-black">{{ auth()->user()->name ?? '' }}</p>
-                        </div>
-                    </a>
-                    <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
-                        <a class="dropdown-item" href="#">
-                            <i class="mdi mdi-cached mr-2 text-success"></i> Activity Log </a>
-                        <div class="dropdown-divider"></div>
-                        {{ Form::open(['url' => route('logout'), 'method' => 'POST']) }}
-                        <button class="dropdown-item">
-                            <i class="mdi mdi-logout mr-2 text-primary"></i> Signout
-                        </button>
-                        {{ Form::close() }}
-                    </div>
+<body class="hold-transition sidebar-mini layout-fixed">
+    <div class="wrapper">
+        <!-- <div class="preloader flex-column justify-content-center align-items-center">
+            <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
+        </div> -->
+
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
-                <li class="nav-item d-none d-lg-block full-screen-link">
-                    <a class="nav-link">
-                        <i class="mdi mdi-fullscreen" id="fullscreen-button"></i>
-                    </a>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="index3.html" class="nav-link">Home</a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#"
-                       data-toggle="dropdown" aria-expanded="false">
-                        <i class="mdi mdi-email-outline"></i>
-                        <span class="count-symbol bg-warning"></span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
-                         aria-labelledby="messageDropdown">
-                        <h6 class="p-3 mb-0">Messages</h6>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item preview-item">
-                            <div class="preview-thumbnail">
-                                <img src="{{ asset('asset/images/faces/face4.jpg') }}" alt="image" class="profile-pic">
-                            </div>
-                            <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                                <h6 class="preview-subject ellipsis mb-1 font-weight-normal">Mark send you a
-                                    message</h6>
-                                <p class="text-gray mb-0"> 1 Minutes ago </p>
-                            </div>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item preview-item">
-                            <div class="preview-thumbnail">
-                                <img src="{{ asset('asset/images/faces/face2.jpg') }}" alt="image" class="profile-pic">
-                            </div>
-                            <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                                <h6 class="preview-subject ellipsis mb-1 font-weight-normal">Cregh send you a
-                                    message</h6>
-                                <p class="text-gray mb-0"> 15 Minutes ago </p>
-                            </div>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item preview-item">
-                            <div class="preview-thumbnail">
-                                <img src="{{ asset('asset/images/faces/face3.jpg') }}" alt="image" class="profile-pic">
-                            </div>
-                            <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                                <h6 class="preview-subject ellipsis mb-1 font-weight-normal">Profile picture
-                                    updated</h6>
-                                <p class="text-gray mb-0"> 18 Minutes ago </p>
-                            </div>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <h6 class="p-3 mb-0 text-center">4 new messages</h6>
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#"
-                       data-toggle="dropdown">
-                        <i class="mdi mdi-bell-outline"></i>
-                        <span class="count-symbol bg-danger"></span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
-                         aria-labelledby="notificationDropdown">
-                        <h6 class="p-3 mb-0">Notifications</h6>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item preview-item">
-                            <div class="preview-thumbnail">
-                                <div class="preview-icon bg-success">
-                                    <i class="mdi mdi-calendar"></i>
-                                </div>
-                            </div>
-                            <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                                <h6 class="preview-subject font-weight-normal mb-1">Event today</h6>
-                                <p class="text-gray ellipsis mb-0"> Just a reminder that you have an event today </p>
-                            </div>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item preview-item">
-                            <div class="preview-thumbnail">
-                                <div class="preview-icon bg-warning">
-                                    <i class="mdi mdi-settings"></i>
-                                </div>
-                            </div>
-                            <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                                <h6 class="preview-subject font-weight-normal mb-1">Settings</h6>
-                                <p class="text-gray ellipsis mb-0"> Update Bảng Điều Khiển </p>
-                            </div>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item preview-item">
-                            <div class="preview-thumbnail">
-                                <div class="preview-icon bg-info">
-                                    <i class="mdi mdi-link-variant"></i>
-                                </div>
-                            </div>
-                            <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                                <h6 class="preview-subject font-weight-normal mb-1">Launch Admin</h6>
-                                <p class="text-gray ellipsis mb-0"> New admin wow! </p>
-                            </div>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <h6 class="p-3 mb-0 text-center">See all notifications</h6>
-                    </div>
-                </li>
-                <li class="nav-item nav-logout d-none d-lg-block">
-                    <a class="nav-link" href="#">
-                        <i class="mdi mdi-power"></i>
-                    </a>
-                </li>
-                <li class="nav-item nav-settings d-none d-lg-block">
-                    <a class="nav-link" href="#">
-                        <i class="mdi mdi-format-line-spacing"></i>
-                    </a>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="#" class="nav-link">Contact</a>
                 </li>
             </ul>
-            <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
-                    data-toggle="offcanvas">
-                <span class="mdi mdi-menu"></span>
-            </button>
-        </div>
-    </nav>
-    <div class="container-fluid page-body-wrapper">
-        <nav class="sidebar sidebar-offcanvas" id="sidebar">
-            <ul class="nav">
-                <li class="nav-item nav-profile">
-                    <a href="#" class="nav-link">
-                        <div class="nav-profile-image">
-                            <img src="{{ assetStorage(auth()->user()->avatar->path ?? '') }}" alt="profile">
-                            <span class="login-status online"></span>
-                        </div>
-                        <div class="nav-profile-text d-flex flex-column">
-                            <span class="font-weight-bold mb-2">{{ auth()->user()->name ?? '' }}</span>
-                            <span class="text-secondary text-small text-uppercase">{{ get_guard() }}</span>
-                        </div>
-                        <div class="ml-1">
-                            <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
-                        </div>
+
+            <!-- Right navbar links -->
+            <ul class="navbar-nav ml-auto">
+                <!-- Navbar Search -->
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="navbar-search" href="#" role="button">
+                        <i class="fas fa-search"></i>
+                    </a>
+                    <div class="navbar-search-block">
+                        <form class="form-inline">
+                            <div class="input-group input-group-sm">
+                                <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+                                <div class="input-group-append">
+                                    <button class="btn btn-navbar" type="submit">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                    <button class="btn btn-navbar" type="button" data-widget="navbar-search">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </li>
+
+                <!-- Messages Dropdown Menu -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link" data-toggle="dropdown" href="#">
+                        <i class="far fa-comments"></i>
+                        <span class="badge badge-danger navbar-badge">3</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        <a href="#" class="dropdown-item">
+                            <!-- Message Start -->
+                            <div class="media">
+                                <img src="{{ asset('dist/img/user1-128x128.jpg') }}" alt="User Avatar" class="img-size-50 mr-2 img-circle">
+                                <div class="media-body">
+                                    <h3 class="dropdown-item-title">
+                                        Brad Diesel
+                                        <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
+                                    </h3>
+                                    <p class="text-sm">Call me whenever you can...</p>
+                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                                </div>
+                            </div>
+                            <!-- Message End -->
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <!-- Message Start -->
+                            <div class="media">
+                                <img src="{{ asset('dist/img/user8-128x128.jpg') }}" alt="User Avatar" class="img-size-50 img-circle mr-2">
+                                <div class="media-body">
+                                    <h3 class="dropdown-item-title">
+                                        John Pierce
+                                        <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
+                                    </h3>
+                                    <p class="text-sm">I got your message bro</p>
+                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                                </div>
+                            </div>
+                            <!-- Message End -->
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <!-- Message Start -->
+                            <div class="media">
+                                <img src="{{ asset('dist/img/user3-128x128.jpg') }}" alt="User Avatar" class="img-size-50 img-circle mr-2">
+                                <div class="media-body">
+                                    <h3 class="dropdown-item-title">
+                                        Nora Silvester
+                                        <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
+                                    </h3>
+                                    <p class="text-sm">The subject goes here</p>
+                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                                </div>
+                            </div>
+                            <!-- Message End -->
+                        </a>alert
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+                    </div>
+                </li>
+                <!-- Notifications Dropdown Menu -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link" data-toggle="dropdown" href="#">
+                        <i class="far fa-bell"></i>
+                        <span class="badge badge-warning navbar-badge">15</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        <span class="dropdown-item dropdown-header">15 Notifications</span>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-envelope mr-2"></i> 4 new messages
+                            <span class="float-right text-muted text-sm">3 mins</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-users mr-2"></i> 8 friend requests
+                            <span class="float-right text-muted text-sm">12 hours</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-file mr-2"></i> 3 new reports
+                            <span class="float-right text-muted text-sm">2 days</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+                        <i class="fas fa-expand-arrows-alt"></i>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('home') }}">
-                        <span class="menu-title">Bảng Điều Khiển</span>
-                        <i class="mdi mdi-home menu-icon"></i>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('credits.index') }}">
-                        <span class="menu-title">Credit</span>
-                        <i class="mdi mdi-contacts menu-icon"></i>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('marks.index') }}">
-                        <span class="menu-title">Mark</span>
-                        <i class="mdi mdi-contacts menu-icon"></i>
+                    <a class="nav-link" href="{{ route('admin.logout') }}">
+                        <i class="fas fa-sign-out-alt"></i>
                     </a>
                 </li>
             </ul>
         </nav>
-        <div class="main-panel">
-            <div class="content-wrapper">
-                @yield('breadcrumb')
-                @if($errors->any())
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <strong>Warning!</strong> {{ $errors->first() }}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <!-- Brand Logo -->
+            <a href="index3.html" class="brand-link">
+                <img src="{{ asset('img/logo_small.jpeg') }}" alt="AdminLTE Logo" class="brand-image elevation-3" style="opacity: .8">
+                <span class="brand-text font-weight-light text-capitalize">Data Warehouse</span>
+            </a>
+            <div class="sidebar">
+                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                    <div class="image">
+                        <img src="{{ assetStorage(auth()->user()->avatar->path ?? '') }}" class="img-circle elevation-2" alt="User Image">
                     </div>
-                @endif
-                @if(session()->has('success'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <strong>Success!</strong> {{ session()->get('success') }}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                    <div class="info">
+                        <a href="#" class="d-block text-capitalize">{{ auth()->user()->name ?? get_guard() }}</a>
                     </div>
-                @endif
-                @yield('main')
+                </div>
+                <nav class="mt-3">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        <li class="nav-item">
+                            <a href="{{ route('home') }}" class="nav-link">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>
+                                    Bảng Điều Khiển
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-header text text-uppercase">Khoa Viện</li>
+                        <li class="nav-item">
+                            <a href="{{ route('credits.index') }}" class="nav-link">
+                                <i class="nav-icon far fa-calendar-alt"></i>
+                                <p>
+                                    Tín Chỉ
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('marks.index') }}" class="nav-link">
+                                <i class="nav-icon far fa-calendar-alt"></i>
+                                <p>
+                                    Điểm Số
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
+        </aside>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        @yield('breadcrumb')
+                    </div><!-- /.row -->
+                </div>
+                @if($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fa fa-exclamation-circle"></i> {{ $errors->first() }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                @endif
+                @if(session()->has('message'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fa fa-check-circle"></i> {{ session()->get('message') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                @endif
+            </div>
+            <section class="content">
+                <div class="container-fluid">
+                    <!-- table table-bordered table-hover dataTable -->
+                    @yield('main')
+                </div>
+            </section>
         </div>
+        <footer class="main-footer">
+            <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+            All rights reserved.
+            <div class="float-right d-none d-sm-inline-block">
+                <b>Version</b> 3.2.0-rc
+            </div>
+        </footer>
+
+        <!-- /.control-sidebar -->
     </div>
-</div>
-<script src="{{ asset('asset/vendors/js/vendor.bundle.base.js') }}"></script>
-<script src="{{ asset('asset/vendors/chart.js/Chart.min.js') }}"></script>
-<script src="{{ asset('asset/js/off-canvas.js') }}"></script>
-<script src="{{ asset('asset/js/hoverable-collapse.js') }}"></script>
-<script src="{{ asset('asset/js/misc.js') }}"></script>
-<script src="{{ asset('asset/js/Bảng Điều Khiển.js') }}"></script>
-<script src="{{ asset('asset/js/todolist.js') }}"></script>
-@yield('script')
+    <!-- ./wrapper -->
+
+    <!-- jQuery -->
+    <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="{{ asset('plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+        $.widget.bridge('uibutton', $.ui.button)
+    </script>
+    <!-- Bootstrap 4 -->
+    <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- ChartJS -->
+    <script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script>
+    <!-- Sparkline -->
+    <script src="{{ asset('plugins/sparklines/sparkline.js') }}"></script>
+    <!-- JQVMap -->
+    <script src="{{ asset('plugins/jqvmap/jquery.vmap.min.js') }}"></script>
+    <script src="{{ asset('plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script>
+    <!-- jQuery Knob Chart -->
+    <script src="{{ asset('plugins/jquery-knob/jquery.knob.min.js') }}"></script>
+    <!-- daterangepicker -->
+    <script src="{{ asset('plugins/moment/moment.min.js') }}"></script>
+    <script src="{{ asset('plugins/daterangepicker/daterangepicker.js') }}"></script>
+    <!-- Tempusdominus Bootstrap 4 -->
+    <script src="{{ asset('plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
+    <!-- Summernote -->
+    <script src="{{ asset('plugins/summernote/summernote-bs4.min.js') }}"></script>
+    <!-- overlayScrollbars -->
+    <script src="{{ asset('plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
+    <!-- AdminLTE App -->
+    <script src="{{ asset('dist/js/adminlte.js') }}"></script>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="{{ asset('dist/js/pages/dashboard.js') }}"></script>
+    @yield('script')
 </body>
 
 </html>

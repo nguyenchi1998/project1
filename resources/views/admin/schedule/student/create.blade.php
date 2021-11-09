@@ -40,9 +40,8 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="table-responsive mb-3">
-                    {{ Form::open(['url' => route('admin.schedules.register', $student->id), 'method' => 'post']) }}
+                {{ Form::open(['url' => route('admin.schedules.register', $student->id), 'method' => 'post']) }}
+                <div class="table-responsive">
                     <table class="table table-bordered table-hover" id="subjects">
                         <thead>
                             <tr>
@@ -67,13 +66,13 @@
                                 </td>
                             </tr>
                             @endforeach
-                            <tr align="right">
-                                <td colspan="3">{{ Form::submit('Register', ['id' => 'submit', 'class' => 'btn btn-sm btn-outline-info']) }}</td>
-                            </tr>
                         </tbody>
                     </table>
-                    {{ Form::close() }}
                 </div>
+                <div class="mt-3 d-flex justify-content-end">
+                    {{ Form::submit('Đăng Ký', ['id' => 'submit', 'class' => 'btn btn-sm btn-outline-info']) }}
+                </div>
+                {{ Form::close() }}
             </div>
         </div>
     </div>
@@ -81,13 +80,13 @@
 @endsection
 @section('script')
 <script>
-    $(document).on('click', '#submit', function(event) {
+    jQuery(document).on('click', '#submit', function(event) {
         event.preventDefault();
         let subjects = [];
-        $('#subjects').find('tbody tr:not(:last-child)').each(function(index, tr) {
-            let subject_id = $(tr).find('' + 'td:eq(0)').find('input').val();
-            let student_id = $(tr).find('' + 'td:eq(1)').find('input').val();
-            let selected = $(tr).find('' + 'td:eq(2)').find('input').is(':checked');
+        jQuery('#subjects').find('tbody tr:not(:last-child)').each(function(index, tr) {
+            let subject_id = jQuery(tr).find('' + 'td:eq(0)').find('input').val();
+            let student_id = jQuery(tr).find('' + 'td:eq(1)').find('input').val();
+            let selected = jQuery(tr).find('' + 'td:eq(2)').find('input').is(':checked');
             if (selected)
                 subjects = [
                     ...subjects,
@@ -113,13 +112,13 @@
         });
     });
 
-    // $(document).on('change', '.selectSubject', function(event) {
+    // jQuery(document).on('change', '.selectSubject', function(event) {
     //     event.preventDefault();
 
-    //     let subjects = $('#subjects').find('tbody tr:not(:last-child)').filter(function(index, tr) {
-    //         return $(tr).find('' + 'td:eq(2)').find('input').is(':checked');
+    //     let subjects = jQuery('#subjects').find('tbody tr:not(:last-child)').filter(function(index, tr) {
+    //         return jQuery(tr).find('' + 'td:eq(2)').find('input').is(':checked');
     //     }).toArray();
-    //     $('#submit').attr('disabled', !subjects.length)
+    //     jQuery('#submit').attr('disabled', !subjects.length)
     // })
 </script>
 @endsection

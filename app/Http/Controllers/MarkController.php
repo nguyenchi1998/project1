@@ -36,6 +36,6 @@ class MarkController extends Controller
             })
             ->get()->load(['subject', 'schedule']);
 
-        return view('mark.index', compact('subjects', 'semester', 'semesterFilter'));
+        return view('student.mark.index', compact('subjects', 'semester', 'semesterFilter'));
     }
 }

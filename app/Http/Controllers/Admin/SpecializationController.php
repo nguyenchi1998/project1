@@ -20,7 +20,8 @@ class SpecializationController extends Controller
         ISpecializationRepository $specializationRepository,
         IDepartmentRepository     $departmentRepository,
         ISubjectRepository        $subjectRepository
-    ) {
+    )
+    {
         $this->specializationRepository = $specializationRepository;
         $this->subjectRepository = $subjectRepository;
         $this->departmentRepository = $departmentRepository;
@@ -135,13 +136,13 @@ class SpecializationController extends Controller
         $subjects = $subjects->map(function ($subject) use ($specialization) {
             $subject['can_not_edit'] = $subject->type == config('config.subject.type.basic');
             $subject['choose'] = $specialization->subjects->contains($subject->id);
-            $subject['force'] =  $specialization->subjects->contains(function ($item) use ($subject) {
+            $subject['force'] = $specialization->subjects->contains(function ($item) use ($subject) {
                 return $item->id == $subject->id
                     && $item->pivot->force == config('config.subject.force');
             });
             $subject['semester'] = $specialization->subjects->first(function ($subjectItem) use ($subject, $specialization) {
-                return $specialization->subjects->contains('id', $subject->id) && $subjectItem->id ==  $subject->id;
-            })->pivot->semester ?? null;
+                    return $specialization->subjects->contains('id', $subject->id) && $subjectItem->id == $subject->id;
+                })->pivot->semester ?? null;
             return $subject;
         })->sortBy('type');
 

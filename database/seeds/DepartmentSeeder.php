@@ -384,7 +384,6 @@ class DepartmentSeeder extends Seeder
             ) as $subject) {
                 $subjects[$subject] = [
                     'force' => $faker->randomElement([0, 1]),
-                    'semester' => $faker->randomElement(range(5, 9))
                 ];
             };
             $specialization->subjects()->attach($subjects);

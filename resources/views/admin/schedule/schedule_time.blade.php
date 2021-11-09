@@ -68,16 +68,16 @@
 @endsection
 @section('script')
 <script>
-    $(document).on('click', '#submit', function(event) {
+    jQuery(document).on('click', '#submit', function(event) {
         event.preventDefault();
         let timeschedules = [];
-        $('#schedule-time').find('tbody tr:not(:last-child)').each(function(index, tr) {
-            let weekday = $(tr).find('' + 'td:eq(0)').find('input').val();
-            let selected = $(tr).find('' + 'td:eq(0)').find('input').is(':checked');
-            let weektimes = $(tr).find('' + 'td:eq(1)').find('input').filter(function(index, item) {
+        jQuery('#schedule-time').find('tbody tr:not(:last-child)').each(function(index, tr) {
+            let weekday = jQuery(tr).find('' + 'td:eq(0)').find('input').val();
+            let selected = jQuery(tr).find('' + 'td:eq(0)').find('input').is(':checked');
+            let weektimes = jQuery(tr).find('' + 'td:eq(1)').find('input').filter(function(index, item) {
                 return item.checked;
             }).map(function(index, item) {
-                return $(item).val();
+                return jQuery(item).val();
             }).toArray();
             if (selected && weektimes.length)
                 timeschedules = [

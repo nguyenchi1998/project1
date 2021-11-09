@@ -56,6 +56,7 @@
                                 </td>
                                 <td style="width: 150px" class="text-center">
                                     {{ $subject->credit }}
+                                    {{ Form::text('basic', $subject->type, ['hidden' => true]) }}
                                 </td>
                                 <td style="width: 150px" class="text-center">
                                     {{ $subject->type ? 'Chuyên Ngành' : 'Cơ Bản' }}
@@ -88,24 +89,24 @@
 @endsection
 @section('script')
 <script>
-    $(document).on('click', '#submit', function(event) {
+    jQuery(document).on('click', '#submit', function(event) {
         event.preventDefault();
         let subjects = [];
-        $('#subjects').find('tbody tr').each(function(index, tr) {
-            let subject_id = $(tr).find('' + 'td:first-child').find('input').val();
-            let semester = $(tr).find('' + 'td:eq(3)').find('.semester option:selected').val();
-            let selected = $(tr).find('' + 'td:first-child').find('input').is(':checked');
-            let force = $(tr).find('' + 'td:last-child').find('input').is(':checked');
+        jQuery('#subjects').find('tbody tr').each(function(index, tr) {
+            let subject_id = jQuery(tr).find('' + 'td:first-child').find('input').val();
+            let isBasic = jQuery(tr).find('' + 'td:eq(2)').find('input').val();
+            let semester = jQuery(tr).find('' + 'td:eq(3)').find('.semester option:selected').val();
+            let selected = jQuery(tr).find('' + 'td:first-child').find('input').is(':checked');
+            let force = jQuery(tr).find('' + 'td:last-child').find('input').is(':checked');
             if (selected)
                 subjects = {
                     ...subjects,
                     [subject_id]: {
                         force: Number(force),
-                        semester: Number(semester),
+                        semester: (isBasic ? null : Number(semester)),
                     }
                 }
         });
-        console.log(subjects);
         $.ajax({
             url: "{{ route('admin.specializations.choose_subject', $specialization->id) }}",
             method: 'post',
@@ -121,8 +122,8 @@
             }
         });
     });
-    $(document).on('change', '.selectedSubject', function(event) {
-        let target = $(event.target).closest('tr')
+    jQuery(document).on('change', '.selectedSubject', function(event) {
+        let target = jQuery(event.target).closest('tr')
         target.find('td:eq(3)')
             .find('input')
             .attr('disabled', !this.checked)

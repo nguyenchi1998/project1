@@ -42,6 +42,6 @@ class LoginController extends Controller
     {
         Auth::guard('admin')->logout();
         Auth::guard('teacher')->logout();
-        return view('login');
+        return view('student.login');
     }
 }

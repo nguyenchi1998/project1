@@ -79,14 +79,14 @@
 @endsection
 @section('script')
 <script>
-    $(document).on('click', '#submit', function() {
+    jQuery(document).on('click', '#submit', function() {
         let students = [];
-        $('#mark').find('tbody tr').each(function(index, tr) {
+        jQuery('#mark').find('tbody tr').each(function(index, tr) {
             let student = {};
-            $(tr).find('' + 'td').find('input').each(function(index, input) {
+            jQuery(tr).find('' + 'td').find('input').each(function(index, input) {
                 student = {
                     ...student,
-                    [$(input).attr('name')]: $(input).val(),
+                    [jQuery(input).attr('name')]: jQuery(input).val(),
                 }
             })
             students.push(student);
