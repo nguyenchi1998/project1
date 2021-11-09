@@ -28,16 +28,29 @@ class ScheduleController extends Controller
         $states = array_map(function ($status) {
             return ucfirst($status);
         }, array_flip(config('config.status.schedule')));
-        $schedules = $this->scheduleRepository->where('teacher_id', '=', $teacher->id)
+        $statusSchedules = $this->scheduleRepository->where('teacher_id', '=', $teacher->id)
             ->whereIn('status', array_flip($states))
             ->when(isset($status), function ($query) use ($status) {
                 $query->where('status', $status);
             })
             ->get()
-            ->load('subject')
+            ->load(['subject', 'class.students'])
             ->groupBy('status');
 
-        return view('teacher.schedule', compact('schedules', 'states', 'status'));
+        return view('teacher.schedule', compact('statusSchedules', 'states', 'status'));
+    }
+
+    public function status(Request $request, $id)
+    {
+        $status = $request->get('status');
+        if ($status == config('config.status.schedule.new')) {
+            return $this->failRouteRedirect('Bạn không thể chỉnh trạng thái về trạng thái mới');
+        } else {
+            $this->scheduleRepository->update($id, [
+                'status' => $status,
+            ]);
+            return $this->successRouteRedirect('teacher.schedules.index');
+        }
     }
 
     public function attendanceShow($id)
@@ -51,11 +64,7 @@ class ScheduleController extends Controller
 
     public function attendance($id)
     {
-        $schedule = $this->scheduleRepository->find($id)
-            ->load('scheduleDetails.student');
-        $scheduleDetails = $schedule->scheduleDetails;
-
-        return view('teacher.attendance', compact('scheduleDetails', 'schedule'));
+        return $this->successRouteRedirect('admin.schedules.attendanceShow', $id);
     }
 
     public function markShow(Request $request, $id)

@@ -39,7 +39,7 @@
                         <thead>
                             <tr>
                                 <th>Môn Học</th>
-                                <th></th>
+                                <th class="text-center">{{ Form::checkbox('all', null, false, ['id' => 'all']) }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -49,7 +49,7 @@
                                     {{ $subject['name'] }}
                                 </td>
                                 <td class="text-center">
-                                    {{ Form::checkbox('subject_id[]', $subject['id'], in_array($subject['id'], $teacherSubjects)) }}
+                                    {{ Form::checkbox('subject_id[]', $subject['id'], in_array($subject['id'], $teacherSubjects), ['class' => 'subject']) }}
                                 </td>
                             </tr>
                             @endforeach
@@ -66,4 +66,11 @@
     </div>
 </div>
 @endsection
-@section('script') @endsection
+@section('script')
+<script>
+    $(document).on('change', '#all', function(event) {
+        event.preventDefault();
+        $('.subject').attr('checked', this.checked);
+    })
+</script>
+@endsection

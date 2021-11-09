@@ -35,9 +35,7 @@
                                 <th>Quản Trị Viên</th>
                                 <th>Email</th>
                                 <th>Số Điện Thoại</th>
-                                <th>Giới Tính</th>
                                 <th>Ngày Sinh</th>
-                                <th>Địa Chỉ</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -47,7 +45,7 @@
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <div class="mr-4">
-                                            <img class="img-circle elevation-2 img-avatar" src="{{ assetStorage($manager->avatar->path) }}" alt="avatar">
+                                            <img class="img-circle img-avatar" src="{{ assetStorage($manager->avatar->path) }}" alt="avatar">
                                         </div>
                                         {{ $manager->name }}
                                     </div>
@@ -57,12 +55,6 @@
                                 </td>
                                 <td>
                                     {{ $manager->phone }}
-                                </td>
-                                <td>
-                                    {{ $manager->gender ? 'Male' : 'Female' }}
-                                </td>
-                                <td>
-                                    {{ $manager->birthday }}
                                 </td>
                                 <td>
                                     {{ $manager->address }}

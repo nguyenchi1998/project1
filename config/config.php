@@ -53,6 +53,7 @@ return [
     ],
     'start_semester' => 1,
     'max_credit_register' => 20,
+    'max_credit_force_regiter' => 10,
     'limit' => [
         'studentInClass' => 20,
     ],

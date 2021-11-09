@@ -18,7 +18,7 @@ class TeacherSeeder extends Seeder
     public function run()
     {
         $faker = Faker\Factory::create();
-        $path = $faker->image(storage_path(config('default.path.app_public')), 35, 35);
+        $path = $faker->image(storage_path(config('default.path.app_public')), config('default.avatar_size'), config('default.avatar_size'));
         $teacher = Teacher::create([
             'name' => 'Teacher Chi',
             'gender' => 1,

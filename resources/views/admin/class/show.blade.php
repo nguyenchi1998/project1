@@ -43,7 +43,7 @@
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <div class="mr-4">
-                                            <img src="{{ assetStorage($student->avatar->path) }}" alt="avatar">
+                                            <img class="img-circle img-avatar" src="{{ assetStorage($student->avatar->path) }}" alt="avatar">
                                         </div>
                                         {{ $student->name }}
                                     </div>

@@ -13,5 +13,5 @@ return [
             '29/10', '01/08'
         ]
     ],
-    'avatar_size' => '35',
+    'avatar_size' => '200',
 ];

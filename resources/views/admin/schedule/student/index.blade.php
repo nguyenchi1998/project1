@@ -31,12 +31,12 @@
                     <div class="d-flex justify-content-between">
                         <form action="{{ route('admin.schedules.students.status') }}" method="post">
                             @csrf()
-                            <input type="hidden" name="status" value="{{ config('config.can_register_credit') }}">
+                            <input type="hidden" name="can_register_credit" value="{{ config('config.can_register_credit') }}">
                             <button type="submit" class="mr-2 btn btn-sm btn-outline-success">Mở Đăng Ký</button>
                         </form>
                         <form action="{{ route('admin.schedules.students.status') }}" method="post">
                             @csrf()
-                            <input type="hidden" name="status" value="{{ config('config.can_not_register_credit') }}">
+                            <input type="hidden" name="can_register_credit" value="{{ config('config.can_not_register_credit') }}">
                             <button type="submit" class="btn btn-sm btn-outline-danger">Đóng Đăng Ký</button>
                         </form>
                     </div>
@@ -70,7 +70,14 @@
                                     {{ $student->class->specialization->name }}
                                 </td>
                                 <td>
-                                    {{ $student->can_register_credit ? 'Mở' : 'Đóng' }}
+                                    <form action="{{ route('admin.schedules.students.status') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="id" value="{{ $student->id }}">
+                                        <select name="can_register_credit" class="form-control" onchange="this.form.submit()">
+                                            <option value="0" @if($student->can_register_credit) selected="selected" @endif> Đóng</option>
+                                            <option value="1" @if($student->can_register_credit) selected="selected" @endif>Mở</option>
+                                        </select>
+                                    </form>
                                 </td>
                                 <td class="text-center">
                                     <a href="{{ route('admin.schedules.students.registerScheduleShow', $student->id) }}" class="btn btn-sm btn-outline-success" data-toggle="tooltip" data-placement="top" title="Đăng Ký Tín Chỉ">

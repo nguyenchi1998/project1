@@ -9,7 +9,6 @@ use App\Repositories\ISubjectRepository;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use PDO;
 
 class SubjectController extends Controller
 {
@@ -82,15 +81,11 @@ class SubjectController extends Controller
     }
 
     public function update(Request $request, $id)
-    {
+    {   
         try {
             DB::beginTransaction();
-            $this->subjectRepository->update($id, [
-                'name' => $request->get('name'),
-                'credit' => $request->get('credit'),
-                'department_id' => $request->get('department_id'),
-            ]);
             $subject = $this->subjectRepository->find($id);
+            $subject->update($request->only(['name', 'credit']));
             $subject->specializations()->sync($request->get('specializations'));
             DB::commit();
 

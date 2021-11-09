@@ -50,4 +50,19 @@ class Schedule extends Model
     {
         return $this->belongsTo(Classs::class);
     }
+
+    public function newSchedule()
+    {
+        return $this->whereStatus(config('config.status.schedule.new'));
+    }
+
+    public function classSchedule()
+    {
+        return $this->where('class_id', '!=', null);
+    }
+
+    public function freeSchedule()
+    {
+        return $this->where('class_id', null);
+    }
 }

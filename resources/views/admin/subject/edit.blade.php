@@ -28,18 +28,6 @@
                     {{ Form::input('number', 'credit', $subject->credit, ['class' => 'form-control', 'id' => 'credit', 'placeholder' => 'Sô Tín Chỉ', 'min' => 1]) }}
                 </div>
                 <div class="form-group">
-                    {{ Form::label('department', 'Khoa Viện') }}
-                    @foreach($departments as $key => $department)
-                    <div class="form-check form-check-info">
-                        <label class="form-check-label">
-                            {{ Form::radio('department_id', $department->id, $department->id == $subject->department_id, ['class'=>'form-check-input']) }}
-                            {{ $department->name }}
-                            <i class="input-helper"></i>
-                        </label>
-                    </div>
-                    @endforeach
-                </div>
-                <div class="form-group">
                     <div class="form-check form-check-primary">
                         <label class="form-check-label">
                             {{ Form::checkbox('basic', config('config.subject.type.basic'), $subject->type == config('config.subject.type.basic'), ['class'=>'form-check-input']) }}

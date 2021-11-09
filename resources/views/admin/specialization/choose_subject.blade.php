@@ -59,7 +59,7 @@
                                     {{ Form::text('basic', $subject->type, ['hidden' => true]) }}
                                 </td>
                                 <td style="width: 150px" class="text-center">
-                                    {{ $subject->type ? 'Chuyên Ngành' : 'Cơ Bản' }}
+                                    {{ $subject->type ? ($subject['choose'] ? 'Chuyên Ngành' :'Tự Do') : 'Cơ Bản' }}
                                 </td>
                                 <td style="width: 150px">
                                     {{ Form::select('semester', $subject->type  == config('config.subject.type.basic') ? $basicSemesters : $specializationSemesters, $subject['semester'], ['class'=> 'form-control form-control-sm semester', 'placeholder' => 'Chọn kỳ học', 'disabled' => $subject['can_not_edit']]) }}
