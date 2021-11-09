@@ -39,6 +39,6 @@ class Classs extends Model
 
     public function newbieClass()
     {
-        return $this->where('semester', '<=', config('config.max_semester_register_by_class'));
+        return $this->where('semester', '<=', config('config.class_register_limit_semester'));
     }
 }

@@ -55,7 +55,7 @@ class OpenRegisterCredit extends Command
         $this->studentRepository->model()
             ->query()
             ->update([
-                'can_register_credit' => config('config.can_register_credit'),
+                'can_register_credit' => config('credit.register.can'),
             ]);
     }
 }

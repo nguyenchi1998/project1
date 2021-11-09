@@ -26,14 +26,15 @@ class ScheduleClassController extends Controller
     protected $gradeRepository;
 
     public function __construct(
-        IScheduleRepository $scheduleRepository,
+        IScheduleRepository       $scheduleRepository,
         IScheduleDetailRepository $scheduleDetailRepository,
         ISpecializationRepository $specializationRepository,
-        ISubjectRepository $subjectRepository,
-        IClassRepository $classRepository,
-        IStudentRepository $studentRepository,
-        IGradeRepository $gradeRepository
-    ) {
+        ISubjectRepository        $subjectRepository,
+        IClassRepository          $classRepository,
+        IStudentRepository        $studentRepository,
+        IGradeRepository          $gradeRepository
+    )
+    {
         $this->scheduleRepository = $scheduleRepository;
         $this->specializationRepository = $specializationRepository;
         $this->subjectRepository = $subjectRepository;
@@ -50,7 +51,7 @@ class ScheduleClassController extends Controller
         $keyword = $request->get('keyword');
         $semesters = array_map(function ($item) {
             return 'Kì ' . $item;
-        }, range(config('config.start_semester'),   config('config.max_semester_register_by_class')));
+        }, range(config('config.start_semester'), config('config.class_register_limit_semester')));
         $classes = $this->classRepository->model()
             ->newbieClass()
             ->when($keyword, function ($query) use ($keyword) {
@@ -66,30 +67,32 @@ class ScheduleClassController extends Controller
             ->paginate(config('config.paginate'));
         $classes->getCollection()->transform(function ($class) {
             $class['can_register'] = $class->schedules->reduce(function ($total, $schedule) {
-                $total += $schedule->subject->credit;
+                    $total += $schedule->subject->credit;
 
-                return $total;
-            }, 0) < config('config.max_credit_register');
+                    return $total;
+                }, 0) < config('credit.max_register');
             return $class;
         });
         $specalizations = $this->specializationRepository->all()
             ->pluck('name', 'id');
 
-        return view('admin.schedule.class.index', compact('classes',  'keyword', 'semesterFilter', 'specalizationFilter', 'semesters', 'specalizations'));
+        return view('admin.schedule.class.index', compact('classes', 'keyword', 'semesterFilter', 'specalizationFilter', 'semesters', 'specalizations'));
     }
 
     public function registerScheduleShow($id)
     {
         $class = $this->classRepository->find($id);
+        // lấy danh sách môn học cơ bản thuộc kì tiếp theo của lớp
         $basicSubjects = $this->subjectRepository->model()
             ->basicSubjects()
-            ->with(['specializations' => function ($query) use ($class) {
+            ->wherehas('specializations', function ($query) use ($class) {
                 $query->where('specializations.id', $class->specialization->id);
-            }])
+            })
             ->get()
             ->filter(function ($subject) use ($class) {
-                return $subject->specializations->first()->pivot->semester == $class->semester;
+                return $subject->specializations->first()->pivot->semester == $class->semester + 1;
             });
+        // danh sách các môn đã đăng kí của lớp ở kì tiếp theo
         $scheduleSubjects = $this->scheduleRepository->model()
             ->where('class_id', $id)
             ->with(['subject.specializations' => function ($query) use ($class) {
@@ -97,7 +100,7 @@ class ScheduleClassController extends Controller
             }])
             ->get()
             ->filter(function ($schedule) use ($class) {
-                return $schedule->subject->specializations->first()->pivot->semester == $class->semester;
+                return $schedule->subject->specializations->first()->pivot->semester == $class->semester + 1;
             })
             ->pluck('id', 'subject_id')
             ->toArray();
@@ -105,6 +108,9 @@ class ScheduleClassController extends Controller
         return view('admin.schedule.class.create', compact('basicSubjects', 'scheduleSubjects', 'class'));
     }
 
+    /**
+     * @throws InternalErrorException
+     */
     public function registerSchedule(Request $request, $id)
     {
         try {

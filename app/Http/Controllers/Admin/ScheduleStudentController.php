@@ -11,7 +11,6 @@ use App\Repositories\ISpecializationRepository;
 use App\Repositories\IStudentRepository;
 use App\Repositories\ISubjectRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ScheduleStudentController extends Controller
 {
@@ -31,7 +30,8 @@ class ScheduleStudentController extends Controller
         IClassRepository          $classRepository,
         IStudentRepository        $studentRepository,
         IGradeRepository          $gradeRepository
-    ) {
+    )
+    {
         $this->scheduleRepository = $scheduleRepository;
         $this->specializationRepository = $specializationRepository;
         $this->subjectRepository = $subjectRepository;
@@ -43,16 +43,16 @@ class ScheduleStudentController extends Controller
 
     public function index(Request $request)
     {
-        $filterGrade = $request->get('semester-filter');
+        $filterSemester = $request->get('semester-filter');
         $filterGrade = $request->get('grade-filter');
         $keyword = $request->get('keyword');
         $semesters = array_map(function ($item) {
             return 'Kì ' . $item;
-        }, range(config('config.max_semester_register_by_class') + 1, config('config.max_semester')));
+        }, range(config('config.class_register_limit_semester') + 1, config('config.max_semester')));
         // lấy ra danh sách sinh viên từ kì 5 (năm 3)
         $students = $this->studentRepository->model()
             ->whereHas('class', function ($query) {
-                $query->where('semester', '>', config('config.max_semester_register_by_class'));
+                $query->where('semester', '>', config('config.class_register_limit_semester'));
             })
             ->when($keyword, function ($query) use ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%')
@@ -61,7 +61,10 @@ class ScheduleStudentController extends Controller
             })
             ->paginate(config('config.paginate'));
         $students->getCollection()->transform(function ($student) {
-            $student['total_credit'] = $student->scheduleDetails->reduce(function ($total, $schedule) {
+            $classSemester = $student->class->semester;
+            // chưa xong
+            $student['total_credit'] = $student->scheduleDetails->filter(function($scheduleDetail) {
+            })->reduce(function ($total, $schedule) {
                 $total += $schedule->subject->credit;
 
                 return $total;
@@ -70,7 +73,7 @@ class ScheduleStudentController extends Controller
         });
         $grades = $this->gradeRepository->all()->pluck('name', 'id');
 
-        return view('admin.schedule.student.index', compact('students', 'keyword', 'filterGrade', 'grades', 'semesters'));
+        return view('admin.schedule.student.index', compact('students', 'keyword', 'filterGrade', 'grades', 'semesters', 'filterSemester'));
     }
 
     public function registerScheduleShow(Request $request, $id)
@@ -81,14 +84,14 @@ class ScheduleStudentController extends Controller
         $specialization = $this->specializationRepository->find($student->class->specialization_id)
             ->load([
                 'subjects' => function ($query) use ($class) {
-                    $query->whereType(config('config.subject.type.specialization'))
+                    $query->whereType(config('subject.type.specialization'))
                         ->where(function ($query) use ($class) {
                             $query->where('specialization_subject.semester', '>=', $class->semester)
                                 ->orWhere('specialization_subject.semester', null);
                         });
                 },
                 'subjects.schedules' => function ($query) {
-                    $query->where('status', config('config.status.schedule.new'))
+                    $query->where('status', config('schedule.status.new'))
                         ->where('class_id', null);
                 }
             ]);
@@ -111,7 +114,9 @@ class ScheduleStudentController extends Controller
             ->concat($forceSpecializationSubject)
             ->unique('id')
             ->reduce(function ($total, $subject) {
-                return $total += $subject->credit;
+                $total += $subject->credit;
+
+                return $total;
             }, 0);
 
         return view('admin.schedule.student.create', compact('specializationSubjects', 'student', 'scheduleDetails', 'totalCreditRegisted'));
@@ -126,7 +131,7 @@ class ScheduleStudentController extends Controller
             array_map(function ($item) use ($id) {
                 $item['student_id'] = $id;
                 return $item;
-            },  $request->get('subjects'))
+            }, $request->get('subjects'))
         );
 
         return $this->successRouteRedirect('admin.schedules.students.registerScheduleShow', $id);

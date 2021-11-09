@@ -93,7 +93,6 @@ class Repository implements IRepository
 
     public function saveImage($file, $fileName, $width, $height , $publicPath = 'storage')
     {
-        dd($width);
         $pathImage = $file->storeAs(config('default.path.public'), $fileName);
         $path = str_replace(config('default.path.public'), '', $pathImage);
         $img = Image::make(storage_path(config('default.path.app_public') . $path));

@@ -15,17 +15,18 @@ use ImageResize;
 
 class TeacherController extends Controller
 {
-    private $departmentRepository;
-    private $teacherRepository;
-    private $roleRepository;
-    private $subjectRepository;
+    protected $departmentRepository;
+    protected $teacherRepository;
+    protected $roleRepository;
+    protected $subjectRepository;
 
     public function __construct(
         IDepartmentRepository $departmentRepository,
         ITeacherRepository    $teacherRrpository,
         IRoleRepository       $roleRepository,
         ISubjectRepository    $subjectRepository
-    ) {
+    )
+    {
         $this->departmentRepository = $departmentRepository;
         $this->teacherRepository = $teacherRrpository;
         $this->roleRepository = $roleRepository;
@@ -74,8 +75,8 @@ class TeacherController extends Controller
                 'path' => $path
             ]);
             $teacherRole = $this->roleRepository->findByName(
-                config('config.roles.teacher.name'),
-                config('config.roles.teacher.guard')
+                config('role.rolesteacher.name'),
+                config('role.rolesteacher.guard')
             );
             $teacher->assignRole($teacherRole);
             DB::commit();

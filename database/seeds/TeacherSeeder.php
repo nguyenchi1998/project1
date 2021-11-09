@@ -31,7 +31,7 @@ class TeacherSeeder extends Seeder
             'path' => str_replace(storage_path(config('default.path.app_public')), '', $path),
         ]);
         $teacher->avatar()->save($media);
-        $teacherRole = Role::findByName(config('config.roles.teacher.name'), config('config.roles.teacher.name'));
+        $teacherRole = Role::findByName(config('role.rolesteacher.name'), config('role.rolesteacher.name'));
         $teacher->assignRole($teacherRole);
         $teacher->update([
             'department_id' => 1,

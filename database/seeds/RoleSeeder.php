@@ -20,7 +20,7 @@ class RoleSeeder extends Seeder
             ]);
         }
 
-        Role::findById(1, config('config.roles.super_admin.guard'))
+        Role::findById(1, config('role.rolessuper_admin.guard'))
             ->givePermissionTo(range(0, count(config('config.permissions'))));
     }
 }

@@ -20,7 +20,8 @@ class SubjectController extends Controller
         ISubjectRepository        $subjectRepository,
         ISpecializationRepository $specializationRepository,
         IDepartmentRepository     $departmentRepository
-    ) {
+    )
+    {
         $this->subjectRepository = $subjectRepository;
         $this->departmentRepository = $departmentRepository;
         $this->specializationRepository = $specializationRepository;
@@ -32,7 +33,7 @@ class SubjectController extends Controller
         $typeFilter = $request->get('type-filter');
         $types = array_map(function ($item) {
             return ucfirst($item);
-        }, array_flip(config('config.subject.type')));
+        }, array_flip(config('subject.type')));
         $subjects = $this->subjectRepository->withTrashedModel()
             ->when($typeFilter != null, function ($query) use ($typeFilter) {
                 $query->where('type', $typeFilter);
@@ -53,7 +54,7 @@ class SubjectController extends Controller
     {
         $departments = $this->departmentRepository->all();
 
-        return view('admin.subject.create', compact('departments', 'semesters'));
+        return view('admin.subject.create', compact('departments'));
     }
 
     public function store(Request $request)
@@ -61,7 +62,7 @@ class SubjectController extends Controller
         $this->subjectRepository->create([
             'name' => $request->get('name'),
             'credit' => $request->get('credit'),
-            'type' => $request->get('basic') ? config('config.subject.type.basic') : config('config.subject.type.specialization'),
+            'type' => $request->get('basic') ? config('subject.type.basic') : config('subject.type.specialization'),
             'department_id' => $request->get('department_id'),
         ]);
 
@@ -81,7 +82,7 @@ class SubjectController extends Controller
     }
 
     public function update(Request $request, $id)
-    {   
+    {
         try {
             DB::beginTransaction();
             $subject = $this->subjectRepository->find($id);

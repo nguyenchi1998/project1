@@ -18,10 +18,11 @@ class ClassController extends Controller
     protected $specializationRepository;
 
     public function __construct(
-        IClassRepository $classRepository,
-        IStudentRepository $studentRepository,
+        IClassRepository          $classRepository,
+        IStudentRepository        $studentRepository,
         ISpecializationRepository $specializationRepository
-    ) {
+    )
+    {
         $this->classRepository = $classRepository;
         $this->studentRepository = $studentRepository;
         $this->specializationRepository = $specializationRepository;
@@ -67,11 +68,14 @@ class ClassController extends Controller
         try {
             DB::beginTransaction();
             $class = $this->classRepository->create(
-                $request->only(['name', 'specialization_id'])
+                array_merge($request->only(['name', 'specialization_id']), [
+                    'semester' => config('config.start_semester')
+                ])
             );
-            $this->studentRepository->whereIn('id', $students)->update([
-                'class_id' => $class->id
-            ]);
+            $this->studentRepository->whereIn('id', $students)
+                ->update([
+                    'class_id' => $class->id
+                ]);
             DB::commit();
 
             return $this->successRouteRedirect('admin.classes.index');
@@ -137,7 +141,7 @@ class ClassController extends Controller
         if ($result) {
             return $this->successRouteRedirect('admin.classes.index');
         }
-        return $this->failRouteRedirect();;
+        return $this->failRouteRedirect();
     }
 
     public function restore($id)

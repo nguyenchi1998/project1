@@ -15,7 +15,7 @@ class PermissionSeeder extends Seeder
         $roles = config('config.roles');
         array_shift($roles);
         foreach ($roles as $key => $value) {
-            foreach (config('config.permissions') as $key => $permission) {
+            foreach (config('role.permissions') as $key => $permission) {
                 Permission::create([
                     'name' => $permission['name'],
                     'display_name' => $permission['display_name'],
