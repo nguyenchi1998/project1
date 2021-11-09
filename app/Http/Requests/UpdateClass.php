@@ -24,7 +24,7 @@ class UpdateClass extends FormRequest
     public function rules()
     {
         return [
-            'students' => 'max:' . config('config.limit.studentInClass')
+            'students' => 'max:' . config('config.class_limit_student')
         ];
     }
 

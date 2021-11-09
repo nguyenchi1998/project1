@@ -53,7 +53,7 @@ class Schedule extends Model
 
     public function newSchedule()
     {
-        return $this->whereStatus(config('config.status.schedule.new'));
+        return $this->whereStatus(config('schedule.status.new'));
     }
 
     public function classSchedule()

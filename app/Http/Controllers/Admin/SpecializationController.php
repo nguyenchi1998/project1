@@ -119,14 +119,13 @@ class SpecializationController extends Controller
 
     public function chooseSubjectShow($id)
     {
-
         $specialization = $this->specializationRepository->find($id)->load('subjects');
         $specializationSubjects = $specialization->subjects->pluck('id')->toArray();
         $startSemester = config('config.start_semester');
         $basicSemesters = [];
         $specializationSemesters = [];
         for ($i = $startSemester; $i <= $specialization->total_semester; $i++) {
-            if ($i <= config('config.max_semester_register_by_class')) {
+            if ($i <= config('config.class_register_limit_semester')) {
                 $basicSemesters[$i] = 'Kì ' . $i;
             } else {
                 $specializationSemesters[$i] = 'Kì ' . $i;
@@ -134,12 +133,12 @@ class SpecializationController extends Controller
         }
         $subjects = $this->subjectRepository->all();
         $subjects = $subjects->map(function ($subject) use ($specialization) {
-            $subject['can_not_edit'] = $subject->type == config('config.subject.type.basic');
-            $subject['isBasic'] = $subject->type == config('config.subject.type.basic');
+            $subject['can_not_edit'] = $subject->type == config('subject.type.basic');
+            $subject['isBasic'] = $subject->type == config('subject.type.basic');
             $subject['choose'] = $specialization->subjects->contains($subject->id);
             $subject['force'] = $specialization->subjects->contains(function ($item) use ($subject) {
                 return $item->id == $subject->id
-                    && $item->pivot->force == config('config.subject.force');
+                    && $item->pivot->force == config('subject.force');
             });
             $subject['semester'] = $specialization->subjects->first(function ($subjectItem) use ($subject, $specialization) {
                     return $specialization->subjects->contains('id', $subject->id) && $subjectItem->id == $subject->id;

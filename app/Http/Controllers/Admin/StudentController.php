@@ -9,7 +9,6 @@ use App\Repositories\IRoleRepository;
 use App\Repositories\IStudentRepository;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -80,8 +79,8 @@ class StudentController extends Controller
                 'path' => $path
             ]);
             $studentRole = $this->roleRepository->findByName(
-                config('config.roles.student.name'),
-                config('config.roles.student.guard')
+                config('role.rolesstudent.name'),
+                config('role.rolesstudent.guard')
             );
             $student->assignRole($studentRole);
             DB::commit();
@@ -102,13 +101,6 @@ class StudentController extends Controller
         return view('admin.student.edit', compact('student'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param int $id
-     * @return Response
-     */
     public function update(Request $request, $id)
     {
         try {

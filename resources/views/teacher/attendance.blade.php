@@ -14,62 +14,62 @@
     </div>
 @endsection
 @section('main')
-<div class="row">
-    <div class="col-lg-12 stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <div class="mt-6">
-                    {{ Form::open(['url' =>route('admin.classes.store') , 'method' => 'POST', 'class' => "forms-sample" ]) }}
-                    <div class="form-row">
-                        <div class="col-6">
-                            <div class="form-group">
-                                Lớp Học: {{ $schedule->name }}
+    <div class="row">
+        <div class="col-lg-12 stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mt-6">
+                        {{ Form::open(['url' =>route('admin.classes.store') , 'method' => 'POST', 'class' => "forms-sample" ]) }}
+                        <div class="form-row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    Lớp Học: {{ $schedule->name }}
+                                </div>
+                                <div class="form-group">
+                                    Môn Học: {{ $schedule->subject->name }}
+                                </div>
+                                <div class="form-group">
+                                    Giáo Viên: {{ $schedule->teacher->name }}
+                                </div>
                             </div>
-                            <div class="form-group">
-                                Môn Học: {{ $schedule->subject->name }}
-                            </div>
-                            <div class="form-group">
-                                Giáo Viên: {{ $schedule->teacher->name }}
+                            <div class="col-6">
+                                <div class="form-group">
+                                    Số Sinh Viên: {{ count($scheduleDetails) }}
+                                </div>
+                                <div class="form-group">
+                                    Ngày: {{ now()->format('d/m/yy') }}
+                                </div>
                             </div>
                         </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                Số Sinh Viên: {{ count($scheduleDetails) }}
-                            </div>
-                            <div class="form-group">
-                                Ngày: {{ now()->format('d/m/yy') }}
-                            </div>
-                        </div>
+                        {{ Form::close() }}
                     </div>
-                    {{ Form::close() }}
-                </div>
-                <div class="table-responsive mb-3">
-                    <table class="table table-bordered table-hover">
-                        <thead>
-                        <tr>
-                            <th>Sinh Viên</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($scheduleDetails as $student)
+                    <div class="table-responsive mb-3">
+                        <table class="table table-bordered table-hover">
+                            <thead>
                             <tr>
-                                <td>
-                                    {{ $student->student->name }}
-                                </td>
-                                <td width="100">
-                                    <div class="text-center">
-                                        {{ Form::checkbox('student_id[]', $student->id, false)  }}
-                                    </div>
-                                </td>
+                                <th>Sinh Viên</th>
+                                <th></th>
                             </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                            @foreach($scheduleDetails as $student)
+                                <tr>
+                                    <td>
+                                        {{ $student->student->name }}
+                                    </td>
+                                    <td width="100">
+                                        <div class="text-center">
+                                            {{ Form::checkbox('student_id[]', $student->id, false)  }}
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 @endsection @section('script')
 @endsection

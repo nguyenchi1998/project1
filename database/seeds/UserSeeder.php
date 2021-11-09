@@ -32,8 +32,8 @@ class UserSeeder extends Seeder
             'path' => str_replace(storage_path(config('default.path.app_public')), '', $path),
         ]);
         $superAdmin->avatar()->save($media);
-        $superAdminRole = Role::findByName(config('config.roles.super_admin.name'), config('config.roles.admin.name'));
-        $adminRole = Role::findByName(config('config.roles.admin.name'), 'admin');
+        $superAdminRole = Role::findByName(config('role.rolessuper_admin.name'), config('role.rolesadmin.name'));
+        $adminRole = Role::findByName(config('role.rolesadmin.name'), 'admin');
         $superAdmin->assignRole($superAdminRole);
         factory(User::class, 2)->create()->each(function ($user) use ($adminRole, $path) {
             $media = Media::create([

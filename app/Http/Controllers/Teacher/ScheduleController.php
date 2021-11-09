@@ -16,7 +16,8 @@ class ScheduleController extends Controller
     public function __construct(
         IScheduleRepository       $scheduleRepository,
         IScheduleDetailRepository $scheduleDetailsRepository
-    ) {
+    )
+    {
         $this->scheduleRepository = $scheduleRepository;
         $this->scheduleDetailsRepository = $scheduleDetailsRepository;
     }
@@ -27,7 +28,7 @@ class ScheduleController extends Controller
         $teacher = Auth::user();
         $states = array_map(function ($status) {
             return ucfirst($status);
-        }, array_flip(config('config.status.schedule')));
+        }, array_flip(config('schedule.status')));
         $statusSchedules = $this->scheduleRepository->where('teacher_id', '=', $teacher->id)
             ->whereIn('status', array_flip($states))
             ->when(isset($status), function ($query) use ($status) {
@@ -43,7 +44,7 @@ class ScheduleController extends Controller
     public function status(Request $request, $id)
     {
         $status = $request->get('status');
-        if ($status == config('config.status.schedule.new')) {
+        if ($status == config('schedule.status.new')) {
             return $this->failRouteRedirect('Bạn không thể chỉnh trạng thái về trạng thái mới');
         } else {
             $this->scheduleRepository->update($id, [
@@ -64,7 +65,7 @@ class ScheduleController extends Controller
 
     public function attendance($id)
     {
-        return $this->successRouteRedirect('admin.schedules.attendanceShow', $id);
+        return $this->successRouteRedirect('teacher.schedules.attendanceShow', $id);
     }
 
     public function markShow(Request $request, $id)
@@ -72,7 +73,7 @@ class ScheduleController extends Controller
         $schedule = $this->scheduleRepository->find($id)
             ->load('scheduleDetails.student');
         $scheduleDetails = $schedule->scheduleDetails;
-        $statusScheduleDetails = array_flip(config('config.status.scheduleDetail'));
+        $statusScheduleDetails = array_flip(config('schedule.statusDetail'));
         $statusScheduleDetails = array_map(function ($status) {
             return ucfirst($status);
         }, $statusScheduleDetails);

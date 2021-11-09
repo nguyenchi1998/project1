@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Repositories\ClassRepository;
+use App\Repositories\ConfigRepository;
 use App\Repositories\DepartmentRepository;
 use App\Repositories\GradeRepository;
 use App\Repositories\IClassRepository;
+use App\Repositories\IConfigRepository;
 use App\Repositories\IDepartmentRepository;
 use App\Repositories\IGradeRepository;
 use App\Repositories\IManagerRepository;

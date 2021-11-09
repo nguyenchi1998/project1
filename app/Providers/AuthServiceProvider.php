@@ -28,13 +28,13 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Gate::before(function ($user) {
-            return $user->hasRole(config('config.roles.super_admin.name'));
+            return $user->hasRole(config('role.roles.super_admin.name'));
         });
         Gate::define('isAdmin', function ($user, $permission = '') {
-            return $user->hasRole(config('config.roles.admin.name'));
+            return $user->hasRole(config('role.roles.admin.name'));
         });
         Gate::define('isTeacher', function ($user) {
-            return $user->hasRole(config('config.roles.teacher.name'));
+            return $user->hasRole(config('role.roles.teacher.name'));
         });
     }
 }

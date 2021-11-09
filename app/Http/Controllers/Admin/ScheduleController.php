@@ -29,7 +29,8 @@ class ScheduleController extends Controller
         ISubjectRepository        $subjectRepository,
         IClassRepository          $classRepository,
         IStudentRepository        $studentRepository
-    ) {
+    )
+    {
         $this->scheduleRepository = $scheduleRepository;
         $this->specializationRepository = $specializationRepository;
         $this->subjectRepository = $subjectRepository;
@@ -41,20 +42,12 @@ class ScheduleController extends Controller
     public function index(Request $request)
     {
         $hasScheduleDetails = count($this->calculateScheduleDetails());
+        $classType = $request->get('class-type');
         $status = $request->get('status');
         $states = array_map(function ($item) {
             return ucfirst($item);
-        }, array_flip(config('config.status.schedule')));
-        $classSchedules = $this->scheduleRepository->model()
-            ->classSchedule()
-            ->when($status, function ($query) use ($status) {
-                $query->where('status', $status);
-            })
-            ->orderBy('status')
-            ->get()
-            ->load('subject.teachers', 'teacher', 'scheduleDetails');
-        $freeSchedules = $this->scheduleRepository->model()
-            ->freeSchedule()
+        }, array_flip(config('schedule.status')));
+        $schedules = $this->scheduleRepository->model()
             ->when($status, function ($query) use ($status) {
                 $query->where('status', $status);
             })
@@ -62,14 +55,7 @@ class ScheduleController extends Controller
             ->get()
             ->load('subject.teachers', 'teacher', 'scheduleDetails');
 
-        return view('admin.schedule.index', compact('states', 'classSchedules', 'freeSchedules',  'status', 'hasScheduleDetails'));
-    }
-
-    public function create()
-    {
-        $scheduleDetails = $this->calculateScheduleDetails();
-
-        return view('admin.schedule.create', compact('scheduleDetails'));
+        return view('admin.schedule.index', compact('states', 'schedules', 'status', 'hasScheduleDetails', 'classType'));
     }
 
     protected function calculateScheduleDetails()
@@ -97,6 +83,13 @@ class ScheduleController extends Controller
 
             return $item;
         }, $scheduleDetails);
+    }
+
+    public function create()
+    {
+        $scheduleDetails = $this->calculateScheduleDetails();
+
+        return view('admin.schedule.create', compact('scheduleDetails'));
     }
 
     public function store(Request $request)
@@ -161,8 +154,9 @@ class ScheduleController extends Controller
     public function startSchedule(Request $request, $id)
     {
         try {
-            $schedule =  $this->scheduleRepository->find($id)->load('class.students');
-            if ($schedule->status) {
+            DB::beginTransaction();
+            $schedule = $this->scheduleRepository->find($id)->load('class.students');
+            if ($schedule->status == config('schedule.status.new')) {
                 $students = $schedule->class->students->map(function ($student) use ($schedule) {
                     $item['student_id'] = $student->id;
                     $item['subject_id'] = $schedule->subject_id;
@@ -172,6 +166,7 @@ class ScheduleController extends Controller
                 $schedule->update($request->only('status'));
                 $schedule->scheduleDetails()->createMany($students);
             }
+            DB::commit();
 
             return $this->successRouteRedirect('admin.schedules.index');
         } catch (Exception $e) {

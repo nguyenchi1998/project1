@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Repositories\IManagerRepository;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -16,7 +15,8 @@ class ManagerController extends Controller
 
     public function __construct(
         IManagerRepository $managerRepository
-    ) {
+    )
+    {
         $this->managerRepository = $managerRepository;
     }
 
@@ -59,8 +59,8 @@ class ManagerController extends Controller
                 'path' => $path
             ]);
             $adminRole = $this->roleRepository->findByName(
-                config('config.roles.admin.name'),
-                config('config.roles.admin.guard')
+                config('role.rolesadmin.name'),
+                config('role.rolesadmin.guard')
             );
             $manager->assignRole($adminRole);
             DB::commit();
