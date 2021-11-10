@@ -3,7 +3,7 @@
 return [
     'status' => [
         'register' => [
-            'penidng' => 0,
+            'pending' => 0,
             'success' => 1
         ],
         'result' => [

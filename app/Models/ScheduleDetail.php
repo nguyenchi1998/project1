@@ -16,7 +16,8 @@ class ScheduleDetail extends Model
         'activity_mark',
         'middle_mark',
         'final_mark',
-        'status',
+        'result_status',
+        'register_status',
     ];
 
     public function schedule()

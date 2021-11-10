@@ -12,7 +12,7 @@ class PermissionSeeder extends Seeder
      */
     public function run()
     {
-        $roles = config('config.roles');
+        $roles = config('role.roles');
         array_shift($roles);
         foreach ($roles as $key => $value) {
             foreach (config('role.permissions') as $key => $permission) {

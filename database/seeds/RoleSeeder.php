@@ -12,7 +12,7 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        foreach (config('config.roles') as $key => $role) {
+        foreach (config('role.roles') as $key => $role) {
             Role::create([
                 'name' => $role['name'],
                 'guard_name' => $role['guard'],
@@ -20,7 +20,7 @@ class RoleSeeder extends Seeder
             ]);
         }
 
-        Role::findById(1, config('role.rolessuper_admin.guard'))
-            ->givePermissionTo(range(0, count(config('config.permissions'))));
+        Role::findById(1, config('role.roles.super_admin.guard'))
+            ->givePermissionTo(range(0, count(config('role.permissions'))));
     }
 }

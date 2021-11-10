@@ -79,8 +79,8 @@ class StudentController extends Controller
                 'path' => $path
             ]);
             $studentRole = $this->roleRepository->findByName(
-                config('role.rolesstudent.name'),
-                config('role.rolesstudent.guard')
+                config('role.roles.student.name'),
+                config('role.roles.student.guard')
             );
             $student->assignRole($studentRole);
             DB::commit();

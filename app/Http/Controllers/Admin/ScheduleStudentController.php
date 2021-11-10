@@ -48,11 +48,11 @@ class ScheduleStudentController extends Controller
         $keyword = $request->get('keyword');
         $semesters = array_map(function ($item) {
             return 'Kì ' . $item;
-        }, range(config('config.class_register_limit_semester') + 1, config('config.max_semester')));
-        // lấy ra danh sách sinh viên từ kì 5 (năm 3)
+        }, range(config('config.student_register_start_semester'), config('config.max_semester')));
+        // lấy ra danh sách sinh viên từ kì 5 trở lên (năm 3)
         $students = $this->studentRepository->model()
             ->whereHas('class', function ($query) {
-                $query->where('semester', '>', config('config.class_register_limit_semester'));
+                $query->where('semester', '>=', config('config.student_register_start_semester'));
             })
             ->when($keyword, function ($query) use ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%')
@@ -61,9 +61,8 @@ class ScheduleStudentController extends Controller
             })
             ->paginate(config('config.paginate'));
         $students->getCollection()->transform(function ($student) {
-            $classSemester = $student->class->semester;
-            // chưa xong
-            $student['total_credit'] = $student->scheduleDetails->filter(function($scheduleDetail) {
+            $student['total_credit'] = $student->scheduleDetails->filter(function ($scheduleDetail) {
+                return $scheduleDetail->status_register == config('schedule_detail.status.register.pending');
             })->reduce(function ($total, $schedule) {
                 $total += $schedule->subject->credit;
 
@@ -130,6 +129,8 @@ class ScheduleStudentController extends Controller
         $this->scheduleDetailRepository->updateOrCreateMany(
             array_map(function ($item) use ($id) {
                 $item['student_id'] = $id;
+                $item['register_status'] = config('schedule_detail.status.register.pending');
+
                 return $item;
             }, $request->get('subjects'))
         );

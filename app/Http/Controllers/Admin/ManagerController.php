@@ -15,8 +15,7 @@ class ManagerController extends Controller
 
     public function __construct(
         IManagerRepository $managerRepository
-    )
-    {
+    ) {
         $this->managerRepository = $managerRepository;
     }
 
@@ -59,8 +58,8 @@ class ManagerController extends Controller
                 'path' => $path
             ]);
             $adminRole = $this->roleRepository->findByName(
-                config('role.rolesadmin.name'),
-                config('role.rolesadmin.guard')
+                config('role.roles.admin.name'),
+                config('role.roles.admin.guard')
             );
             $manager->assignRole($adminRole);
             DB::commit();
@@ -69,7 +68,7 @@ class ManagerController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
 
-            return $this->failRouteRedirect();
+            return $this->failRouteRedirect($e->getMessage());
         }
     }
 
@@ -105,7 +104,7 @@ class ManagerController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
 
-            return $this->failRouteRedirect();
+            return $this->failRouteRedirect($e->getMessage());
         }
     }
 

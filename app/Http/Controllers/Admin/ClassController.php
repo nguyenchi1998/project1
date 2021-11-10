@@ -21,8 +21,7 @@ class ClassController extends Controller
         IClassRepository          $classRepository,
         IStudentRepository        $studentRepository,
         ISpecializationRepository $specializationRepository
-    )
-    {
+    ) {
         $this->classRepository = $classRepository;
         $this->studentRepository = $studentRepository;
         $this->specializationRepository = $specializationRepository;
@@ -82,7 +81,7 @@ class ClassController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
 
-            return $this->failRouteRedirect();
+            return $this->failRouteRedirect($e->getMessage());
         }
     }
 
@@ -119,7 +118,7 @@ class ClassController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
 
-            return $this->failRouteRedirect();
+            return $this->failRouteRedirect($e->getMessage());
         }
     }
 

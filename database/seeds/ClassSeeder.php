@@ -20,7 +20,7 @@ class ClassSeeder extends Seeder
         $classes = ['IT', 'CK', 'TT', 'HH', 'PT'];
         $faker = Faker\Factory::create();
         $path = $faker->image(storage_path(config('default.path.app_public')), config('default.avatar_size'), config('default.avatar_size'));
-        $studentRole = Role::findByName(config('role.rolesstudent.name'), config('role.rolesstudent.guard'));
+        $studentRole = Role::findByName(config('role.roles.student.name'), config('role.roles.student.guard'));
 
         foreach ($classes as $class) {
             for ($i = 1; $i <= 3; $i++) {

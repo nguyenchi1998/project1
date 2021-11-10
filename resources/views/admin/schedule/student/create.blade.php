@@ -40,6 +40,10 @@
                             </div>
                             <div class="col-4">
                                 <div>
+                                    <strong>Số Tín Tối Đa Cho Phép</strong>:<span
+                                            id="max_credit_register"> {{ config('credit.max_register') }}</span>
+                                </div>
+                                <div>
                                     <strong>Số Tín Đăng Kí Hiện Tại:</strong> <span
                                             id="total_credit">{{ $totalCreditRegisted }}</span> <span
                                             class="d-none text text-danger" id="warning">Quá số tín chỉ cho phép</span>
