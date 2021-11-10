@@ -21,8 +21,8 @@ class CreateScheduleDetailsTable extends Migration
             $table->unsignedInteger('activity_mark')->nullable();
             $table->unsignedInteger('middle_mark')->nullable();
             $table->unsignedInteger('final_mark')->nullable();
-            $table->unsignedInteger('status_result')->nullable();
-            $table->unsignedInteger('status_register')->default(config('schedule_detail.status.register.pending'));
+            $table->unsignedInteger('result_status')->nullable();
+            $table->unsignedInteger('register_status')->default(config('schedule_detail.status.register.pending'));
             $table->timestamps();
             $table->softDeletes();
         });

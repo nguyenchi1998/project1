@@ -7,6 +7,7 @@ return [
     ],
     'format_date_show' => 'd/m/Y',
     'class_register_limit_semester' => 4,
+    'student_register_start_semester' => 5,
     'max_semester' => 16,
     'paginate' => 8,
     'start_semester' => 1,

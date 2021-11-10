@@ -96,9 +96,10 @@ class ScheduleController extends Controller
     {
         try {
             $subject = $this->subjectRepository->find($request->get('subject_id'));
-            $schedule = $this->scheduleRepository->create(array_merge([
-                $request->only(['subject_id', 'start_time', 'end_time', 'teacher_id'])
-            ], ['name' => 'Lớp tín chỉ môn ' . $subject->name,]));
+            $schedule = $this->scheduleRepository->create(array_merge(
+                $request->only(['subject_id', 'start_time', 'end_time', 'teacher_id']),
+                ['name' => 'Lớp tín chỉ môn ' . $subject->name,]
+            ));
             $this->scheduleDetailRepository->model()
                 ->whereIn('id', $request->get('schedule_details'))
                 ->update([
@@ -109,7 +110,7 @@ class ScheduleController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
 
-            return $this->failRouteRedirect();
+            return $this->failRouteRedirect($e->getMessage());
         }
     }
 
@@ -172,7 +173,7 @@ class ScheduleController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
 
-            return $this->failRouteRedirect();
+            return $this->failRouteRedirect($e->getMessage());
         }
     }
 }

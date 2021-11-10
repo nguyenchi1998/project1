@@ -42,14 +42,14 @@ class User extends Authenticatable
     public function scopeIsSuperAdmin()
     {
         return $this->whereHas('roles', function ($query) {
-            $query->whereName(config('role.rolessuper_admin.name'));
+            $query->whereName(config('role.roles.super_admin.name'));
         });
     }
 
     public function scopeIsAdmin()
     {
         return $this->whereHas('roles', function ($query) {
-            $query->whereName(config('role.rolesadmin.name'));
+            $query->whereName(config('role.roles.admin.name'));
         });
     }
 
@@ -60,11 +60,11 @@ class User extends Authenticatable
 
     public function hasAdminRole()
     {
-        return $this->hasRole(config('role.rolesadmin.name'), config('role.rolesadmin.guard'));
+        return $this->hasRole(config('role.roles.admin.name'), config('role.roles.admin.guard'));
     }
 
     public function hasSuperAdminRole()
     {
-        return $this->hasRole(config('role.rolessuper-admin.name'), config('role.rolessuper-admin.guard'));
+        return $this->hasRole(config('role.roles.super-admin.name'), config('role.roles.super-admin.guard'));
     }
 }

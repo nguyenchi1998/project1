@@ -316,7 +316,7 @@
                             <li class="nav-item">
                                 <a href="{{ route('admin.schedules.classes.index') }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Theo Lớp (4 Kì Đầu))</p>
+                                    <p>Theo Lớp (Năm 1, 2)</p>
                                 </a>
                             </li>
                             <li class="nav-item">

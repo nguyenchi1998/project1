@@ -75,8 +75,8 @@ class TeacherController extends Controller
                 'path' => $path
             ]);
             $teacherRole = $this->roleRepository->findByName(
-                config('role.rolesteacher.name'),
-                config('role.rolesteacher.guard')
+                config('role.roles.teacher.name'),
+                config('role.roles.teacher.guard')
             );
             $teacher->assignRole($teacherRole);
             DB::commit();

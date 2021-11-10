@@ -27,7 +27,7 @@ class RedirectIfAuthenticated
             } elseif ($guard == config('role.guard.teacher')) {
                 return redirect()->route('teacher.home');
             } else {
-                return redirect()->route('student.home');
+                return redirect()->route('home');
             }
         }
 

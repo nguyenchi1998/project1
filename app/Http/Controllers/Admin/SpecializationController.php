@@ -20,8 +20,7 @@ class SpecializationController extends Controller
         ISpecializationRepository $specializationRepository,
         IDepartmentRepository     $departmentRepository,
         ISubjectRepository        $subjectRepository
-    )
-    {
+    ) {
         $this->specializationRepository = $specializationRepository;
         $this->subjectRepository = $subjectRepository;
         $this->departmentRepository = $departmentRepository;
@@ -63,7 +62,7 @@ class SpecializationController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
 
-            return $this->failRouteRedirect();
+            return $this->failRouteRedirect($e->getMessage());
         }
     }
 
@@ -92,7 +91,7 @@ class SpecializationController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
 
-            return $this->failRouteRedirect();
+            return $this->failRouteRedirect($e->getMessage());
         }
     }
 
@@ -141,8 +140,8 @@ class SpecializationController extends Controller
                     && $item->pivot->force == config('subject.force');
             });
             $subject['semester'] = $specialization->subjects->first(function ($subjectItem) use ($subject, $specialization) {
-                    return $specialization->subjects->contains('id', $subject->id) && $subjectItem->id == $subject->id;
-                })->pivot->semester ?? null;
+                return $specialization->subjects->contains('id', $subject->id) && $subjectItem->id == $subject->id;
+            })->pivot->semester ?? null;
             return $subject;
         })
             ->sortBy('type');
@@ -163,7 +162,7 @@ class SpecializationController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
 
-            return $this->failRouteRedirect();
+            return $this->failRouteRedirect($e->getMessage());
         }
     }
 }

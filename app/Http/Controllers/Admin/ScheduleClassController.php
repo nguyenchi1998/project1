@@ -47,7 +47,7 @@ class ScheduleClassController extends Controller
     public function index(Request $request)
     {
         $semesterFilter = $request->get('semester-filter');
-        $specalizationFilter = $request->get('specalization-filter');
+        $specializationFilter = $request->get('specialization-filter');
         $keyword = $request->get('keyword');
         $semesters = array_map(function ($item) {
             return 'Kì ' . $item;
@@ -57,10 +57,10 @@ class ScheduleClassController extends Controller
             ->when($keyword, function ($query) use ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%');
             })
-            ->when($specalizationFilter, function ($query) use ($specalizationFilter) {
+            ->when($specializationFilter, function ($query) use ($specializationFilter) {
                 $query->whereHas('specialization', function ($query)
-                use ($specalizationFilter) {
-                    $query->whereId($specalizationFilter);
+                use ($specializationFilter) {
+                    $query->whereId($specializationFilter);
                 });
             })
             ->with(['students', 'schedules'])
@@ -73,10 +73,10 @@ class ScheduleClassController extends Controller
                 }, 0) < config('credit.max_register');
             return $class;
         });
-        $specalizations = $this->specializationRepository->all()
+        $specializations = $this->specializationRepository->all()
             ->pluck('name', 'id');
 
-        return view('admin.schedule.class.index', compact('classes', 'keyword', 'semesterFilter', 'specalizationFilter', 'semesters', 'specalizations'));
+        return view('admin.schedule.class.index', compact('classes', 'keyword', 'semesterFilter', 'specializationFilter', 'semesters', 'specializations'));
     }
 
     public function registerScheduleShow($id)

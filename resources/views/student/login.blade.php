@@ -33,32 +33,38 @@
 
 <body class="cm-login">
 <div class="container-fluid">
-    <div class="text-center">
-        <h1 class="text-info">Hệ thống quản lí điểm(Student Login)</h1>
-    </div>
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="d-flex justify-content-center align-items-center">
-                <form method="POST" action="{{  url('/login') }}">
+    <div class=" d-flex justify-content-center align-items-center m-auto" style="height: 100vh;">
+        <div class="d-block" >
+            <div class="text-center">
+                <h1 class="text-info">Trang Sinh Viên</h1>
+            </div>
+            <div class="m-auto" style="width: 400px">
+                <form method="POST" action="{{ url('/login') }}">
                     @csrf()
-                    <div class="col-xs-12" style="min-width: 300px;">
+                    <div class="col-xs-12">
                         <div class="form-group">
                             <div class="input-group">
-                                <div class="input-group-addon mr-2 my-auto">
-                                    <i class="fa fa-fw fa-user"></i>
+                                <div class="input-group-addon">
+                                    <i class="mdi mdi-24px mdi-account"></i>
                                 </div>
                                 <input type="email" name="email" required class="form-control" autofocus
-                                       placeholder="Email" value="student@gmail.com">
+                                       placeholder="Email" value="admin@gmail.com">
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="input-group">
-                                <div class="input-group-addon mr-2 my-auto">
-                                    <i class="fa fa-fw fa-lock"></i>
+                                <div class="input-group-addon">
+                                    <i class="mdi mdi-24px mdi-lock"></i>
                                 </div>
                                 <input type="password" name="password" required class="form-control"
-                                       placeholder="Mật khẩu" value="123456">
+                                       placeholder="Mật khẩu"
+                                       value="123456">
                             </div>
+                        </div>
+                    </div>
+                    <div class="">
+                        <div class="checkbox">
+                            <label><input type="checkbox"> Lưu mật khẩu</label>
                         </div>
                     </div>
                     <div class="col-xs-6">

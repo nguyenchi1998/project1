@@ -50,7 +50,7 @@
                                         {{ $schedule->name }}
                                     </td>
                                     <td>
-                                        {{ $schedule->class->name }}
+                                        {{ $schedule->class->name ?? 'Tự Do' }}
                                     </td>
                                     <td class="text-center">
                                         {{ count($schedule->scheduleDetails) ?: count($schedule->class->students)}}

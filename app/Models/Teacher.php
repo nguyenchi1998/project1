@@ -52,6 +52,6 @@ class Teacher extends Authenticatable
 
     public function scopeIsTeacher()
     {
-        return in_array(config('role.rolesteacher'), $this->getRoleNames()->toArray());
+        return in_array(config('role.roles.teacher'), $this->getRoleNames()->toArray());
     }
 }
