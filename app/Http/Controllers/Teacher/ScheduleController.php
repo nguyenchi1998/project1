@@ -16,8 +16,7 @@ class ScheduleController extends Controller
     public function __construct(
         IScheduleRepository       $scheduleRepository,
         IScheduleDetailRepository $scheduleDetailsRepository
-    )
-    {
+    ) {
         $this->scheduleRepository = $scheduleRepository;
         $this->scheduleDetailsRepository = $scheduleDetailsRepository;
     }

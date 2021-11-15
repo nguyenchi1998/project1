@@ -345,7 +345,7 @@ class DepartmentSeeder extends Seeder
                     'name' => $specialization,
                     'department_id' => $departmentInstance->id,
                     'min_credit' => 30,
-                    'total_semester' => 9,
+                    'max_semester' => 9,
                 ]);
             }
         }
@@ -382,8 +382,15 @@ class DepartmentSeeder extends Seeder
                     ->toArray(),
                 8
             ) as $subject) {
+                $force = $faker->randomElement([0, 1]);
                 $subjects[$subject] = [
-                    'force' => $faker->randomElement([0, 1]),
+                    'force' => $force,
+                    'semester' => $force ? null : $faker->randomElement(
+                        range(
+                            config('config.student_register_start_semester'),
+                            $specialization->max_semester
+                        )
+                    ),
                 ];
             };
             $specialization->subjects()->attach($subjects);

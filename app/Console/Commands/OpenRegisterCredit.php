@@ -48,7 +48,7 @@ class OpenRegisterCredit extends Command
     {
         $this->classRepository->model()
             ->whereHas('specialization', function ($query) {
-                $query->where('total_semester', '>', DB::raw('classes.semester'));
+                $query->where('max_semester', '>', DB::raw('classes.semester'));
             })->update([
                 'semester' => DB::raw('classes.semester + 1'),
             ]);

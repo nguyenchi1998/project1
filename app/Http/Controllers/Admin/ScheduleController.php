@@ -29,8 +29,7 @@ class ScheduleController extends Controller
         ISubjectRepository        $subjectRepository,
         IClassRepository          $classRepository,
         IStudentRepository        $studentRepository
-    )
-    {
+    ) {
         $this->scheduleRepository = $scheduleRepository;
         $this->specializationRepository = $specializationRepository;
         $this->subjectRepository = $subjectRepository;
@@ -51,9 +50,12 @@ class ScheduleController extends Controller
             ->when($status, function ($query) use ($status) {
                 $query->where('status', $status);
             })
-            ->orderBy('status')
-            ->get()
-            ->load('subject.teachers', 'teacher', 'scheduleDetails');
+            ->when(isset($classType), function ($query) use ($classType) {
+                $query->where('class_id', $classType ? '=' : '!=', null);
+            })
+            ->with(['subject.teachers', 'teacher', 'scheduleDetails'])
+            ->orderBy('id', 'desc')
+            ->paginate(config('config.paginate'));
 
         return view('admin.schedule.index', compact('states', 'schedules', 'status', 'hasScheduleDetails', 'classType'));
     }

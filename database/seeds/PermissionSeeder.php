@@ -12,14 +12,13 @@ class PermissionSeeder extends Seeder
      */
     public function run()
     {
-        $roles = config('role.roles');
-        array_shift($roles);
-        foreach ($roles as $key => $value) {
+        $guards = config('role.guard');
+        foreach ($guards as $guard) {
             foreach (config('role.permissions') as $key => $permission) {
                 Permission::create([
                     'name' => $permission['name'],
                     'display_name' => $permission['display_name'],
-                    'guard_name' => $value['guard'],
+                    'guard_name' => $guard,
                 ]);
             }
         }

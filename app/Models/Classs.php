@@ -32,11 +32,6 @@ class Classs extends Model
         return $this->hasMany(Schedule::class, 'class_id');
     }
 
-    public function subjects()
-    {
-        return $this->hasManyThrough(Subject::class, Schedule::class);
-    }
-
     public function newbieClass()
     {
         return $this->where('semester', '<=', config('config.class_register_limit_semester'));

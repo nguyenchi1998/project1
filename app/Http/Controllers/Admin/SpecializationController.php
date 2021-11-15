@@ -52,7 +52,7 @@ class SpecializationController extends Controller
             $this->specializationRepository->create($request->only([
                 'name',
                 'min_credit',
-                'total_semester',
+                'max_semester',
                 'department_id',
             ]));
 
@@ -83,7 +83,7 @@ class SpecializationController extends Controller
             $this->specializationRepository->update($id, $request->only([
                 'name',
                 'min_credit',
-                'total_semester'
+                'max_semester'
             ]));
             DB::commit();
 
@@ -123,11 +123,11 @@ class SpecializationController extends Controller
         $startSemester = config('config.start_semester');
         $basicSemesters = [];
         $specializationSemesters = [];
-        for ($i = $startSemester; $i <= $specialization->total_semester; $i++) {
+        for ($i = $startSemester; $i <= $specialization->max_semester; $i++) {
             if ($i <= config('config.class_register_limit_semester')) {
-                $basicSemesters[$i] = 'Kì ' . $i;
+                $basicSemesters[$i] = 'Kỳ ' . $i;
             } else {
-                $specializationSemesters[$i] = 'Kì ' . $i;
+                $specializationSemesters[$i] = 'Kỳ ' . $i;
             }
         }
         $subjects = $this->subjectRepository->all();

@@ -15,8 +15,7 @@ class ManagerController extends Controller
 
     public function __construct(
         IManagerRepository $managerRepository
-    )
-    {
+    ) {
         $this->managerRepository = $managerRepository;
     }
 

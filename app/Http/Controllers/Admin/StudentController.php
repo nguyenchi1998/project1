@@ -24,8 +24,7 @@ class StudentController extends Controller
         IClassRepository   $classRepository,
         IGradeRepository   $gradeRepository,
         IRoleRepository    $roleRepository
-    )
-    {
+    ) {
         $this->studentRepository = $studentRepository;
         $this->classRepository = $classRepository;
         $this->gradeRepository = $gradeRepository;

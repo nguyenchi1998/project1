@@ -33,8 +33,7 @@ class ScheduleClassController extends Controller
         IClassRepository          $classRepository,
         IStudentRepository        $studentRepository,
         IGradeRepository          $gradeRepository
-    )
-    {
+    ) {
         $this->scheduleRepository = $scheduleRepository;
         $this->specializationRepository = $specializationRepository;
         $this->subjectRepository = $subjectRepository;
@@ -50,7 +49,7 @@ class ScheduleClassController extends Controller
         $specializationFilter = $request->get('specialization-filter');
         $keyword = $request->get('keyword');
         $semesters = array_map(function ($item) {
-            return 'Kì ' . $item;
+            return 'Kỳ ' . $item;
         }, range(config('config.start_semester'), config('config.class_register_limit_semester')));
         $classes = $this->classRepository->model()
             ->newbieClass()
@@ -67,10 +66,14 @@ class ScheduleClassController extends Controller
             ->paginate(config('config.paginate'));
         $classes->getCollection()->transform(function ($class) {
             $class['can_register'] = $class->schedules->reduce(function ($total, $schedule) {
-                    $total += $schedule->subject->credit;
+                $total += $schedule->subject->credit;
 
-                    return $total;
-                }, 0) < config('credit.max_register');
+                return $total;
+            }, 0) < config('credit.max_register');
+            $class['total_credit'] = array_sum(array_map(function ($schedule) {
+                return $schedule['subject']['credit'];
+            }, $class->schedules->toArray()));
+
             return $class;
         });
         $specializations = $this->specializationRepository->all()
@@ -82,7 +85,7 @@ class ScheduleClassController extends Controller
     public function registerScheduleShow($id)
     {
         $class = $this->classRepository->find($id);
-        // lấy danh sách môn học cơ bản thuộc kì tiếp theo của lớp
+        // lấy danh sách môn học cơ bản thuộc kỳ tiếp theo của lớp
         $basicSubjects = $this->subjectRepository->model()
             ->basicSubjects()
             ->wherehas('specializations', function ($query) use ($class) {
@@ -92,7 +95,7 @@ class ScheduleClassController extends Controller
             ->filter(function ($subject) use ($class) {
                 return $subject->specializations->first()->pivot->semester == $class->semester + 1;
             });
-        // danh sách các môn đã đăng kí của lớp ở kì tiếp theo
+        // danh sách các môn đã đăng kí của lớp ở kỳ tiếp theo
         $scheduleSubjects = $this->scheduleRepository->model()
             ->where('class_id', $id)
             ->with(['subject.specializations' => function ($query) use ($class) {
