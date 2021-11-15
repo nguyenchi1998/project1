@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repositories\IClassRepository;
 use App\Repositories\IScheduleDetailRepository;
+use App\Repositories\ISpecializationRepository;
 use App\Repositories\ISubjectRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,18 +12,20 @@ use Illuminate\Support\Facades\Auth;
 class CreditController extends Controller
 {
     protected $scheduleDetailRepository;
+    protected $specializationRepository;
     protected $classRepository;
     protected $subjectRepository;
 
     public function __construct(
         IScheduleDetailRepository $scheduleDetailRepository,
+        ISpecializationRepository $specializationRepository,
         IClassRepository          $classRepository,
         ISubjectRepository        $subjectRepository
-    )
-    {
+    ) {
         $this->scheduleDetailRepository = $scheduleDetailRepository;
         $this->classRepository = $classRepository;
         $this->subjectRepository = $subjectRepository;
+        $this->specializationRepository = $specializationRepository;
     }
 
     public function index(Request $request)
@@ -32,9 +35,9 @@ class CreditController extends Controller
         $class = $this->classRepository->find($student->class_id);
         $semester = array_map(function ($item) {
             return 'Kỳ ' . $item;
-        }, range(config('config.start_semester'), $class->specialization->total_semester));
+        }, range(config('config.start_semester'), $class->specialization->max_semester));
         $credits = $this->scheduleDetailRepository->where('student_id', '=', $student->id)
-            ->where('status', '=', null)
+            ->where('register_status', '=', 0)
             ->get();
         if ($credits) {
             $credits->load(['subject', 'schedule']);
@@ -48,16 +51,30 @@ class CreditController extends Controller
         $student = Auth::user();
         $class = $this->classRepository->find($student->class_id)
             ->load('specialization');
-        $subjects = $this->subjectRepository->model()
-            ->specializationSubjects()
-            ->whereHas('specializations', function ($query) use ($class) {
-                $query->where('specializations.id', $class->specialization_id);
-            })
-            ->get();
-        $filter = $request->get('filter');
-        $student = Auth::user();
+        $specialization = $this->specializationRepository->find($student->class->specialization_id)
+            ->load([
+                'subjects' => function ($query) use ($class) {
+                    $query->whereType(config('subject.type.specialization'))
+                        ->where(function ($query) use ($class) {
+                            $query->where('specialization_subject.semester', '>=', $class->semester)
+                                ->orWhere('specialization_subject.semester', null);
+                        });
+                },
+                'subjects.schedules' => function ($query) {
+                    $query->where('status', config('schedule.status.new'))
+                        ->where('class_id', null);
+                }
+            ]);
+        // danh sách môn học thuộc kỳ hiện tại và bắt buộc
+        $subjects = $specialization->subjects->map(function ($subject) use ($class) {
+            $subject['force'] = $subject->pivot->force && $subject->pivot->semester == $class->semester;
 
-        return view('student.credit.create', compact('filter', 'student', 'subjects'));
+            return $subject;
+        });
+        $scheduleDetails = $student->scheduleDetails->pluck('subject_id')->toArray();
+        $filter = $request->get('filter');
+
+        return view('student.credit.create', compact('filter', 'student', 'subjects', 'scheduleDetails'));
     }
 
     public function store(Request $request)

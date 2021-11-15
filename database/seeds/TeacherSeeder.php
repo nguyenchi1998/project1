@@ -37,7 +37,7 @@ class TeacherSeeder extends Seeder
             'department_id' => 1,
         ]);
         $departmentIds = Department::all()->pluck('id')->toArray();
-        factory(Teacher::class, 5)->create()
+        factory(Teacher::class, 50)->create()
             ->each(function ($teacher) use ($teacherRole, $departmentIds, $path) {
                 $media = Media::create([
                     'path' => str_replace(storage_path(config('default.path.app_public')), '', $path),

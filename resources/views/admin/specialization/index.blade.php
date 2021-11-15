@@ -34,11 +34,11 @@
                         <table class="table table-bordered table-hover">
                             <thead>
                             <tr>
-                                <th>Chuyên ngành</th>
+                                <th>Chuyên Ngành</th>
                                 <th>Khoa Viện</th>
-                                <th>Số môn học</th>
-                                <th>Số tín chỉ tối thiểu</th>
-                                <th>Tổng số kì học</th>
+                                <th>Số Môn Học</th>
+                                <th>Số Tín Chỉ Tối Thiểu</th>
+                                <th>Tổng Số Kỳ Học</th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -58,7 +58,7 @@
                                         {{ $specialization->min_credit }}
                                     </td>
                                     <td>
-                                        {{ $specialization->total_semester }}
+                                        {{ $specialization->max_semester }}
                                     </td>
                                     <td width="100">
                                         <div class="d-flex justify-content-center">

@@ -47,9 +47,9 @@ class ScheduleStudentController extends Controller
         $filterGrade = $request->get('grade-filter');
         $keyword = $request->get('keyword');
         $semesters = array_map(function ($item) {
-            return 'Kì ' . $item;
+            return 'Kỳ ' . $item;
         }, range(config('config.student_register_start_semester'), config('config.max_semester')));
-        // lấy ra danh sách sinh viên từ kì 5 trở lên (năm 3)
+        // lấy ra danh sách sinh viên từ kỳ 5 trở lên (năm 3)
         $students = $this->studentRepository->model()
             ->whereHas('class', function ($query) {
                 $query->where('semester', '>=', config('config.student_register_start_semester'));
@@ -79,7 +79,7 @@ class ScheduleStudentController extends Controller
     {
         $student = $this->studentRepository->find($id);
         $class = $this->classRepository->find($student->class->id);
-        // lấy danh sách môn học chuyên ngành có kì học lớn hơn kì học của lớp và các môn ko có kì học cụ thê
+        // lấy danh sách môn học chuyên ngành có kỳ học lớn hơn kỳ học của lớp và các môn ko có kỳ học cụ thê
         $specialization = $this->specializationRepository->find($student->class->specialization_id)
             ->load([
                 'subjects' => function ($query) use ($class) {
@@ -88,20 +88,10 @@ class ScheduleStudentController extends Controller
                             $query->where('specialization_subject.semester', '>=', $class->semester)
                                 ->orWhere('specialization_subject.semester', null);
                         });
-                },
-                'subjects.schedules' => function ($query) {
-                    $query->where('status', config('schedule.status.new'))
-                        ->where('class_id', null);
                 }
             ]);
-        // danh sách môn học thuộc kì hiện tại và bắt buộc
-        $specializationSubjects = $specialization->subjects->map(function ($subject) use ($class) {
-            $subject['force'] = $subject->pivot->force && $subject->pivot->semester == $class->semester;
-            $creditClass = $subject->schedules->first();
-            $subject['creditClass'] = $creditClass ? $creditClass->load('scheduleDetails')->toArray() : [];
-
-            return $subject;
-        });
+        // danh sách môn học thuộc kỳ hiện tại và bắt buộc
+        $specializationSubjects = $specialization->subjects->sortByDesc('pivot.force')->sortBy('pivot.semester');
         // lấy danh sách các môn chuyên ngành bắt buộc
         $forceSpecializationSubject = $specializationSubjects->filter(function ($subject) {
             return $subject['force'];

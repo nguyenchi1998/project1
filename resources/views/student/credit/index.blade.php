@@ -18,7 +18,7 @@
                     <div class="d-flex mb-4 justify-content-between">
                         <div class="">
                             <form action="">
-                                {{ Form::select('semester', $semester, $semesterFilter, ['placeholder' => 'Tất Cả Kì Học', 'class' =>'form-control form-control-sm', 'onchange' => 'this.form.submit()']) }}
+                                {{ Form::select('semester', $semester, $semesterFilter, ['placeholder' => 'Tất Cả Kỳ Học', 'class' =>'form-control form-control-sm', 'onchange' => 'this.form.submit()']) }}
                             </form>
                         </div>
                         @if(auth()->user()->can_register_credit)

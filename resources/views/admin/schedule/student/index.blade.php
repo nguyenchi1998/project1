@@ -21,7 +21,7 @@
                                 <div class="d-flex justify-content-between">
                                     <input type="search" name="keyword" value="{{ $keyword }}"
                                            class="form-control form-control-sm mr-2" placeholder="Từ Khoá">
-                                    {{ Form::select('semester', $semesters, $semester ?? null, ['class' => 'form-control form-control-sm mr-2', 'placeholder' => 'Tất Cả Kì Học', 'onchange' => 'this.form.submit()']) }}
+                                    {{ Form::select('semester', $semesters, $semester ?? null, ['class' => 'form-control form-control-sm mr-2', 'placeholder' => 'Tất Cả Kỳ Học', 'onchange' => 'this.form.submit()']) }}
                                     {{ Form::select('grade-filter', $grades, $filterGrade ?? null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Tất Cả Khóa', 'onchange' => 'this.form.submit()']) }}
                                     <button class="ml-2 btn-sm btn btn-outline-info" type="submit">
                                         <i class="fa fa-edit"></i>

@@ -48,7 +48,7 @@
                                     <i class="mdi mdi-24px mdi-account"></i>
                                 </div>
                                 <input type="email" name="email" required class="form-control" autofocus
-                                       placeholder="Email" value="admin@gmail.com">
+                                       placeholder="Email" value="student@gmail.com">
                             </div>
                         </div>
                         <div class="form-group">

@@ -28,8 +28,8 @@
                         {{ Form::input('number', 'min_credit', $specialization->min_credit, ['class' => 'form-control', 'id' => 'min_creddit', 'placeholder' => 'Sô Tín Chỉ Tối Thiểu', 'min' => 0]) }}
                     </div>
                     <div class="form-group">
-                        <label for="max_semester">Số Kì Học</label>
-                        {{ Form::input('number', 'total_semester', $specialization->total_semester, ['class' => 'form-control', 'id' => 'max_semester', 'placeholder' => 'Số Kì Học', 'min' => 0]) }}
+                        <label for="max_semester">Số Kỳ Học</label>
+                        {{ Form::input('number', 'max_semester', $specialization->max_semester, ['class' => 'form-control', 'id' => 'max_semester', 'placeholder' => 'Số Kỳ Học', 'min' => 0]) }}
                     </div>
                     <div class="mt-3">
                         {{Form::submit('Xác Nhận', ['class'=> 'btn btn-outline-success mr-2']) }}

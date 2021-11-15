@@ -65,7 +65,7 @@
                                         <form action="{{ route('admin.schedules.teacher', $schedule->id) }}"
                                               method="post">
                                             @csrf
-                                            {{ Form::select('teacher_id', $schedule->subject->teachers->pluck('name', 'id')->toArray(), $schedule->teacher->id ?? null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Tất Cả Giảng Viên', 'onchange' => 'this,form.submit()', 'disabled' => (boolean)$schedule->status])}}
+                                            {{ Form::select('teacher_id', $schedule->subject->teachers->pluck('name', 'id')->toArray(), $schedule->teacher_id ?? null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Tất Cả Giảng Viên', 'onchange' => 'this,form.submit()', 'disabled' => (boolean)$schedule->status])}}
                                         </form>
                                     </td>
                                     <td>
@@ -97,6 +97,9 @@
                             @endforelse
                             </tbody>
                         </table>
+                    </div>
+                    <div class="mt-3 d-flex justify-content-end">
+                        {{ $schedules->appends(['status' => $status, 'class-type' => $classType])->links() }}
                     </div>
                 </div>
             </div>

@@ -103,7 +103,7 @@
                         ...subjects,
                         [subject_id]: {
                             force: Number(force),
-                            semester: (isBasic ? null : Number(semester)),
+                            semester: (isBasic || force ? null : Number(semester)),
                         }
                     }
             });

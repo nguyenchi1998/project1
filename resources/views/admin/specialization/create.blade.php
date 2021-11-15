@@ -26,8 +26,8 @@
                         {{ Form::input('number', 'min_credit', null, ['class' => 'form-control', 'id' => 'min_creddit', 'placeholder' => 'Số tín chỉ tối thiểu', 'min' => 0]) }}
                     </div>
                     <div class="form-group">
-                        <label for="total_semester">Số Kì Học</label>
-                        {{ Form::input('number', 'total_semester', null, ['class' => 'form-control', 'id' => 'total_semester', 'placeholder' => 'Số kì học', 'min' => 0]) }}
+                        <label for="max_semester">Số Kỳ Học</label>
+                        {{ Form::input('number', 'max_semester', null, ['class' => 'form-control', 'id' => 'max_semester', 'placeholder' => 'Số kỳ học', 'min' => 0]) }}
                     </div>
                     <div class="form-group">
                         {{ Form::label('department', 'Khoa Viện') }}

@@ -27,7 +27,7 @@
                                     <strong>Lớp</strong>:<span> {{ $class->name }}</span>
                                 </div>
                                 <div class="form-group">
-                                    <strong>Kì Tiếp Theo</strong>:<span> {{ $class->semester }}</span>
+                                    <strong>Kỳ Tiếp Theo</strong>:<span> {{ $class->semester }}</span>
                                 </div>
                             </div>
                             <div class="col-4">

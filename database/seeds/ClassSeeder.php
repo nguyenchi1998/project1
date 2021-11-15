@@ -29,7 +29,7 @@ class ClassSeeder extends Seeder
                     'specialization_id' => $faker->randomElement(Specialization::all()->random()->pluck('id')->toArray()),
                     'semester' => $faker->randomElement(range(1, 6)),
                 ]);
-                factory(Student::class, 5)->create([
+                factory(Student::class, random_int(10, 15))->create([
                     'class_id' => $classInstance->id,
                     'grade_id' => $faker->randomElement(Grade::all()->pluck('id')->toArray()),
                 ])->each(function ($student) use ($path, $studentRole) {
