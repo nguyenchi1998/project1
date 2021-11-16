@@ -72,12 +72,8 @@ class ScheduleController extends Controller
         $schedule = $this->scheduleRepository->find($id)
             ->load('scheduleDetails.student');
         $scheduleDetails = $schedule->scheduleDetails;
-        $statusScheduleDetails = array_flip(config('schedule.statusDetail'));
-        $statusScheduleDetails = array_map(function ($status) {
-            return ucfirst($status);
-        }, $statusScheduleDetails);
 
-        return view('teacher.mark', compact('scheduleDetails', 'schedule', 'statusScheduleDetails'));
+        return view('teacher.mark', compact('scheduleDetails', 'schedule'));
     }
 
     public function mark(Request $request, $id)
@@ -89,7 +85,7 @@ class ScheduleController extends Controller
                 [
                     'schedule_id' => $id,
                     'student_id' => $student['student_id'],
-                    'subject_id' => $schedule->subject->id
+                    'subject_id' => $schedule->specializationSubject->subject->id
                 ],
                 $student
             );

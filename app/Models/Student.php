@@ -21,7 +21,6 @@ class Student extends Authenticatable
         'phone',
         'password',
         'remember_token',
-        'can_register_credit',
         'grade_id',
         'class_id',
         'department_id'
@@ -51,6 +50,4 @@ class Student extends Authenticatable
     {
         return $this->hasMany(ScheduleDetail::class);
     }
-
-
 }

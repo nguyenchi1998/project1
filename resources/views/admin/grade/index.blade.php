@@ -35,6 +35,7 @@
                             <tr>
                                 <th>Niên Khoá</th>
                                 <th>Tổng số sinh viên</th>
+                                <th>Trạng Thái Đăng Ký</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -43,16 +44,16 @@
                             <tr>
                                 <td>{{ $grade->name }}</td>
                                 <td>{{ count($grade->students) }}</td>
-                                <td width="100">
-                                    <div class="d-flex justify-content-between">
+                                <td style="width: 200px;">
+                                    <form action="{{ route('admin.grades.creditStatus', $grade->id) }}" method="post">
+                                        @csrf
+                                        {{ Form::select('can_register_credit', array_flip(config('credit.register')), $grade->can_register_credit, ['class' => 'form-control form-control-sm', 'onchange' => 'this.form.submit()'])}}
+                                    </form>
+                                </td>
+                                <td style="width: 100px;">
+                                    <div class="d-flex justify-content-around">
                                         <div class="mr-2">
                                             <a href="{{ route('admin.grades.edit', $grade->id) }}" class="btn btn-sm btn-outline-warning" data-toggle="tooltip" data-placement="top" title="Sửa"><i class="fa fa-edit"></i></a>
-                                        </div>
-                                        <div>
-                                            <form action="">
-                                                <button type="submit" class="btn btn-sm btn-outline-danger" data-toggle="tooltip" data-placement="top" title="Xoá">
-                                                    <i class="fa fa-trash"></i></button>
-                                            </form>
                                         </div>
                                     </div>
                                 </td>
@@ -60,6 +61,9 @@
                             @endforeach
                         </tbody>
                     </table>
+                </div>
+                <div class="mt-3 d-flex justify-content-end">
+                    {{ $grades->links() }}
                 </div>
             </div>
         </div>

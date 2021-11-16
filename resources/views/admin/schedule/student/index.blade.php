@@ -23,21 +23,9 @@
                                 {{ Form::select('semester', $semesters, $semester ?? null, ['class' => 'form-control form-control-sm mr-2', 'placeholder' => 'Tất Cả Kỳ Học', 'onchange' => 'this.form.submit()']) }}
                                 {{ Form::select('grade-filter', $grades, $filterGrade ?? null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Tất Cả Khóa', 'onchange' => 'this.form.submit()']) }}
                                 <button class="ml-2 btn-sm btn btn-outline-info" type="submit">
-                                    <i class="fa fa-edit"></i>
+                                    <i class="fa fa-search"></i>
                                 </button>
                             </div>
-                        </form>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                        <form action="{{ route('admin.schedules.students.status') }}" method="post">
-                            @csrf()
-                            <input type="hidden" name="can_register_credit" value="{{ config('credit.register.can') }}">
-                            <button type="submit" class="mr-2 btn btn-sm btn-outline-success">Mở Đăng Ký</button>
-                        </form>
-                        <form action="{{ route('admin.schedules.students.status') }}" method="post">
-                            @csrf()
-                            <input type="hidden" name="can_register_credit" value="{{ config('credit.register.can_not') }}">
-                            <button type="submit" class="btn btn-sm btn-outline-danger">Đóng Đăng Ký</button>
                         </form>
                     </div>
                 </div>
@@ -61,7 +49,7 @@
                                 </td>
                                 <td>
                                     {{ $student->grade->name ?? '' }} - {{ $student->class->name ?? '' }}
-                                    - {{ $student->class->semester ?? '' }}
+                                    - {{ 'Kỳ ' . $student->class->semester ?? '' }}
                                 </td>
 
                                 <td>
@@ -71,17 +59,11 @@
                                     {{ $student->class->specialization->name }}
                                 </td>
                                 <td>
-                                    <form action="{{ route('admin.schedules.students.status') }}" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="id" value="{{ $student->id }}">
-                                        <select name="can_register_credit" class="form-control" onchange="this.form.submit()">
-                                            <option value="0" @if($student->can_register_credit) selected="selected" @endif>
-                                                Đóng
-                                            </option>
-                                            <option value="1" @if($student->can_register_credit) selected="selected" @endif>Mở
-                                            </option>
-                                        </select>
-                                    </form>
+                                    @if($student->grade->can_register_credit)
+                                    {{ 'Mở Đăng Ký' }}
+                                    @else
+                                    {{ 'Đóng Đăng Ký' }}
+                                    @endif
                                 </td>
                                 <td class="text-center">
                                     <a href="{{ route('admin.schedules.students.registerScheduleShow', $student->id) }}" class="btn btn-sm btn-outline-success" data-toggle="tooltip" data-placement="top" title="Đăng Ký Tín Chỉ">

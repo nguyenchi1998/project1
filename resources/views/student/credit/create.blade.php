@@ -21,24 +21,24 @@
                     <div class="form-row">
                         <div class="col-6">
                             <div class="form-group">
-                                Sinh Viên: {{ $student->name }}
+                                <strong>Sinh Viên: </strong>{{ $student->name }}
                             </div>
                             <div class="form-group">
-                                Lớp: {{ $student->class->name }}
+                                <strong>Lớp: </strong>{{ $student->class->name }}
                             </div>
                             <div class="form-group">
-                                Trạng Thái Đăng Kí: {{ $student->can_register_credit ? 'Mở' : 'Đóng' }}
+                                <strong>Trạng Thái Đăng Kí: </strong>{{ $student->grade->can_register_credit ? 'Mở' : 'Đóng' }}
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group">
-                                Chuyên Ngành: {{ $student->class->specialization->name }}
+                                <strong>Chuyên Ngành: </strong>{{ $student->class->specialization->name }}
                             </div>
                             <div class="form-group">
-                                Niên Khóa: {{ $student->grade->name }}
+                                <strong>Niên Khóa: </strong> {{ $student->grade->name }}
                             </div>
                             <div class="form-group">
-                                Kỳ Hiện Tại: {{ $student->class->semester }}
+                                <strong>Kỳ Hiện Tại: </strong>{{ $student->class->semester }}
                             </div>
                         </div>
                     </div>
@@ -50,9 +50,10 @@
                         <thead>
                             <tr>
                                 <th>Môn Học</th>
+                                <th>Lớp Học Sẵn Có</th>
                                 <th>Kỳ Học</th>
                                 <th>Số Tín Chỉ</th>
-                                <th>Loại Môn</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -61,6 +62,9 @@
                                 <td>
                                     {{ $subject->name }}
                                     @if($subject->pivot->force )<span class="badge badge-danger">Bắt Buộc</span> @endif
+                                </td>
+                                <td>
+                                    {{ $subject->schedules[0]->name ?? 'Chưa có lớp' }}
                                 </td>
                                 <td>
                                     {{ $subject->pivot->semester ?? 'Tự Do' }}

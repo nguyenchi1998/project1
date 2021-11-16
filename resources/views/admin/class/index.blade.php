@@ -20,7 +20,7 @@
                         <form action="{{ route('admin.departments.index') }}">
                             <div class="d-flex justify-content-between">
                                 <input type="search" name="keyword" value="{{ $keyword }}" class="form-control form-control-sm mr-2" placeholder="Từ Khoá">
-                                <button class="ml-2 btn btn-sm btn-outline-success" type="submit">
+                                <button class="ml-2 btn btn-sm btn-outline-info" type="submit">
                                     <i class="fa fa-search"></i>
                                 </button>
                             </div>

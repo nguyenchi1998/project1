@@ -369,7 +369,7 @@ class DepartmentSeeder extends Seeder
                 $subjects[$subject] =  [
                     'force' => config('subject.force'),
                     'semester' => $faker->randomElement(
-                        range(config('config.start_semester'), config('config.class_register_limit_semester'))
+                        range_semester(config('config.start_semester'), config('config.class_register_limit_semester'), false)
                     )
                 ];
             }

@@ -45,3 +45,15 @@ if (!function_exists('assetStorage')) {
         return asset('storage' . $path);
     }
 }
+
+if (!function_exists('range_semester')) {
+    function range_semester($start, $end, $hasTitle = true)
+    {
+        $semesters = [];
+        for ($i = $start; $i <= $end; $i++) {
+            $semesters[$i] = ($hasTitle  ? 'Kỳ ' : '') . $i;
+        }
+
+        return $semesters;
+    }
+}

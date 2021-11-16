@@ -21,7 +21,7 @@
                             {{ Form::select('semester', $semester, $semesterFilter, ['placeholder' => 'Tất Cả Kỳ Học', 'class' =>'form-control form-control-sm', 'onchange' => 'this.form.submit()']) }}
                         </form>
                     </div>
-                    @if(auth()->user()->can_register_credit)
+                    @if(auth()->user()->grade->can_register_credit)
                     <a class="btn btn-sm d-flex align-items-center btn-outline-success" href="{{ route('credits.create') }}">Đăng Ký</a>
                     @endif
                 </div>
@@ -38,13 +38,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($credits as $credit)
+                            @forelse($credits as $credit)
                             <tr>
                                 <td>
-                                    {{ $credit->schedule ?? '' }}
+                                    {{ $credit->schedule->name ?? 'Chưa có thông tin' }}
                                 </td>
                                 <td>
-                                    {{ $credit->schedule->start_time ?? '' }}
+                                    {{ $credit->schedule->start_time ?? 'Chưa có thông tin' }}
                                 </td>
                                 <td>
                                     {{ $credit->subject->name }}
@@ -53,17 +53,23 @@
                                     {{ $credit->subject->credit }}
                                 </td>
                                 <td>
-                                    {{ !isset($credit->schedule) ? 'Progress' : 'Success'  }}
+                                    {{ $credit->schedule->pending && isset($credit->schedule) ? 'Thành công' : 'Đang chờ xử lý' }}
                                 </td>
                                 <td style="width: 100px">
                                     <div class="d-flex justify-content-between">
-                                        {{ Form::open(['url' => route('credits.destroy', $credit->id)]) }}
+                                        {{ Form::open(['url' => route('credits.destroy', $credit->id), 'method' => 'post']) }}
+                                        @method('delete')
+                                        @csrf
                                         {{ Form::submit('Cancel', ['class' => 'btn btn-sm btn-outline-danger']) }}
                                         {{ Form::close() }}
                                     </div>
                                 </td>
                             </tr>
-                            @endforeach
+                            @empty
+                            <div class="pt-3 d-flex justify-content-center">
+                                <h4>Empty Data</h4>
+                            </div>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>

@@ -45,9 +45,7 @@ class ScheduleStudentController extends Controller
         $filterSemester = $request->get('semester-filter');
         $filterGrade = $request->get('grade-filter');
         $keyword = $request->get('keyword');
-        $semesters = array_map(function ($item) {
-            return 'Kỳ ' . $item;
-        }, range(config('config.student_register_start_semester'), config('config.max_semester')));
+        $semesters = range_semester(config('config.student_register_start_semester'), config('config.max_semester'));
         // lấy ra danh sách sinh viên từ kỳ 5 trở lên (năm 3)
         $students = $this->studentRepository->model()
             ->whereHas('class', function ($query) {
@@ -63,12 +61,14 @@ class ScheduleStudentController extends Controller
             $student['total_credit'] = $student->scheduleDetails->filter(function ($scheduleDetail) {
                 return $scheduleDetail->status_register == config('schedule_detail.status.register.pending');
             })->reduce(function ($total, $schedule) {
-                $total += $schedule->subject->credit;
+                $total += $schedule->specializationSubject->subject->credit;
 
                 return $total;
             }, 0);
+
             return $student;
         });
+
         $grades = $this->gradeRepository->all()->pluck('name', 'id');
 
         return view('admin.schedule.student.index', compact('students', 'keyword', 'filterGrade', 'grades', 'semesters', 'filterSemester'));
@@ -97,7 +97,7 @@ class ScheduleStudentController extends Controller
         });
         $scheduleDetails = $student->scheduleDetails->pluck('subject_id')->toArray();
         $totalCreditRegisted = $student->scheduleDetails->map(function ($scheduleDetail) {
-            return $scheduleDetail->subject;
+            return $scheduleDetail->specializationSubject->subject;
         })
             ->concat($forceSpecializationSubject)
             ->unique('id')
@@ -125,18 +125,5 @@ class ScheduleStudentController extends Controller
         );
 
         return $this->successRouteRedirect('admin.schedules.students.registerScheduleShow', $id);
-    }
-
-    public function registerCreditStatus(Request $request)
-    {
-        if ($request->id) {
-            $this->studentRepository->update($request->id, $request->only('can_register_credit'));
-        } else {
-            $this->studentRepository->model()
-                ->query()
-                ->update($request->only('can_register_credit'));
-        }
-
-        return $this->successRouteRedirect('admin.schedules.students.index');
     }
 }

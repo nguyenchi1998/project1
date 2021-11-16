@@ -26,7 +26,7 @@
                                 Class: {{ $student->class->name }}
                             </div>
                             <div class="form-group">
-                                Register Credit: {{ $student->can_register_credit ? 'Open' : 'Close' }}
+                                Register Credit: {{ $student->grade->can_register_credit ? 'Open' : 'Close' }}
                             </div>
                         </div>
                         <div class="col-6">

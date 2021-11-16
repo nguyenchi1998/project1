@@ -30,7 +30,7 @@
                                 <th>Điểm Chuyên Cần</th>
                                 <th>Điểm Giữa Kỳ</th>
                                 <th>Điểm Cuối Kỳ</th>
-                                <th>TrạnG Thái</th>
+                                <th>Kết Quả</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -38,26 +38,28 @@
                             @forelse($subjects as $subject)
                             <tr>
                                 <td>
-                                    {{ $subject->subject }}
+                                    {{ $subject->subject->name }}
                                 </td>
                                 <td>
-                                    {{ $subject->activity_mark }}
+                                    {{ $subject->activity_mark ?? 'Chưa có điểm' }}
                                 </td>
                                 <td>
-                                    {{ $subject->middle_mark }}
+                                    {{ $subject->middle_mark?? 'Chưa có điểm' }}
                                 </td>
                                 <td>
-                                    {{ $subject->final_mark }}
+                                    {{ $subject->final_mark?? 'Chưa có điểm' }}
                                 </td>
                                 <td>
                                     {{ $subject->status }}
                                 </td>
                                 <td width="100">
+                                    @if(isset($subject->result_status) && $subject->result_status == config('schedule_detail.status.result.relearn'))
                                     <div class="d-flex justify-content-between">
-                                        {{ Form::open(['url' => route('credits.destroy', $credit->id)]) }}
+                                        {{ Form::open(['url' => route('credits.destroy', $subject->id)]) }}
                                         {{ Form::submit('Relearn', ['class' => 'btn btn-sm btn-outline-danger']) }}
                                         {{ Form::close() }}
                                     </div>
+                                    @endif()
                                 </td>
                             </tr>
                             @empty

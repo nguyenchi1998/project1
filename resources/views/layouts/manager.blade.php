@@ -128,7 +128,7 @@
                                 </div>
                             </div>
                             <!-- Message End -->
-                        </a>alert
+                        </a>
                         <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
                     </div>

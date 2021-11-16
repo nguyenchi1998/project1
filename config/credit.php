@@ -3,7 +3,7 @@
 return [
     'max_register' => 20,
     'register' => [
-        'can' => 1,
-        'can_not' => 0,
+        'open' => 1,
+        'close' => 0,
     ],
 ];

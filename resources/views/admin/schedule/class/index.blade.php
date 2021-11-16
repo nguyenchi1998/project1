@@ -23,7 +23,7 @@
                                 {{ Form::select('semester-filter', $semesters, $semesterFilter, ['class' => 'form-control form-control-sm mr-2', 'placeholder' => 'Tất Cả Kỳ Học', 'onchange' => 'this.form.submit()']) }}
                                 {{ Form::select('specialization-filter', $specializations, $specializationFilter, ['class' => 'form-control form-control-sm mr-2', 'placeholder' => 'Tất Cả Chuyên Ngành', 'onchange' => 'this.form.submit()']) }}
                                 <button class="ml-2 btn-sm btn btn-outline-info" type="submit">
-                                    <i class="fa fa-edit"></i>
+                                    <i class="fa fa-search"></i>
                                 </button>
                             </div>
                         </form>
@@ -33,7 +33,7 @@
                     <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th>LỚp Học</th>
+                                <th>Lớp Học</th>
                                 <th>Số Sinh Viên</th>
                                 <th>Kỳ Hiện Tại</th>
                                 <th>Chuyên Ngành</th>
@@ -61,11 +61,9 @@
                                     ({{ $class['total_credit'] }})
                                 </td>
                                 <td class="text-center">
-                                    @if($class['can_register'])
                                     <a href="{{ route('admin.schedules.classes.registerScheduleShow', $class->id) }}" class="btn btn-sm btn-outline-success" data-toggle="tooltip" data-placement="top" title="Đăng Ký Tín Chỉ">
                                         <i class="fa fa-book"></i>
                                     </a>
-                                    @endif
                                 </td>
                             </tr>
                             @empty

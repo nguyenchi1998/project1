@@ -20,15 +20,15 @@
                     <div class="form-row">
                         <div class="col-6">
                             <div class="form-group">
-                                Lớp Học: {{ $schedule->name }}
+                                <strong>Lớp Học:</strong> {{ $schedule->name }}
                             </div>
                             <div class="form-group">
-                                Môn Học: {{ $schedule->subject->name }}
+                                <strong> Môn Học:</strong> {{ $schedule->specializationSubject->subject->name }}
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group">
-                                Số Sinh Viên: {{ count($scheduleDetails) }}
+                                <strong>Số Sinh Viên:</strong> {{ count($scheduleDetails) }}
                             </div>
                         </div>
                     </div>
@@ -49,7 +49,7 @@
                             <tr>
                                 <td>
                                     {{ $student->student->name }}
-                                    {{ Form::text('student_id', $student->id, ['hidden' => true, 'class' => 'form-control']) }}
+                                    {{ Form::text('student_id', $student->student->id, ['hidden' => true, 'class' => 'form-control']) }}
                                 </td>
                                 <td style="width: 200px">
                                     {{ Form::number('activity_mark', $student->activity_mark, ['class' => 'form-control', 'min' => 0, 'max' =>10]) }}
@@ -64,9 +64,9 @@
                             @endforeach
                         </tbody>
                     </table>
-                    <div class="mt-3 d-flex justify-content-end">
-                        <button class="btn btn-sm btn-outline-success" id="submit">Xác Nhận</button>
-                    </div>
+                </div>
+                <div class="mt-3 d-flex justify-content-end">
+                    <button class="btn btn-sm btn-outline-success" id="submit">Xác Nhận</button>
                 </div>
             </div>
         </div>

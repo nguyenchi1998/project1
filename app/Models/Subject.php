@@ -30,7 +30,9 @@ class Subject extends Model
 
     public function specializations()
     {
-        return $this->belongsToMany(Specialization::class)->withPivot(['semester', 'force']);
+        return $this->belongsToMany(Specialization::class)
+            ->using(SpecializationSubject::class)
+            ->withPivot(['semester', 'force']);
     }
 
     public function schedules()
@@ -47,5 +49,4 @@ class Subject extends Model
     {
         return $this->belongsTo(Department::class);
     }
-
 }

@@ -46,16 +46,16 @@ class OpenRegisterCredit extends Command
      */
     public function handle()
     {
-        $this->classRepository->model()
-            ->whereHas('specialization', function ($query) {
-                $query->where('max_semester', '>', DB::raw('classes.semester'));
-            })->update([
-                'semester' => DB::raw('classes.semester + 1'),
-            ]);
-        $this->studentRepository->model()
-            ->query()
-            ->update([
-                'can_register_credit' => config('credit.register.can'),
-            ]);
+        // $this->classRepository->model()
+        //     ->whereHas('specialization', function ($query) {
+        //         $query->where('max_semester', '>', DB::raw('classes.semester'));
+        //     })->update([
+        //         'semester' => DB::raw('classes.semester + 1'),
+        //     ]);
+        // $this->studentRepository->model()
+        //     ->query()
+        //     ->update([
+        //         'can_register_credit' => config('credit.register.can'),
+        //     ]);
     }
 }
