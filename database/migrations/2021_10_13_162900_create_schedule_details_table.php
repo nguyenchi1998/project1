@@ -17,7 +17,7 @@ class CreateScheduleDetailsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedInteger('schedule_id')->nullable();
             $table->unsignedInteger('student_id');
-            $table->unsignedInteger('subject_id');
+            $table->unsignedInteger('specialization_subject_id');
             $table->unsignedInteger('activity_mark')->nullable();
             $table->unsignedInteger('middle_mark')->nullable();
             $table->unsignedInteger('final_mark')->nullable();

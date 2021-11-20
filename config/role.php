@@ -21,7 +21,7 @@ return [
         'teacher' => [
             'name' => 'teacher',
             'guard' => 'teacher',
-            'display_name' => 'Giáo Vien'
+            'display_name' => 'Giáo Viên'
         ],
         'student' => [
             'name' => 'student',

@@ -18,30 +18,32 @@ class ScheduleSeeder extends Seeder
     public function run()
     {
         $faker = Faker\Factory::create();
-        Classs::with('students')->get()->each(function ($class, $key) use ($faker) {
-            if ($class->semster <= config('config.class_register_limit_semester')) {
-                Subject::whereType(config('subject.type.basic'))->get()->each(function ($subject) use ($faker, $class) {
-                    $teacherIds = Teacher::whereHas('subjects', function ($query) use ($subject) {
-                        $query->where('subjects.id', $subject->id);
-                    })->get()->pluck('id');
-                    $schedule = Schedule::create([
-                        'teacher_id' => $faker->randomElement($teacherIds),
-                        'subject_id' => $subject->id,
-                        'name' => 'Lớp Tín Chỉ Môn ' . $subject->name,
-                        'status' => $faker->randomElement(array_values(config('schedule.status'))),
-                        'class_id' => $class->id,
-                    ]);
-                    $class->students->each(function ($student) use ($subject, $schedule) {
-                        ScheduleDetail::create([
-                            'student_id' => $student->id,
-                            'subject_id' => $subject->id,
-                            'schedule_id' => $schedule->id,
-                            'register_status' => config('schedule_detail.status.register.success')
+        Classs::with(['students', 'specialization', 'specialization.subjects' => function ($query) {
+            $query->whereType(config('subject.type.basic'));
+        }, 'specialization.subjects.teachers'])
+            ->get()
+            ->each(function ($class) use ($faker) {
+                if ($class->semster <= config('config.class_register_limit_semester')) {
+                    $class->specialization->subjects->each(function ($subject) use ($faker, $class) {
+                        $teacherIds = $subject->teachers->pluck('id');
+                        $schedule = Schedule::create([
+                            'teacher_id' => $faker->randomElement($teacherIds),
+                            'specialization_subject_id' => $subject->pivot->id,
+                            'name' => 'Lớp Tín Chỉ Môn ' . $subject->name,
+                            'status' => $faker->randomElement(array_values(config('schedule.status'))),
+                            'class_id' => $class->id,
                         ]);
+                        $class->students->each(function ($student) use ($subject, $schedule) {
+                            ScheduleDetail::create([
+                                'student_id' => $student->id,
+                                'specialization_subject_id' => $subject->pivot->id,
+                                'schedule_id' => $schedule->id,
+                                'register_status' => config('schedule_detail.status.register.success')
+                            ]);
+                        });
                     });
-                });
-            } else {
-            }
-        });
+                } else {
+                }
+            });
     }
 }

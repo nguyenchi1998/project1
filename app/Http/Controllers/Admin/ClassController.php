@@ -21,8 +21,7 @@ class ClassController extends Controller
         IClassRepository          $classRepository,
         IStudentRepository        $studentRepository,
         ISpecializationRepository $specializationRepository
-    )
-    {
+    ) {
         $this->classRepository = $classRepository;
         $this->studentRepository = $studentRepository;
         $this->specializationRepository = $specializationRepository;

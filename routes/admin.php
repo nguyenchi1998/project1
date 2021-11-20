@@ -49,8 +49,6 @@ Route::group(['as' => 'admin.'], function () {
         Route::get('schedules/students', 'ScheduleStudentController@index')
             ->name('schedules.students.index');
 
-        Route::post('schedules/students/status', 'ScheduleStudentController@registerCreditStatus')
-            ->name('schedules.students.status');
 
         Route::get('schedules/students/{id}', 'ScheduleStudentController@registerScheduleShow')
             ->name('schedules.students.registerScheduleShow');
@@ -91,6 +89,9 @@ Route::group(['as' => 'admin.'], function () {
             ->name('classes.remove_student');
 
         Route::resource('grades', 'GradeController');
+
+        Route::post('grades/{id}/credit-status', 'GradeController@registerCreditStatus')
+            ->name('grades.creditStatus');
 
         Route::resource('departments', 'DepartmentController');
 

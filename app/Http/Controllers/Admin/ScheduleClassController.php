@@ -33,8 +33,7 @@ class ScheduleClassController extends Controller
         IClassRepository          $classRepository,
         IStudentRepository        $studentRepository,
         IGradeRepository          $gradeRepository
-    )
-    {
+    ) {
         $this->scheduleRepository = $scheduleRepository;
         $this->specializationRepository = $specializationRepository;
         $this->subjectRepository = $subjectRepository;
@@ -49,9 +48,7 @@ class ScheduleClassController extends Controller
         $semesterFilter = $request->get('semester-filter');
         $specializationFilter = $request->get('specialization-filter');
         $keyword = $request->get('keyword');
-        $semesters = array_map(function ($item) {
-            return 'Kỳ ' . $item;
-        }, range(config('config.start_semester'), config('config.class_register_limit_semester')));
+        $semesters = range_semester(config('config.start_semester'), config('config.class_register_limit_semester'));
         $classes = $this->classRepository->model()
             ->newbieClass()
             ->when($keyword, function ($query) use ($keyword) {
@@ -66,11 +63,15 @@ class ScheduleClassController extends Controller
             ->with(['students', 'schedules'])
             ->paginate(config('config.paginate'));
         $classes->getCollection()->transform(function ($class) {
-            $class['can_register'] = $class->schedules->reduce(function ($total, $schedule) {
-                    $total += $schedule->subject->credit;
+            $totalCredit = $class->schedules->reduce(function ($total, $schedule) use ($class) {
+                if ($schedule->specializationSubject->semester == $class->semester)
+                    $total += $schedule->specializationSubject->subject->credit;
 
-                    return $total;
-                }, 0) < config('credit.max_register');
+                return $total;
+            }, 0);
+            $class['can_register'] = $totalCredit < config('credit.max_register');
+            $class['total_credit'] = $totalCredit;
+
             return $class;
         });
         $specializations = $this->specializationRepository->all()
@@ -82,26 +83,24 @@ class ScheduleClassController extends Controller
     public function registerScheduleShow($id)
     {
         $class = $this->classRepository->find($id);
+        $specialization = $this->specializationRepository->find($class->specialization_id)
+            ->load(['subjects' => function ($query) use ($class) {
+                $query->whereType(config('subject.type.basic'))
+                    ->wherePivot('semester', $class->semester + 1);
+            }]);
         // lấy danh sách môn học cơ bản thuộc kỳ tiếp theo của lớp
-        $basicSubjects = $this->subjectRepository->model()
-            ->basicSubjects()
-            ->wherehas('specializations', function ($query) use ($class) {
-                $query->where('specializations.id', $class->specialization->id);
-            })
-            ->get()
-            ->filter(function ($subject) use ($class) {
-                return $subject->specializations->first()->pivot->semester == $class->semester + 1;
-            });
-        // danh sách các môn đã đăng kí của lớp ở kỳ tiếp theo
+        $basicSubjects = $specialization->subjects;
+
+        // danh sách các môn đã đăng kí của lớp ở kỳ tiếp theo của lớp
         $scheduleSubjects = $this->scheduleRepository->model()
             ->where('class_id', $id)
-            ->with(['subject.specializations' => function ($query) use ($class) {
+            ->whereHas('specializationSubject', function ($query) use ($class) {
+                $query->whereSemester($class->semester + 1);
+            })
+            ->with(['specializationSubject.subject.specializations' => function ($query) use ($class) {
                 $query->where('specializations.id', $class->specialization->id);
             }])
             ->get()
-            ->filter(function ($schedule) use ($class) {
-                return $schedule->subject->specializations->first()->pivot->semester == $class->semester + 1;
-            })
             ->pluck('id', 'subject_id')
             ->toArray();
 

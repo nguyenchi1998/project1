@@ -22,7 +22,8 @@ class GradeController extends Controller
             ->when($keyword, function ($query) use ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%');
             })
-            ->paginate(config('config.paginate'))->load('students');
+            ->with('students')
+            ->paginate(config('config.paginate'));
 
         return view('admin.grade.index', compact('grades', 'keyword'));
     }
@@ -79,5 +80,12 @@ class GradeController extends Controller
         }
 
         return $this->failRouteRedirect();
+    }
+
+    public function registerCreditStatus(Request $request, $id)
+    {
+        $this->gradeRepository->update($id, $request->only('can_register_credit'));
+
+        return $this->successRouteRedirect('admin.grades.index');
     }
 }

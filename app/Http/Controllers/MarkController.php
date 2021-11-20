@@ -26,10 +26,10 @@ class MarkController extends Controller
 
     public function index(Request $request)
     {
-        $semesterFilter = $request->semester;
         $student = Auth::user();
         $class = $this->classRepository->find($student->class_id)->load('specialization');
-        $semester = range(config('config.start_semester'), $class->semester);
+        $semesterFilter = $request->get('semester', $class->semester);
+        $semester = range_semester(config('config.start_semester'), $class->semester);
         $subjects = $this->scheduleDetailRepository->where('student_id', '=', $student->id)
             ->whereHas('schedule', function ($query) {
                 $query->where('status', config('schedule.status.done'));

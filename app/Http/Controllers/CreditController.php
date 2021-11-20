@@ -30,18 +30,14 @@ class CreditController extends Controller
 
     public function index(Request $request)
     {
-        $semesterFilter = $request->semester;
         $student = Auth::user();
         $class = $this->classRepository->find($student->class_id);
-        $semester = array_map(function ($item) {
-            return 'Kỳ ' . $item;
-        }, range(config('config.start_semester'), $class->specialization->max_semester));
+        $semesterFilter = $request->get('semester', $class->semester);
+        $semester = range_semester(config('config.start_semester'), $class->specialization->max_semester);
         $credits = $this->scheduleDetailRepository->where('student_id', '=', $student->id)
-            ->where('register_status', '=', 0)
-            ->get();
-        if ($credits) {
-            $credits->load(['subject', 'schedule']);
-        }
+            ->where('register_status', config('schedule_detail.status.register.pending'))
+            ->get()
+            ->load(['subject', 'schedule']);
 
         return view('student.credit.index', compact('credits', 'semester', 'semesterFilter'));
     }
@@ -58,7 +54,8 @@ class CreditController extends Controller
                         ->where(function ($query) use ($class) {
                             $query->where('specialization_subject.semester', '>=', $class->semester)
                                 ->orWhere('specialization_subject.semester', null);
-                        });
+                        })
+                        ->orderBy('specialization_subject.semester', 'desc');
                 },
                 'subjects.schedules' => function ($query) {
                     $query->where('status', config('schedule.status.new'))
@@ -105,6 +102,8 @@ class CreditController extends Controller
 
     public function destroy($id)
     {
-        //
+        $this->scheduleDetailRepository->delete($id, true);
+
+        return $this->successRouteRedirect('credits.index');
     }
 }

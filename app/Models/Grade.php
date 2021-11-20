@@ -11,6 +11,7 @@ class Grade extends Model
 
     protected $fillable = [
         'name',
+        'can_register_credit',
     ];
 
     public function students()

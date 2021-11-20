@@ -12,7 +12,7 @@ class ScheduleDetail extends Model
     protected $fillable = [
         'schedule_id',
         'student_id',
-        'subject_id',
+        'specialization_subject_id',
         'activity_mark',
         'middle_mark',
         'final_mark',
@@ -25,13 +25,13 @@ class ScheduleDetail extends Model
         return $this->belongsTo(Schedule::class);
     }
 
-    public function subject()
-    {
-        return $this->belongsTo(Subject::class);
-    }
-
     public function student()
     {
         return $this->belongsTo(Student::class);
+    }
+
+    public function specializationSubject()
+    {
+        return $this->belongsTo(SpecializationSubject::class, 'specialization_subject_id');
     }
 }
