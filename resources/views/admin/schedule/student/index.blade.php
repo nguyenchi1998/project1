@@ -15,7 +15,7 @@
     <div class="col-lg-12 stretch-card">
         <div class="card">
             <div class="card-body">
-                <div class="d-flex mb-4 justify-content-between">
+                <div class="d-flex mb-3 justify-content-between">
                     <div class="">
                         <form action="{{ route('admin.schedules.students.index') }}">
                             <div class="d-flex justify-content-between">
@@ -35,7 +35,7 @@
                             <tr>
                                 <th>Sinh Viên</th>
                                 <th>Khóa - Lớp - Kỳ Hiện Tại</th>
-                                <th>Số Môn Đã Đăng Ký (Tổng Số Tín)</th>
+                                <th>Số Môn Đã Đăng Ký (Số Tín)</th>
                                 <th>Chuyên Ngành</th>
                                 <th>Trạng Thái</th>
                                 <th></th>
@@ -59,11 +59,10 @@
                                     {{ $student->class->specialization->name }}
                                 </td>
                                 <td>
-                                    @if($student->grade->can_register_credit)
-                                    {{ 'Mở Đăng Ký' }}
-                                    @else
-                                    {{ 'Đóng Đăng Ký' }}
-                                    @endif
+                                    <form action="{{ route('admin.schedules.students.creditStatus', $student->id) }}" method="post">
+                                        @csrf
+                                        {{ Form::select('can_register_credit', $states, $student->can_register_credit, ['class' => 'form-control form-control-sm', 'onchange' => 'this.form.submit()'])}}
+                                    </form>
                                 </td>
                                 <td class="text-center">
                                     <a href="{{ route('admin.schedules.students.registerScheduleShow', $student->id) }}" class="btn btn-sm btn-outline-success" data-toggle="tooltip" data-placement="top" title="Đăng Ký Tín Chỉ">

@@ -20,8 +20,7 @@ class SubjectController extends Controller
         ISubjectRepository        $subjectRepository,
         ISpecializationRepository $specializationRepository,
         IDepartmentRepository     $departmentRepository
-    )
-    {
+    ) {
         $this->subjectRepository = $subjectRepository;
         $this->departmentRepository = $departmentRepository;
         $this->specializationRepository = $specializationRepository;
@@ -31,10 +30,14 @@ class SubjectController extends Controller
     {
         $departmentFilter = $request->get('department-filter');
         $typeFilter = $request->get('type-filter');
+        $keyword = $request->get('keyword');
         $types = array_map(function ($item) {
             return ucfirst($item);
         }, array_flip(config('subject.type')));
         $subjects = $this->subjectRepository->withTrashedModel()
+            ->when($keyword, function ($query) use ($keyword) {
+                $query->where('name', 'like', '%' . $keyword . '%');
+            })
             ->when($typeFilter != null, function ($query) use ($typeFilter) {
                 $query->where('type', $typeFilter);
             })
@@ -47,7 +50,7 @@ class SubjectController extends Controller
             ->paginate(config('config.paginate'));
         $departments = $this->departmentRepository->all()->pluck('name', 'id')->toArray();
 
-        return view('admin.subject.index', compact('subjects', 'types', 'departments', 'departmentFilter', 'typeFilter'));
+        return view('admin.subject.index', compact('subjects', 'types', 'departments', 'departmentFilter', 'typeFilter', 'keyword'));
     }
 
     public function create()

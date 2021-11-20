@@ -60,7 +60,7 @@ class ScheduleClassController extends Controller
                     $query->whereId($specializationFilter);
                 });
             })
-            ->with(['students', 'schedules'])
+            ->with(['students', 'schedules.specializationSubject'])
             ->paginate(config('config.paginate'));
         $classes->getCollection()->transform(function ($class) {
             $totalCredit = $class->schedules->reduce(function ($total, $schedule) use ($class) {

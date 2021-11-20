@@ -28,9 +28,6 @@
                             <div class="form-group">
                                 Môn Học: {{ $schedule->specializationSubject->subject->name }}
                             </div>
-                            <div class="form-group">
-                                Giáo Viên: {{ $schedule->teacher->name }}
-                            </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group">

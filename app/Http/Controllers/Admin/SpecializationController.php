@@ -29,13 +29,19 @@ class SpecializationController extends Controller
     public function index(Request $request)
     {
         $keyword = $request->get('keyword');
+        $departmentFilter = $request->get('department-filter');
         $specializations = $this->specializationRepository->withTrashedModel()
+            ->when($departmentFilter, function ($query) use ($departmentFilter) {
+                $query->whereHas('department', function ($query) use ($departmentFilter) {
+                    $query->where('id', $departmentFilter);
+                });
+            })
             ->with(['subjects', 'department'])
             ->paginate(config('config.paginate'));
+        $departments = $this->departmentRepository->all()->pluck('name', 'id')->toArray();
 
-        return view('admin.specialization.index', compact('specializations', 'keyword'));
+        return view('admin.specialization.index', compact('specializations', 'keyword', 'departmentFilter', 'departments'));
     }
-
 
     public function create()
     {
@@ -43,7 +49,6 @@ class SpecializationController extends Controller
 
         return view('admin.specialization.create', compact('departments'));
     }
-
 
     public function store(Request $request)
     {
@@ -130,7 +135,7 @@ class SpecializationController extends Controller
                 $specializationSemesters[$i] = 'Kỳ ' . $i;
             }
         }
-        $subjects = $this->subjectRepository->all();
+        $subjects = $this->subjectRepository->allWithTrashed();
         $subjects = $subjects->map(function ($subject) use ($specialization) {
             $subject['can_not_edit'] = $subject->type == config('subject.type.basic');
             $subject['isBasic'] = $subject->type == config('subject.type.basic');

@@ -48,7 +48,7 @@
                                     {{ $schedule->start_time }}
                                 </td>
                                 <td style="width:150px">
-                                    {{ count( $schedule->class->students) }}
+                                    {{ count( $schedule->scheduleDetails) }}
                                 </td>
                                 <td style="width:150px">
                                     <form action="{{ route('teacher.schedules.status', $schedule->id) }}" method="POST">

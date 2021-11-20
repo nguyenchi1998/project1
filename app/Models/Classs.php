@@ -24,7 +24,7 @@ class Classs extends Model
 
     public function specialization()
     {
-        return $this->belongsTo(Specialization::class);
+        return $this->belongsTo(Specialization::class)->withTrashed();
     }
 
     public function schedules()

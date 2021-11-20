@@ -21,7 +21,7 @@
                         <h2 class="text-center">{{ $class->name }}</h2>
                     </div>
                 </div>
-                <div class="d-flex mb-4 justify-content-between">
+                <div class="d-flex mb-3 justify-content-between">
                     <div class=""></div>
                     <a class="btn btn-outline-success btn-sm" href="{{ route('admin.classes.create') }}">Thêm Sinh
                         Viên</a>

@@ -4,6 +4,10 @@
 }
 
 .img-avatar {
-    width: 64px;
-    height: 64px;
+    width: 40px;
+    height: 40px;
+}
+
+.text-decoration-line-through {
+    text-decoration: line-through !important;
 }

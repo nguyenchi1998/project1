@@ -15,7 +15,7 @@
     <div class="col-lg-12 stretch-card">
         <div class="card">
             <div class="card-body">
-                <div class="d-flex mb-4 justify-content-between">
+                <div class="d-flex mb-3 justify-content-between">
                     <div class="w-25">
                         <form action="">
                             <div class="d-flex justify-content-between">
@@ -33,7 +33,6 @@
                         <thead>
                             <tr>
                                 <th>Lớp Tín Chỉ</th>
-                                <th>Lớp Học</th>
                                 <th>Số Sinh Viên</th>
                                 <th>Thời Gian Bắt Đầu</th>
                                 <th>Thời Gian Kết Thúc</th>
@@ -47,10 +46,9 @@
                             <tr>
                                 <td>
                                     {{ $schedule->name }}
+                                    @if(!$schedule->class_id) <span class="badge bg-primary">Tự Do</span>@endif
                                 </td>
-                                <td>
-                                    {{ $schedule->class->name ?? 'Tự Do' }}
-                                </td>
+
                                 <td class="text-center">
                                     {{ count($schedule->scheduleDetails) ?: count($schedule->class->students)}}
                                 </td>

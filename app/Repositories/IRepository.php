@@ -6,6 +6,8 @@ interface IRepository
 {
     public function all();
 
+    public function allWithTrashed();
+
     public function find($id);
 
     public function update($id, $array);

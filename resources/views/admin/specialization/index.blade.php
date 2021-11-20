@@ -15,12 +15,13 @@
     <div class="col-lg-12 stretch-card">
         <div class="card">
             <div class="card-body">
-                <div class="d-flex mb-4 justify-content-between">
+                <div class="d-flex mb-3 justify-content-between">
                     <div class="">
-                        <form action="{{ route('admin.departments.index') }}">
+                        <form action="{{ route('admin.specializations.index') }}">
                             <div class="d-flex justify-content-between">
                                 <input type="search" name="keyword" value="{{ $keyword }}" class="form-control form-control-sm mr-2" placeholder="Từ Khoá">
-                                <button class="ml-2 btn btn-sm btn-outline-success" type="submit">
+                                {{ Form::select('department-filter', $departments, $departmentFilter, ['class' => 'mr-2 form-control form-control-sm', 'onchange' => 'this.form.submit()', 'placeholder' => 'Tất cả khoa viện']) }}
+                                <button class="btn btn-sm btn-outline-info" type="submit">
                                     <i class="fa fa-search"></i>
                                 </button>
                             </div>
@@ -42,7 +43,7 @@
                         </thead>
                         <tbody>
                             @forelse($specializations as $specialization)
-                            <tr>
+                            <tr class="{{ modelTrash($specialization) }}">
                                 <td>
                                     {{ $specialization->name }}
                                 </td>

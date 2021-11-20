@@ -341,7 +341,7 @@ class DepartmentSeeder extends Seeder
                 'name' => $department['name'],
             ]);
             foreach ($department['specializations'] as $specialization) {
-                $specialization = Specialization::create([
+                Specialization::create([
                     'name' => $specialization,
                     'department_id' => $departmentInstance->id,
                     'min_credit' => 30,
@@ -392,7 +392,7 @@ class DepartmentSeeder extends Seeder
                         )
                     ),
                 ];
-            };
+            }
             $specialization->subjects()->attach($subjects);
         });
     }

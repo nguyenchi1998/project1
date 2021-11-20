@@ -14,7 +14,7 @@ class PermissionSeeder extends Seeder
     {
         $guards = config('role.guard');
         foreach ($guards as $guard) {
-            foreach (config('role.permissions') as $key => $permission) {
+            foreach (config('role.permissions') as $permission) {
                 Permission::create([
                     'name' => $permission['name'],
                     'display_name' => $permission['display_name'],

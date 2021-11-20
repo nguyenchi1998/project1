@@ -18,6 +18,9 @@ class GradeController extends Controller
     public function index(Request $request)
     {
         $keyword = $request->get('keyword');
+        $states = array_map(function ($val) {
+            return ucfirst($val);
+        },  array_flip(config('credit.register')));
         $grades = $this->gradeRepository->model()
             ->when($keyword, function ($query) use ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%');
@@ -25,7 +28,7 @@ class GradeController extends Controller
             ->with('students')
             ->paginate(config('config.paginate'));
 
-        return view('admin.grade.index', compact('grades', 'keyword'));
+        return view('admin.grade.index', compact('grades', 'keyword', 'states'));
     }
 
     public function create()

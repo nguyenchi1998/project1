@@ -16,12 +16,12 @@
     <div class="col-lg-12 stretch-card">
         <div class="card">
             <div class="card-body">
-                <div class="d-flex mb-4 justify-content-between">
+                <div class="d-flex mb-3 justify-content-between">
                     <div class="">
                         <form action="{{ route('admin.grades.index') }}">
                             <div class="d-flex justify-content-between">
                                 <input type="search" name="keyword" value="{{ $keyword }}" class="form-control form-control-sm mr-2" placeholder="Từ Khoá">
-                                <button class="ml-2 btn-sm btn btn-outline-info" type="submit">
+                                <button class="btn-sm btn btn-outline-info" type="submit">
                                     <i class="fa fa-search"></i>
                                 </button>
                             </div>
@@ -47,7 +47,7 @@
                                 <td style="width: 200px;">
                                     <form action="{{ route('admin.grades.creditStatus', $grade->id) }}" method="post">
                                         @csrf
-                                        {{ Form::select('can_register_credit', array_flip(config('credit.register')), $grade->can_register_credit, ['class' => 'form-control form-control-sm', 'onchange' => 'this.form.submit()'])}}
+                                        {{ Form::select('can_register_credit', $states, $grade->can_register_credit, ['class' => 'form-control form-control-sm', 'onchange' => 'this.form.submit()'])}}
                                     </form>
                                 </td>
                                 <td style="width: 100px;">

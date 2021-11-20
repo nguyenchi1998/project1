@@ -15,7 +15,7 @@
     <div class="col-lg-12 stretch-card">
         <div class="card">
             <div class="card-body">
-                <div class="d-flex mb-4 justify-content-between">
+                <div class="d-flex mb-3 justify-content-between">
                     <div class="">
                         <form action="">
                             {{ Form::select('semester', $semester, $semesterFilter, ['placeholder' => 'Tất Cả Kỳ Học','class' =>'form-control', 'onchange' => 'this.form.submit()']) }}
@@ -38,7 +38,7 @@
                             @forelse($subjects as $subject)
                             <tr>
                                 <td>
-                                    {{ $subject->subject->name }}
+                                    {{ $subject->specializationSubject->subject->name }}
                                 </td>
                                 <td>
                                     {{ $subject->activity_mark ?? 'Chưa có điểm' }}
@@ -50,15 +50,18 @@
                                     {{ $subject->final_mark?? 'Chưa có điểm' }}
                                 </td>
                                 <td>
-                                    {{ $subject->status }}
+                                    {{ ucfirst(array_flip(config('schedule_detail.status.result'))[$subject->result_status]) }}
                                 </td>
-                                <td width="100">
+                                <td class="text-center">
                                     @if(isset($subject->result_status) && $subject->result_status == config('schedule_detail.status.result.relearn'))
-                                    <div class="d-flex justify-content-between">
-                                        {{ Form::open(['url' => route('credits.destroy', $subject->id)]) }}
-                                        {{ Form::submit('Relearn', ['class' => 'btn btn-sm btn-outline-danger']) }}
-                                        {{ Form::close() }}
-                                    </div>
+                                    {{ Form::open(['url' => route('credits.destroy', $subject->id)]) }}
+                                    {{ Form::submit('Relearn', ['class' => 'btn btn-sm btn-outline-danger']) }}
+                                    {{ Form::close() }}
+                                    @endif()
+                                    @if(isset($subject->result_status) && $subject->result_status == config('schedule_detail.status.result.retest'))
+                                    {{ Form::open(['url' => route('credits.destroy', $subject->id)]) }}
+                                    {{ Form::submit('Retest', ['class' => 'btn btn-sm btn-outline-danger']) }}
+                                    {{ Form::close() }}
                                     @endif()
                                 </td>
                             </tr>

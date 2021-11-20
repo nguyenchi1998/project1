@@ -165,9 +165,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.logout') }}">
-                        <i class="fas fa-sign-out-alt"></i>
-                    </a>
+                    <form action="{{ route('logout') }}" id="logout" method="POST">
+                        @csrf
+                        <a class="nav-link" href="#" onclick="document.getElementById('logout').submit()">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </a>
+                    </form>
                 </li>
             </ul>
         </nav>
