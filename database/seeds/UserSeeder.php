@@ -1,8 +1,6 @@
 <?php
 
-use App\Models\Department;
 use App\Models\Media;
-use App\Models\Teacher;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;

@@ -17,7 +17,7 @@ class SubjectTeacherSeeder extends Seeder
         Subject::all()->each(
             function ($subject) use ($faker) {
                 $teacherIds = Teacher::where('department_id', $subject->department_id)->get()->pluck('id');
-                $subject->teachers()->sync($faker->randomElements($teacherIds, random_int(4, count($teacherIds))));
+                $subject->teachers()->sync($faker->randomElements($teacherIds, $faker->randomElement(range(4, count($teacherIds)))));
             }
         );
     }

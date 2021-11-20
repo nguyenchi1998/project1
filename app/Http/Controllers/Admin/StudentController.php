@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Repositories\IClassRepository;
 use App\Repositories\IGradeRepository;
 use App\Repositories\IRoleRepository;
+use App\Repositories\ISpecializationRepository;
 use App\Repositories\IStudentRepository;
 use Exception;
 use Illuminate\Http\Request;
@@ -16,6 +17,7 @@ class StudentController extends Controller
 {
     protected $studentRepository;
     protected $classRepository;
+    protected $specializationRepository;
     protected $gradeRepository;
     protected $roleRepository;
 
@@ -23,33 +25,37 @@ class StudentController extends Controller
         IStudentRepository $studentRepository,
         IClassRepository   $classRepository,
         IGradeRepository   $gradeRepository,
+        ISpecializationRepository   $specializationRepository,
         IRoleRepository    $roleRepository
     ) {
         $this->studentRepository = $studentRepository;
         $this->classRepository = $classRepository;
         $this->gradeRepository = $gradeRepository;
         $this->roleRepository = $roleRepository;
+        $this->specializationRepository = $specializationRepository;
     }
 
     public function index(Request $request)
     {
-        $classFilter = $request->get('class-filter');
+        $specializationFilter = $request->get('specialization-filter');
+        $specializations = $this->specializationRepository->all()->pluck('name', 'id');
         $keyword = $request->get('keyword');
         $students = $this->studentRepository->model()
             ->when($keyword, function ($query) use ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%')
-                    ->orWhere('phone', $keyword)
-                    ->orWhere('email', 'like', '%' . $keyword . '%');
+                    ->orWhere('email', 'like', '%' . $keyword . '%')
+                    ->orWhere('phone', $keyword);
             })
-            ->when($classFilter, function ($query) use ($classFilter) {
-                $query->whereHas('class', function ($query) use ($classFilter) {
-                    $query->whereId($classFilter);
+            ->when($specializationFilter, function ($query) use ($specializationFilter) {
+                $query->whereHas('class.specialization', function ($query) use ($specializationFilter) {
+                    $query->whereId($specializationFilter);
                 });
             })
+            ->with('class.specialization')
             ->paginate(config('config.paginate'));
         $classes = $this->classRepository->all()->pluck('name', 'id');
 
-        return view('admin.student.index', compact('students', 'classFilter', 'classes', 'keyword'));
+        return view('admin.student.index', compact('students', 'specializations', 'specializationFilter', 'keyword'));
     }
 
     public function create()

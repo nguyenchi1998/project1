@@ -50,7 +50,7 @@
                                     <div class="form-check form-check-info m-0" style="min-width: 400px">
                                         <label class="form-check-label">
                                             {{ Form::checkbox('subject_id', $subject->id, $subject['choose'], ['class'=>'form-check-input selectedSubject', 'disabled' => $subject['can_not_edit']]) }}
-                                            {{ $subject->name }}
+                                            {!! render_delete_model($subject, $subject->name) !!}
                                         </label>
                                     </div>
                                 </td>

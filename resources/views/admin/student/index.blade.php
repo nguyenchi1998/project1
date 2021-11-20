@@ -15,18 +15,16 @@
     <div class="col-lg-12 stretch-card">
         <div class="card">
             <div class="card-body">
-                <div class="d-flex mb-4 justify-content-between">
-                    <div class="">
-                        <form action="{{ route('admin.students.index') }}">
-                            <div class="d-flex justify-content-between">
-                                <input type="search" name="keyword" value="{{ $keyword }}" class="form-control form-control-sm mr-2" placeholder="Từ Khoá">
-                                {{ Form::select('class-filter', $classes, $classFilter, ['class' => 'form-control form-control-sm mr-2', 'placeholder' => 'Tất Cả Lớp Học']) }}
-                                <button class="ml-2 btn-sm btn btn-outline-info" type="submit">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+                <div class="d-flex mb-3 justify-content-between">
+                    <form action="{{ route('admin.students.index') }}">
+                        <div class="d-flex justify-content-between">
+                            <input type="search" name="keyword" value="{{ $keyword }}" class="form-control form-control-sm mr-2" placeholder="Từ Khoá">
+                            {{ Form::select('specialization-filter', $specializations, $specializationFilter, ['class' => 'form-control form-control-sm mr-2', 'placeholder' => 'Tất Cả Lớp Học']) }}
+                            <button class="btn-sm btn btn-outline-info" type="submit">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
                     <a class="btn btn-sm d-flex align-items-center btn-outline-success" href="{{ route('admin.students.create') }}">Tạo mới</a>
                 </div>
                 <div class="table-responsive table-scroll">
@@ -36,8 +34,8 @@
                                 <th>Sinh Viên</th>
                                 <th>Email</th>
                                 <th>Số Điện Thoại</th>
-                                <th>Ngày Sinh</th>
                                 <th>Lớp</th>
+                                <th>Chuyên Ngành</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -59,10 +57,10 @@
                                     {{ $student->phone }}
                                 </td>
                                 <td>
-                                    {{ formatDateShow($student->birthday) }}
+                                    {{ $student->class->name ?? '' }}
                                 </td>
                                 <td>
-                                    {{ $student->class->name ?? '' }}
+                                    {{ $student->class->specialization->name ?? '' }}
                                 </td>
                                 <td width="100">
                                     <div class="d-flex justify-content-between">
@@ -90,7 +88,7 @@
                     </table>
                 </div>
                 <div class="mt-3 d-flex justify-content-end">
-                    {{ $students->appends(['class-filter' => $classFilter, 'keyword' => $keyword])->links() }}
+                    {{ $students->appends(['specialization-filter' => $specializationFilter, 'keyword' => $keyword])->links() }}
                 </div>
             </div>
         </div>

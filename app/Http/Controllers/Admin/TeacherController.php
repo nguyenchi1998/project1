@@ -25,8 +25,7 @@ class TeacherController extends Controller
         ITeacherRepository    $teacherRrpository,
         IRoleRepository       $roleRepository,
         ISubjectRepository    $subjectRepository
-    )
-    {
+    ) {
         $this->departmentRepository = $departmentRepository;
         $this->teacherRepository = $teacherRrpository;
         $this->roleRepository = $roleRepository;
@@ -35,18 +34,24 @@ class TeacherController extends Controller
 
     public function index(Request $request)
     {
-        $filter = $request->get('filter');
+        $keyword = $request->get('keyword');
+        $departmentFilter = $request->get('department-filter');
         $teachers = $this->teacherRepository->model()
-            ->when($filter && $filter != 'all', function ($query) use ($filter) {
-                $query->whereHas('department', function ($query) use ($filter) {
-                    $query->whereId($filter);
+            ->when($keyword, function ($query) use ($keyword) {
+                $query->where('name', 'like', '%' . $keyword . '%')
+                    ->orWhere('email', 'like', '%' . $keyword . '%')
+                    ->orWhere('phone',  $keyword);
+            })
+            ->when($departmentFilter, function ($query) use ($departmentFilter) {
+                $query->whereHas('department', function ($query) use ($departmentFilter) {
+                    $query->whereId($departmentFilter);
                 });
             })
-            ->get()
-            ->load(['roles:id,name', 'department', 'nextDepartment']);
-        $departments = $this->departmentRepository->all();
+            ->with(['roles:id,name', 'department', 'nextDepartment'])
+            ->paginate(config('config.paginate'));
+        $departments = $this->departmentRepository->all()->pluck('name', 'id');
 
-        return view('admin.teacher.index', compact('teachers', 'filter', 'departments'));
+        return view('admin.teacher.index', compact('teachers', 'departmentFilter', 'departments', 'keyword'));
     }
 
     public function create()

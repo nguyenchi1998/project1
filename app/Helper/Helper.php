@@ -57,3 +57,33 @@ if (!function_exists('range_semester')) {
         return $semesters;
     }
 }
+
+if (!function_exists('result_schedule_detail')) {
+    function result_schedule_detail($activityMark, $middleMark, $finalMark)
+    {
+        if (!$activityMark || !$middleMark || !$finalMark) {
+            $result = config('schedule_detail.status.result.relearn');
+        } else {
+            $averageMark = ($activityMark + $middleMark * 4 + $finalMark * 5) / 10;
+            if ($averageMark >= 4) {
+                $result = config('schedule_detail.status.result.pass');
+            } else {
+                $result = config('schedule_detail.status.result.retest');
+            }
+        }
+
+        return $result;
+    }
+}
+
+
+if (!function_exists('render_delete_model')) {
+    function render_delete_model($model, $text)
+    {
+        if ($model->trashed()) {
+            return htmlspecialchars_decode("<span class='text-decoration-line-through'>" . $text . "</span>");
+        }
+
+        return $text;
+    }
+}

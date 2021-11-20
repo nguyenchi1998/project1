@@ -20,6 +20,11 @@ class Repository implements IRepository
         return $this->model->all();
     }
 
+    public function allWithTrashed()
+    {
+        return $this->model->withTrashed()->get();;
+    }
+
     public function find($id)
     {
         return $this->model->find($id);

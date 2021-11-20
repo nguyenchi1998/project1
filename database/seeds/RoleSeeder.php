@@ -12,7 +12,7 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        foreach (config('role.roles') as $key => $role) {
+        foreach (config('role.roles') as $role) {
             Role::create([
                 'name' => $role['name'],
                 'guard_name' => $role['guard'],

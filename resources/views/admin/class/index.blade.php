@@ -15,17 +15,16 @@
     <div class="col-lg-12 stretch-card">
         <div class="card">
             <div class="card-body">
-                <div class="d-flex mb-4 justify-content-between">
-                    <div class="">
-                        <form action="{{ route('admin.departments.index') }}">
-                            <div class="d-flex justify-content-between">
-                                <input type="search" name="keyword" value="{{ $keyword }}" class="form-control form-control-sm mr-2" placeholder="Từ Khoá">
-                                <button class="ml-2 btn btn-sm btn-outline-info" type="submit">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+                <div class="d-flex mb-3 justify-content-between">
+                    <form action="{{ route('admin.classes.index') }}">
+                        <div class="d-flex justify-content-between">
+                            <input type="search" name="keyword" value="{{ $keyword }}" class="form-control form-control-sm mr-2" placeholder="Từ Khoá">
+                            {{ Form::select('specializaiton-filter', $specializations, $filterSpecialization, ['class' => 'form-control form-control-sm', 'onchange' => 'this.form.submit()', 'placeholder' => 'Tất cả khoa viện']) }}
+                            <button class="ml-2 btn btn-sm btn-outline-info" type="submit">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
                     <a class="btn btn-sm d-flex align-items-center btn-outline-success" href="{{ route('admin.classes.create') }}">Tạo mới</a>
                 </div>
                 <div class="table-responsive table-scroll">
@@ -52,7 +51,7 @@
                                     {{ $class->semester }}
                                 </td>
                                 <td>
-                                    {{ $class->specialization->name ?? '' }}
+                                    {!! render_delete_model($class->specialization, $class->specialization->name ?? '') !!}
                                 </td>
                                 <td style="width: 100px">
                                     <div class="d-flex justify-content-between">

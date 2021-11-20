@@ -34,7 +34,7 @@ class MarkController extends Controller
             ->whereHas('schedule', function ($query) {
                 $query->where('status', config('schedule.status.done'));
             })
-            ->get()->load(['subject', 'schedule']);
+            ->get()->load(['specializationSubject.subject', 'schedule']);
 
         return view('student.mark.index', compact('subjects', 'semester', 'semesterFilter'));
     }

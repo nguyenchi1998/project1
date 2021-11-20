@@ -3,9 +3,6 @@
 use App\Models\Classs;
 use App\Models\Schedule;
 use App\Models\ScheduleDetail;
-use App\Models\Student;
-use App\Models\Subject;
-use App\Models\Teacher;
 use Illuminate\Database\Seeder;
 
 class ScheduleSeeder extends Seeder
@@ -33,16 +30,22 @@ class ScheduleSeeder extends Seeder
                             'status' => $faker->randomElement(array_values(config('schedule.status'))),
                             'class_id' => $class->id,
                         ]);
-                        $class->students->each(function ($student) use ($subject, $schedule) {
+                        $class->students->each(function ($student) use ($faker,$subject, $schedule) {
+                            $activityMark = $faker->randomElement(range(1, 9));
+                            $middleMark = $faker->randomElement(range(1, 9));
+                            $finalMark = $faker->randomElement(range(1, 9));
                             ScheduleDetail::create([
                                 'student_id' => $student->id,
                                 'specialization_subject_id' => $subject->pivot->id,
                                 'schedule_id' => $schedule->id,
-                                'register_status' => config('schedule_detail.status.register.success')
+                                'register_status' => config('schedule_detail.status.register.success'),
+                                'activity_mark' => $activityMark,
+                                'middle_mark' => $middleMark,
+                                'final_mark' => $finalMark,
+                                'result_status' => result_schedule_detail($activityMark, $middleMark, $finalMark)
                             ]);
                         });
                     });
-                } else {
                 }
             });
     }

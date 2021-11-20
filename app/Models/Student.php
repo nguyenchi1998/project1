@@ -23,7 +23,8 @@ class Student extends Authenticatable
         'remember_token',
         'grade_id',
         'class_id',
-        'department_id'
+        'department_id',
+        'can_register_credit',
     ];
 
     public function class()

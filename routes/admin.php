@@ -56,6 +56,9 @@ Route::group(['as' => 'admin.'], function () {
         Route::post('schedules/students/{id}', 'ScheduleStudentController@registerSchedule')
             ->name('schedules.students.registerSchedule');
 
+        Route::post('schedules/students/{id}/status', 'ScheduleStudentController@creditStatus')
+            ->name('schedules.students.creditStatus');
+
         Route::get('schedules/class', 'ScheduleClassController@index')
             ->name('schedules.classes.index');
 

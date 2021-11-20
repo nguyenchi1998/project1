@@ -15,11 +15,15 @@
     <div class="col-lg-12 stretch-card">
         <div class="card">
             <div class="card-body">
-                <div class="d-flex mb-4 justify-content-between">
+                <div class="d-flex mb-3 justify-content-between">
                     <form action="{{ route('admin.subjects.index') }}">
                         <div class="d-flex justify-content-between">
+                            <input type="search" name="keyword" value="{{ $keyword }}" class="form-control form-control-sm mr-2" placeholder="Từ Khoá">
                             {{ Form::select('department-filter', $departments, $departmentFilter, ['class' => 'mr-2 form-control form-control-sm', 'onchange' => 'this.form.submit()', 'placeholder' => 'Tất cả khoa viện']) }}
-                            {{ Form::select('type-filter', $types, $typeFilter, ['class' => 'form-control form-control-sm', 'onchange' => 'this.form.submit()', 'placeholder' => 'Tất cả thể loại']) }}
+                            {{ Form::select('type-filter', $types, $typeFilter, ['class' => 'mr-2 form-control form-control-sm', 'onchange' => 'this.form.submit()', 'placeholder' => 'Tất cả thể loại']) }}
+                            <button class="btn-sm btn btn-outline-info" type="submit">
+                                <i class="fa fa-search"></i>
+                            </button>
                         </div>
                     </form>
                     <a class="btn btn-sm d-flex align-items-center btn-outline-success" href="{{ route('admin.subjects.create') }}">Tạo mới</a>
@@ -54,7 +58,9 @@
                                             </a>
                                         </div>
                                         <div>
-                                            <form action="{{ route('admin.subjects.destroy', $subject->id) }}">
+                                            <form action="{{ route('admin.subjects.destroy', $subject->id) }}" method="post">
+                                                @csrf
+                                                @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-outline-danger" data-toggle="tooltip" data-placement="top" title="Xoá">
                                                     <i class="fa fa-trash"></i>
                                                 </button>
@@ -72,7 +78,7 @@
                     </table>
                 </div>
                 <div class="mt-3 d-flex justify-content-end">
-                    {{ $subjects->appends(['department-filter' => $departmentFilter, 'type-filter' => $typeFilter])->links() }}
+                    {{ $subjects->appends(['department-filter' => $departmentFilter, 'type-filter' => $typeFilter, 'keyword' => $keyword])->links() }}
                 </div>
             </div>
         </div>

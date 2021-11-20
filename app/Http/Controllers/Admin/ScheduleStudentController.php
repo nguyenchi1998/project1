@@ -46,6 +46,9 @@ class ScheduleStudentController extends Controller
         $filterGrade = $request->get('grade-filter');
         $keyword = $request->get('keyword');
         $semesters = range_semester(config('config.student_register_start_semester'), config('config.max_semester'));
+        $states = array_map(function ($val) {
+            return ucfirst($val);
+        },  array_flip(config('credit.register')));
         // lấy ra danh sách sinh viên từ kỳ 5 trở lên (năm 3)
         $students = $this->studentRepository->model()
             ->whereHas('class', function ($query) {
@@ -68,10 +71,9 @@ class ScheduleStudentController extends Controller
 
             return $student;
         });
-
         $grades = $this->gradeRepository->all()->pluck('name', 'id');
 
-        return view('admin.schedule.student.index', compact('students', 'keyword', 'filterGrade', 'grades', 'semesters', 'filterSemester'));
+        return view('admin.schedule.student.index', compact('students', 'keyword', 'filterGrade', 'states', 'grades', 'semesters', 'filterSemester'));
     }
 
     public function registerScheduleShow(Request $request, $id)
@@ -125,5 +127,12 @@ class ScheduleStudentController extends Controller
         );
 
         return $this->successRouteRedirect('admin.schedules.students.registerScheduleShow', $id);
+    }
+
+    public function creditStatus(Request $request, $id)
+    {
+        $this->studentRepository->update($id, $request->only('can_register_credit'));
+
+        return $this->successRouteRedirect('admin.schedules.students.index');
     }
 }

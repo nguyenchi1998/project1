@@ -15,12 +15,12 @@
     <div class="col-lg-12 stretch-card">
         <div class="card">
             <div class="card-body">
-                <div class="d-flex mb-4 justify-content-between">
+                <div class="d-flex mb-3 justify-content-between">
                     <div class="">
                         <form action="{{ route('admin.departments.index') }}">
                             <div class="d-flex justify-content-between">
                                 <input type="search" name="keyword" value="{{ $keyword }}" class="form-control mr-2 form-control-sm" placeholder="Từ Khoá">
-                                <button class="ml-2 btn-sm btn btn-outline-info" type="submit">
+                                <button class="btn-sm btn btn-outline-info" type="submit">
                                     <i class="fa fa-search"></i>
                                 </button>
                             </div>
