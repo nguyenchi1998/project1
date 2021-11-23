@@ -48,7 +48,7 @@ class ScheduleStudentController extends Controller
         $semesters = range_semester(config('config.student_register_start_semester'), config('config.max_semester'));
         $states = array_map(function ($val) {
             return ucfirst($val);
-        },  array_flip(config('credit.register')));
+        }, array_flip(config('credit.register')));
         // lấy ra danh sách sinh viên từ kỳ 5 trở lên (năm 3)
         $students = $this->studentRepository->model()
             ->whereHas('class', function ($query) {

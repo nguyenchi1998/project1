@@ -16,12 +16,8 @@ class CreditController extends Controller
     protected $classRepository;
     protected $subjectRepository;
 
-    public function __construct(
-        IScheduleDetailRepository $scheduleDetailRepository,
-        ISpecializationRepository $specializationRepository,
-        IClassRepository          $classRepository,
-        ISubjectRepository        $subjectRepository
-    ) {
+    public function __construct(IScheduleDetailRepository $scheduleDetailRepository, ISpecializationRepository $specializationRepository, IClassRepository $classRepository, ISubjectRepository $subjectRepository)
+    {
         $this->scheduleDetailRepository = $scheduleDetailRepository;
         $this->classRepository = $classRepository;
         $this->subjectRepository = $subjectRepository;

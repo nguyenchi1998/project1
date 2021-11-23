@@ -51,7 +51,7 @@ if (!function_exists('range_semester')) {
     {
         $semesters = [];
         for ($i = $start; $i <= $end; $i++) {
-            $semesters[$i] = ($hasTitle  ? 'Kỳ ' : '') . $i;
+            $semesters[$i] = ($hasTitle ? 'Kỳ ' : '') . $i;
         }
 
         return $semesters;
@@ -76,14 +76,9 @@ if (!function_exists('result_schedule_detail')) {
     }
 }
 
-
 if (!function_exists('render_delete_model')) {
-    function render_delete_model($model, $text)
+    function modelTrash($model)
     {
-        if ($model->trashed()) {
-            return htmlspecialchars_decode("<span class='text-decoration-line-through'>" . $text . "</span>");
-        }
-
-        return $text;
+        return $model->trashed() ? 'text-decoration-line-through' : '';
     }
 }

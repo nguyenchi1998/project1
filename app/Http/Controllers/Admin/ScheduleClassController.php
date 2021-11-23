@@ -56,7 +56,7 @@ class ScheduleClassController extends Controller
             })
             ->when($specializationFilter, function ($query) use ($specializationFilter) {
                 $query->whereHas('specialization', function ($query)
-                use ($specializationFilter) {
+ use ($specializationFilter) {
                     $query->whereId($specializationFilter);
                 });
             })
@@ -64,8 +64,9 @@ class ScheduleClassController extends Controller
             ->paginate(config('config.paginate'));
         $classes->getCollection()->transform(function ($class) {
             $totalCredit = $class->schedules->reduce(function ($total, $schedule) use ($class) {
-                if ($schedule->specializationSubject->semester == $class->semester)
+                if ($schedule->specializationSubject->semester == $class->semester) {
                     $total += $schedule->specializationSubject->subject->credit;
+                }
 
                 return $total;
             }, 0);

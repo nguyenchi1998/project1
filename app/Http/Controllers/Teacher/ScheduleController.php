@@ -34,7 +34,7 @@ class ScheduleController extends Controller
                 $query->where('status', $status);
             })
             ->get()
-            ->load(['subject', 'class.students'])
+            ->load(['specializationSubject.subject', 'class.students', 'scheduleDetails'])
             ->groupBy('status');
 
         return view('teacher.schedule', compact('statusSchedules', 'states', 'status'));

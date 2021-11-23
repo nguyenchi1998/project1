@@ -22,7 +22,8 @@ class Repository implements IRepository
 
     public function allWithTrashed()
     {
-        return $this->model->withTrashed()->get();;
+        return $this->model->withTrashed()->get();
+        ;
     }
 
     public function find($id)
@@ -41,7 +42,6 @@ class Repository implements IRepository
     {
         $obj = $this->find($id);
         if ($force) {
-
             return $obj->forceDelete();
         }
 

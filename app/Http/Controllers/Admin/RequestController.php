@@ -40,8 +40,7 @@ class RequestController extends Controller
             if ($teacher->nextDepartment->next_manager_id == $teacher->id) {
                 $title[] = $titleRequest['upgrade'];
             }
-            if (
-                ($teacher->next_department_id == $teacher->department_id
+            if (($teacher->next_department_id == $teacher->department_id
                     && $teacher->department->manager_id == $teacher->id) ||
                 ($teacher->next_department_id != $teacher->department_id
                     && $teacher->nextDepartment->next_manager_id != $teacher->id)

@@ -40,7 +40,7 @@ class TeacherController extends Controller
             ->when($keyword, function ($query) use ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%')
                     ->orWhere('email', 'like', '%' . $keyword . '%')
-                    ->orWhere('phone',  $keyword);
+                    ->orWhere('phone', $keyword);
             })
             ->when($departmentFilter, function ($query) use ($departmentFilter) {
                 $query->whereHas('department', function ($query) use ($departmentFilter) {

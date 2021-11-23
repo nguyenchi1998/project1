@@ -20,7 +20,7 @@ class GradeController extends Controller
         $keyword = $request->get('keyword');
         $states = array_map(function ($val) {
             return ucfirst($val);
-        },  array_flip(config('credit.register')));
+        }, array_flip(config('credit.register')));
         $grades = $this->gradeRepository->model()
             ->when($keyword, function ($query) use ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%');

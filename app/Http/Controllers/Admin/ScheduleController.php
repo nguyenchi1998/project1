@@ -144,7 +144,7 @@ class ScheduleController extends Controller
     public function scheduleTime(Request $request, $id)
     {
         $this->scheduleRepository->update($id, [
-            'schedule_time' => json_encode($request->timeschedules)
+            'schedule_time' => json_encode($request->get('timeschedules'))
         ]);
     }
 
