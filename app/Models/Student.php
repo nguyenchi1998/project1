@@ -4,12 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Spatie\Permission\Traits\HasRoles;
 
 class Student extends Authenticatable
 {
     use SoftDeletes;
-    use HasRoles;
 
     protected $guarded = 'student';
 

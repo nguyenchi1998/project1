@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Manager;
 use Faker\Generator as Faker;
 use Illuminate\Support\Facades\Hash;
 
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Hash;
 |
 */
 
-$factory->define(App\Models\User::class, function (Faker $faker) {
+$factory->define(Manager::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
@@ -25,5 +26,6 @@ $factory->define(App\Models\User::class, function (Faker $faker) {
         'password' => Hash::make(config('default.auth.password')),
         'remember_token' => str_random(10),
         'address' => $faker->address(),
+        'type' => config('role.manager.normal')
     ];
 });

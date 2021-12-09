@@ -3,17 +3,6 @@
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
-if (!function_exists('get_guard')) {
-    function get_guard()
-    {
-        foreach (config('role.guard') as $key => $guard) {
-            if (Auth::guard($guard)->check()) {
-                return $guard;
-            }
-        }
-    }
-}
-
 if (!function_exists('getNameSchedule')) {
     function getNameSchedule($id)
     {
@@ -62,13 +51,13 @@ if (!function_exists('result_schedule_detail')) {
     function result_schedule_detail($activityMark, $middleMark, $finalMark)
     {
         if (!$activityMark || !$middleMark || !$finalMark) {
-            $result = config('schedule_detail.status.result.relearn');
+            $result = config('schedule.detail.status.result.relearn');
         } else {
             $averageMark = ($activityMark + $middleMark * 4 + $finalMark * 5) / 10;
             if ($averageMark >= 4) {
-                $result = config('schedule_detail.status.result.pass');
+                $result = config('schedule.detail.status.result.pass');
             } else {
-                $result = config('schedule_detail.status.result.retest');
+                $result = config('schedule.detail.status.result.retest');
             }
         }
 

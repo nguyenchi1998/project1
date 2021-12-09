@@ -61,7 +61,7 @@ class ScheduleStudentController extends Controller
             ->paginate(config('config.paginate'));
         $students->getCollection()->transform(function ($student) {
             $student['total_credit'] = $student->scheduleDetails->filter(function ($scheduleDetail) {
-                return $scheduleDetail->status_register == config('schedule_detail.status.register.pending');
+                return $scheduleDetail->status_register == config('schedule.detail.status.register.pending');
             })->reduce(function ($total, $schedule) {
                 $total += $schedule->specializationSubject->subject->credit;
 
@@ -129,7 +129,7 @@ class ScheduleStudentController extends Controller
         $this->scheduleDetailRepository->updateOrCreateMany(
             array_map(function ($item) use ($id) {
                 $item['student_id'] = $id;
-                $item['register_status'] = config('schedule_detail.status.register.pending');
+                $item['register_status'] = config('schedule.detail.status.register.pending');
 
                 return $item;
             }, $request->get('subjects'))

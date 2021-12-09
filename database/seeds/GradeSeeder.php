@@ -12,7 +12,6 @@ class GradeSeeder extends Seeder
      */
     public function run()
     {
-
         foreach (range(1, 20) as $grade) {
             Grade::create([
                 'name' => 'Khóa ' . $grade,

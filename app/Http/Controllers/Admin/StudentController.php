@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Repositories\IClassRepository;
 use App\Repositories\IGradeRepository;
-use App\Repositories\IRoleRepository;
 use App\Repositories\ISpecializationRepository;
 use App\Repositories\IStudentRepository;
 use Exception;
@@ -25,13 +24,11 @@ class StudentController extends Controller
         IStudentRepository $studentRepository,
         IClassRepository $classRepository,
         IGradeRepository $gradeRepository,
-        ISpecializationRepository $specializationRepository,
-        IRoleRepository $roleRepository
+        ISpecializationRepository $specializationRepository
     ) {
         $this->studentRepository = $studentRepository;
         $this->classRepository = $classRepository;
         $this->gradeRepository = $gradeRepository;
-        $this->roleRepository = $roleRepository;
         $this->specializationRepository = $specializationRepository;
     }
 
@@ -88,11 +85,6 @@ class StudentController extends Controller
             $student->avatar()->create([
                 'path' => $path
             ]);
-            $studentRole = $this->roleRepository->findByName(
-                config('role.roles.student.name'),
-                config('role.roles.student.guard')
-            );
-            $student->assignRole($studentRole);
             DB::commit();
 
             return $this->successRouteRedirect('admin.students.index');

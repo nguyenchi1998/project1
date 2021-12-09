@@ -16,14 +16,12 @@
         <div class="card">
             <div class="card-body">
                 <div class="d-flex mb-3 justify-content-between">
-                    <div class="max-50">
-                        <form action="{{ route('admin.managers.index') }}">
-                            <div class="d-flex justify-content-between">
-                                <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
-                                <button class="btn btn-sm btn-outline-info" type="submit">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </div>
+                    <div class="">
+                        <form action="{{ route('admin.managers.index') }}" class="form-inline">
+                            <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
+                            <button class="btn btn-sm btn-outline-info" type="submit">
+                                <i class="fa fa-search"></i>
+                            </button>
                         </form>
                     </div>
                     <a class="btn btn-sm d-flex align-items-center btn-outline-success" href="{{ route('admin.managers.create') }}">Tạo Mới</a>
@@ -62,14 +60,14 @@
                                 <td width="100">
                                     <div class="d-flex justify-content-between">
                                         <div class="mr-2">
-                                            <a href="{{ route('admin.managers.edit', $manager->id) }}" class="btn btn-sm btn-outline-warning" data-toggle="tooltip" data-placement="top" title="Sửa"><i class="fa fa-edit"></i></a>
+                                            <a href="{{ route('admin.managers.edit', $manager->id) }}" class="btn btn-sm btn-outline-warning">Sửa</a>
                                         </div>
                                         <div>
                                             <form method="post" action="{{ route('admin.managers.destroy', $manager->id) }}">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-outline-danger" data-toggle="tooltip" data-placement="top" title="Xoá">
-                                                    <i class="fa fa-trash"></i>
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                    Xóa
                                                 </button>
                                             </form>
                                         </div>

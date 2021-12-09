@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 Route::group(['as' => 'admin.'], function () {
-    Route::group(['middleware' => 'auth:admin'], function () {
+    Route::group(['middleware' => 'auth:manager'], function () {
         Route::get('', 'HomeController@index')
             ->name('home');
 
@@ -67,9 +67,6 @@ Route::group(['as' => 'admin.'], function () {
 
         Route::post('schedules/class/{id}', 'ScheduleClassController@registerSchedule')
             ->name('schedules.classes.registerSchedule');
-
-        Route::resource('roles', 'RoleController')
-            ->only(['index', 'update', 'edit']);
 
         Route::resource('specializations', 'SpecializationController');
 

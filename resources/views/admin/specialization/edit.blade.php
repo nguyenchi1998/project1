@@ -16,6 +16,11 @@
     <div class="col-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
+                <div class="d-flex justify-content-end">
+                    <a href="{{ route('admin.specializations.choose_subject_show', $specialization->id) }}" class="btn btn-sm btn-outline-info">
+                        Danh Sách Môn Giảng Dạy
+                    </a>
+                </div>
                 {{ Form::open(['url' => route('admin.specializations.update', $specialization->id) , 'method' => 'POST']) }}
                 @method('PUT')
                 {{ Form::text('id',$specialization->id, ['hidden'=>true]) }}

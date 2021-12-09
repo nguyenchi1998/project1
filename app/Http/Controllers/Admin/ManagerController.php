@@ -23,7 +23,7 @@ class ManagerController extends Controller
     {
         $keyword = $request->get('keyword');
         $managers = $this->managerRepository->model()
-            ->isAdmin()
+            ->isNormalManager()
             ->when($keyword, function ($query) use ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%')
                     ->orWhere('phone', $keyword)
@@ -57,11 +57,6 @@ class ManagerController extends Controller
             $manager->avatar()->create([
                 'path' => $path
             ]);
-            $adminRole = $this->roleRepository->findByName(
-                config('role.roles.admin.name'),
-                config('role.roles.admin.guard')
-            );
-            $manager->assignRole($adminRole);
             DB::commit();
 
             return $this->successRouteRedirect('admin.managers.index');

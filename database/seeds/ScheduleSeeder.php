@@ -30,7 +30,7 @@ class ScheduleSeeder extends Seeder
                             'status' => $faker->randomElement(array_values(config('schedule.status'))),
                             'class_id' => $class->id,
                         ]);
-                        $class->students->each(function ($student) use ($faker,$subject, $schedule) {
+                        $class->students->each(function ($student) use ($faker, $subject, $schedule) {
                             $activityMark = $faker->randomElement(range(1, 9));
                             $middleMark = $faker->randomElement(range(1, 9));
                             $finalMark = $faker->randomElement(range(1, 9));
@@ -38,7 +38,7 @@ class ScheduleSeeder extends Seeder
                                 'student_id' => $student->id,
                                 'specialization_subject_id' => $subject->pivot->id,
                                 'schedule_id' => $schedule->id,
-                                'register_status' => config('schedule_detail.status.register.success'),
+                                'register_status' => config('schedule.detail.status.register.success'),
                                 'activity_mark' => $activityMark,
                                 'middle_mark' => $middleMark,
                                 'final_mark' => $finalMark,

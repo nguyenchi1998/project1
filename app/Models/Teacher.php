@@ -4,12 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Spatie\Permission\Traits\HasRoles;
 
 class Teacher extends Authenticatable
 {
     use SoftDeletes;
-    use HasRoles;
 
     protected $guarded = 'teacher';
 
@@ -48,10 +46,5 @@ class Teacher extends Authenticatable
     public function schedules()
     {
         return $this->hasMany(Schedule::class);
-    }
-
-    public function scopeIsTeacher()
-    {
-        return in_array(config('role.roles.teacher'), $this->getRoleNames()->toArray());
     }
 }

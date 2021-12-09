@@ -16,16 +16,14 @@
         <div class="card">
             <div class="card-body">
                 <div class="d-flex mb-3 justify-content-between">
-                    <div class="max-50">
-                        <form action="{{ route('admin.schedules.students.index') }}">
-                            <div class="d-flex justify-content-between">
-                                <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
-                                {{ Form::select('semester', $semesters, $semester ?? null, ['class' => 'form-control  mr-2', 'placeholder' => 'Tất Cả Kỳ Học']) }}
-                                {{ Form::select('grade-filter', $grades, $filterGrade ?? null, ['class' => 'form-control ', 'placeholder' => 'Tất Cả Khóa']) }}
-                                <button class="ml-2 btn-sm btn btn-outline-info" type="submit">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </div>
+                    <div class="">
+                        <form action="{{ route('admin.schedules.students.index') }}" class="form-inline">
+                            <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
+                            {{ Form::select('semester', $semesters, $semester ?? null, ['class' => 'form-control  mr-2', 'placeholder' => 'Tất Cả Kỳ Học']) }}
+                            {{ Form::select('grade-filter', $grades, $filterGrade ?? null, ['class' => 'form-control ', 'placeholder' => 'Tất Cả Khóa']) }}
+                            <button class="ml-2 btn-sm btn btn-outline-info" type="submit">
+                                <i class="fa fa-search"></i>
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -64,9 +62,9 @@
                                         {{ Form::select('can_register_credit', $states, $student->can_register_credit, ['class' => 'form-control ', 'onchange' => 'this.form.submit()'])}}
                                     </form>
                                 </td>
-                                <td class="text-center">
-                                    <a href="{{ route('admin.schedules.students.registerScheduleShow', $student->id) }}" class="btn btn-sm btn-outline-success" data-toggle="tooltip" data-placement="top" title="Đăng Ký Tín Chỉ">
-                                        <i class="fa fa-book"></i>
+                                <td class="text-center" style="width: 150px;">
+                                    <a href="{{ route('admin.schedules.students.registerScheduleShow', $student->id) }}" class="btn btn-sm btn-outline-success">
+                                        Đăng Ký Tín Chỉ
                                     </a>
                                 </td>
                             </tr>

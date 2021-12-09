@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\IDepartmentRepository;
-use App\Repositories\IRoleRepository;
 use App\Repositories\ISubjectRepository;
 use App\Repositories\ITeacherRepository;
 use Exception;
@@ -22,12 +21,10 @@ class TeacherController extends Controller
     public function __construct(
         IDepartmentRepository $departmentRepository,
         ITeacherRepository $teacherRrpository,
-        IRoleRepository $roleRepository,
         ISubjectRepository $subjectRepository
     ) {
         $this->departmentRepository = $departmentRepository;
         $this->teacherRepository = $teacherRrpository;
-        $this->roleRepository = $roleRepository;
         $this->subjectRepository = $subjectRepository;
     }
 
@@ -46,7 +43,7 @@ class TeacherController extends Controller
                     $query->whereId($departmentFilter);
                 });
             })
-            ->with(['roles:id,name', 'department', 'nextDepartment'])
+            ->with(['department', 'nextDepartment'])
             ->paginate(config('config.paginate'));
         $departments = $this->departmentRepository->all()->pluck('name', 'id');
 
@@ -78,11 +75,6 @@ class TeacherController extends Controller
             $teacher->avatar()->create([
                 'path' => $path
             ]);
-            $teacherRole = $this->roleRepository->findByName(
-                config('role.roles.teacher.name'),
-                config('role.roles.teacher.guard')
-            );
-            $teacher->assignRole($teacherRole);
             DB::commit();
 
             return redirect()->route('admin.teachers.index');

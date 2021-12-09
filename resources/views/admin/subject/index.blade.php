@@ -16,16 +16,16 @@
         <div class="card">
             <div class="card-body">
                 <div class="d-flex mb-3 justify-content-between">
-                    <form action="{{ route('admin.subjects.index') }}">
-                        <div class="d-flex justify-content-between">
+                    <div class="">
+                        <form action="{{ route('admin.subjects.index') }}" class="form-inline">
                             <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
                             {{ Form::select('department-filter', $departments, $departmentFilter, ['class' => 'mr-2 form-control ', 'placeholder' => 'Tất Cả Khoa Viện']) }}
                             {{ Form::select('type-filter', $types, $typeFilter, ['class' => 'mr-2 form-control ', 'placeholder' => 'Tất Cả Thể Loại']) }}
-                            <button class="btn-sm btn btn-outline-info" type="submit">
+                            <button class="btn btn-outline-info" type="submit">
                                 <i class="fa fa-search"></i>
                             </button>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                     <a class="btn btn-sm d-flex align-items-center btn-outline-success" href="{{ route('admin.subjects.create') }}">Tạo Mới</a>
                 </div>
                 <div class="table-responsive table-scroll">
@@ -53,16 +53,16 @@
                                 <td style="width: 100px">
                                     <div class="d-flex justify-content-between">
                                         <div class="mr-2">
-                                            <a href="{{ route('admin.subjects.edit', $subject->id) }}" class="btn btn-sm btn-outline-warning" data-toggle="tooltip" data-placement="top" title="Sửa">
-                                                <i class="fa fa-edit"></i>
+                                            <a href="{{ route('admin.subjects.edit', $subject->id) }}" class="btn btn-sm btn-outline-warning">
+                                                Sửa
                                             </a>
                                         </div>
                                         <div>
                                             <form action="{{ route('admin.subjects.destroy', $subject->id) }}" method="post">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-outline-danger" data-toggle="tooltip" data-placement="top" title="Xoá">
-                                                    <i class="fa fa-trash"></i>
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                    Xóa
                                                 </button>
                                             </form>
                                         </div>

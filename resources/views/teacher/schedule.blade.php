@@ -60,8 +60,8 @@
                                 <td style="width: 150px">
                                     <div class="d-flex justify-content-center align-items-center">
                                         @if($schedule->status == config('schedule.status.inprogress'))
-                                        <a class="btn btn-sm btn-outline-success" href="{{ route('teacher.schedules.attendanceShow', $schedule->id) }}" data-toggle="tooltip" data-placement="top" title="Điểm danh">
-                                            <i class="fa fa-users"></i>
+                                        <a class="btn btn-sm btn-outline-success" href="{{ route('teacher.schedules.attendanceShow', $schedule->id) }}">
+                                            Điểm danh
                                         </a>
                                         @elseif($schedule->status == config('schedule.status.marking'))
                                         <a class="btn btn-sm btn-primary" href="{{ route('teacher.schedules.markShow', $schedule->id) }}">

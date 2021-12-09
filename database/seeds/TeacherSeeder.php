@@ -31,19 +31,16 @@ class TeacherSeeder extends Seeder
             'path' => str_replace(storage_path(config('default.path.app_public')), '', $path),
         ]);
         $teacher->avatar()->save($media);
-        $teacherRole = Role::findByName(config('role.roles.teacher.name'), config('role.roles.teacher.name'));
-        $teacher->assignRole($teacherRole);
         $teacher->update([
             'department_id' => 1,
         ]);
         $departmentIds = Department::all()->pluck('id')->toArray();
         factory(Teacher::class, 50)->create()
-            ->each(function ($teacher) use ($teacherRole, $departmentIds, $path) {
+            ->each(function ($teacher) use ($departmentIds, $path) {
                 $media = Media::create([
                     'path' => str_replace(storage_path(config('default.path.app_public')), '', $path),
                 ]);
                 $teacher->avatar()->save($media);
-                $teacher->assignRole($teacherRole);
                 $teacher->update([
                     'department_id' => $departmentIds[array_rand($departmentIds)]
                 ]);

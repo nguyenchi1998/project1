@@ -19,6 +19,11 @@
     <div class="col-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
+                <div class="d-flex justify-content-end">
+                    <a href="{{ route('admin.teachers.choose_subject_show', $teacher->id) }}" class="btn btn-sm btn-outline-info">
+                        Danh Sách Môn Giảng Dạy
+                    </a>
+                </div>
                 {{ Form::open(['url' => route('admin.teachers.update', $teacher->id) , 'method' => 'POST', 'files' => true]) }}
                 @method('PUT')
                 {{ Form::text('id',$teacher->id, ['hidden'=>true]) }}

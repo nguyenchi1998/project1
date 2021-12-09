@@ -7,12 +7,10 @@ use App\Repositories\ConfigRepository;
 use App\Repositories\DepartmentRepository;
 use App\Repositories\GradeRepository;
 use App\Repositories\IClassRepository;
-use App\Repositories\IConfigRepository;
 use App\Repositories\IDepartmentRepository;
 use App\Repositories\IGradeRepository;
 use App\Repositories\IManagerRepository;
 use App\Repositories\IPermissionRepository;
-use App\Repositories\IRoleRepository;
 use App\Repositories\IScheduleDetailRepository;
 use App\Repositories\IScheduleRepository;
 use App\Repositories\ISpecializationRepository;
@@ -37,7 +35,6 @@ class RepositoryProvider extends ServiceProvider
         ISpecializationRepository::class => SpecializationRepository::class,
         IClassRepository::class => ClassRepository::class,
         IStudentRepository::class => StudentRepository::class,
-        IRoleRepository::class => RoleRepository::class,
         IPermissionRepository::class => PermissionRepository::class,
         IScheduleRepository::class => ScheduleRepository::class,
         IDepartmentRepository::class => DepartmentRepository::class,

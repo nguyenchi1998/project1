@@ -67,7 +67,8 @@
                                             <form action="{{ route('admin.classes.remove_student', $class->id) }}" method="POST">
                                                 @csrf()
                                                 {{ Form::text('student_id', $student->id, ['hidden' => true]) }}
-                                                <button type="submit" class="btn btn-sm btn-outline-danger" data-toggle="tooltip" data-placement="top" title="Xoá Sinh Viên Khỏi Lớp">Remove
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                    Xóa
                                                 </button>
                                             </form>
                                         </div>

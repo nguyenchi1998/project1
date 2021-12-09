@@ -16,15 +16,13 @@
         <div class="card">
             <div class="card-body">
                 <div class="d-flex mb-3 justify-content-between">
-                    <div class="max-50">
-                        <form action="{{ route('admin.classes.index') }}">
-                            <div class="d-flex justify-content-between">
-                                <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
-                                {{ Form::select('specializaiton-filter', $specializations, $filterSpecialization, ['class' => 'form-control ', 'placeholder' => 'Tất cả Khoa Viện']) }}
-                                <button class="ml-2 btn btn-sm btn-outline-info" type="submit">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </div>
+                    <div class="">
+                        <form action="{{ route('admin.classes.index') }}" class="form-inline">
+                            <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
+                            {{ Form::select('specializaiton-filter', $specializations, $filterSpecialization, ['class' => 'form-control ', 'placeholder' => 'Tất cả Khoa Viện']) }}
+                            <button class="ml-2 btn btn-sm btn-outline-info" type="submit">
+                                <i class="fa fa-search"></i>
+                            </button>
                         </form>
                     </div>
                     <a class="btn btn-sm d-flex align-items-center btn-outline-success" href="{{ route('admin.classes.create') }}">Tạo Mới</a>
@@ -59,19 +57,13 @@
                                 <td style="width: 100px">
                                     <div class="d-flex justify-content-between">
                                         <div class="mr-2">
-                                            <a href="{{ route('admin.classes.students', $class->id) }}" class="btn btn-sm btn-outline-info" data-toggle="tooltip" data-placement="top" title="Danh Sách Sinh Viên">
-                                                <i class="fa fa-users"></i>
-                                            </a>
-                                        </div>
-                                        <div class="mr-2">
-                                            <a href="{{ route('admin.classes.edit', $class->id) }}" class="btn btn-sm btn-outline-warning" data-toggle="tooltip" data-placement="top" title="Sửa">
-                                                <i class="fa fa-edit"></i>
+                                            <a href="{{ route('admin.classes.edit', $class->id) }}" class="btn btn-sm btn-outline-warning">
+                                                Sửa
                                             </a>
                                         </div>
                                         <div>
                                             <form action="{{ route('admin.classes.destroy', $class->id) }}">
-                                                <button type="submit" class="btn btn-sm btn-outline-danger" data-toggle="tooltip" data-placement="top" title="Xoá"><i class="fa fa-trash"></i>
-                                                </button>
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">Xóa</button>
                                             </form>
                                         </div>
                                     </div>

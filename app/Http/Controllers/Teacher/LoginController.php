@@ -20,7 +20,7 @@ class LoginController extends Controller
 
     public function showLoginForm()
     {
-        Auth::guard('admin')->logout();
+        Auth::guard('manager')->logout();
         Auth::guard('student')->logout();
         return view('teacher.login');
     }
@@ -30,7 +30,7 @@ class LoginController extends Controller
         return Auth::guard('teacher');
     }
 
-    protected function loggedOut(Request $request)
+    protected function loggedOut()
     {
         return redirect()->route('teacher.loginShow');
     }

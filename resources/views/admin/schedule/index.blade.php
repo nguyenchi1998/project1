@@ -17,14 +17,12 @@
             <div class="card-body">
                 <div class="d-flex mb-3 justify-content-between">
                     <div class="">
-                        <form action="">
-                            <div class="d-flex justify-content-between">
-                                {{ Form::select('status', $states, $status , ['class' => 'form-control ', 'placeholder' => 'Tất Cả Trạng Thái']) }}
-                                {{ Form::select('class-type', [0 => 'Lớp Học', 1 => 'Tự Do'], $classType, ['class' => 'ml-2 form-control mr-2', 'placeholder' => 'Tất Cả Thể Loại']) }}
-                                <button class="btn-sm btn btn-outline-info" type="submit">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </div>
+                        <form action="" class="form-inline">
+                            {{ Form::select('status', $states, $status , ['class' => 'form-control', 'placeholder' => 'Tất Cả Trạng Thái']) }}
+                            {{ Form::select('class-type', [0 => 'Lớp Học', 1 => 'Tự Do'], $classType, ['class' => 'ml-2 form-control mr-2', 'placeholder' => 'Tất Cả Thể Loại']) }}
+                            <button class="btn btn-outline-info" type="submit">
+                                <i class="fa fa-search"></i>
+                            </button>
                         </form>
                     </div>
                     @if($hasScheduleDetails)
@@ -73,16 +71,14 @@
                                         {{ Form::select('status', $states, $schedule->status, ['class' => 'form-control ', 'onchange' => 'this.form.submit()']) }}
                                     </form>
                                 </td>
-                                <td class="text-center">
-                                    <div class="d-flex justify-content-between">
-                                        <form action="{{ route('admin.schedules.destroy', $schedule->id) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="btn mr-1 btn-sm btn-outline-danger" href="#" data-toggle="tooltip" data-placement="top" title="Xóa lớp tín chỉ">
-                                                <i class="fa fa-trash"></i>
-                                            </button>
-                                        </form>
-                                    </div>
+                                <td class="text-center" style="width: 80px;">
+                                    <form action="{{ route('admin.schedules.destroy', $schedule->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn mr-1 btn-sm btn-outline-danger" href="#">
+                                            Xóa
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                             @empty

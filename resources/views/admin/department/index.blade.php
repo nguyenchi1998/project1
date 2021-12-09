@@ -16,16 +16,12 @@
         <div class="card">
             <div class="card-body">
                 <div class="d-flex mb-3 justify-content-between">
-                    <div class="max-50">
-                        <form action="{{ route('admin.departments.index') }}">
-                            <div class="d-flex justify-content-between">
-                                <input type="search" name="keyword" value="{{ $keyword }}" class="form-control mr-2 " placeholder="Từ Khoá">
-                                <button class="btn-sm btn btn-outline-info" type="submit">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+                    <form action="{{ route('admin.departments.index') }}" class="form-inline">
+                        <input type="search" name="keyword" value="{{ $keyword }}" class="form-control mr-2 " placeholder="Từ Khoá">
+                        <button class="btn-sm btn btn-outline-info" type="submit">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </form>
                     <a class="btn btn-sm d-flex align-items-center btn-outline-success" href="{{ route('admin.departments.create') }}">Tạo Mới</a>
                 </div>
                 <div class="table-responsive table-scroll">
@@ -48,11 +44,11 @@
                                 <td width="100">
                                     <div class="d-flex justify-content-between">
                                         <div class="mr-2">
-                                            <a href="{{ route('admin.departments.edit', $department->id) }}" class="btn btn-sm btn-outline-warning" data-toggle="tooltip" data-placement="top" title="Sửa"><i class="fa fa-edit"></i></a>
+                                            <a href="{{ route('admin.departments.edit', $department->id) }}" class="btn btn-sm btn-outline-warning">Sửa</a>
                                         </div>
                                         <div>
                                             <form action="">
-                                                <button type="submit" class="btn btn-sm btn-outline-danger" data-toggle="tooltip" data-placement="top" title="Xoá"><i class="fa fa-trash"></i>
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">Xóa
                                                 </button>
                                             </form>
                                         </div>

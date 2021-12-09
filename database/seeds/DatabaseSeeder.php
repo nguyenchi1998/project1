@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Manager;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -12,11 +13,9 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(GradeSeeder::class);
-        $this->call(PermissionSeeder::class);
-        $this->call(RoleSeeder::class);
         $this->call(DepartmentSeeder::class);
         $this->call(TeacherSeeder::class);
-        $this->call(UserSeeder::class);
+        $this->call(ManagerSeeder::class);
         $this->call(ClassSeeder::class);
         $this->call(SubjectTeacherSeeder::class);
         $this->call(ScheduleSeeder::class);
