@@ -17,7 +17,7 @@ class RequestController extends Controller
 
     public function __construct(
         IDepartmentRepository $departmentRepository,
-        ITeacherRepository    $teacherRepository
+        ITeacherRepository $teacherRepository
     ) {
         $this->departmentRepository = $departmentRepository;
         $this->teacherRepository = $teacherRepository;
@@ -67,9 +67,7 @@ class RequestController extends Controller
         }
         try {
             DB::beginTransaction();
-            // same department
             if ($teacher->department_id == $teacher->next_department_id) {
-                // upgrade to manager
                 if ($teacher->department->next_manager_id == $teacher->id) {
                     $this->departmentRepository->update($teacher->department_id, [
                         'manager_id' => $teacher->id,
@@ -82,14 +80,12 @@ class RequestController extends Controller
                     ]);
                 }
             } else {
-                // remove departmnet manager
                 if ($teacher->department->manager_id == $teacher->id) {
                     $this->departmentRepository->update($teacher->department_id, [
                         'manager_id' => null,
                         'next_manager_id' => null,
                     ]);
                 }
-                // upgrade new department manager
                 if ($teacher->nextDepartment->next_manager_id == $teacher->id) {
                     $this->departmentRepository->update($teacher->next_department_id, [
                         'manager_id' => $teacher->id,

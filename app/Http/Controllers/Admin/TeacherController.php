@@ -11,7 +11,6 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use ImageResize;
 
 class TeacherController extends Controller
 {
@@ -22,9 +21,9 @@ class TeacherController extends Controller
 
     public function __construct(
         IDepartmentRepository $departmentRepository,
-        ITeacherRepository    $teacherRrpository,
-        IRoleRepository       $roleRepository,
-        ISubjectRepository    $subjectRepository
+        ITeacherRepository $teacherRrpository,
+        IRoleRepository $roleRepository,
+        ISubjectRepository $subjectRepository
     ) {
         $this->departmentRepository = $departmentRepository;
         $this->teacherRepository = $teacherRrpository;
@@ -110,7 +109,6 @@ class TeacherController extends Controller
         $teacher = $this->teacherRepository->find($id)
             ->load('avatar');
         $teacher->update($id, $request->only(['name', 'gender', 'birthday', 'address', 'phone']));
-
         if ($request->file('avatar')) {
             $imageDeleted = $this->teacherRepository->deleteImage($teacher->avatar->path);
             if (!$imageDeleted) {
@@ -148,7 +146,9 @@ class TeacherController extends Controller
             DB::beginTransaction();
             $teacher = $this->teacherRepository->find($id)->load('department');
             if ($teacher->next_department_id) {
-                return redirect()->back()->withErrors(['msg' => 'Teacher has department change, please contact to manager to handle']);
+                return redirect()->back()->withErrors([
+                    'msg' => 'Teacher has department change, please contact to manager to handle'
+                ]);
             }
             if ($isManager) {
                 $this->departmentRepository->update($departmentId, [
@@ -196,10 +196,10 @@ class TeacherController extends Controller
     public function destroy($id)
     {
         $result = $this->teacherRepository->delete($id);
-
         if ($result) {
             return redirect()->route('admin.teachers.index');
         }
+
         return redirect()->route('admin.teachers.index')
             ->withErrors(['msg' => 'Delete Error']);
     }

@@ -55,8 +55,7 @@ class ScheduleClassController extends Controller
                 $query->where('name', 'like', '%' . $keyword . '%');
             })
             ->when($specializationFilter, function ($query) use ($specializationFilter) {
-                $query->whereHas('specialization', function ($query)
- use ($specializationFilter) {
+                $query->whereHas('specialization', function ($query) use ($specializationFilter) {
                     $query->whereId($specializationFilter);
                 });
             })
@@ -78,7 +77,14 @@ class ScheduleClassController extends Controller
         $specializations = $this->specializationRepository->all()
             ->pluck('name', 'id');
 
-        return view('admin.schedule.class.index', compact('classes', 'keyword', 'semesterFilter', 'specializationFilter', 'semesters', 'specializations'));
+        return view('admin.schedule.class.index', compact(
+            'classes',
+            'keyword',
+            'semesterFilter',
+            'specializationFilter',
+            'semesters',
+            'specializations'
+        ));
     }
 
     public function registerScheduleShow($id)

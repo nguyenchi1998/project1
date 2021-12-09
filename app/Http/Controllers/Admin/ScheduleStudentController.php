@@ -23,13 +23,13 @@ class ScheduleStudentController extends Controller
     protected $gradeRepository;
 
     public function __construct(
-        IScheduleRepository       $scheduleRepository,
+        IScheduleRepository $scheduleRepository,
         IScheduleDetailRepository $scheduleDetailRepository,
         ISpecializationRepository $specializationRepository,
-        ISubjectRepository        $subjectRepository,
-        IClassRepository          $classRepository,
-        IStudentRepository        $studentRepository,
-        IGradeRepository          $gradeRepository
+        ISubjectRepository $subjectRepository,
+        IClassRepository $classRepository,
+        IStudentRepository $studentRepository,
+        IGradeRepository $gradeRepository
     ) {
         $this->scheduleRepository = $scheduleRepository;
         $this->specializationRepository = $specializationRepository;
@@ -49,7 +49,6 @@ class ScheduleStudentController extends Controller
         $states = array_map(function ($val) {
             return ucfirst($val);
         }, array_flip(config('credit.register')));
-        // lấy ra danh sách sinh viên từ kỳ 5 trở lên (năm 3)
         $students = $this->studentRepository->model()
             ->whereHas('class', function ($query) {
                 $query->where('semester', '>=', config('config.student_register_start_semester'));
@@ -73,14 +72,21 @@ class ScheduleStudentController extends Controller
         });
         $grades = $this->gradeRepository->all()->pluck('name', 'id');
 
-        return view('admin.schedule.student.index', compact('students', 'keyword', 'filterGrade', 'states', 'grades', 'semesters', 'filterSemester'));
+        return view('admin.schedule.student.index', compact(
+            'students',
+            'keyword',
+            'filterGrade',
+            'states',
+            'grades',
+            'semesters',
+            'filterSemester'
+        ));
     }
 
     public function registerScheduleShow(Request $request, $id)
     {
         $student = $this->studentRepository->find($id);
         $class = $this->classRepository->find($student->class->id);
-        // lấy danh sách môn học chuyên ngành có kỳ học lớn hơn kỳ học của lớp và các môn ko có kỳ học cụ thê
         $specialization = $this->specializationRepository->find($student->class->specialization_id)
             ->load([
                 'subjects' => function ($query) use ($class) {
@@ -91,9 +97,7 @@ class ScheduleStudentController extends Controller
                         });
                 }
             ]);
-        // danh sách môn học thuộc kỳ hiện tại và bắt buộc
         $specializationSubjects = $specialization->subjects->sortByDesc('pivot.force')->sortBy('pivot.semester');
-        // lấy danh sách các môn chuyên ngành bắt buộc
         $forceSpecializationSubject = $specializationSubjects->filter(function ($subject) {
             return $subject['force'];
         });
@@ -109,7 +113,12 @@ class ScheduleStudentController extends Controller
                 return $total;
             }, 0);
 
-        return view('admin.schedule.student.create', compact('specializationSubjects', 'student', 'scheduleDetails', 'totalCreditRegisted'));
+        return view('admin.schedule.student.create', compact(
+            'specializationSubjects',
+            'student',
+            'scheduleDetails',
+            'totalCreditRegisted'
+        ));
     }
 
     public function registerSchedule(Request $request, $id)

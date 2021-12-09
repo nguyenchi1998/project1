@@ -68,10 +68,10 @@ class GradeController extends Controller
     public function destroy($id)
     {
         $result = $this->gradeRepository->delete($id);
-
         if ($result) {
             return $this->successRouteRedirect('admin.grades.index');
         }
+
         return $this->failRouteRedirect();
     }
 

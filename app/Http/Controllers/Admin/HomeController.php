@@ -13,7 +13,7 @@ class HomeController extends Controller
 
     public function __construct(
         IDepartmentRepository $departmentRepository,
-        ITeacherRepository    $teacherRepository
+        ITeacherRepository $teacherRepository
     ) {
         $this->departmentRepository = $departmentRepository;
         $this->teacherRepository = $teacherRepository;

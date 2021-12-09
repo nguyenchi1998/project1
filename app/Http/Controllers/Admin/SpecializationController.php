@@ -40,7 +40,12 @@ class SpecializationController extends Controller
             ->paginate(config('config.paginate'));
         $departments = $this->departmentRepository->all()->pluck('name', 'id')->toArray();
 
-        return view('admin.specialization.index', compact('specializations', 'keyword', 'departmentFilter', 'departments'));
+        return view('admin.specialization.index', compact(
+            'specializations',
+            'keyword',
+            'departmentFilter',
+            'departments'
+        ));
     }
 
     public function create()
@@ -144,14 +149,22 @@ class SpecializationController extends Controller
                 return $item->id == $subject->id
                     && $item->pivot->force == config('subject.force');
             });
-            $subject['semester'] = $specialization->subjects->first(function ($subjectItem) use ($subject, $specialization) {
-                return $specialization->subjects->contains('id', $subject->id) && $subjectItem->id == $subject->id;
-            })->pivot->semester ?? null;
+            $subject['semester'] = $specialization->subjects->first(
+                function ($subjectItem) use ($subject, $specialization) {
+                    return $specialization->subjects->contains('id', $subject->id) && $subjectItem->id == $subject->id;
+                }
+            )->pivot->semester ?? null;
             return $subject;
         })
             ->sortBy('type');
 
-        return view('admin.specialization.choose_subject', compact('specialization', 'subjects', 'specializationSubjects', 'basicSemesters', 'specializationSemesters'));
+        return view('admin.specialization.choose_subject', compact(
+            'specialization',
+            'subjects',
+            'specializationSubjects',
+            'basicSemesters',
+            'specializationSemesters'
+        ));
     }
 
     public function chooseSubject(Request $request, $id)

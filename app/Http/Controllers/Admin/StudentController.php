@@ -23,10 +23,10 @@ class StudentController extends Controller
 
     public function __construct(
         IStudentRepository $studentRepository,
-        IClassRepository   $classRepository,
-        IGradeRepository   $gradeRepository,
-        ISpecializationRepository   $specializationRepository,
-        IRoleRepository    $roleRepository
+        IClassRepository $classRepository,
+        IGradeRepository $gradeRepository,
+        ISpecializationRepository $specializationRepository,
+        IRoleRepository $roleRepository
     ) {
         $this->studentRepository = $studentRepository;
         $this->classRepository = $classRepository;
@@ -55,7 +55,12 @@ class StudentController extends Controller
             ->paginate(config('config.paginate'));
         $classes = $this->classRepository->all()->pluck('name', 'id');
 
-        return view('admin.student.index', compact('students', 'specializations', 'specializationFilter', 'keyword'));
+        return view('admin.student.index', compact(
+            'students',
+            'specializations',
+            'specializationFilter',
+            'keyword'
+        ));
     }
 
     public function create()
@@ -145,7 +150,6 @@ class StudentController extends Controller
     public function destroy($id)
     {
         $result = $this->studentRepository->delete($id);
-
         if ($result) {
             return $this->successRouteRedirect('admin.students.index');
         }

@@ -11,3 +11,7 @@
 .text-decoration-line-through {
     text-decoration: line-through !important;
 }
+
+.max-50 {
+    max-width: 50%;
+}

@@ -57,7 +57,13 @@ class ScheduleController extends Controller
             ->orderBy('status', 'asc')
             ->paginate(config('config.paginate'));
 
-        return view('admin.schedule.index', compact('states', 'schedules', 'status', 'hasScheduleDetails', 'classType'));
+        return view('admin.schedule.index', compact(
+            'states',
+            'schedules',
+            'status',
+            'hasScheduleDetails',
+            'classType'
+        ));
     }
 
     protected function calculateScheduleDetails()
@@ -70,7 +76,10 @@ class ScheduleController extends Controller
                 if (isset($subjects[$scheduleDetail->specialization_subject_id])) {
                     $subjects[$scheduleDetail->specialization_subject_id] = [
                         'subject' => $scheduleDetail->specializationSubject->subject->toArray(),
-                        'schedule_details' => array_merge($subjects[$scheduleDetail->specialization_subject_id]['schedule_details'], [$scheduleDetail->id])
+                        'schedule_details' => array_merge(
+                            $subjects[$scheduleDetail->specialization_subject_id]['schedule_details'],
+                            [$scheduleDetail->id]
+                        )
                     ];
                 } else {
                     $subjects[$scheduleDetail->specialization_subject_id] = [
@@ -119,7 +128,7 @@ class ScheduleController extends Controller
 
     public function destroy($id)
     {
-        $schedule = $this->scheduleRepository->delete($id);
+        $this->scheduleRepository->delete($id);
 
         return $this->successRouteRedirect('admin.schedules.index');
     }

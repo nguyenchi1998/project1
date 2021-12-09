@@ -16,8 +16,8 @@ class MarkController extends Controller
 
     public function __construct(
         IScheduleDetailRepository $scheduleDetailRepository,
-        IClassRepository          $classRepository,
-        ISubjectRepository        $subjectRepository
+        IClassRepository $classRepository,
+        ISubjectRepository $subjectRepository
     ) {
         $this->scheduleDetailRepository = $scheduleDetailRepository;
         $this->classRepository = $classRepository;

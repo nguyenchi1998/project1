@@ -18,8 +18,8 @@ class ClassController extends Controller
     protected $specializationRepository;
 
     public function __construct(
-        IClassRepository          $classRepository,
-        IStudentRepository        $studentRepository,
+        IClassRepository $classRepository,
+        IStudentRepository $studentRepository,
         ISpecializationRepository $specializationRepository
     ) {
         $this->classRepository = $classRepository;
@@ -46,7 +46,12 @@ class ClassController extends Controller
             ->with(['students', 'specialization'])
             ->paginate(config('config.paginate'));
 
-        return view('admin.class.index', compact('classes', 'filterSpecialization', 'keyword', 'specializations'));
+        return view('admin.class.index', compact(
+            'classes',
+            'filterSpecialization',
+            'keyword',
+            'specializations'
+        ));
     }
 
     public function create()
@@ -130,16 +135,17 @@ class ClassController extends Controller
         if ($rs) {
             return back()->with('msg', 'Xóa sinh viên thành công');
         }
+
         return back()->withErrors(['msg' => 'Xóa sinh viên thất bại']);
     }
 
     public function destroy($id)
     {
         $result = $this->classRepository->delete($id);
-
         if ($result) {
             return $this->successRouteRedirect('admin.classes.index');
         }
+
         return $this->failRouteRedirect();
     }
 

@@ -17,9 +17,9 @@ class SubjectController extends Controller
     protected $specializationRepository;
 
     public function __construct(
-        ISubjectRepository        $subjectRepository,
+        ISubjectRepository $subjectRepository,
         ISpecializationRepository $specializationRepository,
-        IDepartmentRepository     $departmentRepository
+        IDepartmentRepository $departmentRepository
     ) {
         $this->subjectRepository = $subjectRepository;
         $this->departmentRepository = $departmentRepository;
@@ -50,7 +50,14 @@ class SubjectController extends Controller
             ->paginate(config('config.paginate'));
         $departments = $this->departmentRepository->all()->pluck('name', 'id')->toArray();
 
-        return view('admin.subject.index', compact('subjects', 'types', 'departments', 'departmentFilter', 'typeFilter', 'keyword'));
+        return view('admin.subject.index', compact(
+            'subjects',
+            'types',
+            'departments',
+            'departmentFilter',
+            'typeFilter',
+            'keyword'
+        ));
     }
 
     public function create()
