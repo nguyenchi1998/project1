@@ -26,7 +26,7 @@
                         </form>
                     </div>
                     @if($hasScheduleDetails)
-                    <a class="btn d-flex align-items-center btn-sm btn-outline-success" href="{{ route('admin.schedules.create') }}">Tạo Mới</a>
+                    <a class="btn d-flex align-items-center btn-outline-success" href="{{ route('admin.schedules.create') }}">Tạo Mới</a>
                     @endif
                 </div>
                 <div class="table-responsive table-scroll">
@@ -34,9 +34,10 @@
                         <thead>
                             <tr>
                                 <th>Lớp Tín Chỉ</th>
-                                <th>Sinh Viên</th>
-                                <th>Thời Gian Bắt Đầu</th>
-                                <th>Thời Gian Kết Thúc</th>
+                                <th>Kỳ Học</th>
+                                <th>Số Tín Chỉ</th>
+                                <th>Số Sinh Viên</th>
+                                <th>Thời Gian</th>
                                 <th>Giảng Viên</th>
                                 <th>Trạng Thái</th>
                                 <th></th>
@@ -46,39 +47,51 @@
                             @forelse($schedules as $schedule)
                             <tr>
                                 <td>
-                                    {{ $schedule->name }}
+                                    {{ $schedule->name ?? ('Lớp Tín Chỉ Môn ' . $schedule->subject->name) }}
                                     @if(!$schedule->class_id) <span class="badge bg-primary">Tự Do</span>@endif
                                 </td>
-
-                                <td class="text-center">
-                                    {{ count($schedule->scheduleDetails) ?: count($schedule->class->students)}}
+                                <td>
+                                    {{ $schedule->semester }}
                                 </td>
                                 <td>
-                                    {{ Form::date('start_time', $schedule->start_time, ['class' => 'form-control ', 'disabled' => (boolean)$schedule->status]) }}
+                                    {{ $schedule->credit ?? $schedule->subject->credit }}
                                 </td>
                                 <td>
-                                    {{ Form::date('end_time', $schedule->start_time, ['class' => 'form-control ', 'disabled' => (boolean)$schedule->status]) }}
+                                    {{ count($schedule->scheduleDetails) ?? count($schedule->class->students)}}
+                                </td>
+                                <td style="width:200px">
+                                    {{ formatDateShow($schedule->start_time) . ' - ' . formatDateShow($schedule->end_time)  }}
                                 </td>
                                 <td>
-                                    <form action="{{ route('admin.schedules.teacher', $schedule->id) }}" method="post">
-                                        @csrf
-                                        {{ Form::select('teacher_id', $schedule->specializationSubject->subject->teachers->pluck('name', 'id')->toArray(), $schedule->teacher_id ?? null, ['class' => 'form-control ', 'placeholder' => 'Tất Cả Giảng Viên', 'onchange' => 'this,form.submit()', 'disabled' => (boolean)$schedule->status])}}
-                                    </form>
+                                    @if($schedule->teacher)
+                                    {{ $schedule->teacher->name }}
+                                    @else
+                                    <span class="text text-danger">Chưa Chọn</span>
+                                    @endif
                                 </td>
-                                <td>
+                                <td style="width: 130px">
                                     <form action="{{ route('admin.schedules.start', $schedule->id) }}" method="POST">
                                         @csrf
-                                        {{ Form::select('status', $states, $schedule->status, ['class' => 'form-control ', 'onchange' => 'this.form.submit()']) }}
+                                        {{ Form::select('status', $states, $schedule->status, ['class' => 'form-control', 'onchange' => 'this.form.submit()']) }}
                                     </form>
                                 </td>
-                                <td class="text-center" style="width: 80px;">
-                                    <form action="{{ route('admin.schedules.destroy', $schedule->id) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn mr-1 btn-sm btn-outline-danger" href="#">
-                                            Xóa
-                                        </button>
-                                    </form>
+                                <td style="width: 100px;">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="mr-2">
+                                            <form action="{{ route('admin.schedules.edit', $schedule->id) }}">
+                                                <button class="btn btn-outline-warning" @if ($schedule->status) disabled @endif>Sửa</button>
+                                            </form>
+                                        </div>
+                                        <div>
+                                            <form action="{{ route('admin.schedules.destroy', $schedule->id) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="btn mr-1 btn-outline-danger" type="submit">
+                                                    Xóa
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                             @empty

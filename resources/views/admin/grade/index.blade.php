@@ -19,13 +19,13 @@
                 <div class="d-flex mb-3 justify-content-between">
                     <div class="">
                         <form action="{{ route('admin.grades.index') }}" class="form-inline">
-                            <input type="search" name="keyword" value="{{ $keyword }}" class="form-control mr-2" placeholder="Từ Khoá">
-                            <button class="btn-sm btn btn-outline-info" type="submit">
+                            <input type="search" name="Từ Khóa" value="{{ $keyword }}" class="form-control mr-2" placeholder="Từ Khoá">
+                            <button class="btn btn-outline-secondary" type="submit">
                                 <i class="fa fa-search"></i>
                             </button>
                         </form>
                     </div>
-                    <a class="btn btn-sm align-items-center d-flex btn-outline-success" href="{{ route('admin.grades.create') }}">Tạo Mới</a>
+                    <a class="btn align-items-center d-flex btn-outline-success" href="{{ route('admin.grades.create') }}">Tạo Mới</a>
                 </div>
                 <div class="table-responsive table-scroll">
                     <table class="table table-bordered table-hover">
@@ -41,19 +41,15 @@
                             @foreach($grades as $grade)
                             <tr>
                                 <td>{{ $grade->name }}</td>
-                                <td>{{ count($grade->students) }}</td>
+                                <td style="width: 200px;">{{ count($grade->students) }}</td>
                                 <td style="width: 200px;">
                                     <form action="{{ route('admin.grades.creditStatus', $grade->id) }}" method="post">
                                         @csrf
                                         {{ Form::select('can_register_credit', $states, $grade->can_register_credit, ['class' => 'form-control ', 'onchange' => 'this.form.submit()'])}}
                                     </form>
                                 </td>
-                                <td style="width: 50px;">
-                                    <div class="d-flex justify-content-around">
-                                        <div class="mr-2">
-                                            <a href="{{ route('admin.grades.edit', $grade->id) }}" class="btn btn-sm btn-outline-warning">Sửa</a>
-                                        </div>
-                                    </div>
+                                <td style="width: 30px;">
+                                    <a href="{{ route('admin.grades.edit', $grade->id) }}" class="btn btn-outline-warning">Sửa</a>
                                 </td>
                             </tr>
                             @endforeach

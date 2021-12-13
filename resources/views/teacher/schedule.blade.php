@@ -19,7 +19,7 @@
                     <div class="">
                         <form action="">
                             {{ Form::select('status', $states, $status ?? null, ['class' => 'form-control', 'placeholder' => 'Tất Cả Trạng Thái']) }}
-                            <button class="ml-2 btn-sm btn btn-outline-info" type="submit">
+                            <button class="ml-2 btn btn-outline-info" type="submit">
                                 <i class="fa fa-search"></i>
                             </button>
                         </form>
@@ -44,7 +44,7 @@
                             @foreach($schedules as $schedule)
                             <tr>
                                 <td>
-                                    {{ $schedule->specializationSubject->subject->name }}
+                                    {{ $schedule->subject->name }}
                                 </td>
                                 <td style="width:200px">
                                     {{ $schedule->start_time }}
@@ -60,16 +60,16 @@
                                 <td style="width: 150px">
                                     <div class="d-flex justify-content-center align-items-center">
                                         @if($schedule->status == config('schedule.status.inprogress'))
-                                        <a class="btn btn-sm btn-outline-success" href="{{ route('teacher.schedules.attendanceShow', $schedule->id) }}">
+                                        <a class="btn btn-outline-success" href="{{ route('teacher.schedules.attendanceShow', $schedule->id) }}">
                                             Điểm danh
                                         </a>
                                         @elseif($schedule->status == config('schedule.status.marking'))
-                                        <a class="btn btn-sm btn-primary" href="{{ route('teacher.schedules.markShow', $schedule->id) }}">
+                                        <a class="btn btn-primary" href="{{ route('teacher.schedules.markShow', $schedule->id) }}">
                                             Vào Điểm
                                         </a>
                                         @if(checkFinishMark($schedule->scheduleDetails->toArray()))
                                         <div class="ml-1">
-                                            <a class="btn btn-sm btn-outline-success" href="{{ route('teacher.schedules.markShow', $schedule->id) }}">
+                                            <a class="btn btn-outline-success" href="{{ route('teacher.schedules.markShow', $schedule->id) }}">
                                                 Hoàn Thành
                                             </a>
                                         </div>

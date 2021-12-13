@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ChooseSubject;
 use App\Repositories\IDepartmentRepository;
 use App\Repositories\ISpecializationRepository;
 use App\Repositories\ISubjectRepository;
@@ -62,7 +63,6 @@ class SpecializationController extends Controller
             $this->specializationRepository->create($request->only([
                 'name',
                 'min_credit',
-                'max_semester',
                 'department_id',
             ]));
 
@@ -93,7 +93,6 @@ class SpecializationController extends Controller
             $this->specializationRepository->update($id, $request->only([
                 'name',
                 'min_credit',
-                'max_semester'
             ]));
             DB::commit();
 
@@ -133,7 +132,7 @@ class SpecializationController extends Controller
         $startSemester = config('config.start_semester');
         $basicSemesters = [];
         $specializationSemesters = [];
-        for ($i = $startSemester; $i <= $specialization->max_semester; $i++) {
+        for ($i = $startSemester; $i <= config('config.max_semester'); $i++) {
             if ($i <= config('config.class_register_limit_semester')) {
                 $basicSemesters[$i] = 'Kỳ ' . $i;
             } else {
@@ -167,7 +166,7 @@ class SpecializationController extends Controller
         ));
     }
 
-    public function chooseSubject(Request $request, $id)
+    public function chooseSubject(ChooseSubject $request, $id)
     {
         try {
             DB::beginTransaction();

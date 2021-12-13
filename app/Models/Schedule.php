@@ -13,6 +13,7 @@ class Schedule extends Model
 
     protected $fillable = [
         'teacher_id',
+        'subject_id',
         'specialization_subject_id',
         'name',
         'start_time',
@@ -61,8 +62,13 @@ class Schedule extends Model
         return $this->where('class_id', null);
     }
 
+    public function subject()
+    {
+        return $this->belongsTo(Subject::class);
+    }
+
     public function specializationSubject()
     {
-        return $this->belongsTo(SpecializationSubject::class, 'specialization_subject_id');
+        return $this->belongsTo(SpecializationSubject::class);
     }
 }

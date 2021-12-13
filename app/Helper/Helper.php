@@ -36,11 +36,20 @@ if (!function_exists('assetStorage')) {
 }
 
 if (!function_exists('range_semester')) {
-    function range_semester($start, $end, $hasTitle = true, $currentSemester = null)
+    function range_semester($start, $end, $hasTitle = true, $currentSemester = null, $nextSemester = false)
     {
         $semesters = [];
         for ($i = $start; $i <= $end; $i++) {
-            $semesters[$i] = ($hasTitle ? 'Kỳ ' : '') . $i . ($currentSemester && $currentSemester == $i ? ' - Kỳ Hiện Tại' : '');
+            $title = $currentSemester ?
+                ($currentSemester == $i ?
+                    ' - Kỳ Hiện Tại'
+                    : ($nextSemester && $currentSemester == $i - 1 ?
+                        ' - Kỳ Tiếp Theo'
+                        : ''
+                    )
+                )
+                : '';
+            $semesters[$i] = ($hasTitle ? 'Kỳ ' : '') . $i . $title;
         }
 
         return $semesters;

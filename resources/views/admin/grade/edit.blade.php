@@ -19,7 +19,7 @@
                 {{ Form::open(['url' =>route('admin.grades.update', $grade->id) , 'method' => 'POST']) }}
                 <div class="form-group">
                     <label for="name">Niên Khoá</label>
-                    {{ Form::input('text', 'name', $grade->name, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Enter tên niên khoá']) }}
+                    {{ Form::input('text', 'name', $grade->name, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Niên Khoá']) }}
                 </div>
                 <div class="mt-3">
                     {{Form::submit('Xác Nhận', ['class'=> 'btn btn-outline-success mr-2']) }}

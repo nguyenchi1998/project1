@@ -1,7 +1,7 @@
 @extends('layouts.manager')
 @section('breadcrumb')
 <div class="col-sm-6">
-    <h1 class="m-0">Quản Lý Tín Chỉ</h1>
+    <h1 class="m-0">Đăng Ký Tín Chỉ</h1>
 </div>
 <div class="col-sm-6">
     <ol class="breadcrumb float-sm-right">
@@ -10,7 +10,7 @@
             <a href="{{ route('admin.schedules.students.index') }}">Danh Sách Sinh Viên</a>
         </li>
         <li class="breadcrumb-item active" aria-current="page">
-            Đăng Ký
+            Đăng Ký Tín Chỉ
         </li>
     </ol>
 </div>
@@ -22,28 +22,33 @@
             <div class="card-body">
                 <div class="mb-3">
                     <div class="form-row">
-                        <div class="col-4">
-                            <div class="mb-2">
+                        <div class="col-5">
+                            <div class="mb-3">
                                 <strong>Sinh Viên</strong>:<span> {{ $student->name }}</span>
                             </div>
                             <div>
                                 <strong>Niên Khóa</strong>:<span> {{ $student->grade->name }}</span>
                             </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-5">
                             <div class="mb-2">
                                 <strong>Chuyên Ngành:</strong> {{ $student->class->specialization->name }}
                             </div>
-                            <div>
-                                <strong>Kỳ Học:</strong> {{ $student->class->semester }}
+                            <div class="d-flex justify-content-start align-items-center">
+                                <strong>Kỳ Học</strong>:
+                                <div class="ml-1">
+                                    <form action="">
+                                        {{ Form::select('semester-filter', $semesters, $semesterFilter, ['class' => 'form-control', 'onchange' => 'this.form.submit()']) }}
+                                    </form>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-4">
-                            <div class="mb-2">
-                                <strong>Số Tín Tối Đa Cho Phép</strong>:<span id="max_credit_register"> {{ config('credit.max_register') }}</span>
+                        <div class="col-2">
+                            <div class="mb-3">
+                                <strong>Số Tín Tối Đa</strong>:<span id="max_credit_register"> {{ config('credit.max_register') }}</span>
                             </div>
                             <div>
-                                <strong>Số Tín Đăng Kí Hiện Tại:</strong> <span id="total_credit">{{ $totalCreditRegisted }}</span> <span class="d-none text text-danger" id="warning">Quá số tín chỉ cho phép</span>
+                                <strong>Tổng số tín:</strong> <span id="total_credit">{{ $totalCreditRegisted }}</span> <span class="d-none text text-danger" id="warning">Quá số tín chỉ cho phép</span>
                             </div>
                         </div>
                     </div>
@@ -56,34 +61,37 @@
                                 <th>Môn Học</th>
                                 <th>Kỳ Học</th>
                                 <th>Lớp Tín Chỉ</th>
-                                <th>Số sinh viên đã đăng kí</th>
+                                <th>Số Sinh Viên Đã Đăng Ký</th>
                                 <th>Số Tín Chỉ</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($specializationSubjects as $subject)
+                            @foreach($subjects as $subject)
                             <tr>
                                 <td>
-                                    {{ $subject->name }}
-                                    @if($subject->pivot->force)<span class="badge badge-danger">Bắt Buộc</span> @endif
-                                    {{ Form::text('subject_id', $subject->id, ['hidden' => true]) }}
+                                    {{ $subject->subject->name }}
+                                    @if($subject->force)<span class="badge badge-danger">Bắt Buộc</span> @endif
+                                    {{ Form::text('subject_id', $subject->subject_id, ['hidden' => true]) }}
+
                                 </td>
                                 <td>
-                                    {{ $subject->pivot->semester ?? 'Tự Do' }}
+                                    {{ $subject->semester ?? 'Tự Do' }}
+                                    {{ Form::text('semseter', $student->class->semester, ['hidden' => true]) }}
+                                    {{ Form::text('specialization_id', $subject->specialization_id, ['hidden' => true]) }}
                                 </td>
                                 <td>
-                                    {{ $subject['creditClass']['name'] ?? 'Chưa có lớp' }}
+                                    {{ ($subject->hasCreditClass ? 'Đã' : 'Chưa') . ' có lớp' }}
                                 </td>
                                 <td>
-                                    {{ empty($subject['creditClass']) ? 0 : count($subject['creditClass']['schedule_details']) }}
+                                    {{ 0 }}
                                 </td>
                                 <td>
                                     {{ $subject->credit }}
                                     {{ Form::text('credit', $subject->credit, ['hidden' => true]) }}
                                 </td>
                                 <td class="text-center">
-                                    {{ Form::checkbox('checked', $subject->id, in_array($subject->id, $scheduleDetails), ['onclick' => $subject['force'] ? 'return false' : 'return true', 'class' => 'selectSubject'])  }}
+                                    {{ Form::checkbox('checked', $subject->id, $subject->isSelected, ['class' => 'selectSubject'])  }}
                                 </td>
                             </tr>
                             @endforeach
@@ -105,13 +113,17 @@
         event.preventDefault();
         let subjects = [];
         jQuery('#subjects').find('tbody tr:not(:last-child)').each(function(index, tr) {
-            let subject_id = jQuery(tr).find('' + 'td:eq(0)').find('input').val();
-            let selected = jQuery(tr).find('' + 'td:eq(5)').find('input').is(':checked');
+            const subject_id = jQuery(tr).find('' + 'td:eq(0)').find('input').val();
+            const semester = jQuery(tr).find('' + 'td:eq(1)').find('input:eq(0)').val();
+            const specialization_id = jQuery(tr).find('' + 'td:eq(1)').find('input:eq(1)').val();
+            const selected = jQuery(tr).find('' + 'td:eq(5)').find('input').is(':checked');
             if (selected)
                 subjects = [
                     ...subjects,
                     {
                         subject_id,
+                        semester,
+                        specialization_id
                     }
                 ]
         });
@@ -124,7 +136,7 @@
                     subjects,
                 },
                 success: function() {
-                    window.location.href = "{{ route('admin.schedules.students.index') }}"
+                    window.location.href = "{{ route('admin.schedules.students.registerScheduleShow', $student->id) }}"
                 },
                 error: function() {
                     alert('Error');

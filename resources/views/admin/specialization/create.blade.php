@@ -19,7 +19,7 @@
                 {{ Form::open(['url' =>route('admin.specializations.store') , 'method' => 'POST']) }}
                 <div class="form-group">
                     <label for="name">Chuyên Ngành</label>
-                    {{ Form::input('text', 'name', null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Tên chuyên ngành']) }}
+                    {{ Form::input('text', 'name', null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Chuyên ngành']) }}
                 </div>
                 <div class="form-group">
                     <label for="min_creddit">Số Tín Chỉ Tối Thiểu</label>

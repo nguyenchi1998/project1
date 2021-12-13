@@ -18,7 +18,7 @@
                 <div class="d-flex mb-3 justify-content-between">
                     <div class="">
                         <form action="{{ route('admin.schedules.students.index') }}" class="form-inline">
-                            <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
+                            <input type="search" name="Từ Khóa" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
                             {{ Form::select('semester', $semesters, $semester ?? null, ['class' => 'form-control  mr-2', 'placeholder' => 'Tất Cả Kỳ Học']) }}
                             {{ Form::select('grade-filter', $grades, $filterGrade ?? null, ['class' => 'form-control mr-2', 'placeholder' => 'Tất Cả Khóa']) }}
                             <button class="btn btn-outline-secondary" type="submit">
@@ -32,10 +32,10 @@
                         <thead>
                             <tr>
                                 <th>Sinh Viên</th>
-                                <th>Khóa - Lớp - Kỳ Hiện Tại</th>
-                                <th>Số Môn Đã Đăng Ký (Số Tín)</th>
+                                <th>Khóa</th>
                                 <th>Chuyên Ngành</th>
-                                <th>Trạng Thái</th>
+                                <th>Môn Đăng Ký</th>
+                                <th>Trạng Thái Đăng Ký</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -46,25 +46,26 @@
                                     {{ $student->name }}
                                 </td>
                                 <td>
-                                    {{ $student->grade->name ?? '' }} - {{ $student->class->name ?? '' }}
-                                    - {{ 'Kỳ ' . $student->class->semester ?? '' }}
-                                </td>
-
-                                <td>
-                                    {{ count($student->scheduleDetails) }} ({{ $student['total_credit'] }})
+                                    {{ $student->grade->name }}
                                 </td>
                                 <td>
                                     {{ $student->class->specialization->name }}
                                 </td>
                                 <td>
+                                    {{ count($student->scheduleDetails) }}
+                                </td>
+                                <td style="width: 180px;">
                                     <form action="{{ route('admin.schedules.students.creditStatus', $student->id) }}" method="post">
                                         @csrf
-                                        {{ Form::select('can_register_credit', $states, $student->can_register_credit, ['class' => 'form-control ', 'onchange' => 'this.form.submit()'])}}
+                                        <select name="can_register_credit" class="form-control" onchange="this.form.submit()">
+                                            <option value="{{ config('credit.register.open') }}" @if($student->can_register_credit ==config('credit.register.open')) selected @endif>Mở</option>
+                                            <option value="{{ config('credit.register.close') }}" @if($student->can_register_credit ==config('credit.register.close')) selected @endif>Đóng</option>
+                                        </select>
                                     </form>
                                 </td>
-                                <td class="text-center" style="width: 150px;">
-                                    <a href="{{ route('admin.schedules.students.registerScheduleShow', $student->id) }}" class="btn btn-sm btn-outline-success">
-                                        Đăng Ký Tín Chỉ
+                                <td class="text-center" style="width: 180px;">
+                                    <a href="{{ route('admin.schedules.students.registerScheduleShow', $student->id) }}" class="btn btn-outline-success">
+                                        Danh Sách Tín Chỉ
                                     </a>
                                 </td>
                             </tr>

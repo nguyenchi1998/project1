@@ -19,7 +19,7 @@
                 {{ Form::open(['url' =>route('admin.departments.store') , 'method' => 'POST']) }}
                 <div class="form-group">
                     <label for="name">Khoa Viện</label>
-                    {{ Form::input('text', 'name', null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Enter tên khoa/viện']) }}
+                    {{ Form::input('text', 'name', null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Khoa Viện']) }}
                 </div>
                 <div class="mt-3">
                     {{Form::submit('Xác Nhận', ['class'=> 'btn btn-outline-success mr-2']) }}

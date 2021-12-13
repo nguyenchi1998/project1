@@ -33,7 +33,7 @@ class CreditController extends Controller
         $student = Auth::user();
         $class = $this->classRepository->find($student->class_id);
         $semesterFilter = $request->get('semester', $class->semester);
-        $semester = range_semester(config('config.start_semester'), $class->specialization->max_semester);
+        $semester = range_semester(config('config.start_semester'), config('config.max_semester'));
         $credits = $this->scheduleDetailRepository->where('student_id', '=', $student->id)
             ->where('register_status', config('schedule.detail.status.register.pending'))
             ->get()

@@ -48,14 +48,14 @@
                                             <form action="{{ route('admin.requests.departments.approve') }}" method="post">
                                                 @csrf
                                                 {{ Form::text('teacherId', $teacher->id, ['hidden'=> true]) }}
-                                                <button class="btn btn-sm btn-outline-success">Chấp Nhận</button>
+                                                <button class="btn btn-outline-success">Chấp Nhận</button>
                                             </form>
                                         </div>
                                         <div>
                                             <form action="{{ route('admin.requests.departments.reject') }}" method="post">
                                                 @csrf
                                                 {{ Form::text('teacherId', $teacher->id, ['hidden'=> true]) }}
-                                                <button class="btn btn-sm btn-outline-danger">Từ Chối</button>
+                                                <button class="btn btn-outline-danger">Từ Chối</button>
                                             </form>
                                         </div>
                                     </div>
