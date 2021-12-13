@@ -20,7 +20,7 @@
                         <form action="{{ route('admin.teachers.index') }}" class="form-inline">
                             <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
                             {{ Form::select('department-filter', $departments, $departmentFilter, ['class' => 'form-control  mr-2', 'placeholder' => 'Tất Cả Khoa Viện']) }}
-                            <button class="btn btn-outline-info" type="submit">
+                            <button class="btn btn-outline-secondary" type="submit">
                                 <i class="fa fa-search"></i>
                             </button>
                         </form>
@@ -62,7 +62,7 @@
                                 <td width="100">
                                     <div class="d-flex justify-content-between">
                                         <!-- <div class="mr-2">
-                                            <a href="{{ route('admin.teachers.change_department_show', $teacher->id) }}" class="btn btn-sm btn-outline-info">
+                                            <a href="{{ route('admin.teachers.change_department_show', $teacher->id) }}" class="btn btn-outline-secondary">
                                                 Chuyển Khoa Viện
                                             </a>
                                         </div> -->

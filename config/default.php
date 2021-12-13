@@ -14,4 +14,5 @@ return [
         ]
     ],
     'avatar_size' => '200',
+    'app_name' => env('APP_NAME', 'BK - MARK')
 ];

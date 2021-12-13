@@ -110,7 +110,7 @@ class StudentController extends Controller
             $student = $this->studentRepository->find($id)
                 ->load('avatar');
             $student->update($request->only([
-                'name', 'email', 'phone', 'birthday', 'address', 'gender', 'grade_id',
+                'name', 'phone', 'birthday', 'address', 'gender', 'grade_id',
             ]));
             if ($request->file('avatar')) {
                 $imageDeleted = $this->studentRepository->deleteImage($student->avatar->path);

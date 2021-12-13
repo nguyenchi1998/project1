@@ -48,7 +48,7 @@
                 </div>
                 <div class="form-group">
                     <label for="email">Email</label>
-                    {{ Form::input('email', 'email', $manager->email, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Email']) }}
+                    {{ Form::input('email', 'email', $manager->email, ['readonly' => true, 'class' => 'form-control', 'id' => 'name', 'placeholder' => 'Email']) }}
                 </div>
                 <div class="form-group">
                     <label for="phone">Số Điện Thoại</label>

@@ -179,7 +179,7 @@
             <!-- Brand Logo -->
             <a href="index3.html" class="brand-link">
                 <img src="{{ asset('img/logo_small.jpeg') }}" alt="AdminLTE Logo" class="brand-image elevation-3" style="opacity: .8">
-                <span class="brand-text font-weight-light text-capitalize">Data Warehouse</span>
+                <span class="brand-text font-weight-light text-capitalize">{{ config('default.app_name') }}</span>
             </a>
             <div class="sidebar">
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">

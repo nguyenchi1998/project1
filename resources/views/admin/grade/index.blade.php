@@ -48,7 +48,7 @@
                                         {{ Form::select('can_register_credit', $states, $grade->can_register_credit, ['class' => 'form-control ', 'onchange' => 'this.form.submit()'])}}
                                     </form>
                                 </td>
-                                <td style="width: 100px;">
+                                <td style="width: 50px;">
                                     <div class="d-flex justify-content-around">
                                         <div class="mr-2">
                                             <a href="{{ route('admin.grades.edit', $grade->id) }}" class="btn btn-sm btn-outline-warning">Sửa</a>

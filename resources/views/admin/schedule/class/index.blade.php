@@ -20,8 +20,8 @@
                         <form action="{{ route('admin.schedules.classes.index') }}" class="form-inline">
                             <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
                             {{ Form::select('semester-filter', $semesters, $semesterFilter, ['class' => 'form-control  mr-2', 'placeholder' => 'Tất Cả Kỳ Học']) }}
-                            {{ Form::select('specialization-filter', $specializations, $specializationFilter, ['class' => 'form-control  mr-2', 'placeholder' => 'Tất Cả Chuyên Ngành']) }}
-                            <button class="ml-2 btn-sm btn btn-outline-info" type="submit">
+                            {{ Form::select('specialization-filter', $specializations, $specializationFilter, ['class' => 'form-control mr-2', 'placeholder' => 'Tất Cả Chuyên Ngành']) }}
+                            <button class="btn btn-outline-secondary" type="submit">
                                 <i class="fa fa-search"></i>
                             </button>
                         </form>
@@ -35,7 +35,6 @@
                                 <th>Sinh Viên</th>
                                 <th>Kỳ Hiện Tại</th>
                                 <th>Chuyên Ngành</th>
-                                <th>Số Môn Đăng Ký</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -54,13 +53,9 @@
                                 <td>
                                     {{ $class->specialization->name }}
                                 </td>
-                                <td>
-                                    {{ count($class->schedules) }}
-                                    ({{ $class['total_credit'] }})
-                                </td>
                                 <td class="text-center" style="width: 150px">
-                                    <a href="{{ route('admin.schedules.classes.registerScheduleShow', $class->id) }}" class="btn btn-sm btn-outline-success">
-                                        Đăng Ký Tín Chỉ
+                                    <a href="{{ route('admin.schedules.classes.showListCredits', $class->id) }}" class="btn btn-sm btn-outline-success">
+                                        Danh Sách Tín Chỉ
                                     </a>
                                 </td>
                             </tr>

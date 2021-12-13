@@ -21,7 +21,7 @@
                             <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
                             {{ Form::select('department-filter', $departments, $departmentFilter, ['class' => 'mr-2 form-control ', 'placeholder' => 'Tất Cả Khoa Viện']) }}
                             {{ Form::select('type-filter', $types, $typeFilter, ['class' => 'mr-2 form-control ', 'placeholder' => 'Tất Cả Thể Loại']) }}
-                            <button class="btn btn-outline-info" type="submit">
+                            <button class="btn btn-outline-secondary" type="submit">
                                 <i class="fa fa-search"></i>
                             </button>
                         </form>

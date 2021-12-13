@@ -20,7 +20,7 @@
                         <form action="" class="form-inline">
                             {{ Form::select('status', $states, $status , ['class' => 'form-control', 'placeholder' => 'Tất Cả Trạng Thái']) }}
                             {{ Form::select('class-type', [0 => 'Lớp Học', 1 => 'Tự Do'], $classType, ['class' => 'ml-2 form-control mr-2', 'placeholder' => 'Tất Cả Thể Loại']) }}
-                            <button class="btn btn-outline-info" type="submit">
+                            <button class="btn btn-outline-secondary" type="submit">
                                 <i class="fa fa-search"></i>
                             </button>
                         </form>

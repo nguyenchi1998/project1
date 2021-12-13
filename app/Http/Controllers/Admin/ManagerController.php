@@ -80,7 +80,7 @@ class ManagerController extends Controller
             DB::beginTransaction();
             $manager = $this->managerRepository->find($id);
             $manager->update($id, $request->only([
-                'name', 'email', 'phone', 'birthday', 'address', 'gender'
+                'name', 'phone', 'birthday', 'address', 'gender'
             ]));
             $avatar = $request->file('avatar');
             $avatarFilename = $request->get('email') . '.' . $avatar->getClientOriginalExtension();

@@ -26,13 +26,13 @@ class ScheduleClassController extends Controller
     protected $gradeRepository;
 
     public function __construct(
-        IScheduleRepository       $scheduleRepository,
+        IScheduleRepository $scheduleRepository,
         IScheduleDetailRepository $scheduleDetailRepository,
         ISpecializationRepository $specializationRepository,
-        ISubjectRepository        $subjectRepository,
-        IClassRepository          $classRepository,
-        IStudentRepository        $studentRepository,
-        IGradeRepository          $gradeRepository
+        ISubjectRepository $subjectRepository,
+        IClassRepository $classRepository,
+        IStudentRepository $studentRepository,
+        IGradeRepository  $gradeRepository
     ) {
         $this->scheduleRepository = $scheduleRepository;
         $this->specializationRepository = $specializationRepository;
@@ -59,21 +59,8 @@ class ScheduleClassController extends Controller
                     $query->whereId($specializationFilter);
                 });
             })
-            ->with(['students', 'schedules.specializationSubject'])
+            ->with(['students', 'schedules'])
             ->paginate(config('config.paginate'));
-        $classes->getCollection()->transform(function ($class) {
-            $totalCredit = $class->schedules->reduce(function ($total, $schedule) use ($class) {
-                if ($schedule->specializationSubject->semester == $class->semester) {
-                    $total += $schedule->specializationSubject->subject->credit;
-                }
-
-                return $total;
-            }, 0);
-            $class['can_register'] = $totalCredit < config('credit.max_register');
-            $class['total_credit'] = $totalCredit;
-
-            return $class;
-        });
         $specializations = $this->specializationRepository->all()
             ->pluck('name', 'id');
 
@@ -87,9 +74,36 @@ class ScheduleClassController extends Controller
         ));
     }
 
-    public function registerScheduleShow($id)
+    public function showListCredits(Request $request, $classId)
     {
-        $class = $this->classRepository->find($id);
+        $class = $this->classRepository->find($classId);
+        $semesterFilter = $request->get('semester-filter');
+        $specializationFilter = $request->get('specialization-filter');
+        $keyword = $request->get('keyword');
+        $semesters = range_semester(config('config.start_semester'), config('config.class_register_limit_semester'), true, $class->semester);
+        $schedules = $this->scheduleRepository->model()
+            ->where('class_id', $classId)
+            ->when($semesterFilter, function ($query) use ($semesterFilter) {
+                $query->whereHas('specializationSubject', function ($query) use ($semesterFilter) {
+                    $query->where('semester', $semesterFilter);
+                });
+            })
+            ->with(['specializationSubject.subject.specializations'])
+            ->orderBy('status')
+            ->paginate(config('config.paginate'));
+        return view('admin.schedule.class.list_credit', compact(
+            'schedules',
+            'keyword',
+            'semesterFilter',
+            'specializationFilter',
+            'semesters',
+            'class'
+        ));
+    }
+
+    public function registerScheduleShow($classId)
+    {
+        $class = $this->classRepository->find($classId);
         $specialization = $this->specializationRepository->find($class->specialization_id)
             ->load(['subjects' => function ($query) use ($class) {
                 $query->whereType(config('subject.type.basic'))
@@ -100,7 +114,7 @@ class ScheduleClassController extends Controller
 
         // danh sách các môn đã đăng kí của lớp ở kỳ tiếp theo của lớp
         $scheduleSubjects = $this->scheduleRepository->model()
-            ->where('class_id', $id)
+            ->where('class_id', $classId)
             ->whereHas('specializationSubject', function ($query) use ($class) {
                 $query->whereSemester($class->semester + 1);
             })

@@ -62,6 +62,9 @@ Route::group(['as' => 'admin.'], function () {
         Route::get('schedules/class', 'ScheduleClassController@index')
             ->name('schedules.classes.index');
 
+        Route::get('schedules/class/{id}/credit', 'ScheduleClassController@showListCredits')
+            ->name('schedules.classes.showListCredits');
+
         Route::get('schedules/class/{id}', 'ScheduleClassController@registerScheduleShow')
             ->name('schedules.classes.registerScheduleShow');
 

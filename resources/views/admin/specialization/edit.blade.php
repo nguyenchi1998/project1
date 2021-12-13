@@ -17,7 +17,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="d-flex justify-content-end">
-                    <a href="{{ route('admin.specializations.choose_subject_show', $specialization->id) }}" class="btn btn-sm btn-outline-info">
+                    <a href="{{ route('admin.specializations.choose_subject_show', $specialization->id) }}" class="btn btn-outline-secondary">
                         Danh Sách Môn Giảng Dạy
                     </a>
                 </div>

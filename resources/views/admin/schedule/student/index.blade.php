@@ -20,8 +20,8 @@
                         <form action="{{ route('admin.schedules.students.index') }}" class="form-inline">
                             <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
                             {{ Form::select('semester', $semesters, $semester ?? null, ['class' => 'form-control  mr-2', 'placeholder' => 'Tất Cả Kỳ Học']) }}
-                            {{ Form::select('grade-filter', $grades, $filterGrade ?? null, ['class' => 'form-control ', 'placeholder' => 'Tất Cả Khóa']) }}
-                            <button class="ml-2 btn-sm btn btn-outline-info" type="submit">
+                            {{ Form::select('grade-filter', $grades, $filterGrade ?? null, ['class' => 'form-control mr-2', 'placeholder' => 'Tất Cả Khóa']) }}
+                            <button class="btn btn-outline-secondary" type="submit">
                                 <i class="fa fa-search"></i>
                             </button>
                         </form>

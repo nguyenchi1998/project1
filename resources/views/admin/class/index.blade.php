@@ -19,8 +19,8 @@
                     <div class="">
                         <form action="{{ route('admin.classes.index') }}" class="form-inline">
                             <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
-                            {{ Form::select('specializaiton-filter', $specializations, $filterSpecialization, ['class' => 'form-control ', 'placeholder' => 'Tất cả Khoa Viện']) }}
-                            <button class="ml-2 btn btn-sm btn-outline-info" type="submit">
+                            {{ Form::select('specializaiton-filter', $specializations, $filterSpecialization, ['class' => 'form-control mr-2', 'placeholder' => 'Tất cả Khoa Viện']) }}
+                            <button class="btn btn-outline-secondary" type="submit">
                                 <i class="fa fa-search"></i>
                             </button>
                         </form>

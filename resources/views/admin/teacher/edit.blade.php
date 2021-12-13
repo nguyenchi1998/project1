@@ -20,7 +20,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="d-flex justify-content-end">
-                    <a href="{{ route('admin.teachers.choose_subject_show', $teacher->id) }}" class="btn btn-sm btn-outline-info">
+                    <a href="{{ route('admin.teachers.choose_subject_show', $teacher->id) }}" class="btn btn-outline-secondary">
                         Danh Sách Môn Giảng Dạy
                     </a>
                 </div>
@@ -57,7 +57,7 @@
                 </div>
                 <div class="form-group">
                     <label for="email">Email</label>
-                    {{ Form::input('email', 'email', $teacher->email, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Email']) }}
+                    {{ Form::input('email', 'email', $teacher->email, ['readonly' => true, 'class' => 'form-control', 'id' => 'name', 'placeholder' => 'Email']) }}
                 </div>
                 <div class="form-group">
                     <label for="phone">Số Điện Thoại</label>
