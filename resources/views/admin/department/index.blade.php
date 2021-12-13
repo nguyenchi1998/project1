@@ -17,12 +17,12 @@
             <div class="card-body">
                 <div class="d-flex mb-3 justify-content-between">
                     <form action="{{ route('admin.departments.index') }}" class="form-inline">
-                        <input type="search" name="keyword" value="{{ $keyword }}" class="form-control mr-2 " placeholder="Từ Khoá">
+                        <input type="search" name="Từ Khóa" value="{{ $keyword }}" class="form-control mr-2 " placeholder="Từ Khoá">
                         <button class="btn btn-outline-secondary" type="submit">
                             <i class="fa fa-search"></i>
                         </button>
                     </form>
-                    <a class="btn btn-sm d-flex align-items-center btn-outline-success" href="{{ route('admin.departments.create') }}">Tạo Mới</a>
+                    <a class="btn Tìm Kiếmd-flex align-items-center btn-outline-success" href="{{ route('admin.departments.create') }}">Tạo Mới</a>
                 </div>
                 <div class="table-responsive table-scroll">
                     <table class="table table-bordered table-hover">
@@ -44,11 +44,11 @@
                                 <td width="100">
                                     <div class="d-flex justify-content-between">
                                         <div class="mr-2">
-                                            <a href="{{ route('admin.departments.edit', $department->id) }}" class="btn btn-sm btn-outline-warning">Sửa</a>
+                                            <a href="{{ route('admin.departments.edit', $department->id) }}" class="btn btn-outline-warning">Sửa</a>
                                         </div>
                                         <div>
                                             <form action="">
-                                                <button type="submit" class="btn btn-sm btn-outline-danger">Xóa
+                                                <button type="submit" class="btn btn-outline-danger">Xóa
                                                 </button>
                                             </form>
                                         </div>

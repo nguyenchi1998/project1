@@ -26,7 +26,7 @@
                 {{ Form::text('id',$specialization->id, ['hidden'=>true]) }}
                 <div class="form-group">
                     <label for="name">Chuyên Ngành</label>
-                    {{ Form::input('text', 'name', $specialization->name, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Tên Chuyên Ngành']) }}
+                    {{ Form::input('text', 'name', $specialization->name, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Chuyên Ngành']) }}
                 </div>
                 <div class="form-group">
                     <label for="min_creddit">Sô Tín Chỉ Tối Thiểu</label>
@@ -34,7 +34,7 @@
                 </div>
                 <div class="form-group">
                     <label for="max_semester">Số Kỳ Học</label>
-                    {{ Form::input('number', 'max_semester', $specialization->max_semester, ['class' => 'form-control', 'id' => 'max_semester', 'placeholder' => 'Số Kỳ Học', 'min' => 0]) }}
+                    {{ Form::input('number', 'max_semester', config('config.semester'), ['class' => 'form-control', 'id' => 'max_semester', 'placeholder' => 'Số Kỳ Học', 'min' => 0]) }}
                 </div>
                 <div class="mt-3">
                     {{Form::submit('Xác Nhận', ['class'=> 'btn btn-outline-success mr-2']) }}

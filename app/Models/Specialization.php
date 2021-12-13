@@ -13,7 +13,6 @@ class Specialization extends Model
     protected $fillable = [
         'name',
         'min_credit',
-        'max_semester',
         'department_id',
     ];
 

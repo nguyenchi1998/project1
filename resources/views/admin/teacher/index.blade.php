@@ -18,14 +18,14 @@
                 <div class="d-flex mb-3 justify-content-between">
                     <div class="">
                         <form action="{{ route('admin.teachers.index') }}" class="form-inline">
-                            <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
+                            <input type="search" name="Từ Khóa" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
                             {{ Form::select('department-filter', $departments, $departmentFilter, ['class' => 'form-control  mr-2', 'placeholder' => 'Tất Cả Khoa Viện']) }}
                             <button class="btn btn-outline-secondary" type="submit">
                                 <i class="fa fa-search"></i>
                             </button>
                         </form>
                     </div>
-                    <a class="btn btn-sm d-flex align-items-center btn-outline-success" href="{{ route('admin.teachers.create') }}">Tạo Mới</a>
+                    <a class="btn Tìm Kiếmd-flex align-items-center btn-outline-success" href="{{ route('admin.teachers.create') }}">Tạo Mới</a>
                 </div>
                 <div class="table-responsive table-scroll">
                     <table class="table table-bordered table-hover">
@@ -67,13 +67,13 @@
                                             </a>
                                         </div> -->
                                         <div class="mr-2">
-                                            <a href="{{ route('admin.teachers.edit', $teacher->id) }}" class="btn btn-sm btn-outline-warning">
+                                            <a href="{{ route('admin.teachers.edit', $teacher->id) }}" class="btn btn-outline-warning">
                                                 Sửa
                                             </a>
                                         </div>
                                         <div>
                                             <form action="{{ route('admin.teachers.destroy', $teacher->id) }}">
-                                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                <button type="submit" class="btn btn-outline-danger">
                                                     Xóa
                                                 </button>
                                             </form>

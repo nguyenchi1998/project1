@@ -39,6 +39,7 @@
                         <thead>
                             <tr>
                                 <th>Môn Học</th>
+                                <th>Số Tín Chỉ</th>
                                 <th>Kỳ Học</th>
                                 <th>Trạng Thái</th>
                                 <th></th>
@@ -49,6 +50,9 @@
                             <tr @if($schedule->status == config('schedule.status.done')) class="table-secondary" @endif>
                                 <td>
                                     {{ $schedule->specializationSubject->subject->name }}
+                                </td>
+                                <td>
+                                    {{ $schedule->credit ?? $schedule->specializationSubject->subject->credit }}
                                 </td>
                                 <td>
                                     {{ $schedule->specializationSubject->semester }}
@@ -74,7 +78,7 @@
                                 <td style="width: 120px">
                                     @if($schedule->status == config('schedule.status.done') || $schedule->status == config('schedule.status.marking'))
                                     <div class="d-flex justify-content-center">
-                                        <a href="{{ route('admin.schedules.classes.registerScheduleShow', $schedule->class_id) }}" class="btn btn-sm btn-outline-success">
+                                        <a href="{{ route('admin.schedules.classes.registerScheduleShow', $schedule->class_id) }}" class="btn btn-outline-success">
                                             Xem Điểm
                                         </a>
                                     </div>

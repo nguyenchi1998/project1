@@ -52,7 +52,7 @@ class DepartmentSeeder extends Seeder
                 'specializations' => [
                     'Kỹ thuật Điện',
                     'Kỹ thuật Điều khiển - Tự động hóa',
-                    'Chương trình tiên tiến Điều khiển-Tự động hóa và Hệ thống điện',
+                    'Chương trình tiên tiến Điều khiển - Tự động hóa và Hệ thống điện',
                     'Kĩ thuật robot',
                 ]
             ]
@@ -345,7 +345,6 @@ class DepartmentSeeder extends Seeder
                     'name' => $specialization,
                     'department_id' => $departmentInstance->id,
                     'min_credit' => 30,
-                    'max_semester' => 9,
                 ]);
             }
         }
@@ -388,7 +387,7 @@ class DepartmentSeeder extends Seeder
                     'semester' => $force ? null : $faker->randomElement(
                         range(
                             config('config.student_register_start_semester'),
-                            $specialization->max_semester
+                            config('config.max_semester')
                         )
                     ),
                 ];

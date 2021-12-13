@@ -29,7 +29,7 @@ Route::group(['as' => 'admin.'], function () {
             ->name('teachers.choose_subject');
 
         Route::resource('schedules', 'ScheduleController')
-            ->only(['index', 'create', 'destroy']);
+            ->only(['index', 'create', 'destroy', 'edit', 'update']);
 
         Route::post('schedules/{id}/teacher', 'ScheduleController@setTeacher')
             ->name('schedules.teacher');

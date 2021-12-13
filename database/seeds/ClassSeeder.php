@@ -33,23 +33,22 @@ class ClassSeeder extends Seeder
             $student->avatar()->save($media);
         });
         foreach ($classes as $class) {
-            // for ($i = 1; $i <= 3; $i++) {
-            $classInstance = Classs::create([
-                // 'name' => $class . $i,
-                'name' => $class,
-                'specialization_id' => $faker->randomElement(Specialization::all()->random()->pluck('id')->toArray()),
-                'semester' => $faker->randomElement(range(3, 6)),
-            ]);
-            factory(Student::class, $faker->randomElement([5, 6]))->create([
-                'class_id' => $classInstance->id,
-                'grade_id' => $faker->randomElement(Grade::all()->pluck('id')->toArray()),
-            ])->each(function ($student) use ($path) {
-                $media = Media::create([
-                    'path' => str_replace(storage_path(config('default.path.app_public')), '', $path),
+            for ($i = 1; $i <= 3; $i++) {
+                $classInstance = Classs::create([
+                    'name' => $class . ' - ' . $i,
+                    'specialization_id' => $faker->randomElement(Specialization::all()->random()->pluck('id')->toArray()),
+                    'semester' => $faker->randomElement(range(1, config('config.max_semester'))),
                 ]);
-                $student->avatar()->save($media);
-            });
-            // }
+                factory(Student::class, $faker->randomElement([5, 10]))->create([
+                    'class_id' => $classInstance->id,
+                    'grade_id' => $faker->randomElement(Grade::all()->pluck('id')->toArray()),
+                ])->each(function ($student) use ($path) {
+                    $media = Media::create([
+                        'path' => str_replace(storage_path(config('default.path.app_public')), '', $path),
+                    ]);
+                    $student->avatar()->save($media);
+                });
+            }
         }
     }
 }

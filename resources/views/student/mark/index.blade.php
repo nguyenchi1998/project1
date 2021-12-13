@@ -19,7 +19,7 @@
                     <div class="">
                         <form action="">
                             {{ Form::select('semester', $semester, $semesterFilter, ['placeholder' => 'Tất Cả Kỳ Học','class' =>'form-control']) }}
-                            <button class="ml-2 btn-sm btn btn-outline-info" type="submit">
+                            <button class="ml-2 btn btn-outline-info" type="submit">
                                 <i class="fa fa-search"></i>
                             </button>
                         </form>
@@ -58,12 +58,12 @@
                                 <td class="text-center">
                                     @if(isset($subject->result_status) && $subject->result_status == config('schedule.detail.status.result.relearn'))
                                     {{ Form::open(['url' => route('credits.destroy', $subject->id)]) }}
-                                    {{ Form::submit('Relearn', ['class' => 'btn btn-sm btn-outline-danger']) }}
+                                    {{ Form::submit('Relearn', ['class' => 'btn btn-outline-danger']) }}
                                     {{ Form::close() }}
                                     @endif()
                                     @if(isset($subject->result_status) && $subject->result_status == config('schedule.detail.status.result.retest'))
                                     {{ Form::open(['url' => route('credits.destroy', $subject->id)]) }}
-                                    {{ Form::submit('Retest', ['class' => 'btn btn-sm btn-outline-danger']) }}
+                                    {{ Form::submit('Retest', ['class' => 'btn btn-outline-danger']) }}
                                     {{ Form::close() }}
                                     @endif()
                                 </td>

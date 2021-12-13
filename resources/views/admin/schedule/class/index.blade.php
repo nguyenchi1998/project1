@@ -18,7 +18,7 @@
                 <div class="d-flex mb-3 justify-content-between">
                     <div class="">
                         <form action="{{ route('admin.schedules.classes.index') }}" class="form-inline">
-                            <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
+                            <input type="search" name="Từ Khóa" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
                             {{ Form::select('semester-filter', $semesters, $semesterFilter, ['class' => 'form-control  mr-2', 'placeholder' => 'Tất Cả Kỳ Học']) }}
                             {{ Form::select('specialization-filter', $specializations, $specializationFilter, ['class' => 'form-control mr-2', 'placeholder' => 'Tất Cả Chuyên Ngành']) }}
                             <button class="btn btn-outline-secondary" type="submit">
@@ -53,8 +53,8 @@
                                 <td>
                                     {{ $class->specialization->name }}
                                 </td>
-                                <td class="text-center" style="width: 150px">
-                                    <a href="{{ route('admin.schedules.classes.showListCredits', $class->id) }}" class="btn btn-sm btn-outline-success">
+                                <td class="text-center" style="width: 200px">
+                                    <a href="{{ route('admin.schedules.classes.showListCredits', $class->id) }}" class="btn btn-outline-success">
                                         Danh Sách Tín Chỉ
                                     </a>
                                 </td>

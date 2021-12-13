@@ -16,28 +16,31 @@
     <div class="col-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                {{ Form::open(['url' => route('admin.classes.update', $class->id) , 'method' => 'POST']) }}
+                {{ Form::open(['url' => route('admin.classes.update', $schedule->id) , 'method' => 'POST']) }}
                 @method('PUT')
-                {{ Form::text('id',$class->id, ['hidden'=>true]) }}
-                <div class="form-group">
-                    <label for="name">Name</label>
-                    {{ Form::input('text', 'name', $class->name, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Enter name']) }}
-                </div>
-                <div class="form-group">
-                    {{ Form::label('subject', 'Subject') }}
-                    @foreach($students as $key => $student)
-                    <div class="form-check form-check-info">
-                        <label class="form-check-label">
-                            {{ Form::checkbox('students[]', $student->id, in_array($student->id, $class->students->pluck('id')->toArray()),  ['class'=>'form-check-input']) }}
-                            {{ $student->name }}
-                            <i class="input-helper"></i>
-                        </label>
+                <div class="row">
+                    <div class="form-group col-lg-6">
+                        {{ Form::label('name', 'Lớp Tín Chỉ') }}
+                        {{ Form::input('text', 'name', $schedule->specializationSubject->subject->name, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Lớp Tín Chỉ']) }}
                     </div>
-                    @endforeach
+                    <div class="form-group col-lg-6">
+                        {{ Form::label('teacher_id', 'Giảng Viên') }}
+                        {{ Form::select('teacher_id', $teachers, $schedule->teacher_id ?? null, ['class' => 'form-control ', 'placeholder' => 'Tất Cả Giảng Viên', 'onchange' => 'this,form.submit()', 'disabled' => (boolean)$schedule->status])}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 form-group">
+                        {{ Form::label('start_time', 'Thời Gian Bắt Đầu') }}
+                        {{ Form::date('start_time', $schedule->start_time, ['class' => 'form-control ', 'disabled' => (boolean)$schedule->status]) }}
+                    </div>
+                    <div class="col-lg-6 form-group">
+                        {{ Form::label('end_time', 'Thời Gian Kết Thúc') }}
+                        {{ Form::date('end_time', $schedule->end_time, ['class' => 'form-control ', 'disabled' => (boolean)$schedule->status]) }}
+                    </div>
                 </div>
                 <div class="mt-3">
                     {{Form::submit('Xác Nhận', ['class'=> 'btn btn-outline-success mr-2']) }}
-                    <a href="{{ route('admin.classes.index') }}" class="btn btn-outline-dark">Huỷ Bỏ</a>
+                    <a href="{{ route('admin.schedules.index') }}" class="btn btn-outline-dark">Huỷ Bỏ</a>
                     {{ Form::close() }}
                 </div>
             </div>

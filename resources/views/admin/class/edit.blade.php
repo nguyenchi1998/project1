@@ -18,15 +18,15 @@
             <div class="card-body">
                 <div class="d-flex justify-content-end">
                     <a href="{{ route('admin.classes.students', $class->id) }}" class="btn btn-outline-secondary">
-                        Danh Sách Sinh Viên
+                        Sửa Đổi Lớp Học
                     </a>
                 </div>
                 {{ Form::open(['url' => route('admin.classes.update', $class->id) , 'method' => 'POST']) }}
                 @method('PUT')
                 {{ Form::text('id',$class->id, ['hidden'=>true]) }}
                 <div class="form-group">
-                    <label for="name">Name</label>
-                    {{ Form::input('text', 'name', $class->name, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Enter name']) }}
+                    <label for="name">Lớp Học</label>
+                    {{ Form::input('text', 'name', $class->name, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Lớp Học']) }}
                 </div>
                 <div class="mt-3">
                     {{Form::submit('Xác Nhận', ['class'=> 'btn btn-outline-success mr-2']) }}

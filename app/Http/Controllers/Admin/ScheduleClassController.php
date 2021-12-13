@@ -138,7 +138,7 @@ class ScheduleClassController extends Controller
             $class = $this->classRepository->find($id);
             $subjects = $this->subjectRepository->whereIn('id', array_column($request->get('subjects'), 'subject_id'))
                 ->get()
-                ->map(function ($subject) use ($class, $request) {
+                ->map(function ($subject) use ($class) {
                     $item['class_id'] = $class->id;
                     $item['name'] = 'Lớp Tín Chỉ Môn ' . $subject->name;
                     $item['subject_id'] = $subject->id;

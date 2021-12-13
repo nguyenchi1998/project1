@@ -19,13 +19,13 @@
                     <div class="">
                         <form action="">
                             {{ Form::select('semester', $semester, $semesterFilter, ['placeholder' => 'Tất Cả Kỳ Học', 'class' =>'form-control ']) }}
-                            <button class="ml-2 btn-sm btn btn-outline-info" type="submit">
+                            <button class="ml-2 btn btn-outline-info" type="submit">
                                 <i class="fa fa-search"></i>
                             </button>
                         </form>
                     </div>
                     @if(auth()->user()->grade->can_register_credit)
-                    <a class="btn btn-sm d-flex align-items-center btn-outline-success" href="{{ route('credits.create') }}">Đăng Ký</a>
+                    <a class="btn Tìm Kiếmd-flex align-items-center btn-outline-success" href="{{ route('credits.create') }}">Đăng Ký</a>
                     @endif
                 </div>
                 <div class="table-responsive table-scroll">
@@ -63,7 +63,7 @@
                                         {{ Form::open(['url' => route('credits.destroy', $credit->id), 'method' => 'post']) }}
                                         @method('delete')
                                         @csrf
-                                        {{ Form::submit('Cancel', ['class' => 'btn btn-sm btn-outline-danger']) }}
+                                        {{ Form::submit('Cancel', ['class' => 'btn btn-outline-danger']) }}
                                         {{ Form::close() }}
                                     </div>
                                 </td>

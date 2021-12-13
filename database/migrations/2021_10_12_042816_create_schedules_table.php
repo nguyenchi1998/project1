@@ -17,6 +17,7 @@ class CreateSchedulesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('teacher_id')->nullable();
             $table->unsignedInteger('specialization_subject_id');
+            $table->unsignedInteger('credit')->nullable();
             $table->string('name')->nullable();
             $table->date('start_time')->nullable();
             $table->date('end_time')->nullable();

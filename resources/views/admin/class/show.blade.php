@@ -23,7 +23,7 @@
                 </div>
                 <div class="d-flex mb-3 justify-content-between">
                     <div class=""></div>
-                    <a class="btn btn-outline-success btn-sm" href="{{ route('admin.classes.create') }}">Thêm Sinh
+                    <a class="btn btn-outline-success" href="{{ route('admin.classes.create') }}">Thêm Sinh
                         Viên</a>
                 </div>
                 <div class="table-responsive table-scroll">
@@ -67,7 +67,7 @@
                                             <form action="{{ route('admin.classes.remove_student', $class->id) }}" method="POST">
                                                 @csrf()
                                                 {{ Form::text('student_id', $student->id, ['hidden' => true]) }}
-                                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                <button type="submit" class="btn btn-outline-danger">
                                                     Xóa
                                                 </button>
                                             </form>

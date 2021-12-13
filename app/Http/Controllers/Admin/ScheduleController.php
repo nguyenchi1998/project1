@@ -126,6 +126,15 @@ class ScheduleController extends Controller
         }
     }
 
+    public function edit($id)
+    {
+        $schedule = $this->scheduleRepository->find($id);
+        $teachers = $schedule->specializationSubject->subject->teachers->pluck('name', 'id')
+            ->toArray();
+
+        return view('admin.schedule.edit', compact('schedule', 'teachers'));
+    }
+
     public function destroy($id)
     {
         $this->scheduleRepository->delete($id);

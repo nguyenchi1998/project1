@@ -18,47 +18,53 @@
             <div class="card-body">
                 {{ Form::open(['url' => route('admin.managers.store'), 'method' => 'POST', 'files' => true]) }}
                 <div class="form-group">
-                    <label for="name">Họ Tên</label>
-                    {{ Form::input('text', 'name', null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Họ tên']) }}
-                </div>
-                <div class="form-group">
-                    <label for="avatar">Ảnh Đại Diện</label>
-                    {{ Form::file('avatar', ['class' =>'form-control', 'id' => 'avatar']) }}
-                </div>
-                <div class="form-group ">
-                    {{ Form::label('gender', 'Giới Tính') }}
-                    <div class="form-inline">
-                        <div class="form-check form-check-info">
-                            <label class="form-check-label">
-                                {{ Form::radio('gender', config('config.gender.male'), false ,  ['class'=>'form-check-input']) }}
-                                {{ 'Nam' }}
-                                <i class="input-helper"></i>
-                            </label>
-                        </div>
-                        <div class="ml-3 form-check form-check-info">
-                            <label class="form-check-label">
-                                {{ Form::radio('gender', config('config.gender.female'), false ,  ['class'=>'form-check-input']) }}
-                                {{ 'Nữ' }}
-                                <i class="input-helper"></i>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
                     <label for="email">Email</label>
                     {{ Form::input('email', 'email', null, ['class' => 'form-control', 'id' => 'email', 'placeholder' => 'Email']) }}
                 </div>
-                <div class="form-group">
-                    <label for="phone">Số Điện Thoại</label>
-                    {{ Form::input('text', 'phone', null, ['class' => 'form-control', 'id' => 'phone', 'placeholder' => 'Số điện thoại']) }}
+                <div class="row">
+                    <div class="form-group col-lg-6">
+                        <label for="name">Họ Tên</label>
+                        {{ Form::input('text', 'name', null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Họ tên']) }}
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label for="avatar">Ảnh Đại Diện</label>
+                        {{ Form::file('avatar', ['class' =>'form-control', 'id' => 'avatar']) }}
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="birthday">Ngày Sinh</label>
-                    {{ Form::input('date', 'birthday', null, ['class' => 'form-control', 'id' => 'birthday']) }}
+                <div class="row">
+                    <div class="form-group col-lg-6">
+                        <label for="phone">Số Điện Thoại</label>
+                        {{ Form::input('text', 'phone', null, ['class' => 'form-control', 'id' => 'phone', 'placeholder' => 'Số điện thoại']) }}
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label for="birthday">Ngày Sinh</label>
+                        {{ Form::input('date', 'birthday', null, ['class' => 'form-control', 'id' => 'birthday']) }}
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="address">Địa chỉ</label>
-                    {{ Form::input('text', 'address', null, ['class' => 'form-control', 'id' => 'credit', 'placeholder' => 'Đại chỉ liên hệ']) }}
+                <div class="row">
+                    <div class="form-group col-lg-6">
+                        {{ Form::label('gender', 'Giới Tính') }}
+                        <div class="form-inline">
+                            <div class="form-check form-check-info">
+                                <label class="form-check-label">
+                                    {{ Form::radio('gender', config('config.gender.male'), false ,  ['class'=>'form-check-input']) }}
+                                    {{ 'Nam' }}
+                                    <i class="input-helper"></i>
+                                </label>
+                            </div>
+                            <div class="ml-3 form-check form-check-info">
+                                <label class="form-check-label">
+                                    {{ Form::radio('gender', config('config.gender.female'), false ,  ['class'=>'form-check-input']) }}
+                                    {{ 'Nữ' }}
+                                    <i class="input-helper"></i>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label for="address">Địa chỉ</label>
+                        {{ Form::input('text', 'address', null, ['class' => 'form-control', 'id' => 'credit', 'placeholder' => 'Đại chỉ liên hệ']) }}
+                    </div>
                 </div>
                 <div class="mt-3">
                     {{Form::submit('Xác Nhận', ['class'=> 'btn btn-outline-success mr-2']) }}
