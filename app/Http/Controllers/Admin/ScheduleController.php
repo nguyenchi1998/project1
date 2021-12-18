@@ -53,7 +53,7 @@ class ScheduleController extends Controller
             ->when(isset($classType), function ($query) use ($classType) {
                 $query->where('class_id', $classType ? '=' : '!=', null);
             })
-            ->with(['specializationSubject.subject.teachers', 'teacher', 'scheduleDetails'])
+            ->with(['subject.teachers', 'teacher', 'scheduleDetails'])
             ->orderBy('status', 'asc')
             ->paginate(config('config.paginate'));
 
@@ -71,19 +71,19 @@ class ScheduleController extends Controller
         $scheduleDetails = $this->scheduleDetailRepository->model()
             ->doesntHave('schedule')
             ->get()
-            ->load('specializationSubject.subject.teachers')
+            ->load('subject.teachers')
             ->reduce(function (&$subjects, $scheduleDetail) {
-                if (isset($subjects[$scheduleDetail->specialization_subject_id])) {
-                    $subjects[$scheduleDetail->specialization_subject_id] = [
-                        'subject' => $scheduleDetail->specializationSubject->subject->toArray(),
+                if (isset($subjects[$scheduleDetail->subject_id])) {
+                    $subjects[$scheduleDetail->subject_id] = [
+                        'subject' => $scheduleDetail->subject->toArray(),
                         'schedule_details' => array_merge(
-                            $subjects[$scheduleDetail->specialization_subject_id]['schedule_details'],
+                            $subjects[$scheduleDetail->subject_id]['schedule_details'],
                             [$scheduleDetail->id]
                         )
                     ];
                 } else {
-                    $subjects[$scheduleDetail->specialization_subject_id] = [
-                        'subject' => $scheduleDetail->specializationSubject->subject->toArray(),
+                    $subjects[$scheduleDetail->subject_id] = [
+                        'subject' => $scheduleDetail->subject->toArray(),
                         'schedule_details' => [$scheduleDetail->id],
                     ];
                 }
@@ -115,7 +115,7 @@ class ScheduleController extends Controller
                 ->whereIn('id', $request->get('schedule_details'))
                 ->update([
                     'schedule_id' => $schedule->id,
-                    'register_pending' => config('schedule_detail.status.register.success')
+                    'register_status' => config('schedule.detail.status.register.success')
                 ]);
 
             return $this->successRouteRedirect('admin.schedules.index');
@@ -129,7 +129,7 @@ class ScheduleController extends Controller
     public function edit($id)
     {
         $schedule = $this->scheduleRepository->find($id);
-        $teachers = $schedule->specializationSubject->subject->teachers->pluck('name', 'id')
+        $teachers = $schedule->subject->teachers->pluck('name', 'id')
             ->toArray();
 
         return view('admin.schedule.edit', compact('schedule', 'teachers'));
@@ -181,7 +181,7 @@ class ScheduleController extends Controller
             if ($schedule->status == config('schedule.status.new')) {
                 $students = $schedule->class->students->map(function ($student) use ($schedule) {
                     $item['student_id'] = $student->id;
-                    $item['specialization_subject_id'] = $schedule->specialization_subject_id;
+                    $item['subject_id'] = $schedule->subject_id;
                     $item['schedule_id'] = $schedule->id;
                     return $item;
                 })->toArray();

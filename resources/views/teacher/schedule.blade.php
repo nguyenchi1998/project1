@@ -44,7 +44,7 @@
                             @foreach($schedules as $schedule)
                             <tr>
                                 <td>
-                                    {{ $schedule->specializationSubject->subject->name }}
+                                    {{ $schedule->subject->name }}
                                 </td>
                                 <td style="width:200px">
                                     {{ $schedule->start_time }}

@@ -34,6 +34,7 @@
                         <thead>
                             <tr>
                                 <th>Lớp Tín Chỉ</th>
+                                <th>Kỳ Học</th>
                                 <th>Số Tín Chỉ</th>
                                 <th>Số Sinh Viên</th>
                                 <th>Thời Gian</th>
@@ -46,20 +47,27 @@
                             @forelse($schedules as $schedule)
                             <tr>
                                 <td>
-                                    {{ $schedule->name ?? ('Lớp Tín Chỉ Môn ' . $schedule->specializationSubject->subject->name) }}
+                                    {{ $schedule->name ?? ('Lớp Tín Chỉ Môn ' . $schedule->subject->name) }}
                                     @if(!$schedule->class_id) <span class="badge bg-primary">Tự Do</span>@endif
                                 </td>
                                 <td>
-                                    {{ $schedule->credit ?? $schedule->specializationSubject->subject->credit }}
+                                    {{ $schedule->semester }}
                                 </td>
                                 <td>
-                                    {{ count($schedule->scheduleDetails) ?: count($schedule->class->students)}}
+                                    {{ $schedule->credit ?? $schedule->subject->credit }}
+                                </td>
+                                <td>
+                                    {{ count($schedule->scheduleDetails) ?? count($schedule->class->students)}}
                                 </td>
                                 <td style="width:200px">
                                     {{ formatDateShow($schedule->start_time) . ' - ' . formatDateShow($schedule->end_time)  }}
                                 </td>
                                 <td>
+                                    @if($schedule->teacher)
                                     {{ $schedule->teacher->name }}
+                                    @else
+                                    <span class="text text-danger">Chưa Chọn</span>
+                                    @endif
                                 </td>
                                 <td style="width: 130px">
                                     <form action="{{ route('admin.schedules.start', $schedule->id) }}" method="POST">

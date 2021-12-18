@@ -46,6 +46,7 @@ class ScheduleClassController extends Controller
     public function index(Request $request)
     {
         $semesterFilter = $request->get('semester-filter');
+
         $specializationFilter = $request->get('specialization-filter');
         $keyword = $request->get('keyword');
         $semesters = range_semester(config('config.start_semester'), config('config.class_register_limit_semester'));
@@ -78,26 +79,37 @@ class ScheduleClassController extends Controller
     {
         $class = $this->classRepository->find($classId);
         $semesterFilter = $request->get('semester-filter');
+        $isShowRegisterCredit = $semesterFilter == $class->semester || $semesterFilter == $class->semester + 1;
         $specializationFilter = $request->get('specialization-filter');
         $keyword = $request->get('keyword');
-        $semesters = range_semester(config('config.start_semester'), config('config.class_register_limit_semester'), true, $class->semester);
+        $semesters = range_semester(
+            config('config.start_semester'),
+            config('config.class_register_limit_semester'),
+            true,
+            $class->semester
+        );
         $schedules = $this->scheduleRepository->model()
             ->where('class_id', $classId)
             ->when($semesterFilter, function ($query) use ($semesterFilter) {
-                $query->whereHas('specializationSubject', function ($query) use ($semesterFilter) {
-                    $query->where('semester', $semesterFilter);
-                });
+                $query->whereHas(
+                    'specializationSubject',
+                    function ($query) use ($semesterFilter) {
+                        $query->where('semester', $semesterFilter);
+                    }
+                );
             })
-            ->with(['specializationSubject.subject.specializations'])
+            ->with(['subject.specializations'])
             ->orderBy('status')
             ->paginate(config('config.paginate'));
+
         return view('admin.schedule.class.list_credit', compact(
             'schedules',
             'keyword',
             'semesterFilter',
             'specializationFilter',
             'semesters',
-            'class'
+            'class',
+            'isShowRegisterCredit',
         ));
     }
 
@@ -107,7 +119,7 @@ class ScheduleClassController extends Controller
         $specialization = $this->specializationRepository->find($class->specialization_id)
             ->load(['subjects' => function ($query) use ($class) {
                 $query->whereType(config('subject.type.basic'))
-                    ->wherePivot('semester', $class->semester + 1);
+                    ->wherePivot('semester', $class->semester);
             }]);
         // lấy danh sách môn học cơ bản thuộc kỳ tiếp theo của lớp
         $basicSubjects = $specialization->subjects;
@@ -116,11 +128,13 @@ class ScheduleClassController extends Controller
         $scheduleSubjects = $this->scheduleRepository->model()
             ->where('class_id', $classId)
             ->whereHas('specializationSubject', function ($query) use ($class) {
-                $query->whereSemester($class->semester + 1);
+                $query->whereSemester($class->semester);
             })
-            ->with(['specializationSubject.subject.specializations' => function ($query) use ($class) {
-                $query->where('specializations.id', $class->specialization->id);
-            }])
+            ->with([
+                'specializationSubject.subject.specializations' => function ($query) use ($class) {
+                    $query->where('specializations.id', $class->specialization->id);
+                }
+            ])
             ->get()
             ->pluck('id', 'subject_id')
             ->toArray();
@@ -128,23 +142,21 @@ class ScheduleClassController extends Controller
         return view('admin.schedule.class.create', compact('basicSubjects', 'scheduleSubjects', 'class'));
     }
 
-    /**
-     * @throws InternalErrorException
-     */
     public function registerSchedule(Request $request, $id)
     {
         try {
             DB::beginTransaction();
             $class = $this->classRepository->find($id);
-            $subjects = $this->subjectRepository->whereIn('id', array_column($request->get('subjects'), 'subject_id'))
-                ->get()
-                ->map(function ($subject) use ($class) {
-                    $item['class_id'] = $class->id;
-                    $item['name'] = 'Lớp Tín Chỉ Môn ' . $subject->name;
-                    $item['subject_id'] = $subject->id;
+            $subjects = $this->subjectRepository->whereIn(
+                'id',
+                array_column($request->get('subjects'), 'subject_id')
+            )->get()->map(function ($subject) use ($class) {
+                $item['class_id'] = $class->id;
+                $item['name'] = 'Lớp Tín Chỉ Môn ' . $subject->name;
+                $item['subject_id'] = $subject->id;
 
-                    return $item;
-                })->toArray();
+                return $item;
+            })->toArray();
             foreach ($subjects as $subject) {
                 $this->scheduleRepository->model()->updateOrCreate($subject);
             }

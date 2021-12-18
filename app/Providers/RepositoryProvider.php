@@ -14,6 +14,7 @@ use App\Repositories\IPermissionRepository;
 use App\Repositories\IScheduleDetailRepository;
 use App\Repositories\IScheduleRepository;
 use App\Repositories\ISpecializationRepository;
+use App\Repositories\ISpecializationSubjectRepository;
 use App\Repositories\IStudentRepository;
 use App\Repositories\ISubjectRepository;
 use App\Repositories\ITeacherRepository;
@@ -23,6 +24,7 @@ use App\Repositories\RoleRepository;
 use App\Repositories\ScheduleDetailRepository;
 use App\Repositories\ScheduleRepository;
 use App\Repositories\SpecializationRepository;
+use App\Repositories\SpecializationSubjectRepository;
 use App\Repositories\StudentRepository;
 use App\Repositories\SubjectRepository;
 use App\Repositories\TeacherRepository;
@@ -42,6 +44,7 @@ class RepositoryProvider extends ServiceProvider
         IScheduleDetailRepository::class => ScheduleDetailRepository::class,
         ITeacherRepository::class => TeacherRepository::class,
         IManagerRepository::class => ManagerRepository::class,
+        ISpecializationSubjectRepository::class => SpecializationSubjectRepository::class,
     ];
 
     /**

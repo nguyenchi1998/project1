@@ -41,7 +41,7 @@
                             @forelse($subjects as $subject)
                             <tr>
                                 <td>
-                                    {{ $subject->specializationSubject->subject->name }}
+                                    {{ $subject->subject->name }}
                                 </td>
                                 <td>
                                     {{ $subject->activity_mark ?? 'Chưa có điểm' }}

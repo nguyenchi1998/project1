@@ -9,6 +9,7 @@ use App\Repositories\IGradeRepository;
 use App\Repositories\IScheduleDetailRepository;
 use App\Repositories\IScheduleRepository;
 use App\Repositories\ISpecializationRepository;
+use App\Repositories\ISpecializationSubjectRepository;
 use App\Repositories\IStudentRepository;
 use App\Repositories\ISubjectRepository;
 use Exception;
@@ -23,6 +24,7 @@ class ScheduleStudentController extends Controller
     protected $classRepository;
     protected $studentRepository;
     protected $gradeRepository;
+    protected $specializationSubjectRepository;
 
     public function __construct(
         IScheduleRepository $scheduleRepository,
@@ -31,7 +33,8 @@ class ScheduleStudentController extends Controller
         ISubjectRepository $subjectRepository,
         IClassRepository $classRepository,
         IStudentRepository $studentRepository,
-        IGradeRepository $gradeRepository
+        IGradeRepository $gradeRepository,
+        ISpecializationSubjectRepository $specializationSubjectRepository
     ) {
         $this->scheduleRepository = $scheduleRepository;
         $this->specializationRepository = $specializationRepository;
@@ -40,6 +43,7 @@ class ScheduleStudentController extends Controller
         $this->studentRepository = $studentRepository;
         $this->gradeRepository = $gradeRepository;
         $this->scheduleDetailRepository = $scheduleDetailRepository;
+        $this->specializationSubjectRepository = $specializationSubjectRepository;
     }
 
     public function index(Request $request)
@@ -61,11 +65,9 @@ class ScheduleStudentController extends Controller
         $students->getCollection()->transform(function ($student) {
             $student['total_credit'] = $student->scheduleDetails->filter(function ($scheduleDetail) {
                 return $scheduleDetail->status_register == config('schedule.detail.status.register.pending');
-            })->reduce(function ($total, $schedule) {
-                $total += $schedule->specializationSubject->subject->credit;
-
-                return $total;
-            }, 0);
+            })->sum(function ($schedule) {
+                return $schedule->subject->credit;
+            });
 
             return $student;
         });
@@ -83,40 +85,45 @@ class ScheduleStudentController extends Controller
 
     public function registerScheduleShow(Request $request, $id)
     {
-
-        $student = $this->studentRepository->find($id)->load('scheduleDetails.specializationSubject.subject');
+        $student = $this->studentRepository->find($id)->load('scheduleDetails.subject');
         $class = $this->classRepository->find($student->class->id);
-        $semesters = range_semester(
-            config('config.student_register_start_semester'),
-            config('config.student_register_start_semester') + 1,
-            true,
-            $class->semester
-        );
         $semesterFilter = $request->get('semester-filter', $class->semester);
-        $specialization = $this->specializationRepository->find($student->class->specialization_id)
-            ->load([
-                'subjects' => function ($query) use ($class) {
-                    $query->whereType(config('subject.type.specialization'))
-                        ->where(function ($query) use ($class) {
-                            $query->where('specialization_subject.semester', '>=', $class->semester)
-                                ->orWhere('specialization_subject.semester', null);
-                        });
-                }
-            ]);
-        $specializationSubjects = $specialization->subjects->sortByDesc('pivot.force')
-            ->sortBy('pivot.semester')
-            ->map(function ($subject)  use ($student) {
-                $isSelected = in_array($subject->pivot->id, $student->scheduleDetails->pluck('specialization_subject_id')->toArray());
-                $subject->isSelected = $isSelected;
-                $subject->hasCreditClass = (bool) $student->scheduleDetails->where('specializationSubject.subject_id',  $subject->id)->get('schedule_id');
-
-                return $subject;
-            });
-        $totalCreditRegisted = $student->scheduleDetails->sum(function ($scheduleDetail) {
-            return $scheduleDetail->specializationSubject->subject->credit;
+        $semesters = range_semester(
+            config('config.start_semester'),
+            config('config.max_semester'),
+            true,
+            $class->semester,
+            true
+        );
+        $subjects = $this->specializationSubjectRepository->model()
+            ->where('specialization_subject.specialization_id', $student->class->specialization_id)
+            ->whereHas('subject', function ($query) {
+                $query->whereType(config('subject.type.specialization'));
+            })
+            ->when($semesterFilter < $class->semester, function ($query) use ($semesterFilter) {
+                $query->where('specialization_subject.semester', $semesterFilter);
+            }, function ($query) use ($class, $semesterFilter) {
+                $query->where(function ($query) use ($class, $semesterFilter) {
+                    $query->whereBetween('specialization_subject.semester', [$semesterFilter, $class->semester])
+                        ->orWhere('specialization_subject.semester', null);
+                });
+            })
+            ->with('subject')
+            ->select('specialization_subject.*', 'schedule_details.id as isSelected')
+            ->leftJoin('schedule_details', function ($join) use ($student) {
+                $join->on('specialization_subject.subject_id', '=', 'schedule_details.subject_id')
+                    ->where('student_id', $student->id)
+                    ->join('subjects', 'schedule_details.subject_id', '=', 'subjects.id');
+            })
+            ->get();
+        $totalCreditRegisted = $subjects->filter(function ($subject) {
+            return $subject->isSelected;
+        })->sum(function ($subject) {
+            return $subject->subject->credit;
         });
+
         return view('admin.schedule.student.create', compact(
-            'specializationSubjects',
+            'subjects',
             'student',
             'totalCreditRegisted',
             'semesters',

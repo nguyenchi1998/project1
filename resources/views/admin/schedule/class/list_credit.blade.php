@@ -16,15 +16,12 @@
     <div class="col-lg-12 stretch-card">
         <div class="card">
             <div class="card-body">
-                <div class="d-flex mb-3 justify-content-between">
-                    <div class="col-lg-12 row">
-                        <div class="col-lg-6">
-                            <div class="d-flex align-items-center h-100">
-                                <strong class="mr-1">Lớp: </strong>{{ $class->name }}
+                <div class="d-flex mb-3 justify-content-between align-items-center">
+                    <div>
+                        <div class="d-flex justify-content-between flex-column">
+                            <div class="d-flex align-items-center mb-2">
+                                <strong class="mr-1">Lớp: </strong> {{ $class->name }}
                             </div>
-                        </div>
-
-                        <div class="col-lg-6">
                             <div class="d-flex align-items-center">
                                 <strong class="mr-1">Kỳ Hiện Tại: </strong>
                                 <form action="">
@@ -33,6 +30,9 @@
                             </div>
                         </div>
                     </div>
+                    @if($isShowRegisterCredit)
+                    <a class="btn h-100 btn-outline-success" href="{{ route('admin.schedules.classes.registerScheduleShow', $class->id) }}">Tạo Mới</a>
+                    @endif
                 </div>
                 <div class="table-responsive table-scroll">
                     <table class="table table-bordered table-hover">
@@ -47,9 +47,12 @@
                         </thead>
                         <tbody>
                             @forelse($schedules as $schedule)
-                            <tr @if($schedule->status == config('schedule.status.done')) class="table-secondary" @endif>
+                            <tr>
                                 <td>
-                                    {{ $schedule->specializationSubject->subject->name }}
+                                    {{ $schedule->subject->name }}
+                                </td>
+                                <td>
+                                    {{ $schedule->credit ?? $schedule->subject->credit }}
                                 </td>
                                 <td>
                                     {{ $schedule->credit ?? $schedule->specializationSubject->subject->credit }}
@@ -78,7 +81,7 @@
                                 <td style="width: 120px">
                                     @if($schedule->status == config('schedule.status.done') || $schedule->status == config('schedule.status.marking'))
                                     <div class="d-flex justify-content-center">
-                                        <a href="{{ route('admin.schedules.classes.registerScheduleShow', $schedule->class_id) }}" class="btn btn-outline-success">
+                                        <a href="#" class="btn btn-outline-success">
                                             Xem Điểm
                                         </a>
                                     </div>

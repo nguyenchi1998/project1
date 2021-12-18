@@ -23,7 +23,7 @@
                                 <strong>Lớp Học:</strong> {{ $schedule->name }}
                             </div>
                             <div class="form-group">
-                                <strong> Môn Học:</strong> {{ $schedule->specializationSubject->subject->name }}
+                                <strong> Môn Học:</strong> {{ $schedule->subject->name }}
                             </div>
                         </div>
                         <div class="col-6">

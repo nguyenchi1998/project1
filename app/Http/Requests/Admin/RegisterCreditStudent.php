@@ -24,7 +24,7 @@ class RegisterCreditStudent extends FormRequest
     public function rules()
     {
         return [
-            'specializationSubjectIds' => 'required|array|min:1',
+            'subjects' => 'required|array|min:1',
         ];
     }
 }

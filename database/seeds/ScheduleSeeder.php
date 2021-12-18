@@ -32,6 +32,8 @@ class ScheduleSeeder extends Seeder
                     $schedule = Schedule::create([
                         'name' => 'Lớp Tín Chỉ Môn ' . $subject->name,
                         'teacher_id' => $faker->randomElement($teacherIds),
+                        'subject_id' => $subject->id,
+                        'semester' => $class->semester,
                         'specialization_subject_id' => $subject->pivot->id,
                         'credit' => $subject->credit,
                         'start_time' => $startTime,
@@ -45,14 +47,16 @@ class ScheduleSeeder extends Seeder
                                 config('schedule.status.marking'),
                             ]) : config('schedule.status.done'),
                     ]);
-                    $class->students->each(function ($student) use ($faker, $subject, $schedule) {
+                    $class->students->each(function ($student) use ($faker, $subject, $schedule, $class) {
                         $activityMark = $faker->randomElement(range(1, 9));
                         $middleMark = $faker->randomElement(range(1, 9));
                         $finalMark = $faker->randomElement(range(1, 9));
                         ScheduleDetail::create([
                             'student_id' => $student->id,
-                            'specialization_subject_id' => $subject->pivot->id,
+                            'subject_id' => $subject->id,
+                            'specialization_id' => $student->class->specialization->id,
                             'schedule_id' => $schedule->id,
+                            'semester' => $class->semester,
                             'register_status' => config('schedule.detail.status.register.success'),
                             'activity_mark' => $activityMark,
                             'middle_mark' => $middleMark,
@@ -66,24 +70,22 @@ class ScheduleSeeder extends Seeder
                     });
                 });
             } else {
-                $specializationSubject = $class->specialization->subjects->filter(
+                $specializationSubjects = $class->specialization->subjects->filter(
                     function ($subject) use ($class) {
                         return $subject->pivot->semester >= $class->semester;
                     }
                 );
-                if (count($specializationSubject) >= 3) {
-                    $specializationSubject->random(3)
-                        ->each(function ($subject) use ($class) {
-                            $class->students->random(4)
-                                ->each(function ($student) use ($subject) {
-                                    ScheduleDetail::create([
-                                        'student_id' => $student->id,
-                                        'specialization_subject_id' => $subject->pivot->id,
-                                        'register_status' => config('schedule.detail.status.register.pending'),
-                                    ]);
-                                });
+                $specializationSubjects->each(function ($subject) use ($class) {
+                    $class->students->random(4)
+                        ->each(function ($student) use ($subject) {
+                            ScheduleDetail::create([
+                                'student_id' => $student->id,
+                                'subject_id' => $subject->id,
+                                'specialization_id' => $subject->specialization->id,
+                                'register_status' => config('schedule.detail.status.register.pending'),
+                            ]);
                         });
-                }
+                });
             }
         });
     }

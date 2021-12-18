@@ -35,7 +35,7 @@
                                 <strong>Chuyên Ngành:</strong> {{ $student->class->specialization->name }}
                             </div>
                             <div class="d-flex justify-content-start align-items-center">
-                                <strong>Kỳ Học:</strong>
+                                <strong>Kỳ Học</strong>:
                                 <div class="ml-1">
                                     <form action="">
                                         {{ Form::select('semester-filter', $semesters, $semesterFilter, ['class' => 'form-control', 'onchange' => 'this.form.submit()']) }}
@@ -48,7 +48,7 @@
                                 <strong>Số Tín Tối Đa</strong>:<span id="max_credit_register"> {{ config('credit.max_register') }}</span>
                             </div>
                             <div>
-                                <strong>Số Tín Hiện Tại:</strong> <span id="total_credit">{{ $totalCreditRegisted }}</span> <span class="d-none text text-danger" id="warning">Quá số tín chỉ cho phép</span>
+                                <strong>Tổng số tín:</strong> <span id="total_credit">{{ $totalCreditRegisted }}</span> <span class="d-none text text-danger" id="warning">Quá số tín chỉ cho phép</span>
                             </div>
                         </div>
                     </div>
@@ -67,18 +67,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($specializationSubjects as $subject)
+                            @foreach($subjects as $subject)
                             <tr>
                                 <td>
-                                    {{ $subject->name }}
-                                    @if($subject->pivot->force)<span class="badge badge-danger">Bắt Buộc</span> @endif
-                                    {{ Form::text('specialization_subject_id', $subject->pivot->id, ['hidden' => true]) }}
+                                    {{ $subject->subject->name }}
+                                    @if($subject->force)<span class="badge badge-danger">Bắt Buộc</span> @endif
+                                    {{ Form::text('subject_id', $subject->subject_id, ['hidden' => true]) }}
+
                                 </td>
                                 <td>
-                                    {{ $subject->pivot->semester ?? 'Tự Do' }}
+                                    {{ $subject->semester ?? 'Tự Do' }}
+                                    {{ Form::text('semseter', $student->class->semester, ['hidden' => true]) }}
+                                    {{ Form::text('specialization_id', $subject->specialization_id, ['hidden' => true]) }}
                                 </td>
                                 <td>
-                                    {{ ($subject->creditClass ? 'Đã' : 'Chưa') . ' có lớp' }}
+                                    {{ ($subject->hasCreditClass ? 'Đã' : 'Chưa') . ' có lớp' }}
                                 </td>
                                 <td>
                                     {{ 0 }}
@@ -88,7 +91,7 @@
                                     {{ Form::text('credit', $subject->credit, ['hidden' => true]) }}
                                 </td>
                                 <td class="text-center">
-                                    {{ Form::checkbox('checked', $subject->id, $subject->isSelected, ['onclick' => $subject['force'] ? 'return false' : 'return true', 'class' => 'selectSubject'])  }}
+                                    {{ Form::checkbox('checked', $subject->id, $subject->isSelected, ['class' => 'selectSubject'])  }}
                                 </td>
                             </tr>
                             @endforeach
@@ -110,13 +113,29 @@
         event.preventDefault();
         let specializationSubjectIds = [];
         jQuery('#subjects').find('tbody tr:not(:last-child)').each(function(index, tr) {
+            <<
+            << << < HEAD
             let specialization_subject_id = jQuery(tr).find('' + 'td:eq(0)').find('input').val();
-            let selected = jQuery(tr).find('' + 'td:eq(5)').find('input').is(':checked');
+            let selected = jQuery(tr).find('' + 'td:eq(5)').find('input').is(':checked'); ===
+            === =
+            const subject_id = jQuery(tr).find('' + 'td:eq(0)').find('input').val();
+            const semester = jQuery(tr).find('' + 'td:eq(1)').find('input:eq(0)').val();
+            const specialization_id = jQuery(tr).find('' + 'td:eq(1)').find('input:eq(1)').val();
+            const selected = jQuery(tr).find('' + 'td:eq(5)').find('input').is(':checked'); >>>
+            >>> > e178a03ea7c92ddd0c67b675156e239ff8c4802d
             if (selected)
                 specializationSubjectIds = [
                     ...specializationSubjectIds,
                     {
+                        <<
+                        << << < HEAD
                         specialization_subject_id,
+                        ===
+                        === =
+                        subject_id,
+                        semester,
+                        specialization_id >>>
+                        >>> > e178a03ea7c92ddd0c67b675156e239ff8c4802d
                     }
                 ]
         });

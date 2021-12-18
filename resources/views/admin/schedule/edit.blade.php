@@ -21,7 +21,7 @@
                 <div class="row">
                     <div class="form-group col-lg-6">
                         {{ Form::label('name', 'Lớp Tín Chỉ') }}
-                        {{ Form::input('text', 'name', $schedule->specializationSubject->subject->name, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Lớp Tín Chỉ']) }}
+                        {{ Form::input('text', 'name', $schedule->subject->name, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Lớp Tín Chỉ']) }}
                     </div>
                     <div class="form-group col-lg-6">
                         {{ Form::label('teacher_id', 'Giảng Viên') }}

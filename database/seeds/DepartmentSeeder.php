@@ -335,7 +335,6 @@ class DepartmentSeeder extends Seeder
         ];
 
         $faker = Faker\Factory::create();
-
         foreach ($departments as $department) {
             $departmentInstance = Department::create([
                 'name' => $department['name'],
