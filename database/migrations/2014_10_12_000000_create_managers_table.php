@@ -23,7 +23,8 @@ class CreateManagersTable extends Migration
             $table->string('experience')->nullable();
             $table->string('phone')->nullable();
             $table->string('password');
-            $table->unsignedTinyInteger('type')->default(config('role.manager.normal'));
+            $table->unsignedTinyInteger('type')
+                ->default(config('role.manager.normal'));
             $table->timestamps();
             $table->rememberToken();
             $table->softDeletes();

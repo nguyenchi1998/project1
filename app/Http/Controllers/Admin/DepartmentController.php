@@ -19,7 +19,7 @@ class DepartmentController extends Controller
     {
         $keyword = $request->get('keyword');
         $departments = $this->departmentRepository->where('name', 'like', '%' . $keyword . '%')
-            ->with('teachers')
+            ->with(['teachers', 'manager'])
             ->paginate(config('config.paginate'));
 
         return view('admin.department.index', compact('departments', 'keyword'));
@@ -69,5 +69,15 @@ class DepartmentController extends Controller
         }
 
         return $this->failRouteRedirect();
+    }
+
+    public function changeManager(Request $request, $departmentId)
+    {
+        $this->departmentRepository->update($departmentId, [
+            'next_manager_id' => $request->get('next_manager_id'),
+            'next_manager_status' => config('status.department.next_manager.pending')
+        ]);
+
+        return $this->successRouteRedirect('admin.departments.index');
     }
 }

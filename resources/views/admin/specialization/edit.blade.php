@@ -32,10 +32,6 @@
                     <label for="min_creddit">Sô Tín Chỉ Tối Thiểu</label>
                     {{ Form::input('number', 'min_credit', $specialization->min_credit, ['class' => 'form-control', 'id' => 'min_creddit', 'placeholder' => 'Sô Tín Chỉ Tối Thiểu', 'min' => 0]) }}
                 </div>
-                <div class="form-group">
-                    <label for="max_semester">Số Kỳ Học</label>
-                    {{ Form::input('number', 'max_semester', config('config.semester'), ['class' => 'form-control', 'id' => 'max_semester', 'placeholder' => 'Số Kỳ Học', 'min' => 0]) }}
-                </div>
                 <div class="mt-3">
                     {{Form::submit('Xác Nhận', ['class'=> 'btn btn-outline-success mr-2']) }}
                     <a href="{{ route('admin.specializations.index') }}" class="btn btn-outline-dark">Huỷ Bỏ</a>

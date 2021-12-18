@@ -1,7 +1,7 @@
 @extends('layouts.manager')
 @section('breadcrumb')
 <div class="col-sm-6">
-    <h1 class="m-0">Quản Lý Chuyên Ngành</h1>
+    <h1 class="m-0">Chọn Môn Giảng Dạy</h1>
 </div>
 <div class="col-sm-6">
     <ol class="breadcrumb float-sm-right">
@@ -25,7 +25,7 @@
                         </div>
                         <div class="col-6">
                             <div class="form-group">
-                                Khoa Viện: {{ $specialization->department->name }}
+                                Viện: {{ $specialization->department->name }}
                             </div>
                         </div>
                     </div>
@@ -40,7 +40,6 @@
                                 <th>Số Tín Chỉ</th>
                                 <th>Loại</th>
                                 <th>Kỳ Học</th>
-                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -49,7 +48,7 @@
                                 <td>
                                     <div class="form-check form-check-info m-0" style="min-width: 400px">
                                         <label class="form-check-label">
-                                            {{ Form::checkbox('subject_id', $subject->id, $subject['choose'], ['class'=>'form-check-input selectedSubject', 'disabled' => $subject['can_not_edit']]) }}
+                                            {{ Form::checkbox('subject_id', $subject->id, $subject->choose, ['class'=>'form-check-input selectedSubject']) }}
                                             <span class="{{ modelTrash($subject) }}">{{ $subject->name }}</span>
                                         </label>
                                     </div>
@@ -59,18 +58,10 @@
                                     {{ Form::text('basic', $subject->type, ['hidden' => true]) }}
                                 </td>
                                 <td style="width: 150px" class="text-center">
-                                    {{ $subject->type ? ($subject['choose'] ? 'Chuyên Ngành' :'Tự Do') : 'Cơ Bản' }}
+                                    {{ $subject->type ? 'Chuyên Ngành' : 'Đại Cương' }}
                                 </td>
-                                <td style="width: 150px">
-                                    {{ Form::select('semester', $subject->type  == config('subject.type.basic') ? $basicSemesters : $specializationSemesters, $subject['semester'], ['class'=> 'form-control  semester', 'placeholder' => 'Tất Cả kỳ học', 'disabled' => $subject['can_not_edit']]) }}
-                                </td>
-                                <td style="width: 150px">
-                                    <div class="form-check form-check-info m-0">
-                                        <label class="form-check-label">
-                                            {{ Form::checkbox('force', config('subject.force'), $subject['force'], ['class'=>'form-check-input', 'disabled' => $subject['can_not_edit']]) }}
-                                            {{ 'Bắt Buộc' }}
-                                        </label>
-                                    </div>
+                                <td style="width: 180px">
+                                    {{ Form::select('semester', $subject->type  == config('subject.type.basic') ? $basicSemesters : $specializationSemesters, $subject->semester, ['class'=> 'form-control  semester', 'placeholder' => 'Tất Cả kỳ học']) }}
                                 </td>
                             </tr>
                             @endforeach

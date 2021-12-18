@@ -201,7 +201,7 @@
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-header text text-uppercase">Khoa Viện</li>
+                        <li class="nav-header text text-uppercase">Viện</li>
                         <li class="nav-item">
                             <a href="{{ route('teacher.schedules.index') }}" class="nav-link">
                                 <i class="nav-icon far fa-calendar-alt"></i>

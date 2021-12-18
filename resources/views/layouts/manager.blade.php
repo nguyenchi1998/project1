@@ -198,6 +198,7 @@
                                 </p>
                             </a>
                         </li>
+                        @can('process-request')
                         <li class="nav-header text text-uppercase">Super Admin</li>
                         <li class="nav-item">
                             <a href="{{ route('admin.managers.index') }}" class="nav-link">
@@ -215,13 +216,13 @@
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-header text text-uppercase">Khoa Viện</li>
+                        @endcan
+                        <li class="nav-header text text-uppercase">Viện</li>
                         <li class="nav-item">
                             <a href="{{ route('admin.departments.index') }}" class="nav-link">
                                 <i class="nav-icon far fa-calendar-alt"></i>
                                 <p>
-                                    Khoa Viện
-                                    <span class="badge badge-info right">2</span>
+                                    Viện
                                 </p>
                             </a>
                         </li>

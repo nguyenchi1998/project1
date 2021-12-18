@@ -73,7 +73,7 @@
                     {{ Form::textarea('experience', null, ['class' => 'form-control', 'id' => 'credit', 'placeholder' => 'Kinh Nghiệm Cá Nhân', 'rows' => 3]) }}
                 </div>
                 <div class="form-group">
-                    {{ Form::label('department', 'Khoa Viện') }}
+                    {{ Form::label('department', 'Viện') }}
                     @foreach($departments as $key => $department)
                     <div class="form-check form-check-info">
                         <label class="form-check-label">

@@ -127,7 +127,8 @@ class SpecializationController extends Controller
 
     public function chooseSubjectShow($id)
     {
-        $specialization = $this->specializationRepository->find($id)->load('subjects');
+        $specialization = $this->specializationRepository->find($id)
+            ->load('subjects');
         $specializationSubjects = $specialization->subjects->pluck('id')->toArray();
         $startSemester = config('config.start_semester');
         $basicSemesters = [];
@@ -141,18 +142,18 @@ class SpecializationController extends Controller
         }
         $subjects = $this->subjectRepository->allWithTrashed();
         $subjects = $subjects->map(function ($subject) use ($specialization) {
-            $subject['can_not_edit'] = $subject->type == config('subject.type.basic');
-            $subject['isBasic'] = $subject->type == config('subject.type.basic');
-            $subject['choose'] = $specialization->subjects->contains($subject->id);
-            $subject['force'] = $specialization->subjects->contains(function ($item) use ($subject) {
+            $subject->choose = $specialization->subjects->contains($subject->id);
+            $subject->force = $specialization->subjects->contains(function ($item) use ($subject) {
                 return $item->id == $subject->id
                     && $item->pivot->force == config('subject.force');
             });
-            $subject['semester'] = $specialization->subjects->first(
+            $subject->semester = $specialization->subjects->first(
                 function ($subjectItem) use ($subject, $specialization) {
-                    return $specialization->subjects->contains('id', $subject->id) && $subjectItem->id == $subject->id;
+                    return $specialization->subjects->contains('id', $subject->id)
+                        && $subjectItem->id == $subject->id;
                 }
             )->pivot->semester ?? null;
+
             return $subject;
         })
             ->sortBy('type');

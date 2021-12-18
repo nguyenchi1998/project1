@@ -26,25 +26,19 @@
                     {{ Form::input('number', 'credit', null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Số Tín Chỉ', 'min' => 1]) }}
                 </div>
                 <div class="form-group">
-                    <label for="department">Khoa Viện</label>
-                    @foreach($departments as $key => $department)
-                    <div class="form-check form-check-info">
-                        <label class="form-check-label">
-                            {{ Form::radio('department_id', $department->id, false, ['class'=>'form-check-input']) }}
-                            {{ $department->name }}
-                            <i class="input-helper"></i>
-                        </label>
-                    </div>
-                    @endforeach
+                    <label for="type">Loại Môn Học</label>
+                    <select name="type" class="form-control" id="type">
+                        <option value="">Chọn Loại Môn</option>
+                        <option value="{{ config('subject.type.basic') }}">Đại Cương</option>
+                        <option value="{{ config('subject.type.specialization') }}">Chuyên Ngành</option>
+                    </select>
                 </div>
                 <div class="form-group">
-                    <div class="form-check form-check-primary">
-                        <label class="form-check-label">
-                            {{ Form::checkbox('basic', config('subject.type.basic'), false, ['class'=>'form-check-input']) }}
-                            Môn Cơ Bản
-                            <i class="input-helper"></i>
-                        </label>
-                    </div>
+                    <label for="type">Loại Môn Học</label>
+                </div>
+                <div class="form-group">
+                    <label for="department">Viện</label>
+                    {{ Form::select('department_id', $departments, null, ['class' => 'form-control', 'id' => 'department', 'placeholder' => 'Chọn Viện'] )}}
                 </div>
                 <div class="mt-3">
                     {{Form::submit('Xác Nhận', ['class'=> 'btn btn-outline-success mr-2']) }}

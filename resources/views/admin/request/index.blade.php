@@ -15,46 +15,92 @@
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Yêu Cầu Về Khoa</h4>
+                <h4>Giảng Viên</h4>
                 <div class="table-responsive table-scroll">
-                    <table class="table">
+                    <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th>Tiêu Đề</th>
                                 <th>Giảng Viên</th>
-                                <th>Thâm Niên</th>
                                 <th>Viện Cũ</th>
                                 <th>Viện Mới</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($moveDepartmenteTeachers as $teacher)
+                            @forelse($changeDepartmentTeacherRequest as $teacher)
                             <tr>
-                                <td>{{ $teacher->titleRequest }}</td>
                                 <td>{{ $teacher->name }}</td>
-                                <td>{{ $teacher->seniority }} years</td>
-                                <td>
-                                    {{ $teacher->department->name }}
-                                    <label class="ml-2 badge badge-danger">{{ $teacher->department->manager_id == $teacher->id ? 'Manager' : '' }}</label>
-                                </td>
-                                <td>
-                                    {{ $teacher->nextDepartment->name }}
-                                    <label class="ml-2 badge badge-danger">{{ $teacher->nextDepartment->next_manager_id == $teacher->id ? 'Manager' : '' }}</label>
-                                </td>
-                                <td width="100">
+                                <td>{{ $teacher->department->name }}</td>
+                                <td>{{ $teacher->nextDepartment->name }}</td>
+                                <td style="width: 210px;">
                                     <div class="d-flex justify-content-between">
                                         <div class="mr-1">
-                                            <form action="{{ route('admin.requests.departments.approve') }}" method="post">
+                                            <form action="{{ route('admin.requests.departmentTeacher', $teacher->id) }}" method="post">
                                                 @csrf
-                                                {{ Form::text('teacherId', $teacher->id, ['hidden'=> true]) }}
+                                                {{ Form::text('status', true, ['hidden'=> true]) }}
+                                                {{ Form::text('next_department_id', $teacher->next_department_id, ['hidden'=> true]) }}
                                                 <button class="btn btn-outline-success">Chấp Nhận</button>
                                             </form>
                                         </div>
                                         <div>
-                                            <form action="{{ route('admin.requests.departments.reject') }}" method="post">
+                                            <form action="{{ route('admin.requests.departmentTeacher', $teacher->id) }}" method="post">
                                                 @csrf
-                                                {{ Form::text('teacherId', $teacher->id, ['hidden'=> true]) }}
+                                                {{ Form::text('status', false, ['hidden'=> true]) }}
+                                                <button class="btn btn-outline-danger">Từ Chối</button>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                </td>
+                            </tr>
+                            @empty
+                            <div class="pt-3 d-flex justify-content-center">
+                                <h4>Empty Data</h4>
+                            </div>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4>Viện</h4>
+                <div class="table-responsive table-scroll">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Viện</th>
+                                <th>Trưởng Viện Cũ</th>
+                                <th>Trưởng Viện Mới</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($changeDepartmentManagerRequest as $department)
+                            <tr>
+                                <td>{{ $department->name }}</td>
+                                <td>{{ $department->manager->name }}</td>
+                                <td>{{ $department->nextManager->name }}</td>
+                                <td style="width: 210px;">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="mr-1">
+                                            <form action="{{ route('admin.requests.departmentManager', $department->id) }}" method="post">
+                                                @csrf
+                                                {{ Form::text('status', true, ['hidden'=> true]) }}
+                                                {{ Form::text('next_manager_id', $department->next_manager_id, ['hidden'=> true]) }}
+                                                <button class="btn btn-outline-success">Chấp Nhận</button>
+                                            </form>
+                                        </div>
+                                        <div>
+                                            <form action="{{ route('admin.requests.departmentManager', $department->id) }}" method="post">
+                                                @csrf
+                                                {{ Form::text('status', false, ['hidden'=> true]) }}
                                                 <button class="btn btn-outline-danger">Từ Chối</button>
                                             </form>
                                         </div>

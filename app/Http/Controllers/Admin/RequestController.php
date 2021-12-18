@@ -25,99 +25,40 @@ class RequestController extends Controller
 
     public function index()
     {
-        $titleRequest = [
-            'change' => 'Change Department',
-            'upgrade' => 'Upgrade to Manager',
-            'downgrade' => 'Downgrade to Member',
-        ];
-        $moveDepartmenteTeachers = $this->teacherRepository->where('next_department_id', '!=', null)->get();
-        if ($moveDepartmenteTeachers) {
-            $moveDepartmenteTeachers->load(['department', 'nextDepartment']);
-        }
-        $moveDepartmenteTeachers = $moveDepartmenteTeachers->map(function ($teacher) use ($titleRequest) {
-            $teacher['seniority'] = Carbon::now()->diffInYears($teacher->created_at);
-            $title = [];
-            if ($teacher->nextDepartment->next_manager_id == $teacher->id) {
-                $title[] = $titleRequest['upgrade'];
-            }
-            if (($teacher->next_department_id == $teacher->department_id
-                    && $teacher->department->manager_id == $teacher->id) ||
-                ($teacher->next_department_id != $teacher->department_id
-                    && $teacher->nextDepartment->next_manager_id != $teacher->id)
-            ) {
-                $title[] = $titleRequest['downgrade'];
-            }
-            if ($teacher->department_id != $teacher->next_department_id) {
-                $title[] = $titleRequest['change'];
-            }
-            $teacher['titleRequest'] = implode(', ', $title);
+        $changeDepartmentTeacherRequest = $this->teacherRepository->model()
+            ->whereNotNull('next_department_id')
+            ->get();
+        $changeDepartmentManagerRequest = $this->departmentRepository->model()
+            ->whereNotNull('next_manager_id')
+            ->get();
 
-            return $teacher;
-        });
-
-        return view('admin.request.index', compact('moveDepartmenteTeachers'));
+        return view('admin.request.index', compact(
+            'changeDepartmentTeacherRequest',
+            'changeDepartmentManagerRequest'
+        ));
     }
 
-    public function approveDepartmentChange(Request $request)
+    public function departmentTeacher(Request $request, $teacherId)
     {
-        $teacherId = $request->get('teacherId');
-        $teacher = $this->teacherRepository->find($teacherId);
-        if ($teacher) {
-            $teacher->load('department', 'nextDepartment');
-        }
-        try {
-            DB::beginTransaction();
-            if ($teacher->department_id == $teacher->next_department_id) {
-                if ($teacher->department->next_manager_id == $teacher->id) {
-                    $this->departmentRepository->update($teacher->department_id, [
-                        'manager_id' => $teacher->id,
-                        'next_manager_id' => null,
-                    ]);
-                } else {
-                    $this->departmentRepository->update($teacher->department_id, [
-                        'manager_id' => null,
-                        'next_manager_id' => null,
-                    ]);
-                }
-            } else {
-                if ($teacher->department->manager_id == $teacher->id) {
-                    $this->departmentRepository->update($teacher->department_id, [
-                        'manager_id' => null,
-                        'next_manager_id' => null,
-                    ]);
-                }
-                if ($teacher->nextDepartment->next_manager_id == $teacher->id) {
-                    $this->departmentRepository->update($teacher->next_department_id, [
-                        'manager_id' => $teacher->id,
-                        'next_manager_id' => null,
-                    ]);
-                }
-            }
-            $teacher->update([
-                'department_id' => $teacher->next_department_id,
-                'next_department_id' => null,
-            ]);
-            DB::commit();
-
-            return redirect()->route('admin.requests.show');
-        } catch (Exception $e) {
-            DB::rollBack();
-
-            return redirect()->back();
-        }
-    }
-
-    public function rejectDepartmentChange(Request $request)
-    {
-        $teacherId = $request->get('teacherId');
-        $teacher = $this->teacherRepository->find($teacherId)->load(['department', 'nextDepartment']);
-        if ($teacher->nextDepartment->next_manager_id == $teacher->id) {
-            $this->departmentRepository->update($teacher->nextDepartment->id, [
-                'next_manager_id' => null,
-            ]);
-        }
-        $teacher->update([
-            'next_department_id' => null
+        $status = $request->get('status');
+        $this->teacherRepository->update($teacherId, [
+            'department_id' => $status ? $request->get('next_department_id') : null,
+            'next_department_id' => null,
+            'next_department_status' => config('status.department.next_manager.success'),
         ]);
+
+        return $this->successRouteRedirect('admin.requests.index');
+    }
+
+    public function departmentManager(Request $request, $departmentId)
+    {
+        $status = $request->get('status');
+        $this->departmentRepository->update($departmentId, [
+            'manager_id' => $status ? $request->get('next_manager_id') : null,
+            'next_manager_id' => null,
+            'next_manager_status' => config('status.teacher.next_department.success'),
+        ]);
+
+        return $this->successRouteRedirect('admin.requests.index');
     }
 }

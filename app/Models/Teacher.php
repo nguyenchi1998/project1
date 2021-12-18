@@ -21,11 +21,12 @@ class Teacher extends Authenticatable
         'phone',
         'department_id',
         'next_department_id',
+        'next_department_status',
     ];
 
     public function department()
     {
-        return $this->belongsTo(Department::class);
+        return $this->belongsTo(Department::class, 'department_id');
     }
 
     public function nextDepartment()

@@ -25,6 +25,8 @@ class CreateTeachersTable extends Migration
             $table->string('password');
             $table->unsignedInteger('department_id')->nullable();
             $table->unsignedInteger('next_department_id')->nullable();
+            $table->boolean('next_department_status')
+                ->default(config('status.teacher.next_department.pending'));
             $table->timestamps();
             $table->rememberToken();
             $table->softDeletes();

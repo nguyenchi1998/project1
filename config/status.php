@@ -6,5 +6,11 @@ return [
             'pending' => 0,
             'success' => 1,
         ]
+    ],
+    'teacher' => [
+        'next_department' => [
+            'pending' => 0,
+            'success' => 1,
+        ]
     ]
 ];

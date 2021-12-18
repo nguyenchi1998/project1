@@ -1,12 +1,12 @@
 @extends('layouts.manager')
 @section('breadcrumb')
 <div class="col-sm-6">
-    <h1 class="m-0">Danh Sách Khoa Viện</h1>
+    <h1 class="m-0">Danh Sách Viện</h1>
 </div>
 <div class="col-sm-6">
     <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
-        <li class="breadcrumb-item active">Danh Sách Khoa Viện</li>
+        <li class="breadcrumb-item active">Danh Sách Viện</li>
     </ol>
 </div>
 @endsection
@@ -28,7 +28,8 @@
                     <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th>Khoa Viện</th>
+                                <th>Viện</th>
+                                <th>Viện Trưởng</th>
                                 <th>Số chuyên ngành</th>
                                 <th>Sô Giáo Viên</th>
                                 <th></th>
@@ -38,10 +39,15 @@
                             @forelse($departments as $department)
                             <tr>
                                 <td>{{ $department->name }}</td>
+                                <td>
+                                    <form action="{{ route('admin.departments.changeManager', $department->id) }}" method="post">
+                                        @csrf
+                                        {{ Form::select('next_manager_id', $department->teachers->pluck('name', 'id')->toArray(), $department->manager->id ?? null, ['onchange' => 'this.form.submit()', 'class' => 'form-control', 'placeholder' => 'Chọn Viện Trưởnng']) }}
+                                    </form>
+                                </td>
                                 <td>{{ count($department->specializations) }}</td>
                                 <td>{{ count($department->teachers) }}</td>
-
-                                <td width="100">
+                                <td>
                                     <div class="d-flex justify-content-between">
                                         <div class="mr-2">
                                             <a href="{{ route('admin.departments.edit', $department->id) }}" class="btn btn-outline-warning">Sửa</a>

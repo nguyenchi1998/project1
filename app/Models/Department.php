@@ -18,12 +18,12 @@ class Department extends Model
 
     public function manager()
     {
-        return $this->hasOne(Teacher::class, 'manager_id');
+        return $this->belongsTo(Teacher::class, 'manager_id');
     }
 
     public function nextManager()
     {
-        return $this->hasOne(User::class, 'next_manager_id');
+        return $this->belongsTo(Teacher::class, 'next_manager_id');
     }
 
     public function specializations()

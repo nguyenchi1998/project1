@@ -19,7 +19,7 @@
                     <div class="">
                         <form action="{{ route('admin.teachers.index') }}" class="form-inline">
                             <input type="search" name="Từ Khóa" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
-                            {{ Form::select('department-filter', $departments, $departmentFilter, ['class' => 'form-control  mr-2', 'placeholder' => 'Tất Cả Khoa Viện']) }}
+                            {{ Form::select('department-filter', $departments, $departmentFilter, ['class' => 'form-control  mr-2', 'placeholder' => 'Tất Cả Viện']) }}
                             <button class="btn btn-outline-secondary" type="submit">
                                 <i class="fa fa-search"></i>
                             </button>
@@ -34,7 +34,7 @@
                                 <th>Giảng Viên</th>
                                 <th>Email</th>
                                 <th>Số Điện Thoại</th>
-                                <th>Khoa Viện</th>
+                                <th>Viện</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -56,16 +56,16 @@
                                     {{ $teacher->phone }}
                                 </td>
                                 <td>
-                                    {{ $teacher->department->name }} @if($teacher->department->manager_id == $teacher->id)
-                                    <strong class="text text-danger ">(Manager)</strong> @endif
+                                    {{ $teacher->department->name ?? '' }} @if($teacher->department->manager_id == $teacher->id)
+                                    <strong class="text text-danger ">(Viện Trưởng)</strong> @endif
                                 </td>
-                                <td width="100">
+                                <td style="width: 255px;">
                                     <div class="d-flex justify-content-between">
-                                        <!-- <div class="mr-2">
+                                        <div class="mr-2">
                                             <a href="{{ route('admin.teachers.change_department_show', $teacher->id) }}" class="btn btn-outline-secondary">
-                                                Chuyển Khoa Viện
+                                                Chuyển Viện
                                             </a>
-                                        </div> -->
+                                        </div>
                                         <div class="mr-2">
                                             <a href="{{ route('admin.teachers.edit', $teacher->id) }}" class="btn btn-outline-warning">
                                                 Sửa

@@ -98,6 +98,9 @@ Route::group(['as' => 'admin.'], function () {
 
         Route::resource('departments', 'DepartmentController');
 
+        Route::post('departments/{id}/change-manager', 'DepartmentController@changeManager')
+            ->name('departments.changeManager');
+
         Route::resource('students', 'StudentController')
             ->except('show');
 
@@ -105,11 +108,11 @@ Route::group(['as' => 'admin.'], function () {
             Route::get('', 'RequestController@index')
                 ->name('index');
 
-            Route::post('/departments/approve', 'RequestController@approveDepartmentChange')
-                ->name('departments.approve');
+            Route::post('/departmentManager/{departmentId}', 'RequestController@departmentManager')
+                ->name('departmentManager');
 
-            Route::post('/departments/reject', 'RequestController@approveDepartmentChange')
-                ->name('departments.reject');
+            Route::post('/departmentTeacher/{teacherId}', 'RequestController@departmentTeacher')
+                ->name('departmentTeacher');
         });
     });
 

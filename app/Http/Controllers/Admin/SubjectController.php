@@ -62,7 +62,7 @@ class SubjectController extends Controller
 
     public function create()
     {
-        $departments = $this->departmentRepository->all();
+        $departments = $this->departmentRepository->all()->pluck('name', 'id');
 
         return view('admin.subject.create', compact('departments'));
     }
@@ -96,8 +96,11 @@ class SubjectController extends Controller
         try {
             DB::beginTransaction();
             $subject = $this->subjectRepository->find($id);
-            $subject->update($request->only(['name', 'credit']));
-            $subject->specializations()->sync($request->get('specializations'));
+            $subject->update($request->only([
+                'name', 'credit'
+            ]));
+            $subject->specializations()
+                ->sync($request->get('specializations'));
             DB::commit();
 
             return redirect()->route('admin.subjects.index');

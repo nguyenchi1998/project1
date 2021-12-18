@@ -19,7 +19,7 @@
                     <div class="">
                         <form action="{{ route('admin.classes.index') }}" class="form-inline">
                             <input type="search" name="Từ Khóa" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
-                            {{ Form::select('specializaiton-filter', $specializations, $filterSpecialization, ['class' => 'form-control mr-2', 'placeholder' => 'Tất cả Khoa Viện']) }}
+                            {{ Form::select('specializaiton-filter', $specializations, $filterSpecialization, ['class' => 'form-control mr-2', 'placeholder' => 'Tất cả Viện']) }}
                             <button class="btn btn-outline-secondary" type="submit">
                                 <i class="fa fa-search"></i>
                             </button>

@@ -35,7 +35,7 @@
                                 <strong>Chuyên Ngành:</strong> {{ $class->specialization->name }}
                             </div>
                             <div class="form-group">
-                                <strong>Khoa Viện:</strong> {{ $class->specialization->department->name }}
+                                <strong>Viện:</strong> {{ $class->specialization->department->name }}
                             </div>
                         </div>
                         <div class="col-4">
