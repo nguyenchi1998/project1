@@ -24,7 +24,15 @@ class ChooseSubject extends FormRequest
     public function rules()
     {
         return [
-            //
+            'subjects' => 'required|array',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'subjects.required' => 'Chưa Chọn Môn Học',
+            'subjects.array' => 'Danh Sách Môn Học Phải Là Mảng',
         ];
     }
 }

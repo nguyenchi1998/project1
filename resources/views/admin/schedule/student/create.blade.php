@@ -113,29 +113,17 @@
         event.preventDefault();
         let specializationSubjectIds = [];
         jQuery('#subjects').find('tbody tr:not(:last-child)').each(function(index, tr) {
-            <<
-            << << < HEAD
-            let specialization_subject_id = jQuery(tr).find('' + 'td:eq(0)').find('input').val();
-            let selected = jQuery(tr).find('' + 'td:eq(5)').find('input').is(':checked'); ===
-            === =
             const subject_id = jQuery(tr).find('' + 'td:eq(0)').find('input').val();
             const semester = jQuery(tr).find('' + 'td:eq(1)').find('input:eq(0)').val();
             const specialization_id = jQuery(tr).find('' + 'td:eq(1)').find('input:eq(1)').val();
-            const selected = jQuery(tr).find('' + 'td:eq(5)').find('input').is(':checked'); >>>
-            >>> > e178a03ea7c92ddd0c67b675156e239ff8c4802d
+            const selected = jQuery(tr).find('' + 'td:eq(5)').find('input').is(':checked');
             if (selected)
                 specializationSubjectIds = [
                     ...specializationSubjectIds,
                     {
-                        <<
-                        << << < HEAD
-                        specialization_subject_id,
-                        ===
-                        === =
                         subject_id,
                         semester,
-                        specialization_id >>>
-                        >>> > e178a03ea7c92ddd0c67b675156e239ff8c4802d
+                        specialization_id
                     }
                 ]
         });

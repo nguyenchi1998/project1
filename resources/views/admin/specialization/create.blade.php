@@ -25,19 +25,18 @@
                     <label for="min_creddit">Số Tín Chỉ Tối Thiểu</label>
                     {{ Form::input('number', 'min_credit', null, ['class' => 'form-control', 'id' => 'min_creddit', 'placeholder' => 'Số tín chỉ tối thiểu', 'min' => 0]) }}
                 </div>
-            </div>
-            <div class="form-group">
-                {{ Form::label('department', 'Viện') }}
-                {{ Form::select('department_id', $departments, null, ['class' => 'form-control', 'id' => 'department', 'placeholder' => 'Tất Cả Viện']) }}
-            </div>
-            <div class="mt-3">
-                {{ Form::submit('Xác Nhận', ['class'=> 'btn btn-outline-success mr-2']) }}
-                <a href="{{ route('admin.specializations.index') }}" class="btn btn-outline-dark">Huỷ Bỏ</a>
-                {{ Form::close() }}
+                <div class="form-group">
+                    {{ Form::label('department', 'Viện Phụ Trách') }}
+                    {{ Form::select('department_id', $departments, null, ['class' => 'form-control', 'id' => 'department', 'placeholder' => 'Chọn Viện']) }}
+                </div>
+                <div class="mt-3">
+                    {{ Form::submit('Xác Nhận', ['class'=> 'btn btn-outline-success mr-2']) }}
+                    <a href="{{ route('admin.specializations.index') }}" class="btn btn-outline-dark">Huỷ Bỏ</a>
+                    {{ Form::close() }}
+                </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 @endsection
 @section('script') @endsection

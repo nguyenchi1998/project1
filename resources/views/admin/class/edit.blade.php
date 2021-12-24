@@ -18,7 +18,7 @@
             <div class="card-body">
                 <div class="d-flex justify-content-end">
                     <a href="{{ route('admin.classes.students', $class->id) }}" class="btn btn-outline-secondary">
-                        Sửa Đổi Lớp Học
+                        Danh Sách Sinh Viên
                     </a>
                 </div>
                 {{ Form::open(['url' => route('admin.classes.update', $class->id) , 'method' => 'POST']) }}

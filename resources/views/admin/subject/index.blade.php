@@ -20,7 +20,11 @@
                         <form action="{{ route('admin.subjects.index') }}" class="form-inline">
                             <input type="search" name="Từ Khóa" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
                             {{ Form::select('department-filter', $departments, $departmentFilter, ['class' => 'mr-2 form-control ', 'placeholder' => 'Tất Cả Viện']) }}
-                            {{ Form::select('type-filter', $types, $typeFilter, ['class' => 'mr-2 form-control ', 'placeholder' => 'Tất Cả Thể Loại']) }}
+                            <select name="type-filter" class="form-control mr-2">
+                                <option value="">Tất Cả Thể Loại</option>
+                                <option value="{{ config('subject.type.basic') }}" @if($typeFilter===config('subject.type.basic')) selected @endif>Đại Cương</option>
+                                <option value="{{ config('subject.type.specialization') }}" @if($typeFilter===config('subject.type.specialization')) selected @endif>Chuyên Ngành</option>
+                            </select>
                             <button class="btn btn-outline-secondary" type="submit">
                                 <i class="fa fa-search"></i>
                             </button>
@@ -33,6 +37,7 @@
                         <thead>
                             <tr>
                                 <th>Môn Học</th>
+                                <th>Học Kỳ</th>
                                 <th>Loại</th>
                                 <th>Số Tín Chỉ</th>
                                 <th>Viện Phụ Trách</th>
@@ -44,6 +49,20 @@
                             <tr>
                                 <td>
                                     {{ $subject->name }}
+                                </td>
+                                <td>
+                                    @if($subject->type == config('subject.type.basic'))
+                                    <form action="{{ route('admin.subjects.update', $subject->id) }}" method="post">
+                                        @csrf
+                                        @method('put')
+                                        {{ Form::select(
+                                            'semester', 
+                                            range_semester(config('config.start_semester'), config('config.class_register_limit_semester')), 
+                                            $subject->semester,
+                                            ['class' => 'form-control', 'placeholder' => 'Chọn Kỳ Học', 'onchange' => 'this.form.submit()'],
+                                        )}}
+                                    </form>
+                                    @endif
                                 </td>
                                 <td>
                                     {{ $subject->type ? 'Chuyên Ngành' : 'Đại Cương' }}

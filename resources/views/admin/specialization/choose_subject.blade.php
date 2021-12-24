@@ -1,13 +1,13 @@
 @extends('layouts.manager')
 @section('breadcrumb')
 <div class="col-sm-6">
-    <h1 class="m-0">Chọn Môn Giảng Dạy</h1>
+    <h1 class="m-0">Chọn Môn Học</h1>
 </div>
 <div class="col-sm-6">
     <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"><a href="#">Bảng Điều Khiển</a></li>
         <li class="breadcrumb-item"><a href="#">Danh Sách Chuyên Ngành</a></li>
-        <li class="breadcrumb-item active">Chọn Môn Giảng Dạy</li>
+        <li class="breadcrumb-item active">Chọn Môn Học</li>
     </ol>
 </div>
 @endsection
@@ -53,22 +53,22 @@
                                         </label>
                                     </div>
                                 </td>
-                                <td style="width: 150px" class="text-center">
+                                <td style="width: 150px">
                                     {{ $subject->credit }}
                                     {{ Form::text('basic', $subject->type, ['hidden' => true]) }}
                                 </td>
-                                <td style="width: 150px" class="text-center">
+                                <td style="width: 150px">
                                     {{ $subject->type ? 'Chuyên Ngành' : 'Đại Cương' }}
                                 </td>
                                 <td style="width: 180px">
-                                    {{ Form::select('semester', $subject->type  == config('subject.type.basic') ? $basicSemesters : $specializationSemesters, $subject->semester, ['class'=> 'form-control  semester', 'placeholder' => 'Tất Cả kỳ học']) }}
+                                    {{ Form::select('semester', $subject->type  == config('subject.type.basic') ? $basicSemesters : $specializationSemesters, $subject->semester, ['class'=> 'form-control  semester', 'placeholder' => 'Tự Do']) }}
                                 </td>
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
-                <div class="mt-3">
+                <div class="mt-3 float-right">
                     {{Form::submit('Xác Nhận', ['id' => 'submit', 'class'=> 'btn btn-outline-success mr-2']) }}
                     <a href="{{ route('admin.specializations.index') }}" class="btn btn-outline-dark">Huỷ Bỏ</a>
                     {{ Form::close() }}
@@ -82,22 +82,22 @@
 <script>
     jQuery(document).on('click', '#submit', function(event) {
         event.preventDefault();
-        let subjects = [];
-        jQuery('#subjects').find('tbody tr').each(function(index, tr) {
-            let subject_id = jQuery(tr).find('' + 'td:first-child').find('input').val();
-            let isBasic = jQuery(tr).find('' + 'td:eq(2)').find('input').val();
-            let semester = jQuery(tr).find('' + 'td:eq(3)').find('.semester option:selected').val();
-            let selected = jQuery(tr).find('' + 'td:first-child').find('input').is(':checked');
-            let force = jQuery(tr).find('' + 'td:last-child').find('input').is(':checked');
-            if (selected)
-                subjects = {
-                    ...subjects,
-                    [subject_id]: {
-                        force: Number(force),
-                        semester: (isBasic || force ? null : Number(semester)),
+        let subjects = {};
+        jQuery('#subjects').find('tbody tr')
+            .each(function(index, tr) {
+                let subject_id = jQuery(tr).find('' + 'td:first-child').find('input').val();
+                let isBasic = jQuery(tr).find('' + 'td:eq(1)').find('input').val();
+                let semester = jQuery(tr).find('' + 'td:eq(3)').find('.semester option:selected').val();
+                let selected = jQuery(tr).find('' + 'td:first-child').find('input').is(':checked');
+                if (selected)
+                    subjects = {
+                        ...subjects,
+                        [subject_id]: {
+                            force: !!(!isBasic || (isBasic && semester)),
+                            semester: semester ? Number(semester) : null,
+                        }
                     }
-                }
-        });
+            });
         $.ajax({
             url: "{{ route('admin.specializations.choose_subject', $specialization->id) }}",
             method: 'post',
@@ -105,11 +105,24 @@
                 _token: "{{ csrf_token() }}",
                 subjects,
             },
-            success: function() {
-                window.location.href = "{{ route('admin.specializations.index') }}"
+            success: function({
+                status,
+                message
+            }) {
+                if (status)
+                    window.location.href = "{{ route('admin.redirect_route', 'admin.specializations.index') }}";
+                else
+                    alert(message);
             },
-            error: function() {
-                alert('Error');
+            error: function({
+                responseJSON,
+                status
+            }) {
+                if (status == 422) {
+                    alert(Object.values(responseJSON.errors)[0][0])
+                } else {
+                    alert('Xử lý thất bại');
+                }
             }
         });
     });

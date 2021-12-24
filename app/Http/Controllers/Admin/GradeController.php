@@ -36,7 +36,6 @@ class GradeController extends Controller
         return view('admin.grade.create');
     }
 
-
     public function store(Request $request)
     {
         $this->gradeRepository->create($request->only(['name',]));
@@ -67,7 +66,8 @@ class GradeController extends Controller
 
     public function destroy($id)
     {
-        $result = $this->gradeRepository->delete($id);
+        $grade = $this->gradeRepository->find($id)->load('students');
+        $result = $this->gradeRepository->delete($id, !count($grade->students));
         if ($result) {
             return $this->successRouteRedirect('admin.grades.index');
         }
@@ -87,7 +87,10 @@ class GradeController extends Controller
 
     public function registerCreditStatus(Request $request, $id)
     {
-        $this->gradeRepository->update($id, $request->only('can_register_credit'));
+        $this->gradeRepository->update(
+            $id,
+            $request->only('can_register_credit')
+        );
 
         return $this->successRouteRedirect('admin.grades.index');
     }

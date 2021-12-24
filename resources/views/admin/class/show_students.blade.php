@@ -22,9 +22,11 @@
                     </div>
                 </div>
                 <div class="d-flex mb-3 justify-content-between">
-                    <div class=""></div>
-                    <a class="btn btn-outline-success" href="{{ route('admin.classes.create') }}">Thêm Sinh
-                        Viên</a>
+                    @if($studentsNotHasClass)
+                    <a class="btn btn-outline-success" href="{{ route('admin.classes.create') }}">
+                        Thêm SinhViên
+                    </a>
+                    @endif
                 </div>
                 <div class="table-responsive table-scroll">
                     <table class="table table-bordered table-hover">

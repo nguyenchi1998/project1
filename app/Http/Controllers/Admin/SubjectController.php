@@ -31,9 +31,7 @@ class SubjectController extends Controller
         $departmentFilter = $request->get('department-filter');
         $typeFilter = $request->get('type-filter');
         $keyword = $request->get('keyword');
-        $types = array_map(function ($item) {
-            return ucfirst($item);
-        }, array_flip(config('subject.type')));
+        $departments = $this->departmentRepository->all()->pluck('name', 'id')->toArray();
         $subjects = $this->subjectRepository->withTrashedModel()
             ->when($keyword, function ($query) use ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%');
@@ -48,11 +46,9 @@ class SubjectController extends Controller
             })
             ->with('department')
             ->paginate(config('config.paginate'));
-        $departments = $this->departmentRepository->all()->pluck('name', 'id')->toArray();
 
         return view('admin.subject.index', compact(
             'subjects',
-            'types',
             'departments',
             'departmentFilter',
             'typeFilter',
@@ -62,7 +58,8 @@ class SubjectController extends Controller
 
     public function create()
     {
-        $departments = $this->departmentRepository->all()->pluck('name', 'id');
+        $departments = $this->departmentRepository->all()
+            ->pluck('name', 'id');
 
         return view('admin.subject.create', compact('departments'));
     }
@@ -72,11 +69,13 @@ class SubjectController extends Controller
         $this->subjectRepository->create([
             'name' => $request->get('name'),
             'credit' => $request->get('credit'),
-            'type' => $request->get('basic') ? config('subject.type.basic') : config('subject.type.specialization'),
+            'type' => $request->get('basic')
+                ? config('subject.type.basic')
+                : config('subject.type.specialization'),
             'department_id' => $request->get('department_id'),
         ]);
 
-        return redirect()->route('admin.subjects.index');
+        return $this->successRouteRedirect('admin.subjects.index');
     }
 
     public function edit($id)
@@ -88,7 +87,11 @@ class SubjectController extends Controller
         $specializations = $this->specializationRepository->all();
         $departments = $this->departmentRepository->all();
 
-        return view('admin.subject.edit', compact('subject', 'specializations', 'departments'));
+        return view('admin.subject.edit', compact(
+            'subject',
+            'specializations',
+            'departments'
+        ));
     }
 
     public function update(Request $request, $id)
@@ -96,18 +99,23 @@ class SubjectController extends Controller
         try {
             DB::beginTransaction();
             $subject = $this->subjectRepository->find($id);
-            $subject->update($request->only([
-                'name', 'credit'
-            ]));
+            $subject->update(
+                array_merge(
+                    ['semester' => $subject->type == config('subject.type.basic')  ? $request->get('semester') : null],
+                    $request->only([
+                        'name', 'credit',
+                    ])
+                )
+            );
             $subject->specializations()
                 ->sync($request->get('specializations'));
             DB::commit();
 
-            return redirect()->route('admin.subjects.index');
+            return $this->successRouteRedirect('admin.subjects.index');
         } catch (Exception $e) {
             DB::rollBack();
 
-            return redirect()->back();
+            return $this->failRouteRedirect();
         }
     }
 
@@ -115,10 +123,10 @@ class SubjectController extends Controller
     {
         $result = $this->subjectRepository->delete($id);
         if ($result) {
-            return redirect()->route('admin.subjects.index');
+            return $this->successRouteRedirect('admin.subjects.index');
         }
 
-        return redirect()->route('admin.subjects.index')->withErrors(['msg' => 'Delete Error']);
+        return $this->failRouteRedirect();
     }
 
     public function restore($id)

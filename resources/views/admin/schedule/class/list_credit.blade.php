@@ -31,7 +31,7 @@
                         </div>
                     </div>
                     @if($isShowRegisterCredit)
-                    <a class="btn h-100 btn-outline-success" href="{{ route('admin.schedules.classes.registerScheduleShow', $class->id) }}">Tạo Mới</a>
+                    <a class="btn h-100 btn-outline-success" href="{{ route('admin.schedules.classes.registerScheduleShow', $class->id) }}">Đăng Ký</a>
                     @endif
                 </div>
                 <div class="table-responsive table-scroll">
@@ -53,9 +53,6 @@
                                 </td>
                                 <td>
                                     {{ $schedule->credit ?? $schedule->subject->credit }}
-                                </td>
-                                <td>
-                                    {{ $schedule->credit ?? $schedule->specializationSubject->subject->credit }}
                                 </td>
                                 <td>
                                     {{ $schedule->specializationSubject->semester }}
@@ -81,7 +78,7 @@
                                 <td style="width: 120px">
                                     @if($schedule->status == config('schedule.status.done') || $schedule->status == config('schedule.status.marking'))
                                     <div class="d-flex justify-content-center">
-                                        <a href="#" class="btn btn-outline-success">
+                                        <a href="#" class="btn btn-outline-info">
                                             Xem Điểm
                                         </a>
                                     </div>

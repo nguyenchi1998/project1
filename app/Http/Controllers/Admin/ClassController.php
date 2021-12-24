@@ -34,6 +34,10 @@ class ClassController extends Controller
         $specializations = $this->specializationRepository->all()
             ->pluck('name', 'id')
             ->toArray();
+        $showCreateClassBtn = $this->studentRepository->model()
+            ->whereNull('class_id')
+            ->get()
+            ->count();
         $classes = $this->classRepository->withTrashedModel()
             ->when($keyword, function ($query) use ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%');
@@ -50,27 +54,25 @@ class ClassController extends Controller
             'classes',
             'filterSpecialization',
             'keyword',
-            'specializations'
+            'specializations',
+            'showCreateClassBtn'
         ));
     }
 
     public function create()
     {
         $students = $this->studentRepository->model()
-            ->has('class', '=', 0)
+            ->whereNull('class_id')
             ->get();
-        if (!count($students)) {
-            return $this->failRouteRedirect('All student has class');
-        }
 
         return view('admin.class.create', compact('students'));
     }
 
     public function store(Request $request)
     {
-        $students = $request->get('students');
         try {
             DB::beginTransaction();
+            $students = $request->get('students');
             $class = $this->classRepository->create(
                 array_merge($request->only(['name', 'specialization_id']), [
                     'semester' => config('config.start_semester')
@@ -92,21 +94,18 @@ class ClassController extends Controller
 
     public function studentsShow($id)
     {
-        $class = $this->classRepository->find($id);
-        if ($class) {
-            $class->load('students');
-        }
+        $studentsNotHasClass = $this->studentRepository->model()
+            ->whereNull('class_id')
+            ->get()
+            ->count();
+        $class = $this->classRepository->find($id)->load('students');
 
-        return view('admin.class.show', compact('class'));
+        return view('admin.class.show_students', compact('class', 'studentsNotHasClass'));
     }
 
     public function edit($id)
     {
         $class = $this->classRepository->find($id);
-        $studentsNotHasClass = $this->studentRepository->model()
-            ->has('class', '=', 0)
-            ->get();
-        $students = $studentsNotHasClass->merge($class->students);
 
         return view('admin.class.edit', compact('class', 'students'));
     }
@@ -127,16 +126,19 @@ class ClassController extends Controller
         }
     }
 
-    public function removeStudent(Request $request)
+    public function removeStudent(Request $request, $id)
     {
-        $rs = $this->studentRepository->update($request->get('student_id'), [
-            'class_id' => null,
-        ]);
-        if ($rs) {
-            return back()->with('msg', 'Xóa sinh viên thành công');
+        $result = $this->studentRepository->update(
+            $request->get('student_id'),
+            [
+                'class_id' => null,
+            ]
+        );
+        if ($result) {
+            return $this->successRouteRedirect('admin.classes.students', [$id]);
         }
 
-        return back()->withErrors(['msg' => 'Xóa sinh viên thất bại']);
+        return $this->failRouteRedirect();
     }
 
     public function destroy($id)
@@ -151,7 +153,9 @@ class ClassController extends Controller
 
     public function restore($id)
     {
-        $result = $this->classRepository->restore($id);
+        $result = $this->classRepository->restore(
+            $id,
+        );
         if ($result) {
             return $this->successRouteRedirect('admin.classes.index');
         }

@@ -124,4 +124,8 @@ Route::group(['as' => 'admin.'], function () {
 
     Route::get('logout', 'LoginController@logout')
         ->name('logout');
+
+    Route::get('register_success/{route}', function ($route) {
+        return redirect()->route($route)->with(['message' => 'Xử Lý Thành Công']);
+    })->name('redirect_route');
 });

@@ -25,7 +25,9 @@
                             </button>
                         </form>
                     </div>
+                    @if($showCreateClassBtn)
                     <a class="btn Tìm Kiếmd-flex align-items-center btn-outline-success" href="{{ route('admin.classes.create') }}">Tạo Mới</a>
+                    @endif
                 </div>
                 <div class="table-responsive table-scroll">
                     <table class="table table-bordered table-hover">

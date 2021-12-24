@@ -351,6 +351,13 @@ class DepartmentSeeder extends Seeder
             Subject::create([
                 'name' => $subject['name'],
                 'type' => $subject['type'],
+                'semester' => $subject['type'] == config('subject.type.basic')
+                    ? $faker->randomElement(
+                        range(
+                            config('config.start_semester'),
+                            config('config.class_register_limit_semester')
+                        )
+                    ) : null,
                 'credit' => rand(1, 3),
                 'department_id' => $faker->randomElement(
                     Department::all()->pluck('id')->toArray()

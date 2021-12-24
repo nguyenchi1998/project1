@@ -48,8 +48,19 @@
                                         {{ Form::select('can_register_credit', $states, $grade->can_register_credit, ['class' => 'form-control ', 'onchange' => 'this.form.submit()'])}}
                                     </form>
                                 </td>
-                                <td style="width: 30px;">
-                                    <a href="{{ route('admin.grades.edit', $grade->id) }}" class="btn btn-outline-warning">Sửa</a>
+                                <td style="width: 100px;">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="mr-2">
+                                            <a href="{{ route('admin.grades.edit', $grade->id) }}" class="btn btn-outline-warning">Sửa</a>
+                                        </div>
+                                        <div>
+                                            <form action="{{ route('admin.grades.destroy', $grade->id) }}" method="post">
+                                                @csrf
+                                                @method('delete')
+                                                <button class="btn btn-outline-danger">Xóa</button>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                             @endforeach
