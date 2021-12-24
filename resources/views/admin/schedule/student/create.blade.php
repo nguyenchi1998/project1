@@ -7,7 +7,7 @@
     <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
         <li class="breadcrumb-item active">
-            <a href="{{ route('admin.schedules.students.index') }}">Danh Sách Sinh Viên</a>
+            <a href="{{ route('admin.schedules.students.index') }}">Sinh Viên Đăng Ký</a>
         </li>
         <li class="breadcrumb-item active" aria-current="page">
             Đăng Ký Tín Chỉ
@@ -34,13 +34,8 @@
                             <div class="mb-2">
                                 <strong>Chuyên Ngành:</strong> {{ $student->class->specialization->name }}
                             </div>
-                            <div class="d-flex justify-content-start align-items-center">
-                                <strong>Kỳ Học</strong>:
-                                <div class="ml-1">
-                                    <form action="">
-                                        {{ Form::select('semester-filter', $semesters, $semesterFilter, ['class' => 'form-control', 'onchange' => 'this.form.submit()']) }}
-                                    </form>
-                                </div>
+                            <div>
+                                <strong>Niên Khóa</strong>:<span> {{ $student->class->semester }}</span>
                             </div>
                         </div>
                         <div class="col-2">
@@ -53,7 +48,8 @@
                         </div>
                     </div>
                 </div>
-                {{ Form::open(['url' => route('admin.schedules.register', $student->id), 'method' => 'post']) }}
+                {{ Form::open(['url' => route('admin.schedules.students.store', $student->id), 'method' => 'post']) }}
+                @csrf
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover" id="subjects">
                         <thead>
@@ -61,7 +57,6 @@
                                 <th>Môn Học</th>
                                 <th>Kỳ Học</th>
                                 <th>Lớp Tín Chỉ</th>
-                                <th>Số Sinh Viên Đã Đăng Ký</th>
                                 <th>Số Tín Chỉ</th>
                                 <th></th>
                             </tr>
@@ -70,28 +65,20 @@
                             @foreach($subjects as $subject)
                             <tr>
                                 <td>
-                                    {{ $subject->subject->name }}
+                                    {{ $subject->name }}
                                     @if($subject->force)<span class="badge badge-danger">Bắt Buộc</span> @endif
-                                    {{ Form::text('subject_id', $subject->subject_id, ['hidden' => true]) }}
-
                                 </td>
                                 <td>
                                     {{ $subject->semester ?? 'Tự Do' }}
-                                    {{ Form::text('semseter', $student->class->semester, ['hidden' => true]) }}
-                                    {{ Form::text('specialization_id', $subject->specialization_id, ['hidden' => true]) }}
                                 </td>
                                 <td>
                                     {{ ($subject->hasCreditClass ? 'Đã' : 'Chưa') . ' có lớp' }}
                                 </td>
                                 <td>
-                                    {{ 0 }}
-                                </td>
-                                <td>
                                     {{ $subject->credit }}
-                                    {{ Form::text('credit', $subject->credit, ['hidden' => true]) }}
                                 </td>
                                 <td class="text-center">
-                                    {{ Form::checkbox('checked', $subject->id, $subject->isSelected, ['class' => 'selectSubject'])  }}
+                                    {{ Form::checkbox('subjectIds[]', $subject->id, $subject->isSelected, ['class' => 'selectSubject'])  }}
                                 </td>
                             </tr>
                             @endforeach
@@ -106,65 +93,4 @@
         </div>
     </div>
 </div>
-@endsection
-@section('script')
-<script>
-    jQuery(document).on('click', '#submit', function(event) {
-        event.preventDefault();
-        let specializationSubjectIds = [];
-        jQuery('#subjects').find('tbody tr:not(:last-child)').each(function(index, tr) {
-            const subject_id = jQuery(tr).find('' + 'td:eq(0)').find('input').val();
-            const semester = jQuery(tr).find('' + 'td:eq(1)').find('input:eq(0)').val();
-            const specialization_id = jQuery(tr).find('' + 'td:eq(1)').find('input:eq(1)').val();
-            const selected = jQuery(tr).find('' + 'td:eq(5)').find('input').is(':checked');
-            if (selected)
-                specializationSubjectIds = [
-                    ...specializationSubjectIds,
-                    {
-                        subject_id,
-                        semester,
-                        specialization_id
-                    }
-                ]
-        });
-        if (specializationSubjectIds.length)
-            $.ajax({
-                url: "{{ route('admin.schedules.students.registerSchedule', $student->id) }}",
-                method: 'post',
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    specializationSubjectIds,
-                },
-                success: function() {
-                    window.location.href = "{{ route('admin.schedules.students.registerScheduleShow', $student->id) }}"
-                },
-                error: function() {
-                    alert('Error');
-                }
-            })
-        else {
-            alert('Bạn chưa chọn môn học nào')
-        }
-    });
-
-    jQuery(document).on('change', '.selectSubject', function(event) {
-        event.preventDefault();
-        let total = jQuery('#subjects').find('tbody tr').filter(function(index, tr) {
-                return jQuery(tr).find('' + 'td:eq(5)').find('input').is(':checked');
-            })
-            .toArray()
-            .reduce(function(total, tr) {
-                return total + Number(jQuery(tr).find('' + 'td:eq(4)').find('input').val());
-            }, 0);
-        jQuery('#total_credit').text(total)
-        let maxCreditRegisterCurrent = parseInt(jQuery('#max_credit_register').text(), 10);
-        if (total > maxCreditRegisterCurrent) {
-            jQuery('#warning').removeClass('d-none')
-
-        } else {
-            jQuery('#warning').addClass('d-none')
-        }
-        jQuery('#submit').attr('disabled', total > maxCreditRegisterCurrent)
-    })
-</script>
 @endsection

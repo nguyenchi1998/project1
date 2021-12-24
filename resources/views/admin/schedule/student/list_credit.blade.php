@@ -6,7 +6,7 @@
 <div class="col-sm-6">
     <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('admin.schedules.classes.index') }}">Lớp Đăng Ký</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('admin.schedules.classes.index') }}">Sinh Viên Đăng Ký</a></li>
         <li class="breadcrumb-item active">Danh Sách Tín Chỉ</li>
     </ol>
 </div>
@@ -17,21 +17,19 @@
         <div class="card">
             <div class="card-body">
                 <div class="d-flex mb-3 justify-content-between align-items-center">
-                    <div>
-                        <div class="d-flex justify-content-between flex-column">
-                            <div class="d-flex align-items-center mb-2">
-                                <strong class="mr-1">Lớp: </strong> {{ $class->name }}
-                            </div>
-                            <div class="d-flex align-items-center">
-                                <strong class="mr-1">Kỳ Hiện Tại: </strong>
-                                <form action="">
-                                    {{ Form::select('semester-filter', $semesters, $semesterFilter, ['class' => 'form-control mr-2', 'placeholder' => 'Tất Cả Kỳ Học', 'onchange' => 'this.form.submit()']) }}
-                                </form>
-                            </div>
+                    <div class="d-flex justify-content-between flex-column">
+                        <div class="d-flex align-items-center mb-2">
+                            <strong class="mr-1">Sinh Viên: </strong> {{ $student->name }}
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <strong class="mr-1">Kỳ Học: </strong>
+                            <form action="">
+                                {{ Form::select('semester-filter', $semesters, $semesterFilter, ['class' => 'form-control mr-2', 'placeholder' => 'Tất Cả Kỳ Học', 'onchange' => 'this.form.submit()']) }}
+                            </form>
                         </div>
                     </div>
                     @if($semesterFilter == $class->semester)
-                    <a class="btn h-100 btn-outline-success" href="{{ route('admin.schedules.classes.create', $class->id) }}">Đăng Ký</a>
+                    <a class="btn h-100 btn-outline-success" href="{{ route('admin.schedules.students.create', $student->id) }}">Đăng Ký</a>
                     @endif
                 </div>
                 <div class="table-responsive table-scroll">
@@ -85,9 +83,11 @@
                                     @endif
                                     @if($schedule->status == config('schedule.status.new'))
                                     <div class="d-flex justify-content-center">
-                                        <a href="{{ route('admin.schedules.classes.destroy', ['classId' => $class->id, 'scheduleId' => $schedule->id]) }}" class="btn btn-outline-info">
-                                            Xóa
-                                        </a>
+                                        {{ Form::open(['url' => route('admin.schedules.students.destroy', ['studentId' => $student->id, 'scheduleDetailId' => $schedule->id]), 'method' => 'post']) }}
+                                        @csrf
+                                        @method('delete')
+                                        {{ Form::submit('Xóa', ['class' => 'btn btn-outline-info'])}}
+                                        {{ Form::close() }}
                                     </div>
                                     @endif
                                 </td>

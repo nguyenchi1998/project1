@@ -138,78 +138,25 @@ class SpecializationController extends Controller
 
     public function chooseSubjectShow($id)
     {
+        $subjects = $this->subjectRepository->allWithTrashed();
         $specialization = $this->specializationRepository->find($id)
             ->load('subjects');
-        $specializationSubjects = $specialization->subjects->pluck('id')->toArray();
-        $startSemester = config('config.start_semester');
-        $basicSemesters =  range_semester(
-            config('config.start_semester'),
-            config('config.class_register_limit_semester')
-        );
-        $specializationSemesters =  range_semester(
-            config('config.student_register_start_semester'),
-            config('config.max_semester')
-        );
-        $subjects = $this->subjectRepository->allWithTrashed();
-        $subjects = $subjects->map(function ($subject) use ($specialization) {
-            $subject->choose = $specialization->subjects->contains($subject->id);
-            $subject->semester = $specialization->subjects->first(
-                function ($subjectItem) use ($subject, $specialization) {
-                    return $specialization->subjects->contains('id', $subject->id)
-                        && $subjectItem->id == $subject->id;
-                }
-            )->pivot->semester ?? null;
-
-            return $subject;
-        })
-            ->sortBy('type');
+        $specializationSubjects = $specialization->subjects->pluck('id')
+            ->toArray();
 
         return view('admin.specialization.choose_subject', compact(
             'specialization',
-            'subjects',
             'specializationSubjects',
-            'basicSemesters',
-            'specializationSemesters'
+            'subjects'
         ));
     }
 
     public function chooseSubject(ChooseSubject $request, $id)
     {
-        try {
-            DB::beginTransaction();
-            $basicSubjectIds = $this->subjectRepository->model()
-                ->basicSubjects()
-                ->get()
-                ->pluck('id')
-                ->toArray();
-            $subjectDatas = $request->get('subjects');
-            $subjectIds = array_keys($subjectDatas);
-            $diffSubjectIds = array_diff($basicSubjectIds, $subjectIds);
-            if ($diffSubjectIds) {
-                return response([
-                    'status' => false,
-                    'message' => 'Các Môn Đại Cương Chưa Chọn Đủ'
-                ]);
-            }
-            $subjectDatas = array_map(function ($subject) {
-                $subject['force'] = (bool) $subject['force'];
+        $specialization = $this->specializationRepository->find($id);
+        $specialization->subjects()
+            ->sync($request->get('subjectIds'));
 
-                return $subject;
-            }, $subjectDatas);
-            $specialization = $this->specializationRepository->find($id);
-            $specialization->subjects()->sync($subjectDatas);
-            DB::commit();
-
-            return response([
-                'status' => true,
-            ]);
-        } catch (Exception $e) {
-            DB::rollBack();
-
-            return response([
-                'status' => false,
-                'message' => 'Xử lý thất bại ('  . $e->getMessage() . ')',
-            ]);
-        }
+        return $this->successRouteRedirect('admin.specializations.choose_subject_show', $id);
     }
 }

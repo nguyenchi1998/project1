@@ -25,7 +25,7 @@ Route::group(['as' => 'admin.'], function () {
         Route::get('teachers/{id}/choose-subject', 'TeacherController@chooseSubjectShow')
             ->name('teachers.choose_subject_show');
 
-        Route::put('teachers/{id}/choose-subject', 'TeacherController@chooseSubject')
+        Route::post('teachers/{id}/choose-subject', 'TeacherController@chooseSubject')
             ->name('teachers.choose_subject');
 
         Route::resource('schedules', 'ScheduleController')
@@ -49,12 +49,17 @@ Route::group(['as' => 'admin.'], function () {
         Route::get('schedules/students', 'ScheduleStudentController@index')
             ->name('schedules.students.index');
 
+        Route::get('schedules/students/{id}/credit', 'ScheduleStudentController@show')
+            ->name('schedules.students.show');
 
-        Route::get('schedules/students/{id}', 'ScheduleStudentController@registerScheduleShow')
-            ->name('schedules.students.registerScheduleShow');
+        Route::get('schedules/students/{id}/create', 'ScheduleStudentController@create')
+            ->name('schedules.students.create');
 
-        Route::post('schedules/students/{id}', 'ScheduleStudentController@registerSchedule')
-            ->name('schedules.students.registerSchedule');
+        Route::post('schedules/students/{id}', 'ScheduleStudentController@store')
+            ->name('schedules.students.store');
+
+        Route::delete('schedules/students/{studentId}/credit/{scheduleDetailId}', 'ScheduleStudentController@destroy')
+            ->name('schedules.students.destroy');
 
         Route::post('schedules/students/{id}/status', 'ScheduleStudentController@creditStatus')
             ->name('schedules.students.creditStatus');
@@ -62,14 +67,17 @@ Route::group(['as' => 'admin.'], function () {
         Route::get('schedules/class', 'ScheduleClassController@index')
             ->name('schedules.classes.index');
 
-        Route::get('schedules/class/{id}/credit', 'ScheduleClassController@showListCredits')
-            ->name('schedules.classes.showListCredits');
+        Route::get('schedules/class/{id}/credit', 'ScheduleClassController@show')
+            ->name('schedules.classes.show');
 
-        Route::get('schedules/class/{id}/register', 'ScheduleClassController@registerScheduleShow')
-            ->name('schedules.classes.registerScheduleShow');
+        Route::delete('schedules/class/{classId}/credit/{scheduleId}', 'ScheduleClassController@destroy')
+            ->name('schedules.classes.destroy');
 
-        Route::post('schedules/class/{id}', 'ScheduleClassController@registerSchedule')
-            ->name('schedules.classes.registerSchedule');
+        Route::get('schedules/class/{id}/create', 'ScheduleClassController@create')
+            ->name('schedules.classes.create');
+
+        Route::post('schedules/class/{id}', 'ScheduleClassController@store')
+            ->name('schedules.classes.store');
 
         Route::resource('specializations', 'SpecializationController');
 

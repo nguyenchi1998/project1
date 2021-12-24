@@ -31,7 +31,8 @@ class SubjectController extends Controller
         $departmentFilter = $request->get('department-filter');
         $typeFilter = $request->get('type-filter');
         $keyword = $request->get('keyword');
-        $departments = $this->departmentRepository->all()->pluck('name', 'id')->toArray();
+        $departments = $this->departmentRepository->all()->pluck('name', 'id')
+            ->toArray();
         $subjects = $this->subjectRepository->withTrashedModel()
             ->when($keyword, function ($query) use ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%');
@@ -66,57 +67,40 @@ class SubjectController extends Controller
 
     public function store(Request $request)
     {
-        $this->subjectRepository->create([
-            'name' => $request->get('name'),
-            'credit' => $request->get('credit'),
-            'type' => $request->get('basic')
-                ? config('subject.type.basic')
-                : config('subject.type.specialization'),
-            'department_id' => $request->get('department_id'),
-        ]);
+        $this->subjectRepository->create(
+            $request->only([
+                'name',
+                'credit',
+                'type',
+                'department_id',
+            ])
+        );
 
         return $this->successRouteRedirect('admin.subjects.index');
     }
 
     public function edit($id)
     {
-        $subject = $this->subjectRepository->find($id);
-        if ($subject) {
-            $subject = $subject->load('specializations');
-        }
-        $specializations = $this->specializationRepository->all();
-        $departments = $this->departmentRepository->all();
+        $subject = $this->subjectRepository->find($id)
+            ->load('specializations');
 
         return view('admin.subject.edit', compact(
             'subject',
-            'specializations',
-            'departments'
         ));
     }
 
     public function update(Request $request, $id)
     {
-        try {
-            DB::beginTransaction();
-            $subject = $this->subjectRepository->find($id);
-            $subject->update(
-                array_merge(
-                    ['semester' => $subject->type == config('subject.type.basic')  ? $request->get('semester') : null],
-                    $request->only([
-                        'name', 'credit',
-                    ])
-                )
-            );
-            $subject->specializations()
-                ->sync($request->get('specializations'));
-            DB::commit();
+        DB::beginTransaction();
+        $subject = $this->subjectRepository->find($id);
+        $subject->update($request->only([
+            'name',
+            'credit',
+            'semester'
+        ]));
+        DB::commit();
 
-            return $this->successRouteRedirect('admin.subjects.index');
-        } catch (Exception $e) {
-            DB::rollBack();
-
-            return $this->failRouteRedirect();
-        }
+        return $this->successRouteRedirect('admin.subjects.index');
     }
 
     public function destroy($id)

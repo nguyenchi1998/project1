@@ -24,7 +24,15 @@ class RegisterCreditStudent extends FormRequest
     public function rules()
     {
         return [
-            'subjects' => 'required|array|min:1',
+            'subjectIds' => 'required|array',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'subjectIds.required' => 'Chưa Chọn Môn Học',
+            'subjectIds.array' => 'Danh Sách Môn Học Phải Là Mảng',
         ];
     }
 }

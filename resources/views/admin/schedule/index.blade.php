@@ -72,7 +72,7 @@
                                 <td style="width: 130px">
                                     <form action="{{ route('admin.schedules.start', $schedule->id) }}" method="POST">
                                         @csrf
-                                        {{ Form::select('status', $states, $schedule->status, ['class' => 'form-control', 'onchange' => 'this.form.submit()']) }}
+                                        {{ Form::select('status', $states, $schedule->status, ['class' => 'form-control', 'onchange' => 'this.form.submit()', 'disabled' => $schedule->status]) }}
                                     </form>
                                 </td>
                                 <td style="width: 100px;">

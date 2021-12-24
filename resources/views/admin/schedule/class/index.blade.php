@@ -1,12 +1,12 @@
 @extends('layouts.manager')
 @section('breadcrumb')
 <div class="col-sm-6">
-    <h1 class="m-0">Quản Lý Tín Chỉ</h1>
+    <h1 class="m-0">Đăng Ký Tín Chỉ</h1>
 </div>
 <div class="col-sm-6">
     <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
-        <li class="breadcrumb-item active">Danh Sách Lớp</li>
+        <li class="breadcrumb-item active">Lớp Đăng Ký</li>
     </ol>
 </div>
 @endsection
@@ -54,7 +54,7 @@
                                     {{ $class->specialization->name }}
                                 </td>
                                 <td class="text-center" style="width: 200px">
-                                    <a href="{{ route('admin.schedules.classes.showListCredits', $class->id) }}" class="btn btn-outline-success">
+                                    <a href="{{ route('admin.schedules.classes.show', $class->id) }}" class="btn btn-outline-success">
                                         Danh Sách Tín Chỉ
                                     </a>
                                 </td>

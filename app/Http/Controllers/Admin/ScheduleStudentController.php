@@ -63,7 +63,7 @@ class ScheduleStudentController extends Controller
             })
             ->paginate(config('config.paginate'));
         $students->getCollection()->transform(function ($student) {
-            $student['total_credit'] = $student->scheduleDetails->filter(function ($scheduleDetail) {
+            $student->total_credit = $student->scheduleDetails->filter(function ($scheduleDetail) {
                 return $scheduleDetail->status_register == config('schedule.detail.status.register.pending');
             })->sum(function ($schedule) {
                 return $schedule->subject->credit;
@@ -83,64 +83,95 @@ class ScheduleStudentController extends Controller
         ));
     }
 
-    public function registerScheduleShow(Request $request, $id)
+    public function show(Request $request, $studentId)
     {
-        $student = $this->studentRepository->find($id)->load('scheduleDetails.subject');
-        $class = $this->classRepository->find($student->class->id);
-        $semesterFilter = $request->get('semester-filter', $class->semester);
+        $student = $this->studentRepository->find($studentId);
+        $class = $this->classRepository->find($student->class_id);
+        $semesterFilter = $request->get('semester-filter');
+        $specializationFilter = $request->get('specialization-filter');
+        $keyword = $request->get('keyword');
         $semesters = range_semester(
-            config('config.start_semester'),
+            config('config.class_register_limit_semester'),
             config('config.max_semester'),
             true,
-            $class->semester,
-            true
+            $class->semester
         );
-        $subjects = $this->specializationSubjectRepository->model()
-            ->where('specialization_subject.specialization_id', $student->class->specialization_id)
-            ->whereHas('subject', function ($query) {
-                $query->whereType(config('subject.type.specialization'));
+        $schedules = $this->scheduleDetailRepository->model()
+            ->when($semesterFilter, function ($query) use ($semesterFilter) {
+                $query->where('semester', $semesterFilter);
             })
-            ->when($semesterFilter < $class->semester, function ($query) use ($semesterFilter) {
-                $query->where('specialization_subject.semester', $semesterFilter);
-            }, function ($query) use ($class, $semesterFilter) {
-                $query->where(function ($query) use ($class, $semesterFilter) {
-                    $query->whereBetween('specialization_subject.semester', [$semesterFilter, $class->semester])
-                        ->orWhere('specialization_subject.semester', null);
-                });
-            })
-            ->with('subject')
-            ->select('specialization_subject.*', 'schedule_details.id as isSelected')
-            ->leftJoin('schedule_details', function ($join) use ($student) {
-                $join->on('specialization_subject.subject_id', '=', 'schedule_details.subject_id')
-                    ->where('student_id', $student->id)
-                    ->join('subjects', 'schedule_details.subject_id', '=', 'subjects.id');
-            })
-            ->get();
-        $totalCreditRegisted = $subjects->filter(function ($subject) {
-            return $subject->isSelected;
-        })->sum(function ($subject) {
-            return $subject->subject->credit;
-        });
+            ->with(['subject'])
+            ->orderBy('register_status')
+            ->paginate(config('config.paginate'));
 
-        return view('admin.schedule.student.create', compact(
-            'subjects',
-            'student',
-            'totalCreditRegisted',
+        return view('admin.schedule.student.list_credit', compact(
+            'schedules',
+            'keyword',
+            'semesterFilter',
+            'specializationFilter',
             'semesters',
-            'semesterFilter'
+            'student',
+            'class'
         ));
     }
 
-    public function registerSchedule(RegisterCreditStudent $request, $id)
+    public function create(Request $request, $id)
     {
+        $student = $this->studentRepository->find($id)
+            ->load('scheduleDetails.subject');
+        $class = $this->classRepository->find($student->class->id);
+        $studentRegisterSubjects = $this->scheduleDetailRepository->model()
+            ->where('semester', $class->semester)
+            ->with('subject')
+            ->get();
+
+        $subjects = $this->subjectRepository->model()
+            ->where('semester', $class->semester)
+            ->get()
+            ->map(function ($subject) use ($studentRegisterSubjects) {
+                $subject->hasClass = $studentRegisterSubjects->where('subject_id', $subject->id)->first(function ($studentRegisterSubject) {
+                    return $studentRegisterSubject->schedule_id;
+                });
+
+                return $subject;
+            });
+
+        $totalCreditRegisted = $studentRegisterSubjects->sum(function ($studentRegisterSubject) {
+            return $studentRegisterSubject->subject->credit;
+        });
+
+        return view('admin.schedule.student.create', compact(
+            'student',
+            'studentRegisterSubjects',
+            'totalCreditRegisted',
+            'subjects'
+        ));
+    }
+
+    public function store(RegisterCreditStudent $request, $studentId)
+    {
+        $student = $this->studentRepository->find($studentId)
+            ->load('class');
         $this->scheduleDetailRepository->updateOrCreateMany(
-            array_map(function ($item) use ($id) {
-                $item['student_id'] = $id;
+            array_map(function ($subjectId) use ($studentId, $student) {
+                $item['student_id'] = $studentId;
                 $item['register_status'] = config('schedule.detail.status.register.pending');
+                $item['subject_id'] = $subjectId;
+                $item['specialization_id'] = $student->class->specialization_id;
+                $item['semester'] = $student->class->semester;
 
                 return $item;
-            }, $request->get('specializationSubjectIds'))
+            }, $request->get('subjectIds'))
         );
+
+        return $this->successRouteRedirect('admin.schedules.students.show', $studentId);
+    }
+
+    public function destroy($studentId, $scheduleDetailId)
+    {
+        $this->scheduleDetailRepository->delete($scheduleDetailId);
+
+        return $this->successRouteRedirect('admin.schedules.students.show', $studentId);
     }
 
     public function creditStatus(Request $request, $id)

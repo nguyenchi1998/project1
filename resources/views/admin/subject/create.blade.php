@@ -34,7 +34,8 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="type">Loại Môn Học</label>
+                    <label for="semester">Kỳ Học</label>
+                    {{ Form::select('semester', range_semester(config('config.start_semester'), config('config.max_semester')), null, ['class' => 'form-control', 'id' => 'semester', 'placeholder' => 'Chọn Kỳ Học']) }}
                 </div>
                 <div class="form-group">
                     <label for="department">Viện</label>

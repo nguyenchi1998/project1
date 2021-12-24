@@ -51,18 +51,7 @@
                                     {{ $subject->name }}
                                 </td>
                                 <td>
-                                    @if($subject->type == config('subject.type.basic'))
-                                    <form action="{{ route('admin.subjects.update', $subject->id) }}" method="post">
-                                        @csrf
-                                        @method('put')
-                                        {{ Form::select(
-                                            'semester', 
-                                            range_semester(config('config.start_semester'), config('config.class_register_limit_semester')), 
-                                            $subject->semester,
-                                            ['class' => 'form-control', 'placeholder' => 'Chọn Kỳ Học', 'onchange' => 'this.form.submit()'],
-                                        )}}
-                                    </form>
-                                    @endif
+                                    {{ $subject->semester }}
                                 </td>
                                 <td>
                                     {{ $subject->type ? 'Chuyên Ngành' : 'Đại Cương' }}

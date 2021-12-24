@@ -357,48 +357,32 @@ class DepartmentSeeder extends Seeder
                             config('config.start_semester'),
                             config('config.class_register_limit_semester')
                         )
-                    ) : null,
+                    ) : $faker->randomElement(
+                        range(
+                            config('config.student_register_start_semester'),
+                            config('config.max_semester')
+                        )
+                    ),
                 'credit' => rand(1, 3),
                 'department_id' => $faker->randomElement(
                     Department::all()->pluck('id')->toArray()
                 ),
             ]);
         }
-        Specialization::all()->each(function ($specialization) use ($faker) {
-            $subjects = [];
-            foreach (Subject::whereType(config('subject.type.basic'))
-                ->get()
-                ->pluck('id')
-                ->toArray()
-                as $subject) {
-                $subjects[$subject] =  [
-                    'force' => config('subject.force'),
-                    'semester' => $faker->randomElement(
-                        range_semester(config('config.start_semester'), config('config.class_register_limit_semester'), false)
-                    )
-                ];
-            }
-            $specialization->subjects()->attach($subjects);
-            $subjects = [];
-            foreach ($faker->randomElements(
-                Subject::whereType(config('subject.type.specialization'))
+        Specialization::all()
+            ->each(function ($specialization) use ($faker) {
+                $basicSubject = Subject::whereType(config('subject.type.basic'))
                     ->get()
-                    ->pluck('id')
-                    ->toArray(),
-                8
-            ) as $subject) {
-                $force = $faker->randomElement([0, 1]);
-                $subjects[$subject] = [
-                    'force' => $force,
-                    'semester' => $force ? null : $faker->randomElement(
-                        range(
-                            config('config.student_register_start_semester'),
-                            config('config.max_semester')
-                        )
-                    ),
-                ];
-            }
-            $specialization->subjects()->attach($subjects);
-        });
+                    ->pluck('id');
+                $specialization->subjects()->attach($basicSubject);
+                $specializationSubject = $faker->randomElements(
+                    Subject::whereType(config('subject.type.specialization'))
+                        ->get()
+                        ->pluck('id')
+                        ->toArray(),
+                    8
+                );
+                $specialization->subjects()->attach($specializationSubject);
+            });
     }
 }

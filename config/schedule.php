@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'type' => [
+        'main' => 0,
+        'retest' => 1,
+    ],
     'status' => [
         'new' => 0,
         'inprogress' => 1,

@@ -24,8 +24,7 @@ class Specialization extends Model
     public function subjects()
     {
         return $this->belongsToMany(Subject::class)
-            ->using(SpecializationSubject::class)
-            ->withPivot(['semester', 'force', 'id']);
+            ->using(SpecializationSubject::class);
     }
 
     public function classes()

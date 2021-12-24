@@ -198,6 +198,38 @@
                                 </p>
                             </a>
                         </li>
+                        <li class="nav-header text text-uppercase">Tín Chỉ</li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.schedules.index') }}" class="nav-link">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>
+                                    Lớp Tín Chỉ
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-chart-pie"></i>
+                                <p>
+                                    Đăng Ký Tín Chỉ
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.schedules.classes.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Năm 1, 2 (Lớp)</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.schedules.students.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Năm 3, 4, 5 (Sinh Viên)</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                         @can('process-request')
                         <li class="nav-header text text-uppercase">Super Admin</li>
                         <li class="nav-item">
@@ -276,38 +308,6 @@
                                     Sinh Viên
                                 </p>
                             </a>
-                        </li>
-                        <li class="nav-header text text-uppercase">Tín Chỉ</li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.schedules.index') }}" class="nav-link">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
-                                    Lớp Tín Chỉ
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-chart-pie"></i>
-                                <p>
-                                    Đăng Ký Tín Chỉ
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.schedules.classes.index') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Theo Lớp (Năm 1, 2)</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.schedules.students.index') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Theo Sinh Viên</p>
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
                     </ul>
                 </nav>

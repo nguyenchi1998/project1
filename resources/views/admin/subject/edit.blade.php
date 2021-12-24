@@ -18,6 +18,7 @@
             <div class="card-body">
                 {{ Form::open(['url' => route('admin.subjects.update', $subject->id) , 'method' => 'POST']) }}
                 @method('PUT')
+                @csrf
                 <div class="form-group">
                     <label for="name">Môn Học</label>
                     {{ Form::input('text', 'name', $subject->name, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Môn Học']) }}
@@ -25,6 +26,10 @@
                 <div class="form-group">
                     <label for="credit">Số Tín Chỉ</label>
                     {{ Form::input('number', 'credit', $subject->credit, ['class' => 'form-control', 'id' => 'credit', 'placeholder' => 'Sô Tín Chỉ', 'min' => 1]) }}
+                </div>
+                <div class="form-group">
+                    <label for="semester">Kỳ Học</label>
+                    {{ Form::select('semester', range_semester(config('config.start_semester'), config('config.max_semester')), $subject->semester, ['class' => 'form-control', 'id' => 'semester', 'placeholder' => 'Chọn Kỳ Học']) }}
                 </div>
                 <div class="form-group">
                     <label for="type">Loại Môn Học</label>
@@ -36,8 +41,8 @@
                 <div class="mt-3">
                     {{Form::submit('Xác Nhận', ['class'=> 'btn btn-outline-success mr-2']) }}
                     <a href="{{ route('admin.subjects.index') }}" class="btn btn-outline-dark">Huỷ Bỏ</a>
-                    {{ Form::close() }}
                 </div>
+                {{ Form::close() }}
             </div>
         </div>
     </div>

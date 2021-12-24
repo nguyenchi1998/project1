@@ -18,8 +18,9 @@ class CreateSubjectsTable extends Migration
             $table->string('name');
             $table->unsignedInteger('credit');
             $table->unsignedInteger('department_id')->nullable();
+            $table->boolean('force')->default(config('subject.unforce'));
+            $table->unsignedInteger('semester');
             $table->string('type')->nullable();
-            $table->unsignedInteger('semester')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

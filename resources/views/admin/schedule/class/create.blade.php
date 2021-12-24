@@ -1,13 +1,13 @@
 @extends('layouts.manager')
 @section('breadcrumb')
 <div class="col-sm-6">
-    <h1 class="m-0">Quản Lý Tín Chỉ</h1>
+    <h1 class="m-0">Đăng Ký Tín Chỉ</h1>
 </div>
 <div class="col-sm-6">
     <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
         <li class="breadcrumb-item active">
-            <a href="{{ route('admin.schedules.classes.index') }}">Danh Sách Lớp Học</a>
+            <a href="{{ route('admin.schedules.classes.index') }}">Lớp Đăng Ký</a>
         </li>
         <li class="breadcrumb-item active" aria-current="page">
             Đăng Ký
@@ -27,7 +27,7 @@
                                 <strong>Lớp</strong>:<span> {{ $class->name }}</span>
                             </div>
                             <div class="form-group">
-                                <strong>Kỳ Tiếp Theo</strong>:<span> {{ $class->semester }}</span>
+                                <strong>Kỳ Hiện Tại</strong>:<span> {{ $class->semester }}</span>
                             </div>
                         </div>
                         <div class="col-4">
@@ -43,11 +43,13 @@
                                 <strong>Số Tín Tối Đa Cho Phép</strong>:<span id="max_credit_register"> {{ config('credit.max_register') }}</span>
                             </div>
                             <div class="form-group">
-                                <strong>Số Tín Đăng Kí Hiện Tại:</strong> <span id="total_credit">0</span> <span class="d-none text text-danger" id="warning">Quá số tín chỉ cho phép</span>
+                                <strong>Số Tín Đăng Kí Hiện Tại:</strong> <span id="total_credit">{{ $totalRegisterSubjects }}</span> <span class="d-none text text-danger" id="warning">Quá số tín chỉ cho phép</span>
                             </div>
                         </div>
                     </div>
                 </div>
+                {{ Form::open(['url' => route('admin.schedules.classes.store', $class->id) , 'method' => 'POST']) }}
+                @csrf
                 <div class="table-responsive mb-3 table-scroll">
                     <table class="table table-bordered table-hover" id="subjects">
                         <thead>
@@ -59,22 +61,19 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($basicSubjects as $subject)
+                            @foreach($subjects as $subject)
                             <tr>
                                 <td>
                                     {{ $subject->name }}
-                                    {{ Form::text('subject_id', $subject->id, ['hidden' => true]) }}
                                 </td>
                                 <td>
                                     {{ $subject->department->name }}
-                                    {{ Form::text('schedule_id', $scheduleSubjects[$subject->id] ?? '', ['hidden' => true]) }}
                                 </td>
                                 <td>
                                     {{ $subject->credit }}
-                                    {{ Form::text('credit', $subject->credit, ['hidden' => true]) }}
                                 </td>
                                 <td class="text-center">
-                                    {{ Form::checkbox('checked', $subject->id, in_array($subject->id, array_keys($scheduleSubjects)), ['class' => 'selectSubject'])  }}
+                                    {{ Form::checkbox('subjectIds[]', $subject->id, in_array($subject->id, $classSubjectIds), ['class' => 'selectSubject'])  }}
                                 </td>
                             </tr>
                             @endforeach
@@ -84,63 +83,9 @@
                 <div class="mt-3 d-flex justify-content-end">
                     {{ Form::submit('Đăng Ký', ['id' => 'submit', 'class' => 'btn btn-outline-secondary']) }}
                 </div>
+                {{ Form::close() }}
             </div>
         </div>
     </div>
 </div>
-@endsection
-@section('script')
-<script>
-    jQuery(document).on('click', '#submit', function(event) {
-        event.preventDefault();
-        let subjects = [];
-        jQuery('#subjects').find('tbody tr').each(function(index, tr) {
-            let subject_id = jQuery(tr).find('' + 'td:eq(0)').find('input').val();
-            let selected = jQuery(tr).find('' + 'td:eq(3)').find('input').is(':checked');
-            if (selected)
-                subjects = [
-                    ...subjects,
-                    {
-                        subject_id
-                    }
-                ]
-        });
-        if (subjects.length)
-            $.ajax({
-                url: "{{ route('admin.schedules.classes.registerSchedule', $class->id) }}",
-                method: 'post',
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    subjects,
-                },
-                success: function() {
-                    window.location.href = "{{ route('admin.schedules.classes.index') }}"
-                },
-                error: function() {
-                    alert('Error');
-                }
-            })
-        else {
-            alert('Bạn chưa chọn môn học nào')
-        }
-
-    });
-
-    jQuery(document).on('change', '.selectSubject', function(event) {
-        event.preventDefault();
-        let total = jQuery('#subjects').find('tbody tr').filter(function(index, tr) {
-            return jQuery(tr).find('' + 'td:eq(3)').find('input').is(':checked');
-        }).toArray().reduce(function(total, tr) {
-            return total += Number(jQuery(tr).find('' + 'td:eq(2)').find('input').val());
-        }, 0);
-        jQuery('#total_credit').text(total)
-        if (total > parseInt(jQuery('#max_credit_register').text(), 10)) {
-            jQuery('#warning').removeClass('d-none')
-
-        } else {
-            jQuery('#warning').addClass('d-none')
-        }
-        jQuery('#submit').attr('disabled', total > parseInt(jQuery('#max_credit_register').text(), 10))
-    })
-</script>
 @endsection

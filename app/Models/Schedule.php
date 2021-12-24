@@ -21,6 +21,7 @@ class Schedule extends Model
         'class_id',
         'schedule_time',
         'status',
+        'semester',
     ];
 
     protected static function boot()
@@ -65,10 +66,5 @@ class Schedule extends Model
     public function subject()
     {
         return $this->belongsTo(Subject::class);
-    }
-
-    public function specializationSubject()
-    {
-        return $this->belongsTo(SpecializationSubject::class);
     }
 }

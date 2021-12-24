@@ -1,12 +1,12 @@
 @extends('layouts.manager')
 @section('breadcrumb')
 <div class="col-sm-6">
-    <h1 class="m-0">Quản Lý Tín Chỉ</h1>
+    <h1 class="m-0">Đăng Ký Tín Chỉ</h1>
 </div>
 <div class="col-sm-6">
     <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
-        <li class="breadcrumb-item active">Danh Sách Sinh Viên</li>
+        <li class="breadcrumb-item active">Sinh Viên Đăng Ký</li>
     </ol>
 </div>
 @endsection
@@ -33,6 +33,7 @@
                             <tr>
                                 <th>Sinh Viên</th>
                                 <th>Khóa</th>
+                                <th>Kỳ Hiện Tại</th>
                                 <th>Chuyên Ngành</th>
                                 <th>Môn Đăng Ký</th>
                                 <th>Trạng Thái Đăng Ký</th>
@@ -47,6 +48,9 @@
                                 </td>
                                 <td>
                                     {{ $student->grade->name }}
+                                </td>
+                                <td>
+                                    {{ $student->class->semester }}
                                 </td>
                                 <td>
                                     {{ $student->class->specialization->name }}
@@ -64,7 +68,7 @@
                                     </form>
                                 </td>
                                 <td class="text-center" style="width: 180px;">
-                                    <a href="{{ route('admin.schedules.students.registerScheduleShow', $student->id) }}" class="btn btn-outline-success">
+                                    <a href="{{ route('admin.schedules.students.show', $student->id) }}" class="btn btn-outline-success">
                                         Danh Sách Tín Chỉ
                                     </a>
                                 </td>

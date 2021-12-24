@@ -30,38 +30,34 @@
                         </div>
                     </div>
                 </div>
+                {{ Form::open(['url' => route('admin.specializations.choose_subject', $specialization->id) , 'method' => 'POST']) }}
+                @csrf
                 <div class="table-responsive table-scroll">
-                    {{ Form::open(['url' => route('admin.specializations.choose_subject', $specialization->id) , 'method' => 'POST']) }}
-                    @method('PUT')
+
                     <table class="table table-bordered" id="subjects">
                         <thead>
                             <tr>
                                 <th>Môn Học</th>
                                 <th>Số Tín Chỉ</th>
                                 <th>Loại</th>
-                                <th>Kỳ Học</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($subjects as $key => $subject)
+                            @foreach($subjects as $subject)
                             <tr>
                                 <td>
                                     <div class="form-check form-check-info m-0" style="min-width: 400px">
                                         <label class="form-check-label">
-                                            {{ Form::checkbox('subject_id', $subject->id, $subject->choose, ['class'=>'form-check-input selectedSubject']) }}
+                                            {{ Form::checkbox('subjectIds[]', $subject->id, in_array($subject->id, $specializationSubjects), ['class'=>'form-check-input selectedSubject']) }}
                                             <span class="{{ modelTrash($subject) }}">{{ $subject->name }}</span>
                                         </label>
                                     </div>
                                 </td>
                                 <td style="width: 150px">
                                     {{ $subject->credit }}
-                                    {{ Form::text('basic', $subject->type, ['hidden' => true]) }}
                                 </td>
                                 <td style="width: 150px">
                                     {{ $subject->type ? 'Chuyên Ngành' : 'Đại Cương' }}
-                                </td>
-                                <td style="width: 180px">
-                                    {{ Form::select('semester', $subject->type  == config('subject.type.basic') ? $basicSemesters : $specializationSemesters, $subject->semester, ['class'=> 'form-control  semester', 'placeholder' => 'Tự Do']) }}
                                 </td>
                             </tr>
                             @endforeach
@@ -71,60 +67,11 @@
                 <div class="mt-3 float-right">
                     {{Form::submit('Xác Nhận', ['id' => 'submit', 'class'=> 'btn btn-outline-success mr-2']) }}
                     <a href="{{ route('admin.specializations.index') }}" class="btn btn-outline-dark">Huỷ Bỏ</a>
-                    {{ Form::close() }}
+
                 </div>
+                {{ Form::close() }}
             </div>
         </div>
     </div>
 </div>
-@endsection
-@section('script')
-<script>
-    jQuery(document).on('click', '#submit', function(event) {
-        event.preventDefault();
-        let subjects = {};
-        jQuery('#subjects').find('tbody tr')
-            .each(function(index, tr) {
-                let subject_id = jQuery(tr).find('' + 'td:first-child').find('input').val();
-                let isBasic = jQuery(tr).find('' + 'td:eq(1)').find('input').val();
-                let semester = jQuery(tr).find('' + 'td:eq(3)').find('.semester option:selected').val();
-                let selected = jQuery(tr).find('' + 'td:first-child').find('input').is(':checked');
-                if (selected)
-                    subjects = {
-                        ...subjects,
-                        [subject_id]: {
-                            force: !!(!isBasic || (isBasic && semester)),
-                            semester: semester ? Number(semester) : null,
-                        }
-                    }
-            });
-        $.ajax({
-            url: "{{ route('admin.specializations.choose_subject', $specialization->id) }}",
-            method: 'post',
-            data: {
-                _token: "{{ csrf_token() }}",
-                subjects,
-            },
-            success: function({
-                status,
-                message
-            }) {
-                if (status)
-                    window.location.href = "{{ route('admin.redirect_route', 'admin.specializations.index') }}";
-                else
-                    alert(message);
-            },
-            error: function({
-                responseJSON,
-                status
-            }) {
-                if (status == 422) {
-                    alert(Object.values(responseJSON.errors)[0][0])
-                } else {
-                    alert('Xử lý thất bại');
-                }
-            }
-        });
-    });
-</script>
 @endsection
