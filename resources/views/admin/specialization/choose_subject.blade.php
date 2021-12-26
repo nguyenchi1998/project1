@@ -5,8 +5,12 @@
 </div>
 <div class="col-sm-6">
     <ol class="breadcrumb float-sm-right">
-        <li class="breadcrumb-item"><a href="#">Bảng Điều Khiển</a></li>
-        <li class="breadcrumb-item"><a href="#">Danh Sách Chuyên Ngành</a></li>
+        <li class="breadcrumb-item">
+            <a href="#">Bảng Điều Khiển</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="#">Danh Sách Chuyên Ngành</a>
+        </li>
         <li class="breadcrumb-item active">Chọn Môn Học</li>
     </ol>
 </div>
@@ -30,10 +34,12 @@
                         </div>
                     </div>
                 </div>
-                {{ Form::open(['url' => route('admin.specializations.choose_subject', $specialization->id) , 'method' => 'POST']) }}
+                {{ Form::open([
+                        'url' => route('admin.specializations.choose_subject', $specialization->id),
+                        'method' => 'POST',
+                    ]) }}
                 @csrf
                 <div class="table-responsive table-scroll">
-
                     <table class="table table-bordered" id="subjects">
                         <thead>
                             <tr>
@@ -43,12 +49,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($subjects as $subject)
+                            @foreach ($subjects as $subject)
                             <tr>
                                 <td>
                                     <div class="form-check form-check-info m-0" style="min-width: 400px">
                                         <label class="form-check-label">
-                                            {{ Form::checkbox('subjectIds[]', $subject->id, in_array($subject->id, $specializationSubjects), ['class'=>'form-check-input selectedSubject']) }}
+                                            {{ Form::checkbox('subjectIds[]', $subject->id, in_array($subject->id, $specializationSubjects), [
+                                                        'class' => 'form-check-input selectedSubject',
+                                                    ]) }}
                                             <span class="{{ modelTrash($subject) }}">{{ $subject->name }}</span>
                                         </label>
                                     </div>
@@ -65,9 +73,11 @@
                     </table>
                 </div>
                 <div class="mt-3 float-right">
-                    {{Form::submit('Xác Nhận', ['id' => 'submit', 'class'=> 'btn btn-outline-success mr-2']) }}
+                    {{ Form::submit('Xác Nhận', [
+                            'id' => 'submit',
+                            'class' => 'btn btn-outline-success mr-2',
+                        ]) }}
                     <a href="{{ route('admin.specializations.index') }}" class="btn btn-outline-dark">Huỷ Bỏ</a>
-
                 </div>
                 {{ Form::close() }}
             </div>

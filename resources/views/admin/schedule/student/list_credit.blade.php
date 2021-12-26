@@ -6,7 +6,7 @@
 <div class="col-sm-6">
     <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('admin.schedules.classes.index') }}">Sinh Viên Đăng Ký</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('admin.schedules.classes.index') }}">Đăng Ký Tín Chỉ Cho Sinh Viên</a></li>
         <li class="breadcrumb-item active">Danh Sách Tín Chỉ</li>
     </ol>
 </div>
@@ -39,52 +39,33 @@
                                 <th>Môn Học</th>
                                 <th>Số Tín Chỉ</th>
                                 <th>Mã Lớp</th>
-
                                 <th>Trạng Thái</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($schedules as $schedule)
+                            @forelse($scheduleDetails as $scheduleDetail)
                             <tr>
                                 <td>
-                                    {{ $schedule->subject->name }}
+                                    {{ $scheduleDetail->subject->name }}
                                 </td>
                                 <td>
-                                    {{ $schedule->credit ?? $schedule->subject->credit }}
+                                    {{ $scheduleDetail->credit ?? $scheduleDetail->subject->credit }}
                                 </td>
                                 <td>
-                                    {{ $schedule->schedule->code ?? 'Chưa có lớp' }}
+                                    {{ $scheduleDetail->schedule->code ?? 'Chưa có lớp' }}
                                 </td>
-                                <td style="width: 150px">
-                                    @switch($schedule->status)
-                                    @case(config('schedule.status.new'))
-                                    Mới Đăng Ký
-                                    @break
-                                    @case(config('schedule.status.inprogress'))
-                                    Đang Học
-                                    @break
-                                    @case(config('schedule.status.finish'))
-                                    Kết Thúc
-                                    @break
-                                    @case(config('schedule.status.marking'))
-                                    Đang Vào Điểm
-                                    @break
-                                    @default
-                                    Hoàn Thành
-                                    @endswitch
+                                <td style="width: 200px">
+                                    @if($scheduleDetail->register_status == config('schedule.detail.status.register.pending'))
+                                    Đăng Ký Thành Công
+                                    @else
+                                    Xếp Lớp Thành Công
+                                    @endif
                                 </td>
                                 <td style="width: 120px">
-                                    @if($schedule->status == config('schedule.status.done') || $schedule->status == config('schedule.status.marking'))
+                                    @if($scheduleDetail->register_status == config('schedule.status.new'))
                                     <div class="d-flex justify-content-center">
-                                        <a href="#" class="btn btn-outline-info">
-                                            Xem Điểm
-                                        </a>
-                                    </div>
-                                    @endif
-                                    @if($schedule->status == config('schedule.status.new'))
-                                    <div class="d-flex justify-content-center">
-                                        {{ Form::open(['url' => route('admin.schedules.students.destroy', ['studentId' => $student->id, 'scheduleDetailId' => $schedule->id]), 'method' => 'post']) }}
+                                        {{ Form::open(['url' => route('admin.schedules.students.destroy', ['student' => $student->id, 'scheduleDetail' => $scheduleDetail->id]), 'method' => 'post']) }}
                                         @csrf
                                         @method('delete')
                                         {{ Form::submit('Xóa', ['class' => 'btn btn-outline-info'])}}
@@ -102,7 +83,7 @@
                     </table>
                 </div>
                 <div class="mt-3 d-flex justify-content-end">
-                    {{ $schedules->appends(['specialization-filter' => $specializationFilter, 'semester-filter' => $semesterFilter, 'keyword' => $keyword])->links() }}
+                    {{ $scheduleDetails->appends(['specialization-filter' => $specializationFilter, 'semester-filter' => $semesterFilter, 'keyword' => $keyword])->links() }}
                 </div>
             </div>
         </div>

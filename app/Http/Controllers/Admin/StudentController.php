@@ -35,7 +35,9 @@ class StudentController extends Controller
     public function index(Request $request)
     {
         $specializationFilter = $request->get('specialization-filter');
-        $specializations = $this->specializationRepository->all()->pluck('name', 'id');
+        $specializations = $this->specializationRepository
+            ->all()
+            ->pluck('name', 'id');
         $keyword = $request->get('keyword');
         $students = $this->studentRepository->model()
             ->when($keyword, function ($query) use ($keyword) {
@@ -43,11 +45,17 @@ class StudentController extends Controller
                     ->orWhere('email', 'like', '%' . $keyword . '%')
                     ->orWhere('phone', $keyword);
             })
-            ->when($specializationFilter, function ($query) use ($specializationFilter) {
-                $query->whereHas('class.specialization', function ($query) use ($specializationFilter) {
-                    $query->whereId($specializationFilter);
-                });
-            })
+            ->when(
+                $specializationFilter,
+                function ($query) use ($specializationFilter) {
+                    $query->whereHas(
+                        'class.specialization',
+                        function ($query) use ($specializationFilter) {
+                            $query->whereId($specializationFilter);
+                        }
+                    );
+                }
+            )
             ->with('class.specialization')
             ->paginate(config('config.paginate'));
         $classes = $this->classRepository->all()->pluck('name', 'id');
@@ -62,7 +70,10 @@ class StudentController extends Controller
 
     public function create()
     {
-        $grades = $this->gradeRepository->all()->pluck('name', 'id')->toArray();
+        $grades = $this->gradeRepository
+            ->all()
+            ->pluck('name', 'id')
+            ->toArray();
 
         return view('admin.student.create', compact('grades'));
     }
@@ -71,9 +82,18 @@ class StudentController extends Controller
     {
         try {
             DB::beginTransaction();
-            $student = $this->studentRepository->create(array_merge($request->only([
-                'name', 'email', 'phone', 'birthday', 'address', 'gender', 'grade_id',
-            ]), ['password' => Hash::make(config('default.auth.password'))]));
+            $student = $this->studentRepository
+                ->create(array_merge($request->only([
+                    'name',
+                    'email',
+                    'phone',
+                    'birthday',
+                    'address',
+                    'gender',
+                    'grade_id',
+                ]), [
+                    'password' => Hash::make(config('default.auth.password'))
+                ]));
             $avatar = $request->file('avatar');
             $avatarFilename = $student->email . '.' . $avatar->getClientOriginalExtension();
             $path = $this->studentRepository->saveImage(
@@ -110,10 +130,16 @@ class StudentController extends Controller
             $student = $this->studentRepository->find($id)
                 ->load('avatar');
             $student->update($request->only([
-                'name', 'phone', 'birthday', 'address', 'gender', 'grade_id',
+                'name',
+                'phone',
+                'birthday',
+                'address',
+                'gender',
+                'grade_id',
             ]));
             if ($request->file('avatar')) {
-                $imageDeleted = $this->studentRepository->deleteImage($student->avatar->path);
+                $imageDeleted = $this->studentRepository
+                    ->deleteImage($student->avatar->path);
                 if (!$imageDeleted) {
                     throw new Exception('Error delete old image');
                 }

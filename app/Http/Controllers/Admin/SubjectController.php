@@ -31,20 +31,35 @@ class SubjectController extends Controller
         $departmentFilter = $request->get('department-filter');
         $typeFilter = $request->get('type-filter');
         $keyword = $request->get('keyword');
-        $departments = $this->departmentRepository->all()->pluck('name', 'id')
+        $departments = $this->departmentRepository
+            ->all()
+            ->pluck('name', 'id')
             ->toArray();
-        $subjects = $this->subjectRepository->withTrashedModel()
-            ->when($keyword, function ($query) use ($keyword) {
-                $query->where('name', 'like', '%' . $keyword . '%');
-            })
-            ->when($typeFilter != null, function ($query) use ($typeFilter) {
-                $query->where('type', $typeFilter);
-            })
-            ->when($departmentFilter, function ($query) use ($departmentFilter) {
-                $query->whereHas('department', function ($query) use ($departmentFilter) {
-                    $query->where('id', $departmentFilter);
-                });
-            })
+        $subjects = $this->subjectRepository
+            ->withTrashedModel()
+            ->when(
+                $keyword,
+                function ($query) use ($keyword) {
+                    $query->where('name', 'like', '%' . $keyword . '%');
+                }
+            )
+            ->when(
+                $typeFilter != null,
+                function ($query) use ($typeFilter) {
+                    $query->where('type', $typeFilter);
+                }
+            )
+            ->when(
+                $departmentFilter,
+                function ($query) use ($departmentFilter) {
+                    $query->whereHas(
+                        'department',
+                        function ($query) use ($departmentFilter) {
+                            $query->where('id', $departmentFilter);
+                        }
+                    );
+                }
+            )
             ->with('department')
             ->paginate(config('config.paginate'));
 
@@ -62,7 +77,9 @@ class SubjectController extends Controller
         $departments = $this->departmentRepository->all()
             ->pluck('name', 'id');
 
-        return view('admin.subject.create', compact('departments'));
+        return view('admin.subject.create', compact(
+            'departments'
+        ));
     }
 
     public function store(Request $request)
@@ -92,7 +109,8 @@ class SubjectController extends Controller
     public function update(Request $request, $id)
     {
         DB::beginTransaction();
-        $subject = $this->subjectRepository->find($id);
+        $subject = $this->subjectRepository
+            ->find($id);
         $subject->update($request->only([
             'name',
             'credit',
@@ -105,7 +123,8 @@ class SubjectController extends Controller
 
     public function destroy($id)
     {
-        $result = $this->subjectRepository->delete($id);
+        $result = $this->subjectRepository
+            ->delete($id);
         if ($result) {
             return $this->successRouteRedirect('admin.subjects.index');
         }

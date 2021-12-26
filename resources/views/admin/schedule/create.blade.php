@@ -5,9 +5,15 @@
 </div>
 <div class="col-sm-6">
     <ol class="breadcrumb float-sm-right">
-        <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('admin.schedules.index') }}">Danh Sách Lớp Tín Chỉ</a></li>
-        <li class="breadcrumb-item active">Tạo Mới</li>
+        <li class="breadcrumb-item">
+            <a href="{{ route('admin.home') }}">Bảng Điều Khiển</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{{ route('admin.schedules.index') }}">Danh Sách Lớp Tín Chỉ</a>
+        </li>
+        <li class="breadcrumb-item active">
+            Thêm
+        </li>
     </ol>
 </div>
 @endsection
@@ -32,11 +38,11 @@
                         </thead>
                         <tbody>
                             @forelse($scheduleDetails as $scheduleDetail)
-                            {{ Form::open(['url' => route('admin.schedules.register')]) }}
+                            {{ Form::open(['url' => route('admin.schedules.store')]) }}
                             <tr>
                                 <td>
                                     {{ $scheduleDetail['subject']['name'] }}
-                                    @foreach($scheduleDetail['schedule_details'] as $schedule_detail)
+                                    @foreach ($scheduleDetail['schedule_details'] as $schedule_detail)
                                     {{ Form::text('schedule_details[]', $schedule_detail, ['hidden' => true]) }}
                                     @endforeach
                                     {{ Form::text('subject_id', $scheduleDetail['subject']['id'], ['hidden' => true]) }}
@@ -51,7 +57,7 @@
                                     {{ Form::date('end_time', null, ['class' => 'form-control ']) }}
                                 </td>
                                 <td>
-                                    {{ Form::select('teacher_id', $scheduleDetail['subject']['teachers'], null, ['placeholder'=> 'Chọn Giảng Viên', 'class' => 'form-control ']) }}
+                                    {{ Form::select('teacher_id', $scheduleDetail['subject']['teachers'], null, ['placeholder' => 'Chọn Giảng Viên','class' => 'form-control ']) }}
                                 </td>
                                 <td style="width: 110px">
                                     <button class="btn btn-outline-success">
@@ -73,4 +79,5 @@
         </div>
     </div>
 </div>
-@endsection @section('script') @endsection
+@endsection @section('script')
+@endsection

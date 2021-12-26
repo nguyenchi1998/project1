@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\MarkExport;
 use App\Http\Controllers\Controller;
 use App\Repositories\IClassRepository;
 use App\Repositories\IScheduleDetailRepository;
@@ -42,14 +43,16 @@ class ScheduleController extends Controller
     {
         $hasScheduleDetails = count($this->calculateScheduleDetails());
         $classType = $request->get('class-type');
-        $status = $request->get('status');
+        $status = $request->get('status', config('schedule.status.new'));
         $keyword = $request->get('keyword');
-        $states = array_map(function ($item) {
-            return ucfirst($item);
-        }, array_flip(config('schedule.status')));
         $schedules = $this->scheduleRepository->model()
-            ->when($status, function ($query) use ($status) {
-                $query->where('status', $status);
+            ->where('status', $status)
+            ->where(function ($query) {
+                $query->whereHas('class', function ($query) {
+                    $query->inprogressClass();
+                })->orWhere(function ($query) {
+                    $query->doesntHave('class');
+                });
             })
             ->when($keyword, function ($query) use ($keyword) {
                 $query->where('code', $keyword)
@@ -69,7 +72,6 @@ class ScheduleController extends Controller
             ->paginate(config('config.paginate'));
 
         return view('admin.schedule.index', compact(
-            'states',
             'schedules',
             'status',
             'hasScheduleDetails',
@@ -145,13 +147,63 @@ class ScheduleController extends Controller
         }
     }
 
+    public function show($id)
+    {
+        $schedule = $this->scheduleRepository->find($id)
+            ->load('scheduleDetails');
+
+        return view('admin.schedule.show', compact(
+            'schedule'
+        ));
+    }
+
+    public function export($id)
+    {
+        $schedule = $this->scheduleRepository->find($id)
+            ->load('scheduleDetails.student');
+        $filename = $schedule->code . '-mark.xlsx';
+        $data = $schedule->scheduleDetails->map(function ($scheduleDetail) {
+            $item['code'] = $scheduleDetail->student->code;
+            $item['name'] = $scheduleDetail->student->name;
+            $item['mark'] = result_mark(
+                $scheduleDetail->activity_mark,
+                $scheduleDetail->middle_mark,
+                $scheduleDetail->final_mark
+            );
+
+            return $item;
+        });
+
+        return (new MarkExport($data))->download($filename);
+    }
+
     public function edit($id)
     {
         $schedule = $this->scheduleRepository->find($id);
         $teachers = $schedule->subject->teachers->pluck('name', 'id')
             ->toArray();
 
-        return view('admin.schedule.edit', compact('schedule', 'teachers'));
+        return view('admin.schedule.edit', compact(
+            'schedule',
+            'teachers'
+        ));
+    }
+
+    public function update(Request $request, $scheduleId)
+    {
+        $schedule = $this->scheduleRepository->find($scheduleId);
+        $schedule->update(
+            array_merge(
+                $request->only(['teacher_id', 'start_time', 'end_time']),
+                [
+                    'status' => $request->status ?? ($schedule->teacher
+                        && $schedule->start_time
+                        ? config('schedule.status.inprogress') : $schedule->status),
+                ]
+            )
+        );
+
+        return $this->successRouteRedirect('admin.schedules.index');
     }
 
     public function destroy($id)
@@ -183,19 +235,5 @@ class ScheduleController extends Controller
         $this->scheduleRepository->update($id, [
             'schedule_time' => json_encode($request->get('timeschedules'))
         ]);
-    }
-
-    public function setTeacher(Request $request, $id)
-    {
-        $this->scheduleRepository->update($id, $request->only('teacher_id'));
-
-        return $this->successRouteRedirect('admin.schedules.index');
-    }
-
-    public function statusSchedule(Request $request, $id)
-    {
-        $this->scheduleRepository->update($id, $request->only('status'));
-
-        return $this->successRouteRedirect('admin.schedules.index');
     }
 }

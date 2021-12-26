@@ -25,7 +25,7 @@
                             </button>
                         </form>
                     </div>
-                    <a class="btn Tìm Kiếmd-flex align-items-center btn-outline-success" href="{{ route('admin.specializations.create') }}">Tạo Mới</a>
+                    <a class="btn Tìm Kiếmd-flex align-items-center btn-outline-success" href="{{ route('admin.specializations.create') }}"><i class="fa fa-plus"></i></a>
                 </div>
                 <div class="table-responsive table-scroll">
                     <table class="table table-bordered table-hover">
@@ -33,8 +33,8 @@
                             <tr>
                                 <th>Chuyên Ngành</th>
                                 <th>Viện</th>
-                                <th>Số Môn Học</th>
-                                <th>Số Tín Chỉ Tối Thiểu</th>
+                                <th>Môn Học</th>
+                                <th>Tín Chỉ Tối Thiểu</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -63,16 +63,16 @@
                                             </button>
                                         </form>
                                         @else
-                                        <div class="mr-2">
+                                        <div class="mr-1">
                                             <a href="{{ route('admin.specializations.edit', $specialization->id) }}" class="btn btn-outline-warning">
-                                                Sửa
+                                                <i class="fa fa-edit"></i>
                                             </a>
                                         </div>
                                         <form action="{{ route('admin.specializations.destroy', $specialization->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-outline-danger">
-                                                Xóa
+                                                <i class="fa fa-trash"></i>
                                             </button>
                                         </form>
                                         @endif

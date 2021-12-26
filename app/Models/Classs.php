@@ -38,4 +38,9 @@ class Classs extends Model
     {
         return $this->where('semester', '<=', config('config.class_register_limit_semester'));
     }
+
+    public function scopeInprogressClass($query, $finish = false)
+    {
+        return $query->where('finish', $finish);
+    }
 }

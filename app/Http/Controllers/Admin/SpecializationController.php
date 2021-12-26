@@ -60,12 +60,14 @@ class SpecializationController extends Controller
     {
         try {
             DB::beginTransaction();
-            $specialization = $this->specializationRepository->create($request->only([
-                'name',
-                'min_credit',
-                'department_id',
-            ]));
-            $basicSubjectIds = $this->subjectRepository->model()
+            $specialization = $this->specializationRepository
+                ->create($request->only([
+                    'name',
+                    'min_credit',
+                    'department_id',
+                ]));
+            $basicSubjectIds = $this->subjectRepository
+                ->model()
                 ->basicSubjects()
                 ->get()
                 ->reduce(function ($subjects, $subject) {
@@ -76,7 +78,8 @@ class SpecializationController extends Controller
 
                     return $subjects;
                 }, []);
-            $specialization->subjects()->sync($basicSubjectIds);
+            $specialization->subjects()
+                ->sync($basicSubjectIds);
             DB::commit();
 
             return $this->successRouteRedirect('admin.specializations.index');
@@ -89,22 +92,26 @@ class SpecializationController extends Controller
 
     public function edit($id)
     {
-        $specialization = $this->specializationRepository->find($id);
+        $specialization = $this->specializationRepository
+            ->find($id);
         if ($specialization) {
             $specialization = $specialization->load('subjects');
         }
 
-        return view('admin.specialization.edit', compact('specialization'));
+        return view('admin.specialization.edit', compact(
+            'specialization'
+        ));
     }
 
     public function update(Request $request, $id)
     {
         try {
             DB::beginTransaction();
-            $this->specializationRepository->update($id, $request->only([
-                'name',
-                'min_credit',
-            ]));
+            $this->specializationRepository
+                ->update($id, $request->only([
+                    'name',
+                    'min_credit',
+                ]));
             DB::commit();
 
             return $this->successRouteRedirect('admin.specializations.index');
@@ -128,7 +135,8 @@ class SpecializationController extends Controller
 
     public function restore($id)
     {
-        $result = $this->specializationRepository->restore($id);
+        $result = $this->specializationRepository
+            ->restore($id);
         if ($result) {
             return $this->successRouteRedirect('admin.specializations.index');
         }
@@ -138,10 +146,13 @@ class SpecializationController extends Controller
 
     public function chooseSubjectShow($id)
     {
-        $subjects = $this->subjectRepository->allWithTrashed();
-        $specialization = $this->specializationRepository->find($id)
+        $subjects = $this->subjectRepository
+            ->allWithTrashed();
+        $specialization = $this->specializationRepository
+            ->find($id)
             ->load('subjects');
-        $specializationSubjects = $specialization->subjects->pluck('id')
+        $specializationSubjects = $specialization->subjects
+            ->pluck('id')
             ->toArray();
 
         return view('admin.specialization.choose_subject', compact(
@@ -153,7 +164,8 @@ class SpecializationController extends Controller
 
     public function chooseSubject(ChooseSubject $request, $id)
     {
-        $specialization = $this->specializationRepository->find($id);
+        $specialization = $this->specializationRepository
+            ->find($id);
         $specialization->subjects()
             ->sync($request->get('subjectIds'));
 

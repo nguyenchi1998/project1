@@ -30,7 +30,7 @@
                             </button>
                         </form>
                     </div>
-                    <a class="btn Tìm Kiếmd-flex align-items-center btn-outline-success" href="{{ route('admin.subjects.create') }}">Tạo Mới</a>
+                    <a class="btn Tìm Kiếmd-flex align-items-center btn-outline-success" href="{{ route('admin.subjects.create') }}"><i class="fa fa-plus"></i></a>
                 </div>
                 <div class="table-responsive table-scroll">
                     <table class="table table-bordered table-hover">
@@ -78,7 +78,7 @@
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-outline-danger">
-                                                    Xóa
+                                                    <i class="fa fa-trash"></i>
                                                 </button>
                                             </form>
                                         </div>

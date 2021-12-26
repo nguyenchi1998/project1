@@ -70,7 +70,7 @@
                                                 @csrf()
                                                 {{ Form::text('student_id', $student->id, ['hidden' => true]) }}
                                                 <button type="submit" class="btn btn-outline-danger">
-                                                    Xóa
+                                                    <i class="fa fa-trash"></i>
                                                 </button>
                                             </form>
                                         </div>

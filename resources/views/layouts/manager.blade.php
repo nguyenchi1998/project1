@@ -92,7 +92,9 @@
                                         <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
                                     </h3>
                                     <p class="text-sm">Call me whenever you can...</p>
-                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                                    <p class="text-sm text-muted">
+                                        <i class="far fa-clock mr-1"></i> 4 Hours Ago
+                                    </p>
                                 </div>
                             </div>
                             <!-- Message End -->
@@ -108,7 +110,9 @@
                                         <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
                                     </h3>
                                     <p class="text-sm">I got your message bro</p>
-                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                                    <p class="text-sm text-muted">
+                                        <i class="far fa-clock mr-1"></i> 4 Hours Ago
+                                    </p>
                                 </div>
                             </div>
                             <!-- Message End -->
@@ -124,7 +128,9 @@
                                         <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
                                     </h3>
                                     <p class="text-sm">The subject goes here</p>
-                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                                    <p class="text-sm text-muted">
+                                        <i class="far fa-clock mr-1"></i> 4 Hours Ago
+                                    </p>
                                 </div>
                             </div>
                             <!-- Message End -->
@@ -323,7 +329,7 @@
                         @yield('breadcrumb')
                     </div><!-- /.row -->
                 </div>
-                @if($errors->any())
+                @if ($errors->any())
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <i class="fa fa-exclamation-circle"></i> {{ $errors->first() }}
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -331,7 +337,7 @@
                     </button>
                 </div>
                 @endif
-                @if(session()->has('message'))
+                @if (session()->has('message'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     <i class="fa fa-check-circle"></i> {{ session()->get('message') }}
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">

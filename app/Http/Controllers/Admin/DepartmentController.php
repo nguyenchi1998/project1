@@ -10,19 +10,24 @@ class DepartmentController extends Controller
 {
     protected $departmentRepository;
 
-    public function __construct(IDepartmentRepository $departmentRepository)
-    {
+    public function __construct(
+        IDepartmentRepository $departmentRepository
+    ) {
         $this->departmentRepository = $departmentRepository;
     }
 
     public function index(Request $request)
     {
         $keyword = $request->get('keyword');
-        $departments = $this->departmentRepository->where('name', 'like', '%' . $keyword . '%')
+        $departments = $this->departmentRepository
+            ->where('name', 'like', '%' . $keyword . '%')
             ->with(['teachers', 'manager'])
             ->paginate(config('config.paginate'));
 
-        return view('admin.department.index', compact('departments', 'keyword'));
+        return view('admin.department.index', compact(
+            'departments',
+            'keyword'
+        ));
     }
 
     public function create()
@@ -32,30 +37,37 @@ class DepartmentController extends Controller
 
     public function store(Request $request)
     {
-        $this->departmentRepository->create($request->only('name'));
+        $this->departmentRepository
+            ->create($request
+                ->only('name'));
 
-        return $this->successRouteRedirect('admin.departmants.index');
+        return $this->successRouteRedirect('admin.departments.index');
     }
 
     public function edit($id)
     {
         $department = $this->departmentRepository->find($id);
 
-        return view('admin.department.edit', compact('department'));
+        return view('admin.department.edit', compact(
+            'department'
+        ));
     }
 
     public function update(Request $request, $id)
     {
-        $this->departmentRepository->update($id, $request->only('name'));
+        $this->departmentRepository->update(
+            $id,
+            $request->only('name')
+        );
 
-        return $this->successRouteRedirect('admin.departmants.index');
+        return $this->successRouteRedirect('admin.departments.index');
     }
 
     public function destroy($id)
     {
         $result = $this->departmentRepository->delete($id);
         if ($result) {
-            return $this->successRouteRedirect('admin.departmants.index');
+            return $this->successRouteRedirect('admin.departments.index');
         }
 
         return $this->failRouteRedirect();
@@ -65,7 +77,7 @@ class DepartmentController extends Controller
     {
         $result = $this->departmentRepository->restore($id);
         if ($result) {
-            return $this->successRouteRedirect('admin.departmants.index');
+            return $this->successRouteRedirect('admin.departments.index');
         }
 
         return $this->failRouteRedirect();

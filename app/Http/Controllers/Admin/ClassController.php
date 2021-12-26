@@ -31,23 +31,33 @@ class ClassController extends Controller
     {
         $filterSpecialization = $request->get('specializaiton-filter');
         $keyword = $request->get('keyword');
-        $specializations = $this->specializationRepository->all()
+        $specializations = $this->specializationRepository
+            ->all()
             ->pluck('name', 'id')
             ->toArray();
-        $showCreateClassBtn = $this->studentRepository->model()
+        $showCreateClassBtn = $this->studentRepository
+            ->model()
             ->whereNull('class_id')
             ->get()
             ->count();
-        $classes = $this->classRepository->withTrashedModel()
+        $classes = $this->classRepository
+            ->withTrashedModel()
+            ->inprogressClass()
             ->when($keyword, function ($query) use ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%')
                     ->orWhere('code', $keyword);
             })
-            ->when($filterSpecialization, function ($query) use ($filterSpecialization) {
-                $query->whereHas('specialization', function ($query) use ($filterSpecialization) {
-                    $query->where('id', $filterSpecialization);
-                });
-            })
+            ->when(
+                $filterSpecialization,
+                function ($query) use ($filterSpecialization) {
+                    $query->whereHas(
+                        'specialization',
+                        function ($query) use ($filterSpecialization) {
+                            $query->where('id', $filterSpecialization);
+                        }
+                    );
+                }
+            )
             ->with(['students', 'specialization'])
             ->paginate(config('config.paginate'));
 
@@ -101,14 +111,19 @@ class ClassController extends Controller
             ->count();
         $class = $this->classRepository->find($id)->load('students');
 
-        return view('admin.class.show_students', compact('class', 'studentsNotHasClass'));
+        return view('admin.class.show_students', compact(
+            'class',
+            'studentsNotHasClass'
+        ));
     }
 
     public function edit($id)
     {
         $class = $this->classRepository->find($id);
 
-        return view('admin.class.edit', compact('class', 'students'));
+        return view('admin.class.edit', compact(
+            'class'
+        ));
     }
 
 
@@ -116,7 +131,10 @@ class ClassController extends Controller
     {
         try {
             DB::beginTransaction();
-            $this->classRepository->update($id, $request->only(['name']));
+            $this->classRepository->update(
+                $id,
+                $request->only(['name'])
+            );
             DB::commit();
 
             return $this->successRouteRedirect('admin.classes.index');
@@ -136,7 +154,10 @@ class ClassController extends Controller
             ]
         );
         if ($result) {
-            return $this->successRouteRedirect('admin.classes.students', [$id]);
+            return $this->successRouteRedirect(
+                'admin.classes.students',
+                [$id]
+            );
         }
 
         return $this->failRouteRedirect();
@@ -154,13 +175,28 @@ class ClassController extends Controller
 
     public function restore($id)
     {
-        $result = $this->classRepository->restore(
-            $id,
-        );
+        $result = $this->classRepository->restore($id);
         if ($result) {
             return $this->successRouteRedirect('admin.classes.index');
         }
 
         return $this->failRouteRedirect();
+    }
+
+    public function nextSemester()
+    {
+        $this->classRepository->model()->inprogressClass()
+            ->whereRaw('semester >= ?', [config('config.max_semester')])
+            ->update([
+                'finish' => true,
+            ]);
+        $this->classRepository->model()->inprogressClass()
+            ->whereRaw('semester < ?', [config('config.max_semester')])
+            ->update([
+                'semester' => DB::raw('semester + 1'),
+            ]);
+
+
+        return $this->successRouteRedirect('admin.classes.index');
     }
 }

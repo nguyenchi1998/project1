@@ -25,8 +25,14 @@
                             </button>
                         </form>
                     </div>
+                    <form action="{{ route('admin.classes.next_semester') }}" method="post">
+                        @csrf
+                        <button class="btn btn-outline-info" type="submit">
+                            Chuyển Kỳ Mới
+                        </button>
+                    </form>
                     @if($showCreateClassBtn)
-                    <a class="btn Tìm Kiếmd-flex align-items-center btn-outline-success" href="{{ route('admin.classes.create') }}">Tạo Mới</a>
+                    <a class="btn Tìm Kiếmd-flex align-items-center btn-outline-success" href="{{ route('admin.classes.create') }}"><i class="fa fa-plus"></i></a>
                     @endif
                 </div>
                 <div class="table-responsive table-scroll">
@@ -70,7 +76,7 @@
                                         </div>
                                         <div>
                                             <form action="{{ route('admin.classes.destroy', $class->id) }}">
-                                                <button type="submit" class="btn btn-outline-danger">Xóa</button>
+                                                <button type="submit" class="btn btn-outline-danger"><i class="fa fa-trash"></i></button>
                                             </form>
                                         </div>
                                     </div>

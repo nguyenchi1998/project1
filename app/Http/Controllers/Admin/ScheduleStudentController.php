@@ -51,10 +51,15 @@ class ScheduleStudentController extends Controller
         $filterSemester = $request->get('semester-filter');
         $filterGrade = $request->get('grade-filter');
         $keyword = $request->get('keyword');
-        $semesters = range_semester(config('config.student_register_start_semester'), config('config.max_semester'));
+        $semesters = range_semester(
+            config('config.student_register_start_semester'),
+            config('config.max_semester')
+        );
         $students = $this->studentRepository->model()
-            ->whereHas('class', function ($query) {
-                $query->where('semester', '>=', config('config.student_register_start_semester'));
+            ->when($filterSemester, function ($query) use ($filterSemester) {
+                $query->whereHas('class', function ($query) use ($filterSemester) {
+                    $query->where('semester', $filterSemester);
+                });
             })
             ->when($keyword, function ($query) use ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%')
@@ -63,11 +68,13 @@ class ScheduleStudentController extends Controller
             })
             ->paginate(config('config.paginate'));
         $students->getCollection()->transform(function ($student) {
-            $student->total_credit = $student->scheduleDetails->filter(function ($scheduleDetail) {
-                return $scheduleDetail->status_register == config('schedule.detail.status.register.pending');
-            })->sum(function ($schedule) {
-                return $schedule->subject->credit;
-            });
+            $student->total_credit = $student->scheduleDetails
+                ->filter(function ($scheduleDetail) {
+                    return $scheduleDetail->status_register == config('schedule.detail.status.register.pending');
+                })
+                ->sum(function ($schedule) {
+                    return $schedule->subject->credit;
+                });
 
             return $student;
         });
@@ -85,9 +92,14 @@ class ScheduleStudentController extends Controller
 
     public function show(Request $request, $studentId)
     {
-        $student = $this->studentRepository->find($studentId);
-        $class = $this->classRepository->find($student->class_id);
-        $semesterFilter = $request->get('semester-filter', $class->semester);
+        $student = $this->studentRepository
+            ->find($studentId);
+        $class = $this->classRepository
+            ->find($student->class_id);
+        $semesterFilter = $request->get(
+            'semester-filter',
+            $class->semester
+        );
         $specializationFilter = $request->get('specialization-filter');
         $keyword = $request->get('keyword');
         $semesters = range_semester(
@@ -96,17 +108,21 @@ class ScheduleStudentController extends Controller
             true,
             $class->semester
         );
-        $schedules = $this->scheduleDetailRepository->model()
+        $scheduleDetails = $this->scheduleDetailRepository
+            ->model()
             ->where('student_id', $student->id)
-            ->when($semesterFilter, function ($query) use ($semesterFilter) {
-                $query->where('semester', $semesterFilter);
-            })
+            ->when(
+                $semesterFilter,
+                function ($query) use ($semesterFilter) {
+                    $query->where('semester', $semesterFilter);
+                }
+            )
             ->with(['subject', 'schedule'])
             ->orderBy('register_status')
             ->paginate(config('config.paginate'));
 
         return view('admin.schedule.student.list_credit', compact(
-            'schedules',
+            'scheduleDetails',
             'keyword',
             'semesterFilter',
             'specializationFilter',
@@ -121,12 +137,15 @@ class ScheduleStudentController extends Controller
         $student = $this->studentRepository->find($id)
             ->load('scheduleDetails.subject');
         $class = $this->classRepository->find($student->class->id);
-        $studentRegisterSubjects = $this->scheduleDetailRepository->model()
+        $studentRegisterSubjects = $this->scheduleDetailRepository
+            ->model()
             ->where('student_id', $student->id)
             ->where('semester', $class->semester)
             ->with('subject')
             ->get();
-        $studentRegisterSubjectIds = $studentRegisterSubjects->pluck('subject.id')->toArray();
+        $studentRegisterSubjectIds = $studentRegisterSubjects
+            ->pluck('subject.id')
+            ->toArray();
         $subjects = $this->subjectRepository->model()
             ->where('semester', $class->semester)
             ->whereNotIn('id', $studentRegisterSubjectIds)
@@ -171,7 +190,7 @@ class ScheduleStudentController extends Controller
 
     public function destroy($studentId, $scheduleDetailId)
     {
-        $this->scheduleDetailRepository->delete($scheduleDetailId);
+        $this->scheduleDetailRepository->delete($scheduleDetailId, true);
 
         return $this->successRouteRedirect('admin.schedules.students.show', $studentId);
     }

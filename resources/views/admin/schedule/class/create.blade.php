@@ -48,7 +48,7 @@
                         </div>
                     </div>
                 </div>
-                {{ Form::open(['url' => route('admin.schedules.classes.store', $class->id) , 'method' => 'POST']) }}
+                {{ Form::open(['url' => route('admin.schedules.classes.store', $class->id), 'method' => 'POST']) }}
                 @csrf
                 <div class="table-responsive mb-3 table-scroll">
                     <table class="table table-bordered table-hover" id="subjects">
@@ -72,15 +72,15 @@
                                 <td>
                                     {{ $subject->credit }}
                                 </td>
-                                <td class="text-center">
-                                    {{ Form::checkbox('subjectIds[]', $subject->id, in_array($subject->id, $classSubjectIds), ['class' => 'selectSubject'])  }}
+                                <td width="50">
+                                    {{ Form::checkbox('subjectIds[]', $subject->id, in_array($subject->id, $classSubjectIds), ['class' => 'form-control'])  }}
                                 </td>
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
-                <div class="mt-3 d-flex justify-content-end">
+                <div class=" mt-3 d-flex justify-content-end">
                     @if(count($subjects))
                     {{ Form::submit('Đăng Ký', ['id' => 'submit', 'class' => 'btn btn-outline-secondary']) }}
                     @endif

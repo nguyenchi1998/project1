@@ -48,20 +48,31 @@ class ScheduleClassController extends Controller
         $semesterFilter = $request->get('semester-filter');
         $specializationFilter = $request->get('specialization-filter');
         $keyword = $request->get('keyword');
-        $semesters = range_semester(config('config.start_semester'), config('config.class_register_limit_semester'));
-        $classes = $this->classRepository->model()
+        $semesters = range_semester(
+            config('config.start_semester'),
+            config('config.class_register_limit_semester')
+        );
+        $classes = $this->classRepository
+            ->model()
             ->newbieClass()
             ->when($keyword, function ($query) use ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%');
             })
-            ->when($specializationFilter, function ($query) use ($specializationFilter) {
-                $query->whereHas('specialization', function ($query) use ($specializationFilter) {
-                    $query->whereId($specializationFilter);
-                });
-            })
+            ->when(
+                $specializationFilter,
+                function ($query) use ($specializationFilter) {
+                    $query->whereHas(
+                        'specialization',
+                        function ($query) use ($specializationFilter) {
+                            $query->whereId($specializationFilter);
+                        }
+                    );
+                }
+            )
             ->with(['students', 'schedules'])
             ->paginate(config('config.paginate'));
-        $specializations = $this->specializationRepository->all()
+        $specializations = $this->specializationRepository
+            ->all()
             ->pluck('name', 'id');
 
         return view('admin.schedule.class.index', compact(
@@ -77,7 +88,10 @@ class ScheduleClassController extends Controller
     public function show(Request $request, $classId)
     {
         $class = $this->classRepository->find($classId);
-        $semesterFilter = $request->get('semester-filter', $class->semester);
+        $semesterFilter = $request->get(
+            'semester-filter',
+            $class->semester
+        );
         $specializationFilter = $request->get('specialization-filter');
         $keyword = $request->get('keyword');
         $semesters = range_semester(
@@ -88,9 +102,12 @@ class ScheduleClassController extends Controller
         );
         $schedules = $this->scheduleRepository->model()
             ->where('class_id', $classId)
-            ->when($semesterFilter, function ($query) use ($semesterFilter) {
-                $query->where('semester', $semesterFilter);
-            })
+            ->when(
+                $semesterFilter,
+                function ($query) use ($semesterFilter) {
+                    $query->where('semester', $semesterFilter);
+                }
+            )
             ->with(['subject.specializations'])
             ->orderBy('status')
             ->paginate(config('config.paginate'));
@@ -107,11 +124,14 @@ class ScheduleClassController extends Controller
 
     public function create($classId)
     {
-        $class = $this->classRepository->find($classId);
-        $subjects = $this->subjectRepository->model()
+        $class = $this->classRepository
+            ->find($classId);
+        $subjects = $this->subjectRepository
+            ->model()
             ->where('semester', $class->semester)
             ->get();
-        $classSubjects = $this->scheduleRepository->model()
+        $classSubjects = $this->scheduleRepository
+            ->model()
             ->where('class_id', $classId)
             ->where('semester', $class->semester)
             ->with('subject')
@@ -134,24 +154,31 @@ class ScheduleClassController extends Controller
     {
         try {
             DB::beginTransaction();
-            $class = $this->classRepository->find($classId);
-            $subjects = $this->subjectRepository->whereIn(
-                'id',
-                $request->get('subjectIds')
-            )->get()->map(function ($subject) use ($class) {
-                $item['class_id'] = $class->id;
-                $item['subject_id'] = $subject->id;
-                $item['semester'] = $class->semester;
-                $item['credit'] = $subject->credit;
+            $class = $this->classRepository
+                ->find($classId);
+            $subjects = $this->subjectRepository
+                ->whereIn(
+                    'id',
+                    $request->get('subjectIds')
+                )->get()->map(function ($subject) use ($class) {
+                    $item['class_id'] = $class->id;
+                    $item['subject_id'] = $subject->id;
+                    $item['semester'] = $class->semester;
+                    $item['credit'] = $subject->credit;
 
-                return $item;
-            })->toArray();
+                    return $item;
+                })
+                ->toArray();
             foreach ($subjects as $subject) {
-                $this->scheduleRepository->model()->updateOrCreate($subject);
+                $this->scheduleRepository->model()
+                    ->updateOrCreate($subject);
             }
             DB::commit();
 
-            return $this->successRouteRedirect('admin.schedules.classes.show', $classId);
+            return $this->successRouteRedirect(
+                'admin.schedules.classes.show',
+                $classId
+            );
         } catch (Exception $e) {
             return $this->failRouteRedirect($e->getMessage());
         }
@@ -161,6 +188,9 @@ class ScheduleClassController extends Controller
     {
         $this->scheduleRepository->delete($scheduleId);
 
-        return $this->successRouteRedirect('admin.schedules.classes.show', $classId);
+        return $this->successRouteRedirect(
+            'admin.schedules.classes.show',
+            $classId
+        );
     }
 }

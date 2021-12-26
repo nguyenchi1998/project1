@@ -28,7 +28,11 @@ class GradeController extends Controller
             ->with('students')
             ->paginate(config('config.paginate'));
 
-        return view('admin.grade.index', compact('grades', 'keyword', 'states'));
+        return view('admin.grade.index', compact(
+            'grades',
+            'keyword',
+            'states'
+        ));
     }
 
     public function create()
@@ -48,7 +52,9 @@ class GradeController extends Controller
     {
         $grade = $this->gradeRepository->find($id);
 
-        return view('admin.grade.edit', compact('grade'));
+        return view('admin.grade.edit', compact(
+            'grade'
+        ));
     }
 
     public function update(Request $request, $id)

@@ -43,7 +43,7 @@
                     </div>
                     {{ Form::close() }}
                 </div>
-                {{ Form::open(['url' => route('credits.store'), 'method' => 'post']) }}
+                {{ Form::open(['url' => route('scheduleDetails.store'), 'method' => 'post']) }}
                 <div class="table-responsive table-scroll">
                     <table class="table table-bordered table-hover">
                         <thead>
@@ -65,10 +65,8 @@
                                 <td>
                                     {{ $subject->force ? 'Force' : 'Custom' }}
                                 </td>
-                                <td width="100">
-                                    <div class="text-center">
-                                        {{ Form::checkbox('subject_id[]', $subject->id, (boolean)$subject->force, ['onclick' => (boolean)$subject->force ? 'return false' : 'return true'])  }}
-                                    </div>
+                                <td width="50">
+                                    {{ Form::checkbox('subject_id[]', $subject->id, (boolean)$subject->force, ['onclick' => (boolean)$subject->force ? 'return false' : 'return true', 'class' => 'form-control'])  }}
                                 </td>
                             </tr>
                             @endforeach

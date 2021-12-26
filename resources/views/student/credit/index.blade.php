@@ -17,16 +17,19 @@
             <div class="card-body">
                 <div class="d-flex mb-3 justify-content-between">
                     <div class="">
-                        <form action="">
+                        <form action="" class="form-inline">
                             {{ Form::select('semester', $semester, $semesterFilter, ['placeholder' => 'Tất Cả Kỳ Học', 'class' =>'form-control ']) }}
                             <button class="ml-2 btn btn-outline-info" type="submit">
                                 <i class="fa fa-search"></i>
                             </button>
                         </form>
                     </div>
-                    @if(auth()->user()->grade->can_register_credit)
-                    <a class="btn Tìm Kiếmd-flex align-items-center btn-outline-success" href="{{ route('credits.create') }}">Đăng Ký</a>
+                    @if(auth()->user()->can_register_credit && $semesterFilter == $class->semester)
+                    <a class="btn d-flex align-items-center btn-outline-success" href="{{ route('scheduleDetails.credits.create') }}">Đăng Ký</a>
                     @endif
+                </div>
+                <div class="text-center">
+                    <h4>{{ ($semesterFilter == $class->semester ? 'Kỳ Hiện Tại - ' : ''). ' Kỳ '. $semesterFilter   }}</h4>
                 </div>
                 <div class="table-responsive table-scroll">
                     <table class="table table-bordered table-hover">
@@ -41,31 +44,38 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($credits as $credit)
+                            @forelse($scheduleDetails as $scheduleDetail)
                             <tr>
                                 <td>
-                                    {{ $credit->schedule->name ?? 'Chưa có thông tin' }}
+                                    {{ $scheduleDetail->schedule->code ?? 'Chưa có thông tin' }}
                                 </td>
                                 <td>
-                                    {{ $credit->schedule->start_time ?? 'Chưa có thông tin' }}
+                                    {{ $scheduleDetail->schedule->start_time ?? 'Chưa có thông tin' }}
                                 </td>
                                 <td>
-                                    {{ $credit->subject->name }}
+                                    {{ $scheduleDetail->subject->name }}
                                 </td>
                                 <td>
-                                    {{ $credit->subject->credit }}
+                                    {{ $scheduleDetail->subject->credit }}
                                 </td>
-                                <td>
-                                    {{ $credit->schedule->pending && isset($credit->schedule) ? 'Thành công' : 'Đang chờ xử lý' }}
+                                <td style="width: 200px">
+                                    @if($scheduleDetail->register_status == config('schedule.detail.status.register.pending'))
+                                    Đăng Ký Thành Công
+                                    @else
+                                    Xếp Lớp Thành Công
+                                    @endif
+                                </td>
                                 </td>
                                 <td style="width: 100px">
+                                    @if(!$scheduleDetail->schedule_id)
                                     <div class="d-flex justify-content-between">
-                                        {{ Form::open(['url' => route('credits.destroy', $credit->id), 'method' => 'post']) }}
+                                        {{ Form::open(['url' => route('scheduleDetails.credits.destroy', $scheduleDetail->id), 'method' => 'post']) }}
                                         @method('delete')
                                         @csrf
-                                        {{ Form::submit('Cancel', ['class' => 'btn btn-outline-danger']) }}
+                                        {{ Form::submit('Xóa', ['class' => 'btn btn-outline-danger']) }}
                                         {{ Form::close() }}
                                     </div>
+                                    @endif
                                 </td>
                             </tr>
                             @empty

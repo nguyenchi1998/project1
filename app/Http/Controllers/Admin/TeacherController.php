@@ -20,11 +20,11 @@ class TeacherController extends Controller
 
     public function __construct(
         IDepartmentRepository $departmentRepository,
-        ITeacherRepository $teacherRrpository,
+        ITeacherRepository $teacherRepository,
         ISubjectRepository $subjectRepository
     ) {
         $this->departmentRepository = $departmentRepository;
-        $this->teacherRepository = $teacherRrpository;
+        $this->teacherRepository = $teacherRepository;
         $this->subjectRepository = $subjectRepository;
     }
 
@@ -47,23 +47,39 @@ class TeacherController extends Controller
             ->paginate(config('config.paginate'));
         $departments = $this->departmentRepository->all()->pluck('name', 'id');
 
-        return view('admin.teacher.index', compact('teachers', 'departmentFilter', 'departments', 'keyword'));
+        return view('admin.teacher.index', compact(
+            'teachers',
+            'departmentFilter',
+            'departments',
+            'keyword'
+        ));
     }
 
     public function create()
     {
         $departments = $this->departmentRepository->all();
 
-        return view('admin.teacher.create', compact('departments'));
+        return view('admin.teacher.create', compact(
+            'departments'
+        ));
     }
 
     public function store(Request $request)
     {
         try {
             DB::beginTransaction();
-            $teacher = $this->teacherRepository->create(array_merge($request->only([
-                'name', 'email', 'phone', 'birthday', 'address', 'gender', 'department_id',
-            ]), ['password' => Hash::make(config('default.auth.password'))]));
+            $teacher = $this->teacherRepository
+                ->create(array_merge($request->only([
+                    'name',
+                    'email',
+                    'phone',
+                    'birthday',
+                    'address',
+                    'gender',
+                    'department_id',
+                ]), [
+                    'password' => Hash::make(config('default.auth.password'))
+                ]));
             $avatar = $request->file('avatar');
             $avatarFilename = $teacher->email . '.' . $avatar->getClientOriginalExtension();
             $path = $this->teacherRepository->saveImage(
@@ -93,30 +109,42 @@ class TeacherController extends Controller
         }
         $departments = $this->departmentRepository->all();
 
-        return view('admin.teacher.edit', compact('teacher', 'departments'));
+        return view('admin.teacher.edit', compact(
+            'teacher',
+            'departments'
+        ));
     }
 
     public function update(Request $request, $id)
     {
         $teacher = $this->teacherRepository->find($id)
             ->load('avatar');
-        $teacher->update($id, $request->only(['name', 'gender', 'birthday', 'address', 'phone']));
+        $teacher->update($id, $request->only([
+            'name',
+            'gender',
+            'birthday',
+            'address',
+            'phone'
+        ]));
         if ($request->file('avatar')) {
-            $imageDeleted = $this->teacherRepository->deleteImage($teacher->avatar->path);
+            $imageDeleted = $this->teacherRepository
+                ->deleteImage($teacher->avatar->path);
             if (!$imageDeleted) {
                 throw new Exception('Error delete old image');
             }
             $avatar = $request->file('avatar');
             $avatarFilename = $teacher->email . '.' . $avatar->getClientOriginalExtension();
-            $path = $this->studentRepository->saveImage(
-                $avatar,
-                $avatarFilename,
-                config('default.avatar_size'),
-                config('default.avatar_size')
-            );
-            $teacher->avatar()->update([
-                'path' => $path
-            ]);
+            $path = $this->studentRepository
+                ->saveImage(
+                    $avatar,
+                    $avatarFilename,
+                    config('default.avatar_size'),
+                    config('default.avatar_size')
+                );
+            $teacher->avatar()
+                ->update([
+                    'path' => $path
+                ]);
         }
 
         return redirect()->route('admin.teachers.index');
@@ -124,10 +152,16 @@ class TeacherController extends Controller
 
     public function changeDepartmentShow($id)
     {
-        $teacher = $this->teacherRepository->find($id)->load('department');
-        $departments = $this->departmentRepository->all();
+        $teacher = $this->teacherRepository
+            ->find($id)
+            ->load('department');
+        $departments = $this->departmentRepository
+            ->all();
 
-        return view('admin.teacher.change_department', compact('teacher', 'departments'));
+        return view('admin.teacher.change_department', compact(
+            'teacher',
+            'departments'
+        ));
     }
 
     public function changeDepartment(Request $request, $id)
@@ -136,11 +170,14 @@ class TeacherController extends Controller
         $isManager = $request->get('isManager');
         try {
             DB::beginTransaction();
-            $teacher = $this->teacherRepository->find($id)->load('department');
+            $teacher = $this->teacherRepository
+                ->find($id)
+                ->load('department');
             if ($teacher->next_department_id) {
-                return redirect()->back()->withErrors([
-                    'msg' => 'Teacher has department change, please contact to manager to handle'
-                ]);
+                return redirect()->back()
+                    ->withErrors([
+                        'msg' => 'Teacher has department change, please contact to manager to handle'
+                    ]);
             }
             if ($isManager) {
                 $this->departmentRepository->update($departmentId, [
@@ -173,7 +210,11 @@ class TeacherController extends Controller
             ->toArray();
         $subjects = $teacher->department->subjects;
 
-        return view('admin.teacher.choose_subject', compact('teacher', 'subjects', 'teacherSubjects'));
+        return view('admin.teacher.choose_subject', compact(
+            'teacher',
+            'subjects',
+            'teacherSubjects'
+        ));
     }
 
     public function chooseSubject(Request $request, $id)
@@ -187,13 +228,16 @@ class TeacherController extends Controller
 
     public function destroy($id)
     {
-        $result = $this->teacherRepository->delete($id);
+        $result = $this->teacherRepository
+            ->delete($id);
         if ($result) {
             return redirect()->route('admin.teachers.index');
         }
 
         return redirect()->route('admin.teachers.index')
-            ->withErrors(['msg' => 'Delete Error']);
+            ->withErrors([
+                'msg' => 'Delete Error'
+            ]);
     }
 
     public function restore($id)

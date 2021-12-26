@@ -25,7 +25,7 @@
                             </button>
                         </form>
                     </div>
-                    <a class="btn align-items-center d-flex btn-outline-success" href="{{ route('admin.grades.create') }}">Tạo Mới</a>
+                    <a class="btn align-items-center d-flex btn-outline-success" href="{{ route('admin.grades.create') }}"><i class="fa fa-plus"></i></a>
                 </div>
                 <div class="table-responsive table-scroll">
                     <table class="table table-bordered table-hover">
@@ -51,13 +51,13 @@
                                 <td style="width: 100px;">
                                     <div class="d-flex justify-content-between">
                                         <div class="mr-2">
-                                            <a href="{{ route('admin.grades.edit', $grade->id) }}" class="btn btn-outline-warning">Sửa</a>
+                                            <a href="{{ route('admin.grades.edit', $grade->id) }}" class="btn btn-outline-warning"><i class="fa fa-edit"></i></a>
                                         </div>
                                         <div>
                                             <form action="{{ route('admin.grades.destroy', $grade->id) }}" method="post">
                                                 @csrf
                                                 @method('delete')
-                                                <button class="btn btn-outline-danger">Xóa</button>
+                                                <button class="btn btn-outline-danger"><i class="fa fa-trash"></i></button>
                                             </form>
                                         </div>
                                     </div>

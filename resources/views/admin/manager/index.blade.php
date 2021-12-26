@@ -24,7 +24,7 @@
                             </button>
                         </form>
                     </div>
-                    <a class="btn Tìm Kiếmd-flex align-items-center btn-outline-success" href="{{ route('admin.managers.create') }}">Tạo Mới</a>
+                    <a class="btn Tìm Kiếmd-flex align-items-center btn-outline-success" href="{{ route('admin.managers.create') }}"><i class="fa fa-plus"></i></a>
                 </div>
                 <div class="table-responsive table-scroll">
                     <table class="table table-bordered table-hover">
@@ -60,14 +60,14 @@
                                 <td width="100">
                                     <div class="d-flex justify-content-between">
                                         <div class="mr-2">
-                                            <a href="{{ route('admin.managers.edit', $manager->id) }}" class="btn btn-outline-warning">Sửa</a>
+                                            <a href="{{ route('admin.managers.edit', $manager->id) }}" class="btn btn-outline-warning"><i class="fa fa-edit"></i></a>
                                         </div>
                                         <div>
                                             <form method="post" action="{{ route('admin.managers.destroy', $manager->id) }}">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-outline-danger">
-                                                    Xóa
+                                                    <i class="fa fa-trash"></i>
                                                 </button>
                                             </form>
                                         </div>

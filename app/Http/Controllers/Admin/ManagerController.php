@@ -44,8 +44,15 @@ class ManagerController extends Controller
         try {
             DB::beginTransaction();
             $manager = $this->managerRepository->create(array_merge($request->only([
-                'name', 'email', 'phone', 'birthday', 'address', 'gender'
-            ]), ['password' => Hash::make(config('default.auth.password'))]));
+                'name',
+                'email',
+                'phone',
+                'birthday',
+                'address',
+                'gender'
+            ]), [
+                'password' => Hash::make(config('default.auth.password'))
+            ]));
             $avatar = $request->file('avatar');
             $avatarFilename = $manager->email . '.' . $avatar->getClientOriginalExtension();
             $path = $this->managerRepository->saveImage(
@@ -80,7 +87,11 @@ class ManagerController extends Controller
             DB::beginTransaction();
             $manager = $this->managerRepository->find($id);
             $manager->update($id, $request->only([
-                'name', 'phone', 'birthday', 'address', 'gender'
+                'name',
+                'phone',
+                'birthday',
+                'address',
+                'gender'
             ]));
             $avatar = $request->file('avatar');
             $avatarFilename = $request->get('email') . '.' . $avatar->getClientOriginalExtension();

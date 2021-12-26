@@ -1,12 +1,12 @@
 @extends('layouts.manager')
 @section('breadcrumb')
 <div class="col-sm-6">
-    <h1 class="m-0">Đăng Ký Tín Chỉ</h1>
+    <h1 class="m-0">Đăng Ký Tín Chỉ Cho Sinh Viên</h1>
 </div>
 <div class="col-sm-6">
     <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
-        <li class="breadcrumb-item active">Sinh Viên Đăng Ký</li>
+        <li class="breadcrumb-item active">Đăng Ký Tín Chỉ Cho Sinh Viên</li>
     </ol>
 </div>
 @endsection
@@ -19,8 +19,8 @@
                     <div class="">
                         <form action="{{ route('admin.schedules.students.index') }}" class="form-inline">
                             <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
-                            {{ Form::select('semester', $semesters, $semester ?? null, ['class' => 'form-control  mr-2', 'placeholder' => 'Tất Cả Kỳ Học']) }}
-                            {{ Form::select('grade-filter', $grades, $filterGrade ?? null, ['class' => 'form-control mr-2', 'placeholder' => 'Tất Cả Khóa']) }}
+                            {{ Form::select('semester-filter', $semesters, $filterSemester, ['class' => 'form-control  mr-2', 'placeholder' => 'Tất Cả Kỳ Học']) }}
+                            {{ Form::select('grade-filter', $grades, $filterGrade , ['class' => 'form-control mr-2', 'placeholder' => 'Tất Cả Khóa']) }}
                             <button class="btn btn-outline-secondary" type="submit">
                                 <i class="fa fa-search"></i>
                             </button>
@@ -82,7 +82,7 @@
                     </table>
                 </div>
                 <div class="mt-3 d-flex justify-content-end">
-                    {{ $students->appends(['grade-filter' => $filterGrade, 'keyword' => $keyword])->links() }}
+                    {{ $students->appends(['semester-filter' => $filterSemester, 'grade-filter' => $filterGrade, 'keyword' => $keyword])->links() }}
                 </div>
             </div>
         </div>

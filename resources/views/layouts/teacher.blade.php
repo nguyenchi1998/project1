@@ -197,7 +197,6 @@
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     Bảng Điều Khiển
-                                    <span class="right badge badge-danger">New</span>
                                 </p>
                             </a>
                         </li>
@@ -207,7 +206,6 @@
                                 <i class="nav-icon far fa-calendar-alt"></i>
                                 <p>
                                     Lịch Giảng Dạy
-                                    <span class="badge badge-info right">2</span>
                                 </p>
                             </a>
                         </li>
@@ -225,7 +223,7 @@
                         @yield('breadcrumb')
                     </div><!-- /.row -->
                 </div>
-                @if($errors->any())
+                @if ($errors->any())
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <i class="fa fa-exclamation-circle"></i> {{ $errors->first() }}
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -233,7 +231,7 @@
                     </button>
                 </div>
                 @endif
-                @if(session()->has('message'))
+                @if (session()->has('message'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     <i class="fa fa-check-circle"></i> {{ session()->get('message') }}
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -249,14 +247,6 @@
                 </div>
             </section>
         </div>
-        <footer class="main-footer">
-            <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
-            All rights reserved.
-            <div class="float-right d-none d-sm-inline-block">
-                <b>Version</b> 3.2.0-rc
-            </div>
-        </footer>
-
         <!-- /.control-sidebar -->
     </div>
     <!-- ./wrapper -->

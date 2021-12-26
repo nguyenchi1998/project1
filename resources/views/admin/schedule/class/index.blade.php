@@ -1,12 +1,14 @@
 @extends('layouts.manager')
 @section('breadcrumb')
 <div class="col-sm-6">
-    <h1 class="m-0">Đăng Ký Tín Chỉ</h1>
+    <h1 class="m-0">Đăng Ký Tín Chỉ Cho Lớp Quản Lý</h1>
 </div>
 <div class="col-sm-6">
     <ol class="breadcrumb float-sm-right">
-        <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
-        <li class="breadcrumb-item active">Lớp Đăng Ký</li>
+        <li class="breadcrumb-item">
+            <a href="{{ route('admin.home') }}">Bảng Điều Khiển</a>
+        </li>
+        <li class="breadcrumb-item active">Đăng Ký Tín Chỉ Cho Lớp Quản Lý</li>
     </ol>
 </div>
 @endsection
@@ -19,8 +21,14 @@
                     <div class="">
                         <form action="{{ route('admin.schedules.classes.index') }}" class="form-inline">
                             <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
-                            {{ Form::select('semester-filter', $semesters, $semesterFilter, ['class' => 'form-control  mr-2', 'placeholder' => 'Tất Cả Kỳ Học']) }}
-                            {{ Form::select('specialization-filter', $specializations, $specializationFilter, ['class' => 'form-control mr-2', 'placeholder' => 'Tất Cả Chuyên Ngành']) }}
+                            {{ Form::select('semester-filter', $semesters, $semesterFilter, [
+                                    'class' => 'form-control  mr-2',
+                                    'placeholder' => 'Tất Cả Kỳ Học',
+                                ]) }}
+                            {{ Form::select('specialization-filter', $specializations, $specializationFilter, [
+                                    'class' => 'form-control mr-2',
+                                    'placeholder' => 'Tất Cả Chuyên Ngành',
+                                ]) }}
                             <button class="btn btn-outline-secondary" type="submit">
                                 <i class="fa fa-search"></i>
                             </button>
@@ -70,7 +78,11 @@
                     </table>
                 </div>
                 <div class="mt-3 d-flex justify-content-end">
-                    {{ $classes->appends(['specialization-filter' => $specializationFilter, 'semester-filter' => $semesterFilter, 'keyword' => $keyword])->links() }}
+                    {{ $classes->appends([
+                                'specialization-filter' => $specializationFilter,
+                                'semester-filter' => $semesterFilter,
+                                'keyword' => $keyword,
+                            ])->links() }}
                 </div>
             </div>
         </div>

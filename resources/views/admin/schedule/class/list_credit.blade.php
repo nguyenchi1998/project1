@@ -25,13 +25,18 @@
                             <div class="d-flex align-items-center">
                                 <strong class="mr-1">Kỳ Hiện Tại: </strong>
                                 <form action="">
-                                    {{ Form::select('semester-filter', $semesters, $semesterFilter, ['class' => 'form-control mr-2', 'onchange' => 'this.form.submit()']) }}
+                                    {{ Form::select('semester-filter', $semesters, $semesterFilter, [
+                                            'class' => 'form-control mr-2',
+                                            'onchange' => 'this.form.submit()',
+                                        ]) }}
                                 </form>
                             </div>
                         </div>
                     </div>
-                    @if($semesterFilter == $class->semester)
-                    <a class="btn h-100 btn-outline-success" href="{{ route('admin.schedules.classes.create', $class->id) }}">Đăng Ký</a>
+                    @if ($semesterFilter == $class->semester)
+                    <a class="btn h-100 btn-outline-success" href="{{ route('admin.schedules.classes.create', $class->id) }}">
+                        Đăng Ký
+                    </a>
                     @endif
                 </div>
                 <div class="table-responsive table-scroll">
@@ -62,31 +67,28 @@
                                     @case(config('schedule.status.new'))
                                     Mới Đăng Ký
                                     @break
+
                                     @case(config('schedule.status.inprogress'))
                                     Đang Học
                                     @break
+
                                     @case(config('schedule.status.finish'))
                                     Kết Thúc
                                     @break
+
                                     @case(config('schedule.status.marking'))
                                     Đang Vào Điểm
                                     @break
+
                                     @default
                                     Hoàn Thành
                                     @endswitch
                                 </td>
                                 <td style="width: 120px">
-                                    @if($schedule->status == config('schedule.status.done') || $schedule->status == config('schedule.status.marking'))
+                                    @if ($schedule->status == config('schedule.status.new'))
                                     <div class="d-flex justify-content-center">
-                                        <a href="#" class="btn btn-outline-info">
-                                            Xem Điểm
-                                        </a>
-                                    </div>
-                                    @endif
-                                    @if($schedule->status == config('schedule.status.new'))
-                                    <div class="d-flex justify-content-center">
-                                        <a href="{{ route('admin.schedules.classes.destroy', ['classId' => $class->id, 'scheduleId' => $schedule->id]) }}" class="btn btn-outline-info">
-                                            Xóa
+                                        <a href="{{ route('admin.schedules.classes.destroy', ['class' => $class->id, 'schedule' => $schedule->id]) }}" class="btn btn-outline-info">
+                                            <i class="fa fa-trash"></i>
                                         </a>
                                     </div>
                                     @endif
@@ -101,7 +103,7 @@
                     </table>
                 </div>
                 <div class="mt-3 d-flex justify-content-end">
-                    {{ $schedules->appends(['specialization-filter' => $specializationFilter, 'semester-filter' => $semesterFilter, 'keyword' => $keyword])->links() }}
+                    {{ $schedules->appends(['specialization-filter' => $specializationFilter,'semester-filter' => $semesterFilter,'keyword' => $keyword])->links() }}
                 </div>
             </div>
         </div>

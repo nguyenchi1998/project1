@@ -5,7 +5,9 @@
 </div>
 <div class="col-sm-6">
     <ol class="breadcrumb float-sm-right">
-        <li class="breadcrumb-item"><a href="#">Bảng Điều Khiển</a></li>
+        <li class="breadcrumb-item">
+            <a href="#">Bảng Điều Khiển</a>
+        </li>
         <li class="breadcrumb-item active">Danh Sách Giảng Viên</li>
     </ol>
 </div>
@@ -19,13 +21,13 @@
                     <div class="">
                         <form action="{{ route('admin.teachers.index') }}" class="form-inline">
                             <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
-                            {{ Form::select('department-filter', $departments, $departmentFilter, ['class' => 'form-control  mr-2', 'placeholder' => 'Tất Cả Viện']) }}
+                            {{ Form::select('department-filter', $departments, $departmentFilter, ['class' => 'form-control  mr-2','placeholder' => 'Tất Cả Viện']) }}
                             <button class="btn btn-outline-secondary" type="submit">
                                 <i class="fa fa-search"></i>
                             </button>
                         </form>
                     </div>
-                    <a class="btn Tìm Kiếmd-flex align-items-center btn-outline-success" href="{{ route('admin.teachers.create') }}">Tạo Mới</a>
+                    <a class="btn Tìm Kiếmd-flex align-items-center btn-outline-success" href="{{ route('admin.teachers.create') }}"><i class="fa fa-plus"></i></a>
                 </div>
                 <div class="table-responsive table-scroll">
                     <table class="table table-bordered table-hover">
@@ -39,7 +41,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($teachers as $teacher)
+                            @foreach ($teachers as $teacher)
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center">
@@ -56,8 +58,9 @@
                                     {{ $teacher->phone }}
                                 </td>
                                 <td>
-                                    {{ $teacher->department->name ?? '' }} @if($teacher->department->manager_id == $teacher->id)
-                                    <strong class="text text-danger ">(Viện Trưởng)</strong> @endif
+                                    {{ $teacher->department->name ?? '' }} @if ($teacher->department->manager_id == $teacher->id)
+                                    <strong class="text text-danger ">(Viện Trưởng)</strong>
+                                    @endif
                                 </td>
                                 <td style="width: 255px;">
                                     <div class="d-flex justify-content-between">
@@ -74,7 +77,7 @@
                                         <div>
                                             <form action="{{ route('admin.teachers.destroy', $teacher->id) }}">
                                                 <button type="submit" class="btn btn-outline-danger">
-                                                    Xóa
+                                                    <i class="fa fa-trash"></i>
                                                 </button>
                                             </form>
                                         </div>
@@ -91,4 +94,5 @@
             </div>
         </div>
     </div>
-    @endsection @section('script') @endsection
+    @endsection @section('script')
+    @endsection

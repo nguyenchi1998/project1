@@ -22,7 +22,7 @@
                             <i class="fa fa-search"></i>
                         </button>
                     </form>
-                    <a class="btn Tìm Kiếmd-flex align-items-center btn-outline-success" href="{{ route('admin.departments.create') }}">Tạo Mới</a>
+                    <a class="btn Tìm Kiếmd-flex align-items-center btn-outline-success" href="{{ route('admin.departments.create') }}"><i class="fa fa-plus"></i></a>
                 </div>
                 <div class="table-responsive table-scroll">
                     <table class="table table-bordered table-hover">
@@ -50,11 +50,11 @@
                                 <td>
                                     <div class="d-flex justify-content-between">
                                         <div class="mr-2">
-                                            <a href="{{ route('admin.departments.edit', $department->id) }}" class="btn btn-outline-warning">Sửa</a>
+                                            <a href="{{ route('admin.departments.edit', $department->id) }}" class="btn btn-outline-warning"><i class="fa fa-edit"></i></a>
                                         </div>
                                         <div>
                                             <form action="">
-                                                <button type="submit" class="btn btn-outline-danger">Xóa
+                                                <button type="submit" class="btn btn-outline-danger"><i class="fa fa-trash"></i>
                                                 </button>
                                             </form>
                                         </div>
