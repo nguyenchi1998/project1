@@ -1,16 +1,16 @@
 @extends('layouts.manager')
 @section('breadcrumb')
 <div class="col-sm-6">
-    <h1 class="m-0">Đăng Ký Tín Chỉ</h1>
+    <h1 class="m-0">Danh Sách Môn Học</h1>
 </div>
 <div class="col-sm-6">
     <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
         <li class="breadcrumb-item active">
-            <a href="{{ route('admin.schedules.students.index') }}">Sinh Viên Đăng Ký</a>
+            <a href="{{ route('admin.schedules.students.index') }}">Đăng Ký Tín Chỉ Cho Sinh Viên</a>
         </li>
         <li class="breadcrumb-item active" aria-current="page">
-            Đăng Ký Tín Chỉ
+            Danh Sách Môn Học
         </li>
     </ol>
 </div>
@@ -55,9 +55,9 @@
                         <thead>
                             <tr>
                                 <th>Môn Học</th>
+                                <th>Số Tín Chỉ</th>
                                 <th>Kỳ Học</th>
                                 <th>Lớp Tín Chỉ</th>
-                                <th>Số Tín Chỉ</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -69,23 +69,23 @@
                                     @if($subject->force)<span class="badge badge-danger">Bắt Buộc</span> @endif
                                 </td>
                                 <td>
+                                    {{ $subject->credit }}
+                                </td>
+                                <td>
                                     {{ $subject->semester ?? 'Tự Do' }}
                                 </td>
                                 <td>
                                     {{ ($subject->hasClass ? 'Đã' : 'Chưa') . ' có lớp' }}
                                 </td>
-                                <td>
-                                    {{ $subject->credit }}
-                                </td>
-                                <td class="text-center">
-                                    {{ Form::checkbox('subjectIds[]', $subject->id, $subject->isSelected, ['class' => 'selectSubject'])  }}
+                                <td width="50">
+                                    {{ Form::checkbox('subjectIds[]', $subject->id, $subject->isSelected, ['class' => 'form-control'])  }}
                                 </td>
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
-                <div class="mt-3 d-flex justify-content-end">
+                <div class=" mt-3 d-flex justify-content-end">
                     {{ Form::submit('Đăng Ký', ['id' => 'submit', 'class' => 'btn btn-outline-secondary']) }}
                 </div>
                 {{ Form::close() }}

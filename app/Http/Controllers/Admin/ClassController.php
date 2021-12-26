@@ -39,6 +39,7 @@ class ClassController extends Controller
             ->get()
             ->count();
         $classes = $this->classRepository->withTrashedModel()
+            ->inprogressClass()
             ->when($keyword, function ($query) use ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%')
                     ->orWhere('code', $keyword);
@@ -108,7 +109,7 @@ class ClassController extends Controller
     {
         $class = $this->classRepository->find($id);
 
-        return view('admin.class.edit', compact('class', 'students'));
+        return view('admin.class.edit', compact('class'));
     }
 
 
@@ -154,13 +155,28 @@ class ClassController extends Controller
 
     public function restore($id)
     {
-        $result = $this->classRepository->restore(
-            $id,
-        );
+        $result = $this->classRepository->restore($id);
         if ($result) {
             return $this->successRouteRedirect('admin.classes.index');
         }
 
         return $this->failRouteRedirect();
+    }
+
+    public function nextSemester()
+    {
+        $this->classRepository->model()->inprogressClass()
+            ->whereRaw('semester >= ?', [config('config.max_semester')])
+            ->update([
+                'finish' => true,
+            ]);
+        $this->classRepository->model()->inprogressClass()
+            ->whereRaw('semester < ?', [config('config.max_semester')])
+            ->update([
+                'semester' => DB::raw('semester + 1'),
+            ]);
+
+
+        return $this->successRouteRedirect('admin.classes.index');
     }
 }

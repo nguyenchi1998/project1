@@ -32,13 +32,14 @@
                         </div>
                     </div>
                 </div>
-                {{ Form::open(['url' => route('admin.teachers.choose_subject', $teacher->id) , 'method' => 'POST']) }}
-                @method('PUT')
+                {{ Form::open(['url' => route('admin.teachers.choose_subject', $teacher->id), 'method' => 'POST']) }}
                 <div class="table-responsive table-scroll">
                     <table class="table table-bordered" id="subjects">
                         <thead>
                             <tr>
                                 <th>Môn Học</th>
+                                <th>Số Tín Chỉ</th>
+                                <th>Kỳ Học</th>
                                 <th class="text-center">{{ Form::checkbox('all', null, false, ['id' => 'all']) }}</th>
                             </tr>
                         </thead>
@@ -46,10 +47,16 @@
                             @foreach($subjects as $key => $subject)
                             <tr>
                                 <td>
-                                    {{ $subject['name'] }}
+                                    {{ $subject->name }}
                                 </td>
-                                <td class="text-center">
-                                    {{ Form::checkbox('subject_id[]', $subject['id'], in_array($subject['id'], $teacherSubjects), ['class' => 'subject']) }}
+                                <td>
+                                    {{ $subject->credit }}
+                                </td>
+                                <td>
+                                    {{ $subject->semester }}
+                                </td>
+                                <td width="50">
+                                    {{ Form::checkbox('subject_id[]', $subject['id'], in_array($subject['id'], $teacherSubjects), ['class' => 'subject form-control']) }}
                                 </td>
                             </tr>
                             @endforeach

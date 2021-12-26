@@ -16,7 +16,7 @@
     <div class="col-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                {{ Form::open(['url' => route('admin.subjects.update', $subject->id) , 'method' => 'POST']) }}
+                {{ Form::open(['url' => route('admin.subjects.update', $subject->id), 'method' => 'POST']) }}
                 @method('PUT')
                 @csrf
                 <div class="form-group">

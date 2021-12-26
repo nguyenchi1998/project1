@@ -21,7 +21,7 @@
                         Danh Sách Môn Giảng Dạy
                     </a>
                 </div>
-                {{ Form::open(['url' => route('admin.specializations.update', $specialization->id) , 'method' => 'POST']) }}
+                {{ Form::open(['url' => route('admin.specializations.update', $specialization->id), 'method' => 'POST']) }}
                 @method('PUT')
                 {{ Form::text('id',$specialization->id, ['hidden'=>true]) }}
                 <div class="form-group">

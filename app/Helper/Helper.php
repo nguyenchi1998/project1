@@ -7,12 +7,34 @@ use App\Models\Student;
 use App\Models\Subject;
 use App\Models\Teacher;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
 
 if (!function_exists('getNameSchedule')) {
     function getNameSchedule($id)
     {
-        return array_flip(config('schedule.status'))[$id];
+        switch ($id) {
+            case config('schedule.status.new'): {
+                    $name = 'Mới Tạo';
+                    break;
+                }
+            case config('schedule.status.inprogress'): {
+                    $name = 'Đang Học';
+                    break;
+                }
+            case config('schedule.status.finish'): {
+                    $name = 'Học Xong';
+                    break;
+                }
+            case config('schedule.status.marking'): {
+                    $name = 'Vào Điểm';
+                    break;
+                }
+            default: {
+                    $name = 'Hoàn Thành';
+                    break;
+                }
+        }
+
+        return $name;
     }
 }
 
@@ -30,7 +52,7 @@ if (!function_exists('checkFinishMark')) {
 if (!function_exists('formatDateShow')) {
     function formatDateShow($date)
     {
-        return Carbon::createFromDate($date)->format(config('config.format_date_show'));
+        return $date ?  Carbon::createFromDate($date)->format(config('config.format_date_show')) : '__/__/____';
     }
 }
 
@@ -73,7 +95,16 @@ if (!function_exists('generate_code')) {
             Teacher::class => 'TC',
             Classs::class => 'CLA',
         ];
-        return $types[$type] .  str_pad($number, 4, "0", STR_PAD_LEFT);
+        return $types[$type] . str_pad($number, 4, "0", STR_PAD_LEFT);
+    }
+}
+
+if (!function_exists('result_mark')) {
+    function result_mark($activityMark, $middleMark, $finalMark)
+    {
+        $mark = ($activityMark + $middleMark * 4 + $finalMark * 5) / 10;
+
+        return $mark - floor($mark) < 0.5 ? floor($mark) : ($mark - floor($mark) > 0.5 ? ceil($mark) : $mark);
     }
 }
 
@@ -84,7 +115,7 @@ if (!function_exists('result_schedule_detail')) {
         if (!$activityMark || !$middleMark || !$finalMark) {
             $result = config('schedule.detail.status.result.relearn');
         } else {
-            $averageMark = ($activityMark + $middleMark * 4 + $finalMark * 5) / 10;
+            $averageMark = result_mark($activityMark, $middleMark, $finalMark);
             if ($averageMark >= 4) {
                 $result = config('schedule.detail.status.result.pass');
             } else {

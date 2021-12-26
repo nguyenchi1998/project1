@@ -17,7 +17,7 @@
             <div class="card-body">
                 <div class="d-flex mb-3 justify-content-between">
                     <div class="">
-                        <form action="">
+                        <form action="{{ route('marks.index') }}" class="form-inline">
                             {{ Form::select('semester', $semester, $semesterFilter, ['placeholder' => 'Tất Cả Kỳ Học','class' =>'form-control']) }}
                             <button class="ml-2 btn btn-outline-info" type="submit">
                                 <i class="fa fa-search"></i>
@@ -57,12 +57,12 @@
                                 </td>
                                 <td class="text-center">
                                     @if(isset($subject->result_status) && $subject->result_status == config('schedule.detail.status.result.relearn'))
-                                    {{ Form::open(['url' => route('credits.destroy', $subject->id)]) }}
+                                    {{ Form::open(['url' => route('scheduleDetails.destroy', $subject->id)]) }}
                                     {{ Form::submit('Relearn', ['class' => 'btn btn-outline-danger']) }}
                                     {{ Form::close() }}
                                     @endif()
                                     @if(isset($subject->result_status) && $subject->result_status == config('schedule.detail.status.result.retest'))
-                                    {{ Form::open(['url' => route('credits.destroy', $subject->id)]) }}
+                                    {{ Form::open(['url' => route('scheduleDetails.destroy', $subject->id)]) }}
                                     {{ Form::submit('Retest', ['class' => 'btn btn-outline-danger']) }}
                                     {{ Form::close() }}
                                     @endif()

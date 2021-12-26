@@ -16,97 +16,97 @@ Route::group(['as' => 'admin.'], function () {
         Route::resource('managers', 'ManagerController')
             ->except('show');
 
-        Route::get('teachers/{id}/change-department', 'TeacherController@changeDepartmentShow')
+        Route::get('teachers/{teacher}/change-department', 'TeacherController@changeDepartmentShow')
             ->name('teachers.change_department_show');
 
-        Route::put('teachers/{id}/change-department', 'TeacherController@changeDepartment')
+        Route::put('teachers/{teacher}/change-department', 'TeacherController@changeDepartment')
             ->name('teachers.change_department');
 
-        Route::get('teachers/{id}/choose-subject', 'TeacherController@chooseSubjectShow')
+        Route::get('teachers/{teacher}/choose-subject', 'TeacherController@chooseSubjectShow')
             ->name('teachers.choose_subject_show');
 
-        Route::post('teachers/{id}/choose-subject', 'TeacherController@chooseSubject')
+        Route::post('teachers/{teacher}/choose-subject', 'TeacherController@chooseSubject')
             ->name('teachers.choose_subject');
 
         Route::resource('schedules', 'ScheduleController')
-            ->only(['index', 'create', 'destroy', 'edit', 'update']);
+            ->only(['index', 'show', 'create', 'store', 'edit', 'update', 'destroy']);
 
-        Route::post('schedules/{id}/teacher', 'ScheduleController@setTeacher')
-            ->name('schedules.teacher');
+        Route::post('schedules/{schedule}/export', 'ScheduleController@export')
+            ->name('schedules.export');
 
-        Route::post('schedules/{id}/status', 'ScheduleController@statusSchedule')
-            ->name('schedules.status');
-
-        Route::post('schedules/store', 'ScheduleController@store')
-            ->name('schedules.register');
-
-        // Route::get('schedules/{id}/choose-time', 'ScheduleController@scheduleTimeShow')
+        // Route::get('schedules/{schedule}/choose-time', 'ScheduleController@scheduleTimeShow')
         //     ->name('schedules.scheduleTimeShow');
 
-        // Route::post('schedules/{id}/choose-time', 'ScheduleController@scheduleTime')
+        // Route::post('schedules/{schedule}/choose-time', 'ScheduleController@scheduleTime')
         //     ->name('schedules.scheduleTime');
 
-        Route::get('schedules/students', 'ScheduleStudentController@index')
+        Route::get('student-schedules', 'ScheduleStudentController@index')
             ->name('schedules.students.index');
 
-        Route::get('schedules/students/{id}/credit', 'ScheduleStudentController@show')
+        Route::get('student-schedules/{student}/credit', 'ScheduleStudentController@show')
             ->name('schedules.students.show');
 
-        Route::get('schedules/students/{id}/create', 'ScheduleStudentController@create')
+        Route::get('student-schedules/{student}/create', 'ScheduleStudentController@create')
             ->name('schedules.students.create');
 
-        Route::post('schedules/students/{id}', 'ScheduleStudentController@store')
+        Route::post('student-schedules/{student}', 'ScheduleStudentController@store')
             ->name('schedules.students.store');
 
-        Route::delete('schedules/students/{studentId}/credit/{scheduleDetailId}', 'ScheduleStudentController@destroy')
+        Route::delete('student-schedules/{student}/credit/{scheduleDetail}', 'ScheduleStudentController@destroy')
             ->name('schedules.students.destroy');
 
-        Route::post('schedules/students/{id}/status', 'ScheduleStudentController@creditStatus')
+        Route::post('student-schedules/{student}/status', 'ScheduleStudentController@creditStatus')
             ->name('schedules.students.creditStatus');
 
-        Route::get('schedules/class', 'ScheduleClassController@index')
+        Route::get('class-schedules', 'ScheduleClassController@index')
             ->name('schedules.classes.index');
 
-        Route::get('schedules/class/{id}/credit', 'ScheduleClassController@show')
+        Route::get('class-schedules/{class}/credit', 'ScheduleClassController@show')
             ->name('schedules.classes.show');
 
-        Route::delete('schedules/class/{classId}/credit/{scheduleId}', 'ScheduleClassController@destroy')
+        Route::delete('class-schedules/{class}/credit/{schedule}', 'ScheduleClassController@destroy')
             ->name('schedules.classes.destroy');
 
-        Route::get('schedules/class/{id}/create', 'ScheduleClassController@create')
+        Route::put('class-schedules/{schedule}', 'ScheduleClassController@update')
+            ->name('schedules.classes.update');
+
+        Route::get('class-schedules/{class}/create', 'ScheduleClassController@create')
             ->name('schedules.classes.create');
 
-        Route::post('schedules/class/{id}', 'ScheduleClassController@store')
+        Route::post('class-schedules/{class}', 'ScheduleClassController@store')
             ->name('schedules.classes.store');
 
         Route::resource('specializations', 'SpecializationController');
 
-        Route::post('specializations/{id}/restore', 'SpecializationController@restore')
+        Route::post('specializations/{specialization}/restore', 'SpecializationController@restore')
             ->name('specializations.restore');
 
-        Route::get('specializations/{id}/choose-subject', 'SpecializationController@chooseSubjectShow')
+        Route::get('specializations/{specialization}/choose-subject', 'SpecializationController@chooseSubjectShow')
             ->name('specializations.choose_subject_show');
 
-        Route::post('specializations/{id}/choose-subject', 'SpecializationController@chooseSubject')
+        Route::post('specializations/{specialization}/choose-subject', 'SpecializationController@chooseSubject')
             ->name('specializations.choose_subject');
 
         Route::resource('classes', 'ClassController')
             ->except('show');
 
-        Route::get('classes/{id}/students', 'ClassController@studentsShow')
+        Route::post('classes/next-semester', 'ClassController@nextSemester')
+            ->name('classes.next_semester');
+
+        Route::get('classes/{class}/students', 'ClassController@studentsShow')
             ->name('classes.students');
 
-        Route::post('classes/{id}/remove-student', 'ClassController@removeStudent')
+        Route::post('classes/{class}/remove-student', 'ClassController@removeStudent')
             ->name('classes.remove_student');
 
         Route::resource('grades', 'GradeController');
 
-        Route::post('grades/{id}/credit-status', 'GradeController@registerCreditStatus')
+        Route::post('grades/{grade}/credit-status', 'GradeController@registerCreditStatus')
             ->name('grades.creditStatus');
 
         Route::resource('departments', 'DepartmentController');
 
-        Route::post('departments/{id}/change-manager', 'DepartmentController@changeManager')
+        Route::post('departments/{department}/change-manager', 'DepartmentController@changeManager')
             ->name('departments.changeManager');
 
         Route::resource('students', 'StudentController')
@@ -116,10 +116,10 @@ Route::group(['as' => 'admin.'], function () {
             Route::get('', 'RequestController@index')
                 ->name('index');
 
-            Route::post('/departmentManager/{departmentId}', 'RequestController@departmentManager')
+            Route::post('/departmentManager/{department}', 'RequestController@departmentManager')
                 ->name('departmentManager');
 
-            Route::post('/departmentTeacher/{teacherId}', 'RequestController@departmentTeacher')
+            Route::post('/departmentTeacher/{teacher}', 'RequestController@departmentTeacher')
                 ->name('departmentTeacher');
         });
     });
@@ -132,8 +132,8 @@ Route::group(['as' => 'admin.'], function () {
 
     Route::get('logout', 'LoginController@logout')
         ->name('logout');
-
-    Route::get('register_success/{route}', function ($route) {
-        return redirect()->route($route)->with(['message' => 'Xử Lý Thành Công']);
-    })->name('redirect_route');
 });
+
+Route::get('register_success/{route}', function ($route) {
+    return redirect()->route($route)->with(['message' => 'Xử Lý Thành Công']);
+})->name('redirect_route');

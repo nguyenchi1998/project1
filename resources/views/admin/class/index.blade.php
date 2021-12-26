@@ -25,6 +25,12 @@
                             </button>
                         </form>
                     </div>
+                    <form action="{{ route('admin.classes.next_semester') }}" method="post">
+                        @csrf
+                        <button class="btn btn-outline-info" type="submit">
+                            Chuyển Kỳ Mới
+                        </button>
+                    </form>
                     @if($showCreateClassBtn)
                     <a class="btn Tìm Kiếmd-flex align-items-center btn-outline-success" href="{{ route('admin.classes.create') }}">Tạo Mới</a>
                     @endif

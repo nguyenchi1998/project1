@@ -32,7 +32,7 @@
                         </thead>
                         <tbody>
                             @forelse($scheduleDetails as $scheduleDetail)
-                            {{ Form::open(['url' => route('admin.schedules.register')]) }}
+                            {{ Form::open(['url' => route('admin.schedules.store')]) }}
                             <tr>
                                 <td>
                                     {{ $scheduleDetail['subject']['name'] }}

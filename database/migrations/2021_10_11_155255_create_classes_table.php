@@ -19,6 +19,7 @@ class CreateClassesTable extends Migration
             $table->string('code')->nullable();
             $table->unsignedInteger('specialization_id');
             $table->unsignedInteger('semester');
+            $table->boolean('finish')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

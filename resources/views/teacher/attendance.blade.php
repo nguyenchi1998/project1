@@ -19,11 +19,10 @@
         <div class="card">
             <div class="card-body">
                 <div class="mt-6">
-                    {{ Form::open(['url' =>route('admin.classes.store') , 'method' => 'POST', 'class' => "forms-sample" ]) }}
                     <div class="form-row">
                         <div class="col-6">
                             <div class="form-group">
-                                Lớp Học: {{ $schedule->name }}
+                                Mã Lớp: {{ $schedule->code }}
                             </div>
                             <div class="form-group">
                                 Môn Học: {{ $schedule->subject->name }}
@@ -38,9 +37,9 @@
                             </div>
                         </div>
                     </div>
-                    {{ Form::close() }}
                 </div>
-                <div class="table-responsive mb-3">
+                {{ Form::open(['url' =>route('teacher.schedules.attendance', $schedule->id) , 'method' => 'POST', 'class' => "forms-sample" ]) }}
+                <div class="table-responsive">
                     <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
@@ -54,9 +53,9 @@
                                 <td>
                                     {{ $student->student->name }}
                                 </td>
-                                <td width="100">
+                                <td width="50">
                                     <div class="text-center">
-                                        {{ Form::checkbox('student_id[]', $student->id, false)  }}
+                                        {{ Form::checkbox('studentId[]', $student->id, false, ['class' => 'form-control'])  }}
                                     </div>
                                 </td>
                             </tr>
@@ -64,6 +63,11 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="mt-3 float-right">
+                    {{Form::submit('Xác Nhận', ['class'=> 'btn btn-outline-success mr-2']) }}
+                    <a href="{{ route('teacher.schedules.index') }}" class="btn btn-outline-dark">Huỷ Bỏ</a>
+                </div>
+                {{ Form::close() }}
             </div>
         </div>
     </div>

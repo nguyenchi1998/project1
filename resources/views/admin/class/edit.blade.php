@@ -21,7 +21,7 @@
                         Danh Sách Sinh Viên
                     </a>
                 </div>
-                {{ Form::open(['url' => route('admin.classes.update', $class->id) , 'method' => 'POST']) }}
+                {{ Form::open(['url' => route('admin.classes.update', $class->id), 'method' => 'POST']) }}
                 @method('PUT')
                 {{ Form::text('id',$class->id, ['hidden'=>true]) }}
                 <div class="form-group">

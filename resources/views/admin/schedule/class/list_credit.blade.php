@@ -76,16 +76,9 @@
                                     @endswitch
                                 </td>
                                 <td style="width: 120px">
-                                    @if($schedule->status == config('schedule.status.done') || $schedule->status == config('schedule.status.marking'))
-                                    <div class="d-flex justify-content-center">
-                                        <a href="#" class="btn btn-outline-info">
-                                            Xem Điểm
-                                        </a>
-                                    </div>
-                                    @endif
                                     @if($schedule->status == config('schedule.status.new'))
                                     <div class="d-flex justify-content-center">
-                                        <a href="{{ route('admin.schedules.classes.destroy', ['classId' => $class->id, 'scheduleId' => $schedule->id]) }}" class="btn btn-outline-info">
+                                        <a href="{{ route('admin.schedules.classes.destroy', ['class' => $class->id, 'schedule' => $schedule->id]) }}" class="btn btn-outline-info">
                                             Xóa
                                         </a>
                                     </div>

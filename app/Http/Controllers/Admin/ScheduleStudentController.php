@@ -53,8 +53,10 @@ class ScheduleStudentController extends Controller
         $keyword = $request->get('keyword');
         $semesters = range_semester(config('config.student_register_start_semester'), config('config.max_semester'));
         $students = $this->studentRepository->model()
-            ->whereHas('class', function ($query) {
-                $query->where('semester', '>=', config('config.student_register_start_semester'));
+            ->when($filterSemester, function ($query) use ($filterSemester) {
+                $query->whereHas('class', function ($query) use ($filterSemester) {
+                    $query->where('semester', $filterSemester);
+                });
             })
             ->when($keyword, function ($query) use ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%')
@@ -96,7 +98,7 @@ class ScheduleStudentController extends Controller
             true,
             $class->semester
         );
-        $schedules = $this->scheduleDetailRepository->model()
+        $scheduleDetails = $this->scheduleDetailRepository->model()
             ->where('student_id', $student->id)
             ->when($semesterFilter, function ($query) use ($semesterFilter) {
                 $query->where('semester', $semesterFilter);
@@ -106,7 +108,7 @@ class ScheduleStudentController extends Controller
             ->paginate(config('config.paginate'));
 
         return view('admin.schedule.student.list_credit', compact(
-            'schedules',
+            'scheduleDetails',
             'keyword',
             'semesterFilter',
             'specializationFilter',
@@ -171,7 +173,7 @@ class ScheduleStudentController extends Controller
 
     public function destroy($studentId, $scheduleDetailId)
     {
-        $this->scheduleDetailRepository->delete($scheduleDetailId);
+        $this->scheduleDetailRepository->delete($scheduleDetailId, true);
 
         return $this->successRouteRedirect('admin.schedules.students.show', $studentId);
     }

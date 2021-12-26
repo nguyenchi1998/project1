@@ -6,7 +6,7 @@
 <div class="col-sm-6">
     <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"><a href="{{ route('home') }}">Bảng Điều Khiển</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('credits.index') }}">Danh Sách Tín Chỉ</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('scheduleDetails.credits.index') }}">Danh Sách Tín Chỉ</a></li>
         <li class="breadcrumb-item active">Đăng Ký Tín Chỉ</li>
     </ol>
 </div>
@@ -19,40 +19,40 @@
                 <div class="mt-6">
                     {{ Form::open(['url' =>route('admin.classes.store') , 'method' => 'POST', 'class' => "forms-sample" ]) }}
                     <div class="form-row">
-                        <div class="col-6">
+                        <div class="col-5">
                             <div class="form-group">
-                                <strong>Sinh Viên: </strong>{{ $student->name }}
+                                <strong>Niên Khóa: </strong> {{ $student->grade->name }}
                             </div>
-                            <div class="form-group">
-                                <strong>Lớp: </strong>{{ $student->class->name }}
-                            </div>
-                            <div class="form-group">
-                                <strong>Trạng Thái Đăng
-                                    Kí: </strong>{{ $student->grade->can_register_credit ? 'Mở' : 'Đóng' }}
-                            </div>
-                        </div>
-                        <div class="col-6">
                             <div class="form-group">
                                 <strong>Chuyên Ngành: </strong>{{ $student->class->specialization->name }}
                             </div>
+                        </div>
+                        <div class="col-4">
                             <div class="form-group">
-                                <strong>Niên Khóa: </strong> {{ $student->grade->name }}
+                                <strong>Lớp: </strong>{{ $student->class->name }}
                             </div>
                             <div class="form-group">
                                 <strong>Kỳ Hiện Tại: </strong>{{ $student->class->semester }}
                             </div>
                         </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <strong>Số Tín Tối Đa: </strong>{{ config('credit.max_register') }}
+                            </div>
+                            <div class="form-group">
+                                <strong>Số Tín Hiện Tại: </strong>{{ config('credit.max_register') }}
+                            </div>
+                        </div>
                     </div>
                     {{ Form::close() }}
                 </div>
-                {{ Form::open(['url' => route('credits.store'), 'method' => 'post']) }}
+                {{ Form::open(['url' => route('scheduleDetails.store'), 'method' => 'post']) }}
                 <div class="table-responsive table-scroll">
                     <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
                                 <th>Môn Học</th>
-                                <th>Lớp Học Sẵn Có</th>
-                                <th>Kỳ Học</th>
+                                <th>Lớp Học</th>
                                 <th>Số Tín Chỉ</th>
                                 <th></th>
                             </tr>
@@ -62,20 +62,18 @@
                             <tr>
                                 <td>
                                     {{ $subject->name }}
-                                    @if($subject->pivot->force )<span class="badge badge-danger">Bắt Buộc</span> @endif
+                                    @if($subject->force )<span class="badge badge-danger">Bắt Buộc</span> @endif
                                 </td>
                                 <td>
-                                    {{ $subject->schedules[0]->name ?? 'Chưa có lớp' }}
+                                    {{( $subject->hasClass ? 'Có' : 'Chưa') . ' có lớp' }}
                                 </td>
-                                <td>
-                                    {{ $subject->pivot->semester ?? 'Tự Do' }}
-                                </td>
+
                                 <td>
                                     {{ $subject->credit }}
                                 </td>
-                                <td width="100">
+                                <td width="50">
                                     <div class="text-center">
-                                        {{ Form::checkbox('subject_id[]', $subject->id, in_array($subject->id, $scheduleDetails), ['onclick' => (boolean)$subject->force ? 'return false' : 'return true'])  }}
+                                        {{ Form::checkbox('subjectIds[]', $subject->id, false, ['class'=>'form-control'])  }}
                                     </div>
                                 </td>
                             </tr>

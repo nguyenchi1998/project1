@@ -30,10 +30,9 @@
                         </div>
                     </div>
                 </div>
-                {{ Form::open(['url' => route('admin.specializations.choose_subject', $specialization->id) , 'method' => 'POST']) }}
+                {{ Form::open(['url' => route('admin.specializations.choose_subject', $specialization->id), 'method' => 'POST']) }}
                 @csrf
                 <div class="table-responsive table-scroll">
-
                     <table class="table table-bordered" id="subjects">
                         <thead>
                             <tr>

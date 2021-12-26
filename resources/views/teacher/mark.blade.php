@@ -20,7 +20,7 @@
                     <div class="form-row">
                         <div class="col-6">
                             <div class="form-group">
-                                <strong>Lớp Học:</strong> {{ $schedule->name }}
+                                <strong>Mã Lớp:</strong> {{ $schedule->code }}
                             </div>
                             <div class="form-group">
                                 <strong> Môn Học:</strong> {{ $schedule->subject->name }}
@@ -95,7 +95,7 @@
                 students,
             },
             success: function() {
-                window.location.href = "{{ route('teacher.schedules.index') }}"
+                window.location.href = "{{ route('redirect_route', 'teacher.schedules.index') }}"
             },
             error: function() {
                 alert('Error');

@@ -16,7 +16,7 @@
     <div class="col-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                {{ Form::open(['url' =>route('admin.grades.store') , 'method' => 'POST']) }}
+                {{ Form::open(['url' =>route('admin.grades.store'), 'method' => 'POST']) }}
                 <div class="form-group">
                     <label for="name">Niên Khoá</label>
                     {{ Form::input('text', 'name', null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Niên khoá']) }}

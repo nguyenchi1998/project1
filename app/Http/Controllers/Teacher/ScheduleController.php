@@ -23,27 +23,26 @@ class ScheduleController extends Controller
 
     public function index(Request $request)
     {
-        $status = $request->get('status');
+        $keyword = $request->get('keyword');
+        $statusFilter = $request->get('status-filter', config('schedule.status.inprogress'));
         $teacher = Auth::user();
         $states = array_map(function ($status) {
-            return ucfirst($status);
-        }, array_flip(config('schedule.status')));
-        $statusSchedules = $this->scheduleRepository->where('teacher_id', '=', $teacher->id)
-            ->whereIn('status', array_flip($states))
-            ->when(isset($status), function ($query) use ($status) {
-                $query->where('status', $status);
-            })
-            ->get()
-            ->load(['subject', 'class.students', 'scheduleDetails'])
-            ->groupBy('status');
+            return getNameSchedule($status);
+        }, config('schedule.status'));
+        $schedules = $this->scheduleRepository->model()
+            ->where('teacher_id',  $teacher->id)
+            ->where('status', $statusFilter)
+            ->with(['subject', 'class.students', 'scheduleDetails'])
+            ->paginate(config('config.paginate'));
 
-        return view('teacher.schedule', compact('statusSchedules', 'states', 'status'));
+        return view('teacher.schedule', compact('schedules', 'states', 'statusFilter', 'keyword'));
     }
 
     public function status(Request $request, $id)
     {
+        $schedule = $this->scheduleRepository->find($id);
         $status = $request->get('status');
-        if ($status == config('schedule.status.new')) {
+        if ($schedule->status != config('schedule.status.new') && $status == config('schedule.status.new')) {
             return $this->failRouteRedirect();
         } else {
             $this->scheduleRepository->update($id, [
@@ -64,7 +63,7 @@ class ScheduleController extends Controller
 
     public function attendance($id)
     {
-        return $this->successRouteRedirect('teacher.schedules.attendanceShow', $id);
+        return $this->successRouteRedirect('teacher.schedules.attendanceShow', $id, 'Chưa làm logic đâu :D');
     }
 
     public function markShow(Request $request, $id)
@@ -76,16 +75,16 @@ class ScheduleController extends Controller
         return view('teacher.mark', compact('scheduleDetails', 'schedule'));
     }
 
-    public function mark(Request $request, $id)
+    public function mark(Request $request, $scheduleId)
     {
-        $schedule = $this->scheduleRepository->find($id)
+        $schedule = $this->scheduleRepository->find($scheduleId)
             ->load('subject');
         foreach ($request->get('students') as $student) {
             $this->scheduleDetailsRepository->updateOrCreate(
                 [
-                    'schedule_id' => $id,
+                    'schedule_id' => $scheduleId,
                     'student_id' => $student['student_id'],
-                    'subject_id' => $schedule->specializationSubject->subject->id
+                    'subject_id' => $schedule->subject->id
                 ],
                 $student
             );

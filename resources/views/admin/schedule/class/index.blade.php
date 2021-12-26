@@ -1,12 +1,12 @@
 @extends('layouts.manager')
 @section('breadcrumb')
 <div class="col-sm-6">
-    <h1 class="m-0">Đăng Ký Tín Chỉ</h1>
+    <h1 class="m-0">Đăng Ký Tín Chỉ Cho Lớp Quản Lý</h1>
 </div>
 <div class="col-sm-6">
     <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
-        <li class="breadcrumb-item active">Lớp Đăng Ký</li>
+        <li class="breadcrumb-item active">Đăng Ký Tín Chỉ Cho Lớp Quản Lý</li>
     </ol>
 </div>
 @endsection

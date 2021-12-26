@@ -16,6 +16,9 @@ Route::group(['as' => 'teacher.'], function () {
         Route::get('schedules/{id}/attendance', 'ScheduleController@attendanceShow')
             ->name('schedules.attendanceShow');
 
+        Route::post('schedules/{id}/attendance', 'ScheduleController@attendance')
+            ->name('schedules.attendance');
+
         Route::get('schedules/{id}/mark', 'ScheduleController@markShow')
             ->name('schedules.markShow');
 

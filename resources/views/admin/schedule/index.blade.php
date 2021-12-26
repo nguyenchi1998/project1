@@ -17,9 +17,25 @@
             <div class="card-body">
                 <div class="d-flex mb-3 justify-content-between">
                     <div class="">
-                        <form action="" class="form-inline">
+                        <form action="{{ route('admin.schedules.index') }}" class="form-inline">
                             <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
-                            {{ Form::select('status', $states, $status , ['class' => 'form-control', 'placeholder' => 'Tất Cả Trạng Thái']) }}
+                            <select name="status" class="form-control">
+                                <option value="{{ config('schedule.status.new') }}" @if($status==config('schedule.status.new')) selected @endif>
+                                    {{ getNameSchedule(config('schedule.status.new')) }}
+                                </option>
+                                <option value="{{ config('schedule.status.inprogress') }}" @if($status==config('schedule.status.inprogress')) selected @endif>
+                                    {{ getNameSchedule(config('schedule.status.inprogress')) }}
+                                </option>
+                                <option value="{{ config('schedule.status.finish') }}" @if($status==config('schedule.status.finish')) selected @endif>
+                                    {{ getNameSchedule(config('schedule.status.finish')) }}
+                                </option>
+                                <option value="{{ config('schedule.status.marking') }}" @if($status==config('schedule.status.marking')) selected @endif>
+                                    {{ getNameSchedule(config('schedule.status.marking')) }}
+                                </option>
+                                <option value="{{ config('schedule.status.done') }}" @if($status==config('schedule.status.done')) selected @endif>
+                                    {{ getNameSchedule(config('schedule.status.done')) }}
+                                </option>
+                            </select>
                             {{ Form::select('class-type', [0 => 'Lớp Học', 1 => 'Tự Do'], $classType, ['class' => 'ml-2 form-control mr-2', 'placeholder' => 'Tất Cả Thể Loại']) }}
                             <button class="btn btn-outline-secondary" type="submit">
                                 <i class="fa fa-search"></i>
@@ -52,10 +68,10 @@
                                 </td>
                                 <td>
                                     {{ $schedule->subject->name }}
-                                    @if(!$schedule->class_id) <span class="badge bg-primary">Tự Do</span>@endif
+
                                 </td>
                                 <td>
-                                    {{ $schedule->semester }}
+                                    {{ $schedule->semester ?? 'Tự Do' }}
                                 </td>
                                 <td>
                                     {{ count($schedule->scheduleDetails) ?? count($schedule->class->students)}}
@@ -71,18 +87,43 @@
                                     @endif
                                 </td>
                                 <td style="width: 130px">
-                                    <form action="{{ route('admin.schedules.status', $schedule->id) }}" method="POST">
+                                    <form action="{{ route('admin.schedules.update', $schedule->id) }}" method="POST">
                                         @csrf
-                                        {{ Form::select('status', $states, $schedule->status, ['class' => 'form-control', 'onchange' => 'this.form.submit()', 'disabled' => $schedule->status == config('schedule.status.done')]) }}
+                                        @method('put')
+                                        <select name="status" class="form-control" onchange="this.form.submit()" @if($schedule->status==config('schedule.status.done') || (!$schedule->teacher_id || !$schedule->start_time)) disabled @endif>
+                                            <option value="{{ config('schedule.status.new') }}" @if($schedule->status == config('schedule.status.new')) selected @endif>
+                                                {{ getNameSchedule(config('schedule.status.new')) }}
+                                            </option>
+                                            <option value="{{ config('schedule.status.inprogress') }}" @if($schedule->status == config('schedule.status.inprogress')) selected @endif>
+                                                {{ getNameSchedule(config('schedule.status.inprogress')) }}
+                                            </option>
+                                            <option value="{{ config('schedule.status.finish') }}" @if($schedule->status == config('schedule.status.finish')) selected @endif>
+                                                {{ getNameSchedule(config('schedule.status.finish')) }}
+                                            </option>
+                                            <option value="{{ config('schedule.status.marking') }}" @if($schedule->status == config('schedule.status.marking')) selected @endif>
+                                                {{ getNameSchedule(config('schedule.status.marking')) }}
+                                            </option>
+                                            <option value="{{ config('schedule.status.done') }}" @if($schedule->status == config('schedule.status.done')) selected @endif>
+                                                {{ getNameSchedule(config('schedule.status.done')) }}
+                                            </option>
+                                        </select>
                                     </form>
                                 </td>
-                                <td style="width: 100px;">
+                                <td style="width: 150px;">
                                     <div class="d-flex justify-content-between">
+                                        @if ($schedule->status == config('schedule.status.done'))
+                                        <div class="mr-2">
+                                            <form action="{{ route('admin.schedules.show', $schedule->id) }}">
+                                                <button class="btn btn-outline-info">Xem Điểm</button>
+                                            </form>
+                                        </div>
+                                        @endif
                                         <div class="mr-2">
                                             <form action="{{ route('admin.schedules.edit', $schedule->id) }}">
                                                 <button class="btn btn-outline-warning" @if ($schedule->status == config('schedule.status.done')) disabled @endif>Sửa</button>
                                             </form>
                                         </div>
+                                        @if ($schedule->status != config('schedule.status.done'))
                                         <div>
                                             <form action="{{ route('admin.schedules.destroy', $schedule->id) }}" method="POST">
                                                 @csrf
@@ -92,6 +133,7 @@
                                                 </button>
                                             </form>
                                         </div>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>

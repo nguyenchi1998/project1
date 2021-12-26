@@ -24,7 +24,7 @@
                         Danh Sách Môn Giảng Dạy
                     </a>
                 </div>
-                {{ Form::open(['url' => route('admin.teachers.update', $teacher->id) , 'method' => 'POST', 'files' => true]) }}
+                {{ Form::open(['url' => route('admin.teachers.update', $teacher->id), 'method' => 'POST', 'files' => true]) }}
                 @method('PUT')
                 {{ Form::text('id', $teacher->id, ['hidden'=>true]) }}
                 <div class="form-group">

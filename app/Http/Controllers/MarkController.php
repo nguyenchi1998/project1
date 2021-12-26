@@ -29,7 +29,7 @@ class MarkController extends Controller
         $student = Auth::user();
         $class = $this->classRepository->find($student->class_id)->load('specialization');
         $semesterFilter = $request->get('semester', $class->semester);
-        $semester = range_semester(config('config.start_semester'), $class->semester);
+        $semester = range_semester(config('config.start_semester'), $class->semester, true, $class->semester);
         $subjects = $this->scheduleDetailRepository->where('student_id', '=', $student->id)
             ->whereHas('schedule', function ($query) {
                 $query->where('status', config('schedule.status.done'));

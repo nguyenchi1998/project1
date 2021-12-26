@@ -16,26 +16,26 @@
     <div class="col-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                {{ Form::open(['url' => route('admin.classes.update', $schedule->id) , 'method' => 'POST']) }}
+                {{ Form::open(['url' => route('admin.schedules.update', $schedule->id), 'method' => 'POST']) }}
                 @method('PUT')
                 <div class="row">
                     <div class="form-group col-lg-6">
                         {{ Form::label('name', 'Lớp Tín Chỉ') }}
-                        {{ Form::input('text', 'name', $schedule->subject->name, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Lớp Tín Chỉ']) }}
+                        {{ Form::input('text', 'code', $schedule->code, ['readonly' => true, 'class' => 'form-control', 'id' => 'name', 'placeholder' => 'Lớp Tín Chỉ']) }}
                     </div>
                     <div class="form-group col-lg-6">
                         {{ Form::label('teacher_id', 'Giảng Viên') }}
-                        {{ Form::select('teacher_id', $teachers, $schedule->teacher_id ?? null, ['class' => 'form-control ', 'placeholder' => 'Tất Cả Giảng Viên', 'onchange' => 'this,form.submit()', 'disabled' => (boolean)$schedule->status])}}
+                        {{ Form::select('teacher_id', $teachers, $schedule->teacher_id ?? null, ['class' => 'form-control ', 'placeholder' => 'Chọn Giảng Viên', 'disabled' => (boolean)$schedule->teacher_id])}}
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-6 form-group">
                         {{ Form::label('start_time', 'Thời Gian Bắt Đầu') }}
-                        {{ Form::date('start_time', $schedule->start_time, ['class' => 'form-control ', 'disabled' => (boolean)$schedule->status]) }}
+                        {{ Form::date('start_time', $schedule->start_time, ['class' => 'form-control ', 'disabled' => (boolean)$schedule->start_time]) }}
                     </div>
                     <div class="col-lg-6 form-group">
                         {{ Form::label('end_time', 'Thời Gian Kết Thúc') }}
-                        {{ Form::date('end_time', $schedule->end_time, ['class' => 'form-control ', 'disabled' => (boolean)$schedule->status]) }}
+                        {{ Form::date('end_time', $schedule->end_time, ['class' => 'form-control ', 'disabled' => (boolean)$schedule->end_time]) }}
                     </div>
                 </div>
                 <div class="mt-3">
