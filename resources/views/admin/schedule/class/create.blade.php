@@ -81,7 +81,9 @@
                     </table>
                 </div>
                 <div class="mt-3 d-flex justify-content-end">
+                    @if(count($subjects))
                     {{ Form::submit('Đăng Ký', ['id' => 'submit', 'class' => 'btn btn-outline-secondary']) }}
+                    @endif
                 </div>
                 {{ Form::close() }}
             </div>

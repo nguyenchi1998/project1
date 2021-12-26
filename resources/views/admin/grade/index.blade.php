@@ -19,7 +19,7 @@
                 <div class="d-flex mb-3 justify-content-between">
                     <div class="">
                         <form action="{{ route('admin.grades.index') }}" class="form-inline">
-                            <input type="search" name="Từ Khóa" value="{{ $keyword }}" class="form-control mr-2" placeholder="Từ Khoá">
+                            <input type="search" name="keyword" value="{{ $keyword }}" class="form-control mr-2" placeholder="Từ Khoá">
                             <button class="btn btn-outline-secondary" type="submit">
                                 <i class="fa fa-search"></i>
                             </button>

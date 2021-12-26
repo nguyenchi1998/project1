@@ -347,8 +347,9 @@ class DepartmentSeeder extends Seeder
                 ]);
             }
         }
-        foreach ($subjects as $subject) {
-            Subject::create([
+        foreach ($subjects as $key => $subject) {
+            $subject = Subject::create([
+
                 'name' => $subject['name'],
                 'type' => $subject['type'],
                 'semester' => $subject['type'] == config('subject.type.basic')
@@ -368,6 +369,9 @@ class DepartmentSeeder extends Seeder
                     Department::all()->pluck('id')->toArray()
                 ),
             ]);
+            $subject->update([
+                'code' => generate_code(Subject::class, $subject->id),
+            ]);
         }
         Specialization::all()
             ->each(function ($specialization) use ($faker) {
@@ -382,7 +386,8 @@ class DepartmentSeeder extends Seeder
                         ->toArray(),
                     8
                 );
-                $specialization->subjects()->attach($specializationSubject);
+                $specialization->subjects()
+                    ->attach($specializationSubject);
             });
     }
 }

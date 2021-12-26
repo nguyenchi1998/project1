@@ -18,7 +18,7 @@
                 <div class="d-flex mb-3 justify-content-between">
                     <div class="">
                         <form action="{{ route('admin.classes.index') }}" class="form-inline">
-                            <input type="search" name="Từ Khóa" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
+                            <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
                             {{ Form::select('specializaiton-filter', $specializations, $filterSpecialization, ['class' => 'form-control mr-2', 'placeholder' => 'Tất cả Viện']) }}
                             <button class="btn btn-outline-secondary" type="submit">
                                 <i class="fa fa-search"></i>
@@ -33,6 +33,7 @@
                     <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
+                                <th>Mã</th>
                                 <th>Lớp Học</th>
                                 <th>Số Sinh Viên</th>
                                 <th>Kỳ Hiện Tại</th>
@@ -44,6 +45,9 @@
                             @forelse($classes as $class)
                             <tr>
                                 <td>
+                                    {{ $class->code }}
+                                </td>
+                                <td>
                                     {{ $class->name }}
                                 </td>
                                 <td>
@@ -54,7 +58,8 @@
                                 </td>
                                 <td>
                                     <span class="{{ modelTrash($class->specialization) }}">
-                                        {{$class->specialization->name ?? ''}}
+                                        {{ $class->specialization->name }}
+                                    </span>
                                 </td>
                                 <td style="width: 100px">
                                     <div class="d-flex justify-content-between">

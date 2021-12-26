@@ -11,6 +11,7 @@ class Subject extends Model
 
     protected $fillable = [
         'name',
+        'code',
         'type',
         'credit',
         'force',
@@ -37,6 +38,13 @@ class Subject extends Model
     public function schedules()
     {
         return $this->hasMany(Schedule::class);
+    }
+
+    public function newSchedules()
+    {
+        return $this->schedules()
+            ->has('scheduleDetails', '<=', config('config.class_limit_student'))
+            ->where('status', config('schedule.status.new'));
     }
 
     public function teachers()

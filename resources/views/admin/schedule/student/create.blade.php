@@ -72,7 +72,7 @@
                                     {{ $subject->semester ?? 'Tự Do' }}
                                 </td>
                                 <td>
-                                    {{ ($subject->hasCreditClass ? 'Đã' : 'Chưa') . ' có lớp' }}
+                                    {{ ($subject->hasClass ? 'Đã' : 'Chưa') . ' có lớp' }}
                                 </td>
                                 <td>
                                     {{ $subject->credit }}

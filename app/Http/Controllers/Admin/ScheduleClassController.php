@@ -77,7 +77,7 @@ class ScheduleClassController extends Controller
     public function show(Request $request, $classId)
     {
         $class = $this->classRepository->find($classId);
-        $semesterFilter = $request->get('semester-filter');
+        $semesterFilter = $request->get('semester-filter', $class->semester);
         $specializationFilter = $request->get('specialization-filter');
         $keyword = $request->get('keyword');
         $semesters = range_semester(
@@ -140,9 +140,9 @@ class ScheduleClassController extends Controller
                 $request->get('subjectIds')
             )->get()->map(function ($subject) use ($class) {
                 $item['class_id'] = $class->id;
-                $item['name'] = 'Lớp Tín Chỉ Môn ' . $subject->name;
                 $item['subject_id'] = $subject->id;
                 $item['semester'] = $class->semester;
+                $item['credit'] = $subject->credit;
 
                 return $item;
             })->toArray();

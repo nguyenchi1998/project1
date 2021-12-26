@@ -34,8 +34,8 @@ Route::group(['as' => 'admin.'], function () {
         Route::post('schedules/{id}/teacher', 'ScheduleController@setTeacher')
             ->name('schedules.teacher');
 
-        Route::post('schedules/{id}/start', 'ScheduleController@startSchedule')
-            ->name('schedules.start');
+        Route::post('schedules/{id}/status', 'ScheduleController@statusSchedule')
+            ->name('schedules.status');
 
         Route::post('schedules/store', 'ScheduleController@store')
             ->name('schedules.register');

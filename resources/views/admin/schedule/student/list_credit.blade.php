@@ -24,7 +24,7 @@
                         <div class="d-flex align-items-center">
                             <strong class="mr-1">Kỳ Học: </strong>
                             <form action="">
-                                {{ Form::select('semester-filter', $semesters, $semesterFilter, ['class' => 'form-control mr-2', 'placeholder' => 'Tất Cả Kỳ Học', 'onchange' => 'this.form.submit()']) }}
+                                {{ Form::select('semester-filter', $semesters, $semesterFilter, ['class' => 'form-control mr-2', 'onchange' => 'this.form.submit()']) }}
                             </form>
                         </div>
                     </div>
@@ -38,7 +38,8 @@
                             <tr>
                                 <th>Môn Học</th>
                                 <th>Số Tín Chỉ</th>
-                                <th>Kỳ Học</th>
+                                <th>Mã Lớp</th>
+
                                 <th>Trạng Thái</th>
                                 <th></th>
                             </tr>
@@ -47,13 +48,13 @@
                             @forelse($schedules as $schedule)
                             <tr>
                                 <td>
-                                    {{ $schedule->name ?? $schedule->subject->name }}
+                                    {{ $schedule->subject->name }}
                                 </td>
                                 <td>
                                     {{ $schedule->credit ?? $schedule->subject->credit }}
                                 </td>
                                 <td>
-                                    {{ $schedule->semester }}
+                                    {{ $schedule->schedule->code ?? 'Chưa có lớp' }}
                                 </td>
                                 <td style="width: 150px">
                                     @switch($schedule->status)

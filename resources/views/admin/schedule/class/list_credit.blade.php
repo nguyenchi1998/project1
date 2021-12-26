@@ -25,7 +25,7 @@
                             <div class="d-flex align-items-center">
                                 <strong class="mr-1">Kỳ Hiện Tại: </strong>
                                 <form action="">
-                                    {{ Form::select('semester-filter', $semesters, $semesterFilter, ['class' => 'form-control mr-2', 'placeholder' => 'Tất Cả Kỳ Học', 'onchange' => 'this.form.submit()']) }}
+                                    {{ Form::select('semester-filter', $semesters, $semesterFilter, ['class' => 'form-control mr-2', 'onchange' => 'this.form.submit()']) }}
                                 </form>
                             </div>
                         </div>

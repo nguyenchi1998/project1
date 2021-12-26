@@ -40,7 +40,8 @@ class ClassController extends Controller
             ->count();
         $classes = $this->classRepository->withTrashedModel()
             ->when($keyword, function ($query) use ($keyword) {
-                $query->where('name', 'like', '%' . $keyword . '%');
+                $query->where('name', 'like', '%' . $keyword . '%')
+                    ->orWhere('code', $keyword);
             })
             ->when($filterSpecialization, function ($query) use ($filterSpecialization) {
                 $query->whereHas('specialization', function ($query) use ($filterSpecialization) {

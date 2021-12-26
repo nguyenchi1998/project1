@@ -87,20 +87,21 @@ class ScheduleStudentController extends Controller
     {
         $student = $this->studentRepository->find($studentId);
         $class = $this->classRepository->find($student->class_id);
-        $semesterFilter = $request->get('semester-filter');
+        $semesterFilter = $request->get('semester-filter', $class->semester);
         $specializationFilter = $request->get('specialization-filter');
         $keyword = $request->get('keyword');
         $semesters = range_semester(
-            config('config.class_register_limit_semester'),
+            config('config.student_register_start_semester'),
             config('config.max_semester'),
             true,
             $class->semester
         );
         $schedules = $this->scheduleDetailRepository->model()
+            ->where('student_id', $student->id)
             ->when($semesterFilter, function ($query) use ($semesterFilter) {
                 $query->where('semester', $semesterFilter);
             })
-            ->with(['subject'])
+            ->with(['subject', 'schedule'])
             ->orderBy('register_status')
             ->paginate(config('config.paginate'));
 
@@ -121,21 +122,21 @@ class ScheduleStudentController extends Controller
             ->load('scheduleDetails.subject');
         $class = $this->classRepository->find($student->class->id);
         $studentRegisterSubjects = $this->scheduleDetailRepository->model()
+            ->where('student_id', $student->id)
             ->where('semester', $class->semester)
             ->with('subject')
             ->get();
-
+        $studentRegisterSubjectIds = $studentRegisterSubjects->pluck('subject.id')->toArray();
         $subjects = $this->subjectRepository->model()
             ->where('semester', $class->semester)
+            ->whereNotIn('id', $studentRegisterSubjectIds)
             ->get()
-            ->map(function ($subject) use ($studentRegisterSubjects) {
-                $subject->hasClass = $studentRegisterSubjects->where('subject_id', $subject->id)->first(function ($studentRegisterSubject) {
-                    return $studentRegisterSubject->schedule_id;
-                });
+            ->load('newSchedules')
+            ->map(function ($subject) {
+                $subject->hasClass = count($subject->newSchedules);
 
                 return $subject;
             });
-
         $totalCreditRegisted = $studentRegisterSubjects->sum(function ($studentRegisterSubject) {
             return $studentRegisterSubject->subject->credit;
         });
@@ -143,6 +144,7 @@ class ScheduleStudentController extends Controller
         return view('admin.schedule.student.create', compact(
             'student',
             'studentRegisterSubjects',
+            'studentRegisterSubjectIds',
             'totalCreditRegisted',
             'subjects'
         ));

@@ -44,7 +44,7 @@ class ScheduleController extends Controller
     {
         $status = $request->get('status');
         if ($status == config('schedule.status.new')) {
-            return $this->failRouteRedirect('Bạn không thể chỉnh trạng thái về trạng thái mới');
+            return $this->failRouteRedirect();
         } else {
             $this->scheduleRepository->update($id, [
                 'status' => $status,

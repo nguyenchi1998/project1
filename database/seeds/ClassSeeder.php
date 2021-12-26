@@ -30,6 +30,9 @@ class ClassSeeder extends Seeder
             $media = Media::create([
                 'path' => str_replace(storage_path(config('default.path.app_public')), '', $path),
             ]);
+            $student->update([
+                'code' => generate_code(Student::class, $student->id),
+            ]);
             $student->avatar()->save($media);
         });
         foreach ($classes as $class) {
@@ -39,12 +42,18 @@ class ClassSeeder extends Seeder
                     'specialization_id' => $faker->randomElement(Specialization::all()->random()->pluck('id')->toArray()),
                     'semester' => $faker->randomElement(range(1, config('config.max_semester'))),
                 ]);
+                $classInstance->update([
+                    'code' => generate_code(Classs::class, $classInstance->id),
+                ]);
                 factory(Student::class, $faker->randomElement([5, 10]))->create([
                     'class_id' => $classInstance->id,
                     'grade_id' => $faker->randomElement(Grade::all()->pluck('id')->toArray()),
                 ])->each(function ($student) use ($path) {
                     $media = Media::create([
                         'path' => str_replace(storage_path(config('default.path.app_public')), '', $path),
+                    ]);
+                    $student->update([
+                        'code' => generate_code(Student::class, $student->id),
                     ]);
                     $student->avatar()->save($media);
                 });

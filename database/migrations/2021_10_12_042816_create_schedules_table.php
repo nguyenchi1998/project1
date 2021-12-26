@@ -15,11 +15,11 @@ class CreateSchedulesTable extends Migration
     {
         Schema::create('schedules', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('code')->nullable();
             $table->unsignedInteger('teacher_id')->nullable();
             $table->unsignedInteger('subject_id');
-            $table->unsignedInteger('semester');
+            $table->unsignedInteger('semester')->nullable();
             $table->unsignedInteger('credit')->nullable();
-            $table->string('name')->nullable();
             $table->date('start_time')->nullable();
             $table->date('end_time')->nullable();
             $table->unsignedInteger('class_id')->nullable();

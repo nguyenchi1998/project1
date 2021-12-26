@@ -18,7 +18,7 @@
                 <div class="d-flex mb-3 justify-content-between">
                     <div class="">
                         <form action="{{ route('admin.schedules.students.index') }}" class="form-inline">
-                            <input type="search" name="Từ Khóa" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
+                            <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
                             {{ Form::select('semester', $semesters, $semester ?? null, ['class' => 'form-control  mr-2', 'placeholder' => 'Tất Cả Kỳ Học']) }}
                             {{ Form::select('grade-filter', $grades, $filterGrade ?? null, ['class' => 'form-control mr-2', 'placeholder' => 'Tất Cả Khóa']) }}
                             <button class="btn btn-outline-secondary" type="submit">

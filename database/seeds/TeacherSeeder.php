@@ -27,6 +27,9 @@ class TeacherSeeder extends Seeder
             'password' => Hash::make(config('default.auth.password')),
             'address' => $faker->address(),
         ]);
+        $teacher->update([
+            'code' => generate_code(Teacher::class, $teacher->id),
+        ]);
         $media = Media::create([
             'path' => str_replace(storage_path(config('default.path.app_public')), '', $path),
         ]);
@@ -36,12 +39,13 @@ class TeacherSeeder extends Seeder
         ]);
         $departmentIds = Department::all()->pluck('id')->toArray();
         factory(Teacher::class, 50)->create()
-            ->each(function ($teacher) use ($departmentIds, $path) {
+            ->each(function ($teacher, $key) use ($departmentIds, $path) {
                 $media = Media::create([
                     'path' => str_replace(storage_path(config('default.path.app_public')), '', $path),
                 ]);
                 $teacher->avatar()->save($media);
                 $teacher->update([
+                    'code' => generate_code(Teacher::class, $teacher->id),
                     'department_id' => $departmentIds[array_rand($departmentIds)]
                 ]);
             });

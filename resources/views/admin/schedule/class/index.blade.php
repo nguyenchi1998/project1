@@ -18,7 +18,7 @@
                 <div class="d-flex mb-3 justify-content-between">
                     <div class="">
                         <form action="{{ route('admin.schedules.classes.index') }}" class="form-inline">
-                            <input type="search" name="Từ Khóa" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
+                            <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
                             {{ Form::select('semester-filter', $semesters, $semesterFilter, ['class' => 'form-control  mr-2', 'placeholder' => 'Tất Cả Kỳ Học']) }}
                             {{ Form::select('specialization-filter', $specializations, $specializationFilter, ['class' => 'form-control mr-2', 'placeholder' => 'Tất Cả Chuyên Ngành']) }}
                             <button class="btn btn-outline-secondary" type="submit">
@@ -51,7 +51,9 @@
                                     {{ $class->semester }}
                                 </td>
                                 <td>
-                                    {{ $class->specialization->name }}
+                                    <span class="{{ modelTrash($class->specialization) }}">
+                                        {{ $class->specialization->name }}
+                                    </span>
                                 </td>
                                 <td class="text-center" style="width: 200px">
                                     <a href="{{ route('admin.schedules.classes.show', $class->id) }}" class="btn btn-outline-success">

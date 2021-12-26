@@ -18,7 +18,7 @@
                 <div class="d-flex mb-3 justify-content-between">
                     <div class="">
                         <form action="{{ route('admin.students.index') }}" class="form-inline">
-                            <input type="search" name="Từ Khóa" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
+                            <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
                             {{ Form::select('specialization-filter', $specializations, $specializationFilter, ['class' => 'form-control  mr-2', 'placeholder' => 'Tất Cả Chuyên Ngành']) }}
                             <button class="btn btn-outline-secondary" type="submit">
                                 <i class="fa fa-search"></i>
@@ -31,6 +31,7 @@
                     <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
+                                <th>Mã</th>
                                 <th>Sinh Viên</th>
                                 <th>Email</th>
                                 <th>Số Điện Thoại</th>
@@ -42,6 +43,9 @@
                         <tbody>
                             @forelse($students as $student)
                             <tr>
+                                <td>
+                                    {{ $student->code }}
+                                </td>
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <div class="mr-2">

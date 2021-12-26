@@ -25,17 +25,16 @@ class ScheduleSeeder extends Seeder
         ])->get()->each(function ($class) use ($faker) {
             if ($class->semester <= config('config.class_register_limit_semester')) {
                 $class->specialization->subjects->filter(function ($subject) use ($class) {
-                    return $subject->pivot->semester <= $class->semester;
-                })->each(function ($subject) use ($faker, $class) {
+                    return $subject->semester <= $class->semester;
+                })->each(function ($subject, $key) use ($faker, $class) {
                     $teacherIds = $subject->teachers->pluck('id');
                     $startTime = Carbon::now()->subDays(random_int(30, 50));
                     $schedule = Schedule::create([
-                        'name' => 'Lớp Tín Chỉ Môn ' . $subject->name,
                         'teacher_id' => $faker->randomElement($teacherIds),
                         'subject_id' => $subject->id,
                         'semester' => $class->semester,
-                        'specialization_subject_id' => $subject->pivot->id,
                         'credit' => $subject->credit,
+                        'type' => config('schedule.type.main'),
                         'start_time' => $startTime,
                         'end_time' => $startTime->copy()
                             ->addDays(config('config.range_time_schedule')),
@@ -47,6 +46,9 @@ class ScheduleSeeder extends Seeder
                                 config('schedule.status.marking'),
                             ]) : config('schedule.status.done'),
                     ]);
+                    $schedule->update([
+                        'code' => generate_code(Schedule::class, $schedule->id),
+                    ]);
                     $class->students->each(function ($student) use ($faker, $subject, $schedule, $class) {
                         $activityMark = $faker->randomElement(range(1, 9));
                         $middleMark = $faker->randomElement(range(1, 9));
@@ -54,7 +56,7 @@ class ScheduleSeeder extends Seeder
                         ScheduleDetail::create([
                             'student_id' => $student->id,
                             'subject_id' => $subject->id,
-                            'specialization_id' => $student->class->specialization->id,
+                            'specialization_id' => $student->class->specialization_id,
                             'schedule_id' => $schedule->id,
                             'semester' => $class->semester,
                             'register_status' => config('schedule.detail.status.register.success'),
@@ -72,7 +74,7 @@ class ScheduleSeeder extends Seeder
             } else {
                 $specializationSubjects = $class->specialization->subjects->filter(
                     function ($subject) use ($class) {
-                        return $subject->pivot->semester >= $class->semester;
+                        return $subject->semester > $class->semester;
                     }
                 );
                 $specializationSubjects->each(function ($subject) use ($class) {

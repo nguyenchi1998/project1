@@ -18,6 +18,7 @@
                 <div class="d-flex mb-3 justify-content-between">
                     <div class="">
                         <form action="" class="form-inline">
+                            <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
                             {{ Form::select('status', $states, $status , ['class' => 'form-control', 'placeholder' => 'Tất Cả Trạng Thái']) }}
                             {{ Form::select('class-type', [0 => 'Lớp Học', 1 => 'Tự Do'], $classType, ['class' => 'ml-2 form-control mr-2', 'placeholder' => 'Tất Cả Thể Loại']) }}
                             <button class="btn btn-outline-secondary" type="submit">
@@ -26,16 +27,16 @@
                         </form>
                     </div>
                     @if($hasScheduleDetails)
-                    <a class="btn d-flex align-items-center btn-outline-success" href="{{ route('admin.schedules.create') }}">Tạo Mới</a>
+                    <a class="btn d-flex align-items-center btn-outline-success" href="{{ route('admin.schedules.create') }}">Tạo Lớp</a>
                     @endif
                 </div>
                 <div class="table-responsive table-scroll">
                     <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th>Lớp Tín Chỉ</th>
+                                <th>Mã Lớp</th>
+                                <th>Môn Học</th>
                                 <th>Kỳ Học</th>
-                                <th>Số Tín Chỉ</th>
                                 <th>Số Sinh Viên</th>
                                 <th>Thời Gian</th>
                                 <th>Giảng Viên</th>
@@ -47,14 +48,14 @@
                             @forelse($schedules as $schedule)
                             <tr>
                                 <td>
-                                    {{ $schedule->name ?? ('Lớp Tín Chỉ Môn ' . $schedule->subject->name) }}
+                                    {{ $schedule->code }}
+                                </td>
+                                <td>
+                                    {{ $schedule->subject->name }}
                                     @if(!$schedule->class_id) <span class="badge bg-primary">Tự Do</span>@endif
                                 </td>
                                 <td>
                                     {{ $schedule->semester }}
-                                </td>
-                                <td>
-                                    {{ $schedule->credit ?? $schedule->subject->credit }}
                                 </td>
                                 <td>
                                     {{ count($schedule->scheduleDetails) ?? count($schedule->class->students)}}
@@ -70,23 +71,23 @@
                                     @endif
                                 </td>
                                 <td style="width: 130px">
-                                    <form action="{{ route('admin.schedules.start', $schedule->id) }}" method="POST">
+                                    <form action="{{ route('admin.schedules.status', $schedule->id) }}" method="POST">
                                         @csrf
-                                        {{ Form::select('status', $states, $schedule->status, ['class' => 'form-control', 'onchange' => 'this.form.submit()', 'disabled' => $schedule->status]) }}
+                                        {{ Form::select('status', $states, $schedule->status, ['class' => 'form-control', 'onchange' => 'this.form.submit()', 'disabled' => $schedule->status == config('schedule.status.done')]) }}
                                     </form>
                                 </td>
                                 <td style="width: 100px;">
                                     <div class="d-flex justify-content-between">
                                         <div class="mr-2">
                                             <form action="{{ route('admin.schedules.edit', $schedule->id) }}">
-                                                <button class="btn btn-outline-warning" @if ($schedule->status) disabled @endif>Sửa</button>
+                                                <button class="btn btn-outline-warning" @if ($schedule->status == config('schedule.status.done')) disabled @endif>Sửa</button>
                                             </form>
                                         </div>
                                         <div>
                                             <form action="{{ route('admin.schedules.destroy', $schedule->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button class="btn mr-1 btn-outline-danger" type="submit">
+                                                <button class="btn mr-1 btn-outline-danger" @if ($schedule->status == config('schedule.status.done')) disabled @endif type="submit">
                                                     Xóa
                                                 </button>
                                             </form>
@@ -103,7 +104,7 @@
                     </table>
                 </div>
                 <div class="mt-3 d-flex justify-content-end">
-                    {{ $schedules->appends(['status' => $status, 'class-type' => $classType])->links() }}
+                    {{ $schedules->appends(['status' => $status, 'class-type' => $classType, 'keyword' => $keyword])->links() }}
                 </div>
             </div>
         </div>

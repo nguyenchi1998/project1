@@ -1,5 +1,11 @@
 <?php
 
+use App\Models\Classs;
+use App\Models\Manager;
+use App\Models\Schedule;
+use App\Models\Student;
+use App\Models\Subject;
+use App\Models\Teacher;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -56,6 +62,22 @@ if (!function_exists('range_semester')) {
     }
 }
 
+if (!function_exists('generate_code')) {
+    function generate_code($type, $number = null)
+    {
+        $types = [
+            Subject::class => 'SB',
+            Schedule::class => 'SC',
+            Student::class => 'ST',
+            Manager::class => 'MN',
+            Teacher::class => 'TC',
+            Classs::class => 'CLA',
+        ];
+        return $types[$type] .  str_pad($number, 4, "0", STR_PAD_LEFT);
+    }
+}
+
+
 if (!function_exists('result_schedule_detail')) {
     function result_schedule_detail($activityMark, $middleMark, $finalMark)
     {
@@ -74,7 +96,7 @@ if (!function_exists('result_schedule_detail')) {
     }
 }
 
-if (!function_exists('render_delete_model')) {
+if (!function_exists('modelTrash')) {
     function modelTrash($model)
     {
         return $model->trashed() ? 'text-decoration-line-through' : '';

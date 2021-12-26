@@ -12,6 +12,7 @@ class Schedule extends Model
     protected $table = 'schedules';
 
     protected $fillable = [
+        'code',
         'teacher_id',
         'subject_id',
         'specialization_subject_id',
@@ -27,9 +28,13 @@ class Schedule extends Model
     protected static function boot()
     {
         parent::boot();
-
         static::deleting(function ($schedule) {
             $schedule->scheduleDetails()->delete();
+        });
+        static::created(function ($schedule) {
+            $schedule->update([
+                'code' => generate_code(Schedule::class, $schedule->id),
+            ]);
         });
     }
 
