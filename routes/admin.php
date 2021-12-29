@@ -34,12 +34,6 @@ Route::group(['as' => 'admin.'], function () {
         Route::post('schedules/{schedule}/export', 'ScheduleController@export')
             ->name('schedules.export');
 
-        // Route::get('schedules/{schedule}/choose-time', 'ScheduleController@scheduleTimeShow')
-        //     ->name('schedules.scheduleTimeShow');
-
-        // Route::post('schedules/{schedule}/choose-time', 'ScheduleController@scheduleTime')
-        //     ->name('schedules.scheduleTime');
-
         Route::get('student-schedules', 'ScheduleStudentController@index')
             ->name('schedules.students.index');
 

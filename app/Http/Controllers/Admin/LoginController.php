@@ -3,35 +3,55 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Tymon\JWTAuth\Facades\JWTFactory;
+use JWTAuth;
 
 class LoginController extends Controller
 {
-    use AuthenticatesUsers;
 
-    protected $redirectTo = '/manager';
-
+    /**
+     * Create a new AuthController instance.
+     *
+     * @return void
+     */
     public function __construct()
     {
-        $this->middleware('guest:manager')->except('logout');
+        $this->middleware(['jwt.verify', 'auth.jwt'], ['except' => ['login']]);
     }
 
-    public function showLoginForm()
+    public function login()
     {
-        Auth::guard('teacher')->logout();
-        Auth::guard('student')->logout();
-        return view('admin.login');
+        $credentials = request(['email', 'password']);
+        if (!$token = JWTAuth::attempt($credentials)) {
+            return response()->json([
+                'message' => 'login fail',
+            ], 401);
+        }
+
+
+        return $this->respondWithToken($token);
     }
 
-    protected function guard()
+
+    public function profile()
     {
-        return Auth::guard('manager');
+        return response()->json(
+            auth()->user()
+        );
     }
 
-    protected function loggedOut()
+    public function logout()
     {
-        return redirect()->route('admin.loginShow');
+        auth(config('role.guard.manager'))->logout();
+
+        return response()->json(['message' => 'Successfully logged out']);
+    }
+
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'token_type' => 'Bearer',
+            'access_token' => $token,
+        ]);
     }
 }

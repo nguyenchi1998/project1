@@ -10,6 +10,8 @@ interface IRepository
 
     public function find($id);
 
+    public function findOrFail($id);
+
     public function update($id, $array);
 
     public function delete($id, $force = false);

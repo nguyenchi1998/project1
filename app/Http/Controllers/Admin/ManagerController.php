@@ -3,11 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\CreateManager;
+use App\Http\Resources\ManagerCollection;
 use App\Repositories\IManagerRepository;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Intervention\Image\Exception\NotFoundException;
 
 class ManagerController extends Controller
 {
@@ -29,37 +33,47 @@ class ManagerController extends Controller
                     ->orWhere('phone', $keyword)
                     ->orWhere('email', 'like', '%' . $keyword . '%');
             })
-            ->paginate(config('config.paginate'));
+            ->get();
 
-        return view('admin.manager.index', compact('managers', 'keyword'));
+        return ManagerCollection::collection($managers);
     }
 
-    public function create()
+    public function show($id)
     {
-        return view('admin.manager.create');
+        $manager = $this->managerRepository->find($id);
+
+        return new ManagerCollection($manager);
     }
 
-    public function store(Request $request)
+    public function store(CreateManager $request)
     {
         try {
-            DB::beginTransaction();
-            $manager = $this->managerRepository->create(array_merge($request->only([
+            $data =  $request->only([
                 'name', 'email', 'phone', 'birthday', 'address', 'gender'
-            ]), ['password' => Hash::make(config('default.auth.password'))]));
-            $avatar = $request->file('avatar');
-            $avatarFilename = $manager->email . '.' . $avatar->getClientOriginalExtension();
-            $path = $this->managerRepository->saveImage(
-                $avatar,
-                $avatarFilename,
-                config('default.avatar_size'),
-                config('default.avatar_size')
-            );
-            $manager->avatar()->create([
-                'path' => $path
             ]);
+            DB::beginTransaction();
+            $manager = $this->managerRepository->create(
+                array_merge(
+                    $data,
+                    ['password' => Hash::make(config('default.auth.password'))]
+                )
+            );
+            $avatar = $request->file('avatar');
+            if ($avatar) {
+                $avatarFilename = $manager->email . '.' . $avatar->getClientOriginalExtension();
+                $path = $this->managerRepository->saveImage(
+                    $avatar,
+                    $avatarFilename,
+                    config('default.avatar_size'),
+                    config('default.avatar_size')
+                );
+                $manager->avatar()->create([
+                    'path' => $path
+                ]);
+            }
             DB::commit();
 
-            return $this->successRouteRedirect('admin.managers.index');
+            return $this->successRouteRedirect($data);
         } catch (Exception $e) {
             DB::rollBack();
 
@@ -67,35 +81,35 @@ class ManagerController extends Controller
         }
     }
 
-    public function edit($id)
-    {
-        $manager = $this->managerRepository->find($id);
-
-        return view('admin.manager.edit', compact('manager'));
-    }
-
     public function update(Request $request, $id)
     {
         try {
             DB::beginTransaction();
-            $manager = $this->managerRepository->find($id);
-            $manager->update($id, $request->only([
+            $manager = $this->managerRepository->findOrFail($id);
+            $data = $request->only([
                 'name', 'phone', 'birthday', 'address', 'gender'
-            ]));
-            $avatar = $request->file('avatar');
-            $avatarFilename = $request->get('email') . '.' . $avatar->getClientOriginalExtension();
-            $path = $this->managerRepository->saveImage(
-                $avatar,
-                $avatarFilename,
-                config('default.avatar_size'),
-                config('default.avatar_size')
-            );
-            $manager->avatar()->create([
-                'path' => $path
             ]);
+            $manager->update($data);
+            $avatar = $request->file('avatar');
+            if ($avatar) {
+                $avatarFilename = $request->get('email') . '.' . $avatar->getClientOriginalExtension();
+                $path = $this->managerRepository->saveImage(
+                    $avatar,
+                    $avatarFilename,
+                    config('default.avatar_size'),
+                    config('default.avatar_size')
+                );
+                $manager->avatar()->create([
+                    'path' => $path
+                ]);
+            }
             DB::commit();
 
-            return $this->successRouteRedirect('admin.managers.index');
+            return $this->successRouteRedirect($data);
+        } catch (ModelNotFoundException $e) {
+            DB::rollBack();
+
+            return $this->failRouteRedirect($e->getMessage(), 404);
         } catch (Exception $e) {
             DB::rollBack();
 

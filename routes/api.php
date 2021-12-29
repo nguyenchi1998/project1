@@ -14,6 +14,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['namespace' => 'Admin', 'middleware' => ['auth.guard:manager']], function () {
+    Route::group(['middleware' => ['jwt.verify', 'auth.jwt']], function () {
+        Route::apiResource('managers', 'ManagerController');
+        Route::apiResource('students', 'StudentController');
+        Route::apiResource('teachers', 'TeacherController');
+    });
+    Route::group(['prefix' => 'auth'], function () {
+        Route::post('login', 'LoginController@login');
+        Route::post('logout', 'LoginController@logout');
+        Route::get('profile', 'LoginController@profile');
+    });
 });

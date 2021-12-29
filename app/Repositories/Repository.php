@@ -30,6 +30,11 @@ class Repository implements IRepository
         return $this->model->find($id);
     }
 
+    public function findOrFail($id)
+    {
+        return $this->model->findOrFail($id);
+    }
+
     public function update($id, $array)
     {
         $obj = $this->find($id);

@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'student',
+        'guard' => 'manager',
         'passwords' => 'users',
     ],
 
@@ -36,18 +36,18 @@ return [
     */
 
     'guards' => [
-        'student' => [
-            'driver' => 'session',
-            'provider' => 'users',
-        ],
         'manager' => [
-            'driver' => 'session',
+            'driver' => 'jwt',
             'provider' => 'managers'
         ],
         'teacher' => [
-            'driver' => 'session',
+            'driver' => 'jwt',
             'provider' => 'teachers'
-        ]
+        ],
+        'student' => [
+            'driver' => 'jwt',
+            'provider' => 'students',
+        ],
     ],
 
     /*
@@ -68,7 +68,7 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        'students' => [
             'driver' => 'eloquent',
             'model' => App\Models\Student::class,
         ],
