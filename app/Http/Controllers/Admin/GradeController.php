@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Grade;
+use App\Http\Resources\GradeCollection;
+use App\Http\Resources\GradeResource;
 use App\Repositories\IGradeRepository;
 use Illuminate\Http\Request;
 
@@ -18,37 +21,21 @@ class GradeController extends Controller
     public function index(Request $request)
     {
         $keyword = $request->get('keyword');
-        $states = array_map(function ($val) {
-            return ucfirst($val);
-        }, array_flip(config('credit.register')));
         $grades = $this->gradeRepository->model()
             ->when($keyword, function ($query) use ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%');
             })
             ->with('students')
-            ->paginate(config('config.paginate'));
+            ->get();
 
-        return view('admin.grade.index', compact('grades', 'keyword', 'states'));
-    }
-
-    public function create()
-    {
-        return view('admin.grade.create');
+        return new GradeResource($grades);
     }
 
     public function store(Request $request)
     {
-        $this->gradeRepository->create($request->only(['name',]));
+        $grade = $this->gradeRepository->create($request->only(['name',]));
 
-        return $this->successRouteRedirect('admin.grades.index');
-    }
-
-
-    public function edit($id)
-    {
-        $grade = $this->gradeRepository->find($id);
-
-        return view('admin.grade.edit', compact('grade'));
+        return new GradeResource($grade);
     }
 
     public function update(Request $request, $id)

@@ -44,7 +44,7 @@ class Repository implements IRepository
 
     public function delete($id, $force = false)
     {
-        $obj = $this->find($id);
+        $obj = $this->findOrFail($id);
         if ($force) {
             return $obj->forceDelete();
         }

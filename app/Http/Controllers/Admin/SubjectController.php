@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\SubjectCollection;
+use App\Http\Resources\SubjectResource;
 use App\Repositories\IDepartmentRepository;
 use App\Repositories\ISpecializationRepository;
 use App\Repositories\ISubjectRepository;
@@ -31,8 +33,6 @@ class SubjectController extends Controller
         $departmentFilter = $request->get('department-filter');
         $typeFilter = $request->get('type-filter');
         $keyword = $request->get('keyword');
-        $departments = $this->departmentRepository->all()->pluck('name', 'id')
-            ->toArray();
         $subjects = $this->subjectRepository->withTrashedModel()
             ->when($keyword, function ($query) use ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%');
@@ -46,28 +46,21 @@ class SubjectController extends Controller
                 });
             })
             ->with('department')
-            ->paginate(config('config.paginate'));
+            ->get();
 
-        return view('admin.subject.index', compact(
-            'subjects',
-            'departments',
-            'departmentFilter',
-            'typeFilter',
-            'keyword'
-        ));
+        return new SubjectResource($subjects);
     }
 
-    public function create()
+    public function show($id)
     {
-        $departments = $this->departmentRepository->all()
-            ->pluck('name', 'id');
+        $subject = $this->subjectRepository->findOrFail($id);
 
-        return view('admin.subject.create', compact('departments'));
+        return new SubjectResource($subject);
     }
 
     public function store(Request $request)
     {
-        $this->subjectRepository->create(
+        $subject = $this->subjectRepository->create(
             $request->only([
                 'name',
                 'credit',
@@ -76,31 +69,20 @@ class SubjectController extends Controller
             ])
         );
 
-        return $this->successRouteRedirect('admin.subjects.index');
-    }
-
-    public function edit($id)
-    {
-        $subject = $this->subjectRepository->find($id)
-            ->load('specializations');
-
-        return view('admin.subject.edit', compact(
-            'subject',
-        ));
+        return new SubjectResource($subject);
     }
 
     public function update(Request $request, $id)
     {
-        DB::beginTransaction();
-        $subject = $this->subjectRepository->find($id);
-        $subject->update($request->only([
-            'name',
-            'credit',
-            'semester'
-        ]));
-        DB::commit();
-
-        return $this->successRouteRedirect('admin.subjects.index');
+        try {
+            $subject = $this->subjectRepository->update($id, $request->only([
+                'name',
+                'credit',
+                'semester'
+            ]));
+            return $this->successRouteRedirect('admin.subjects.index');
+        } catch (Exception $e) {
+        }
     }
 
     public function destroy($id)

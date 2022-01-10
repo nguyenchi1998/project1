@@ -60,7 +60,7 @@ class ScheduleClassController extends Controller
                 });
             })
             ->with(['students', 'schedules'])
-            ->paginate(config('config.paginate'));
+            ->get();
         $specializations = $this->specializationRepository->all()
             ->pluck('name', 'id');
 
@@ -93,7 +93,7 @@ class ScheduleClassController extends Controller
             })
             ->with(['subject.specializations'])
             ->orderBy('status')
-            ->paginate(config('config.paginate'));
+            ->get();
 
         return view('admin.schedule.class.list_credit', compact(
             'schedules',
@@ -134,7 +134,7 @@ class ScheduleClassController extends Controller
     {
         try {
             DB::beginTransaction();
-            $class = $this->classRepository->find($classId);
+            $class = $this->classRepository->findOrFail($classId);
             $subjects = $this->subjectRepository->whereIn(
                 'id',
                 $request->get('subjectIds')

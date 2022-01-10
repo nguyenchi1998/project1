@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\TeacherCollection;
+use App\Http\Resources\TeacherResource;
+use App\Models\Teacher;
 use App\Repositories\IDepartmentRepository;
 use App\Repositories\ISubjectRepository;
 use App\Repositories\ITeacherRepository;
@@ -44,17 +47,16 @@ class TeacherController extends Controller
                 });
             })
             ->with(['department', 'nextDepartment'])
-            ->paginate(config('config.paginate'));
-        $departments = $this->departmentRepository->all()->pluck('name', 'id');
+            ->get();
 
-        return view('admin.teacher.index', compact('teachers', 'departmentFilter', 'departments', 'keyword'));
+        return new TeacherResource($teachers);
     }
 
-    public function create()
+    public function show($id)
     {
-        $departments = $this->departmentRepository->all();
+        $teacher = $this->teacherRepository->findOrFail($id);
 
-        return view('admin.teacher.create', compact('departments'));
+        return new TeacherResource($teacher);
     }
 
     public function store(Request $request)
@@ -77,28 +79,17 @@ class TeacherController extends Controller
             ]);
             DB::commit();
 
-            return redirect()->route('admin.teachers.index');
+            return new Teacher($teacher);
         } catch (Exception $e) {
             DB::rollBack();
 
-            return back()->withErrors(['msg' => $e->getMessage()]);
+            return $this->failRouteRedirect();
         }
-    }
-
-    public function edit($id)
-    {
-        $teacher = $this->teacherRepository->find($id);
-        if ($teacher) {
-            $teacher->load('department');
-        }
-        $departments = $this->departmentRepository->all();
-
-        return view('admin.teacher.edit', compact('teacher', 'departments'));
     }
 
     public function update(Request $request, $id)
     {
-        $teacher = $this->teacherRepository->find($id)
+        $teacher = $this->teacherRepository->findOrFail($id)
             ->load('avatar');
         $teacher->update($id, $request->only(['name', 'gender', 'birthday', 'address', 'phone']));
         if ($request->file('avatar')) {

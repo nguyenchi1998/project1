@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\StudentCollection;
+use App\Http\Resources\StudentResource;
 use App\Repositories\IClassRepository;
 use App\Repositories\IGradeRepository;
 use App\Repositories\ISpecializationRepository;
@@ -35,7 +37,6 @@ class StudentController extends Controller
     public function index(Request $request)
     {
         $specializationFilter = $request->get('specialization-filter');
-        $specializations = $this->specializationRepository->all()->pluck('name', 'id');
         $keyword = $request->get('keyword');
         $students = $this->studentRepository->model()
             ->when($keyword, function ($query) use ($keyword) {
@@ -49,45 +50,39 @@ class StudentController extends Controller
                 });
             })
             ->with('class.specialization')
-            ->paginate(config('config.paginate'));
-        $classes = $this->classRepository->all()->pluck('name', 'id');
+            ->get();
 
-        return view('admin.student.index', compact(
-            'students',
-            'specializations',
-            'specializationFilter',
-            'keyword'
-        ));
-    }
-
-    public function create()
-    {
-        $grades = $this->gradeRepository->all()->pluck('name', 'id')->toArray();
-
-        return view('admin.student.create', compact('grades'));
+        return new StudentResource($students);
     }
 
     public function store(Request $request)
     {
         try {
             DB::beginTransaction();
-            $student = $this->studentRepository->create(array_merge($request->only([
-                'name', 'email', 'phone', 'birthday', 'address', 'gender', 'grade_id',
-            ]), ['password' => Hash::make(config('default.auth.password'))]));
-            $avatar = $request->file('avatar');
-            $avatarFilename = $student->email . '.' . $avatar->getClientOriginalExtension();
-            $path = $this->studentRepository->saveImage(
-                $avatar,
-                $avatarFilename,
-                100,
-                100
+            $student = $this->studentRepository->create(
+                array_merge(
+                    $request->only([
+                        'name', 'email', 'phone', 'birthday', 'address', 'gender', 'grade_id',
+                    ]),
+                    ['password' => Hash::make(config('default.auth.password'))]
+                )
             );
-            $student->avatar()->create([
-                'path' => $path
-            ]);
+            $avatar = $request->file('avatar');
+            if ($avatar) {
+                $avatarFilename = $student->email . '.' . $avatar->getClientOriginalExtension();
+                $path = $this->studentRepository->saveImage(
+                    $avatar,
+                    $avatarFilename,
+                    100,
+                    100
+                );
+                $student->avatar()->create([
+                    'path' => $path
+                ]);
+            }
             DB::commit();
 
-            return $this->successRouteRedirect('admin.students.index');
+            return new StudentResource($student);
         } catch (Exception $e) {
             DB::rollBack();
 
@@ -95,19 +90,18 @@ class StudentController extends Controller
         }
     }
 
-
-    public function edit($id)
+    public function show($id)
     {
-        $student = $this->studentRepository->find($id);
+        $student = $this->studentRepository->findOrFail($id);
 
-        return view('admin.student.edit', compact('student'));
+        return new StudentResource($student);
     }
 
     public function update(Request $request, $id)
     {
         try {
             DB::beginTransaction();
-            $student = $this->studentRepository->find($id)
+            $student = $this->studentRepository->findOrFail($id)
                 ->load('avatar');
             $student->update($request->only([
                 'name', 'phone', 'birthday', 'address', 'gender', 'grade_id',

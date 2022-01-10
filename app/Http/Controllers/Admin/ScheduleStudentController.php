@@ -63,7 +63,7 @@ class ScheduleStudentController extends Controller
                     ->orWhere('phone', $keyword)
                     ->orWhere('email', 'like', '%' . $keyword . '%');
             })
-            ->paginate(config('config.paginate'));
+            ->get();
         $students->getCollection()->transform(function ($student) {
             $student->total_credit = $student->scheduleDetails->filter(function ($scheduleDetail) {
                 return $scheduleDetail->status_register == config('schedule.detail.status.register.pending');
@@ -105,7 +105,7 @@ class ScheduleStudentController extends Controller
             })
             ->with(['subject', 'schedule'])
             ->orderBy('register_status')
-            ->paginate(config('config.paginate'));
+            ->get();
 
         return view('admin.schedule.student.list_credit', compact(
             'scheduleDetails',

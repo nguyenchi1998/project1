@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateClass;
+use App\Http\Resources\ClassCollection;
+use App\Http\Resources\ClassResource;
+use App\Http\Resources\Classs;
 use App\Repositories\IClassRepository;
 use App\Repositories\ISpecializationRepository;
 use App\Repositories\IStudentRepository;
@@ -31,13 +34,6 @@ class ClassController extends Controller
     {
         $filterSpecialization = $request->get('specializaiton-filter');
         $keyword = $request->get('keyword');
-        $specializations = $this->specializationRepository->all()
-            ->pluck('name', 'id')
-            ->toArray();
-        $showCreateClassBtn = $this->studentRepository->model()
-            ->whereNull('class_id')
-            ->get()
-            ->count();
         $classes = $this->classRepository->withTrashedModel()
             ->inprogressClass()
             ->when($keyword, function ($query) use ($keyword) {
@@ -50,24 +46,9 @@ class ClassController extends Controller
                 });
             })
             ->with(['students', 'specialization'])
-            ->paginate(config('config.paginate'));
-
-        return view('admin.class.index', compact(
-            'classes',
-            'filterSpecialization',
-            'keyword',
-            'specializations',
-            'showCreateClassBtn'
-        ));
-    }
-
-    public function create()
-    {
-        $students = $this->studentRepository->model()
-            ->whereNull('class_id')
             ->get();
 
-        return view('admin.class.create', compact('students'));
+        return new ClassResource($classes);
     }
 
     public function store(Request $request)
@@ -86,12 +67,19 @@ class ClassController extends Controller
                 ]);
             DB::commit();
 
-            return $this->successRouteRedirect('admin.classes.index');
+            return new ClassResource($class);
         } catch (Exception $e) {
             DB::rollBack();
 
             return $this->failRouteRedirect($e->getMessage());
         }
+    }
+
+    public function show($id)
+    {
+        $class = $this->classRepository->findOrFail($id);
+
+        return new ClassResource($class);
     }
 
     public function studentsShow($id)
@@ -100,18 +88,10 @@ class ClassController extends Controller
             ->whereNull('class_id')
             ->get()
             ->count();
-        $class = $this->classRepository->find($id)->load('students');
+        $class = $this->classRepository->findOrFail($id)->load('students');
 
         return view('admin.class.show_students', compact('class', 'studentsNotHasClass'));
     }
-
-    public function edit($id)
-    {
-        $class = $this->classRepository->find($id);
-
-        return view('admin.class.edit', compact('class'));
-    }
-
 
     public function update(UpdateClass $request, $id)
     {

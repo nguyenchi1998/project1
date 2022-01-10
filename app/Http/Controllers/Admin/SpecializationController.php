@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ChooseSubject;
+use App\Http\Resources\SpecializationCollection;
+use App\Http\Resources\SpecializationResource;
 use App\Repositories\IDepartmentRepository;
 use App\Repositories\ISpecializationRepository;
 use App\Repositories\ISubjectRepository;
@@ -37,23 +39,20 @@ class SpecializationController extends Controller
                     $query->where('id', $departmentFilter);
                 });
             })
+            ->when($keyword, function ($query) use ($keyword) {
+                $query->where('name', $keyword);
+            })
             ->with(['subjects', 'department'])
-            ->paginate(config('config.paginate'));
-        $departments = $this->departmentRepository->all()->pluck('name', 'id')->toArray();
+            ->get();
 
-        return view('admin.specialization.index', compact(
-            'specializations',
-            'keyword',
-            'departmentFilter',
-            'departments'
-        ));
+        return new SpecializationResource($specializations);
     }
 
-    public function create()
+    public function show($id)
     {
-        $departments = $this->departmentRepository->all()->pluck('name', 'id');
+        $specialization = $this->specializationRepository->findOrFail($id);
 
-        return view('admin.specialization.create', compact('departments'));
+        return new SpecializationResource($specialization);
     }
 
     public function store(Request $request)
@@ -79,22 +78,12 @@ class SpecializationController extends Controller
             $specialization->subjects()->sync($basicSubjectIds);
             DB::commit();
 
-            return $this->successRouteRedirect('admin.specializations.index');
+            return new SpecializationCollection($specialization);
         } catch (Exception $e) {
             DB::rollBack();
 
             return $this->failRouteRedirect($e->getMessage());
         }
-    }
-
-    public function edit($id)
-    {
-        $specialization = $this->specializationRepository->find($id);
-        if ($specialization) {
-            $specialization = $specialization->load('subjects');
-        }
-
-        return view('admin.specialization.edit', compact('specialization'));
     }
 
     public function update(Request $request, $id)

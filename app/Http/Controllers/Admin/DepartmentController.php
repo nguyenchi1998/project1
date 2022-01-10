@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Department;
+use App\Http\Resources\DepartmentResource;
 use App\Repositories\IDepartmentRepository;
 use Illuminate\Http\Request;
 
@@ -20,28 +22,16 @@ class DepartmentController extends Controller
         $keyword = $request->get('keyword');
         $departments = $this->departmentRepository->where('name', 'like', '%' . $keyword . '%')
             ->with(['teachers', 'manager'])
-            ->paginate(config('config.paginate'));
+            ->get();
 
-        return view('admin.department.index', compact('departments', 'keyword'));
-    }
-
-    public function create()
-    {
-        return view('admin.department.create');
+        return new DepartmentResource($departments);
     }
 
     public function store(Request $request)
     {
-        $this->departmentRepository->create($request->only('name'));
+        $department = $this->departmentRepository->create($request->only('name'));
 
-        return $this->successRouteRedirect('admin.departmants.index');
-    }
-
-    public function edit($id)
-    {
-        $department = $this->departmentRepository->find($id);
-
-        return view('admin.department.edit', compact('department'));
+        return new DepartmentResource($department);
     }
 
     public function update(Request $request, $id)

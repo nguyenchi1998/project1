@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Exports\MarkExport;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ScheduleCollection;
+use App\Http\Resources\ScheduleResource;
 use App\Repositories\IClassRepository;
 use App\Repositories\IScheduleDetailRepository;
 use App\Repositories\IScheduleRepository;
@@ -41,7 +43,6 @@ class ScheduleController extends Controller
 
     public function index(Request $request)
     {
-        $hasScheduleDetails = count($this->calculateScheduleDetails());
         $classType = $request->get('class-type');
         $status = $request->get('status', config('schedule.status.new'));
         $keyword = $request->get('keyword');
@@ -69,15 +70,9 @@ class ScheduleController extends Controller
             })
             ->with(['subject.teachers', 'teacher', 'scheduleDetails'])
             ->orderBy('status', 'asc')
-            ->paginate(config('config.paginate'));
+            ->get();
 
-        return view('admin.schedule.index', compact(
-            'schedules',
-            'status',
-            'hasScheduleDetails',
-            'classType',
-            'keyword'
-        ));
+        return new ScheduleResource($schedules);
     }
 
     protected function calculateScheduleDetails()
@@ -111,17 +106,17 @@ class ScheduleController extends Controller
         }, $scheduleDetails);
     }
 
-    public function create()
+    public function show($id)
     {
-        $scheduleDetails = $this->calculateScheduleDetails();
+        $schedule = $this->scheduleRepository->findOrFail($id);
 
-        return view('admin.schedule.create', compact('scheduleDetails'));
+        return new ScheduleResource($schedule);
     }
 
     public function store(Request $request)
     {
         try {
-            $subject = $this->subjectRepository->find($request->get('subject_id'));
+            $subject = $this->subjectRepository->findOrFail($request->get('subject_id'));
             $schedule = $this->scheduleRepository->create(
                 array_merge($request->only([
                     'subject_id',
@@ -147,14 +142,6 @@ class ScheduleController extends Controller
         }
     }
 
-    public function show($id)
-    {
-        $schedule = $this->scheduleRepository->find($id)
-            ->load('scheduleDetails');
-
-        return view('admin.schedule.show', compact('schedule'));
-    }
-
     public function export($id)
     {
         $schedule = $this->scheduleRepository->find($id)
@@ -173,15 +160,6 @@ class ScheduleController extends Controller
         });
 
         return (new MarkExport($data))->download($filename);
-    }
-
-    public function edit($id)
-    {
-        $schedule = $this->scheduleRepository->find($id);
-        $teachers = $schedule->subject->teachers->pluck('name', 'id')
-            ->toArray();
-
-        return view('admin.schedule.edit', compact('schedule', 'teachers'));
     }
 
     public function update(Request $request, $scheduleId)

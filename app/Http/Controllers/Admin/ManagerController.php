@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CreateManager;
 use App\Http\Resources\ManagerCollection;
+use App\Http\Resources\ManagerResource;
 use App\Repositories\IManagerRepository;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -30,19 +31,19 @@ class ManagerController extends Controller
             ->isNormalManager()
             ->when($keyword, function ($query) use ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%')
-                    ->orWhere('phone', $keyword)
-                    ->orWhere('email', 'like', '%' . $keyword . '%');
+                    ->orWhere('email', 'like', '%' . $keyword . '%')
+                    ->orWhere('phone', $keyword);
             })
             ->get();
 
-        return ManagerCollection::collection($managers);
+        return new ManagerCollection($managers);
     }
 
     public function show($id)
     {
-        $manager = $this->managerRepository->find($id);
+        $manager = $this->managerRepository->findOrFail($id);
 
-        return new ManagerCollection($manager);
+        return new ManagerResource($manager);
     }
 
     public function store(CreateManager $request)
@@ -83,9 +84,9 @@ class ManagerController extends Controller
 
     public function update(Request $request, $id)
     {
+        $manager = $this->managerRepository->findOrFail($id);
         try {
             DB::beginTransaction();
-            $manager = $this->managerRepository->findOrFail($id);
             $data = $request->only([
                 'name', 'phone', 'birthday', 'address', 'gender'
             ]);
@@ -106,14 +107,10 @@ class ManagerController extends Controller
             DB::commit();
 
             return $this->successRouteRedirect($data);
-        } catch (ModelNotFoundException $e) {
-            DB::rollBack();
-
-            return $this->failRouteRedirect($e->getMessage(), 404);
         } catch (Exception $e) {
             DB::rollBack();
 
-            return $this->failRouteRedirect($e->getMessage());
+            return $this->failRouteRedirect($e->getMessage(), 404);
         }
     }
 

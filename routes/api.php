@@ -19,6 +19,12 @@ Route::group(['namespace' => 'Admin', 'middleware' => ['auth.guard:manager']], f
         Route::apiResource('managers', 'ManagerController');
         Route::apiResource('students', 'StudentController');
         Route::apiResource('teachers', 'TeacherController');
+        Route::apiResource('subjects', 'SubjectController');
+        Route::apiResource('classes', 'ClassController');
+        Route::apiResource('specializations', 'SpecializationController');
+        Route::apiResource('departments', 'DepartmentController');
+        Route::apiResource('grades', 'GradeController');
+        Route::apiResource('schedules.details', 'ScheduleController');
     });
     Route::group(['prefix' => 'auth'], function () {
         Route::post('login', 'LoginController@login');
