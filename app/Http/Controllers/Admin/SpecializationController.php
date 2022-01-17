@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ChooseSubject;
+use App\Http\Requests\ChooseSubjectRequest;
 use App\Http\Resources\SpecializationCollection;
 use App\Http\Resources\SpecializationResource;
 use App\Repositories\IDepartmentRepository;
@@ -45,7 +45,7 @@ class SpecializationController extends Controller
             ->with(['subjects', 'department'])
             ->get();
 
-        return new SpecializationResource($specializations);
+        return SpecializationResource::collection($specializations);
     }
 
     public function show($id)
@@ -96,7 +96,7 @@ class SpecializationController extends Controller
             ]));
             DB::commit();
 
-            return $this->successRouteRedirect('admin.specializations.index');
+            return $this->successRouteRedirect();
         } catch (Exception $e) {
             DB::rollBack();
 
@@ -109,7 +109,7 @@ class SpecializationController extends Controller
         $result = $this->specializationRepository->delete($id);
 
         if ($result) {
-            return $this->successRouteRedirect('admin.specializations.index');
+            return $this->successRouteRedirect();
         }
         return $this->failRouteRedirect();
     }
@@ -119,7 +119,7 @@ class SpecializationController extends Controller
     {
         $result = $this->specializationRepository->restore($id);
         if ($result) {
-            return $this->successRouteRedirect('admin.specializations.index');
+            return $this->successRouteRedirect();
         }
 
         return $this->failRouteRedirect();
@@ -140,7 +140,7 @@ class SpecializationController extends Controller
         ));
     }
 
-    public function chooseSubject(ChooseSubject $request, $id)
+    public function chooseSubject(ChooseSubjectRequest $request, $id)
     {
         $specialization = $this->specializationRepository->find($id);
         $specialization->subjects()

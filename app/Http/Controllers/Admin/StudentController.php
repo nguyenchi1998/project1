@@ -52,7 +52,7 @@ class StudentController extends Controller
             ->with('class.specialization')
             ->get();
 
-        return new StudentResource($students);
+        return  StudentResource::collection($students);
     }
 
     public function store(Request $request)
@@ -125,7 +125,7 @@ class StudentController extends Controller
             }
             DB::commit();
 
-            return $this->successRouteRedirect('admin.students.index');
+            return $this->successRouteRedirect();
         } catch (Exception $e) {
             DB::rollBack();
 
@@ -137,7 +137,7 @@ class StudentController extends Controller
     {
         $result = $this->studentRepository->delete($id);
         if ($result) {
-            return $this->successRouteRedirect('admin.students.index');
+            return $this->successRouteRedirect();
         }
 
         return $this->failRouteRedirect();
@@ -147,7 +147,7 @@ class StudentController extends Controller
     {
         $result = $this->studentRepository->restore($id);
         if ($result) {
-            return $this->successRouteRedirect('admin.students.index');
+            return $this->successRouteRedirect();
         }
 
         return $this->failRouteRedirect();

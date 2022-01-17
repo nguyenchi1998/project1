@@ -26,12 +26,12 @@ class ScheduleController extends Controller
     protected $scheduleDetailRepository;
 
     public function __construct(
-        IScheduleRepository $scheduleRepository,
+        IScheduleRepository       $scheduleRepository,
         IScheduleDetailRepository $scheduleDetailRepository,
         ISpecializationRepository $specializationRepository,
-        ISubjectRepository $subjectRepository,
-        IClassRepository $classRepository,
-        IStudentRepository $studentRepository
+        ISubjectRepository        $subjectRepository,
+        IClassRepository          $classRepository,
+        IStudentRepository        $studentRepository
     ) {
         $this->scheduleRepository = $scheduleRepository;
         $this->specializationRepository = $specializationRepository;
@@ -59,7 +59,7 @@ class ScheduleController extends Controller
                 $query->where('code', $keyword)
                     ->orWhereHas('subject', function ($query) use ($keyword) {
                         $query->where('name', 'like', '%' . $keyword . '%');
-                    });;
+                    });
             })
             ->when(isset($classType), function ($query) use ($classType) {
                 $query->when($classType, function ($query) {
@@ -72,38 +72,7 @@ class ScheduleController extends Controller
             ->orderBy('status', 'asc')
             ->get();
 
-        return new ScheduleResource($schedules);
-    }
-
-    protected function calculateScheduleDetails()
-    {
-        $scheduleDetails = $this->scheduleDetailRepository->model()
-            ->doesntHave('schedule')
-            ->get()
-            ->load('subject.teachers')
-            ->reduce(function (&$subjects, $scheduleDetail) {
-                if (isset($subjects[$scheduleDetail->subject_id])) {
-                    $subjects[$scheduleDetail->subject_id] = [
-                        'subject' => $scheduleDetail->subject->toArray(),
-                        'schedule_details' => array_merge(
-                            $subjects[$scheduleDetail->subject_id]['schedule_details'],
-                            [$scheduleDetail->id]
-                        )
-                    ];
-                } else {
-                    $subjects[$scheduleDetail->subject_id] = [
-                        'subject' => $scheduleDetail->subject->toArray(),
-                        'schedule_details' => [$scheduleDetail->id],
-                    ];
-                }
-                return $subjects;
-            }, []);
-        return array_map(function ($item) {
-            $item['subject']['teachers'] = collect($item['subject']['teachers'])
-                ->pluck('name', 'id');
-
-            return $item;
-        }, $scheduleDetails);
+        return ScheduleResource::collection($schedules);
     }
 
     public function show($id)
@@ -134,7 +103,7 @@ class ScheduleController extends Controller
                     'register_status' => config('schedule.detail.status.register.success')
                 ]);
 
-            return $this->successRouteRedirect('admin.schedules.index');
+            return $this->successRouteRedirect();
         } catch (Exception $e) {
             DB::rollBack();
 
@@ -169,26 +138,30 @@ class ScheduleController extends Controller
             array_merge(
                 $request->only(['teacher_id', 'start_time', 'end_time']),
                 [
-                    'status' => $request->status ?? ($schedule->teacher && $schedule->start_time ? config('schedule.status.inprogress') : $schedule->status),
+                    'status' => $request->status ?? (
+                        $schedule->teacher && $schedule->start_time
+                            ? config('schedule.status.progress')
+                            : $schedule->status
+                        ),
                 ]
             )
         );
 
-        return $this->successRouteRedirect('admin.schedules.index');
+        return $this->successRouteRedirect();
     }
 
     public function destroy($id)
     {
         $this->scheduleRepository->delete($id);
 
-        return $this->successRouteRedirect('admin.schedules.index');
+        return $this->successRouteRedirect();
     }
 
     public function restore($id)
     {
         $result = $this->scheduleRepository->restore($id);
         if ($result) {
-            return $this->successRouteRedirect('admin.schedules.index');
+            return $this->successRouteRedirect();
         }
 
         return $this->failRouteRedirect();
@@ -203,8 +176,44 @@ class ScheduleController extends Controller
 
     public function scheduleTime(Request $request, $id)
     {
-        $this->scheduleRepository->update($id, [
+        $result = $this->scheduleRepository->update($id, [
             'schedule_time' => json_encode($request->get('timeschedules'))
         ]);
+        if ($result) {
+            return $this->successRouteRedirect();
+        }
+
+        return $this->failRouteRedirect();
+    }
+
+    protected function calculateScheduleDetails()
+    {
+        $scheduleDetails = $this->scheduleDetailRepository->model()
+            ->doesntHave('schedule')
+            ->get()
+            ->load('subject.teachers')
+            ->reduce(function (&$subjects, $scheduleDetail) {
+                if (isset($subjects[$scheduleDetail->subject_id])) {
+                    $subjects[$scheduleDetail->subject_id] = [
+                        'subject' => $scheduleDetail->subject->toArray(),
+                        'schedule_details' => array_merge(
+                            $subjects[$scheduleDetail->subject_id]['schedule_details'],
+                            [$scheduleDetail->id]
+                        )
+                    ];
+                } else {
+                    $subjects[$scheduleDetail->subject_id] = [
+                        'subject' => $scheduleDetail->subject->toArray(),
+                        'schedule_details' => [$scheduleDetail->id],
+                    ];
+                }
+                return $subjects;
+            }, []);
+        return array_map(function ($item) {
+            $item['subject']['teachers'] = collect($item['subject']['teachers'])
+                ->pluck('name', 'id');
+
+            return $item;
+        }, $scheduleDetails);
     }
 }

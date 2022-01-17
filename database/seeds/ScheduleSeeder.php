@@ -41,7 +41,7 @@ class ScheduleSeeder extends Seeder
                         'class_id' => $class->id,
                         'status' => $class->semster == config('config.class_register_limit_semester')
                             ? $faker->randomElement([
-                                config('schedule.status.inprogress'),
+                                config('schedule.status.progress'),
                                 config('schedule.status.finish'),
                                 config('schedule.status.marking'),
                             ]) : config('schedule.status.done'),

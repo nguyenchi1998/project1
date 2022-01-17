@@ -20,7 +20,7 @@ class Controller extends BaseController
         ]);
     }
 
-    protected function failRouteRedirect($message = 'Xử lý thất bại', $status = 200)
+    protected function failRouteRedirect($message = 'Xử lý thất bại', $status = 500)
     {
         return response([
             'success' => false,

@@ -36,7 +36,7 @@ class ManagerSeeder extends Seeder
             'code' => generate_code(Manager::class, $superAdmin->id),
         ]);
         $superAdmin->avatar()->save($media);
-        factory(Manager::class, 2)->create()->each(function ($manager, $key) use ($path) {
+        factory(Manager::class, 10)->create()->each(function ($manager, $key) use ($path) {
             $media = Media::create([
                 'path' => str_replace(storage_path(config('default.path.app_public')), '', $path),
             ]);

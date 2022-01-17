@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\RegisterCreditStudent;
+use App\Http\Requests\Admin\RegisterCreditStudentRequest;
 use App\Repositories\IClassRepository;
 use App\Repositories\IGradeRepository;
 use App\Repositories\IScheduleDetailRepository;
@@ -152,7 +152,7 @@ class ScheduleStudentController extends Controller
         ));
     }
 
-    public function store(RegisterCreditStudent $request, $studentId)
+    public function store(RegisterCreditStudentRequest $request, $studentId)
     {
         $student = $this->studentRepository->find($studentId)
             ->load('class');
@@ -168,20 +168,20 @@ class ScheduleStudentController extends Controller
             }, $request->get('subjectIds'))
         );
 
-        return $this->successRouteRedirect('admin.schedules.students.show', $studentId);
+        return $this->successRouteRedirect();
     }
 
     public function destroy($studentId, $scheduleDetailId)
     {
         $this->scheduleDetailRepository->delete($scheduleDetailId, true);
 
-        return $this->successRouteRedirect('admin.schedules.students.show', $studentId);
+        return $this->successRouteRedirect();
     }
 
     public function creditStatus(Request $request, $id)
     {
         $this->studentRepository->update($id, $request->only('can_register_credit'));
 
-        return $this->successRouteRedirect('admin.schedules.students.index');
+        return $this->successRouteRedirect();
     }
 }

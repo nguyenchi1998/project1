@@ -40,25 +40,30 @@ class RequestController extends Controller
 
     public function departmentTeacher(Request $request, $teacherId)
     {
-        $status = $request->get('status');
-        $this->teacherRepository->update($teacherId, [
-            'department_id' => $status ? $request->get('next_department_id') : null,
+        $result = $this->teacherRepository->update($teacherId, [
+            'department_id' => $request->get('status') ? $request->get('next_department_id') : null,
             'next_department_id' => null,
             'next_department_status' => config('status.department.next_manager.success'),
         ]);
+        if ($result) {
+            return $this->successRouteRedirect();
+        }
 
-        return $this->successRouteRedirect('admin.requests.index');
+        return $this->failRouteRedirect();
     }
 
     public function departmentManager(Request $request, $departmentId)
     {
-        $status = $request->get('status');
-        $this->departmentRepository->update($departmentId, [
-            'manager_id' => $status ? $request->get('next_manager_id') : null,
+        $result = $this->departmentRepository->update($departmentId, [
+            'manager_id' => $request->get('status') ? $request->get('next_manager_id') : null,
             'next_manager_id' => null,
             'next_manager_status' => config('status.teacher.next_department.success'),
         ]);
 
-        return $this->successRouteRedirect('admin.requests.index');
+        if ($result) {
+            return $this->successRouteRedirect();
+        }
+
+        return $this->failRouteRedirect();
     }
 }

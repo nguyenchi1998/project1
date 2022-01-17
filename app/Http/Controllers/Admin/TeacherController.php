@@ -13,6 +13,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TeacherController extends Controller
 {
@@ -49,7 +50,7 @@ class TeacherController extends Controller
             ->with(['department', 'nextDepartment'])
             ->get();
 
-        return new TeacherResource($teachers);
+        return TeacherResource::collection($teachers);
     }
 
     public function show($id)
@@ -79,7 +80,7 @@ class TeacherController extends Controller
             ]);
             DB::commit();
 
-            return new Teacher($teacher);
+            return new TeacherResource($teacher);
         } catch (Exception $e) {
             DB::rollBack();
 
@@ -89,36 +90,36 @@ class TeacherController extends Controller
 
     public function update(Request $request, $id)
     {
-        $teacher = $this->teacherRepository->findOrFail($id)
-            ->load('avatar');
-        $teacher->update($id, $request->only(['name', 'gender', 'birthday', 'address', 'phone']));
-        if ($request->file('avatar')) {
-            $imageDeleted = $this->teacherRepository->deleteImage($teacher->avatar->path);
-            if (!$imageDeleted) {
-                throw new Exception('Error delete old image');
+        try {
+            DB::beginTransaction();
+            $teacher = $this->teacherRepository->findOrFail($id)
+                ->load('avatar');
+            $teacher->update($id, $request->only(['name', 'gender', 'birthday', 'address', 'phone']));
+            if ($request->file('avatar')) {
+                $imageDeleted = $this->teacherRepository->deleteImage($teacher->avatar->path);
+                if (!$imageDeleted) {
+                    throw new Exception('Error delete old image');
+                }
+                $avatar = $request->file('avatar');
+                $avatarFilename = $teacher->email . '.' . $avatar->getClientOriginalExtension();
+                $path = $this->studentRepository->saveImage(
+                    $avatar,
+                    $avatarFilename,
+                    config('default.avatar_size'),
+                    config('default.avatar_size')
+                );
+                $teacher->avatar()->update([
+                    'path' => $path,
+                ]);
             }
-            $avatar = $request->file('avatar');
-            $avatarFilename = $teacher->email . '.' . $avatar->getClientOriginalExtension();
-            $path = $this->studentRepository->saveImage(
-                $avatar,
-                $avatarFilename,
-                config('default.avatar_size'),
-                config('default.avatar_size')
-            );
-            $teacher->avatar()->update([
-                'path' => $path
-            ]);
+            DB::commit();
+
+            return $this->successRouteRedirect();
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return $this->failRouteRedirect($e->getMessage());
         }
-
-        return redirect()->route('admin.teachers.index');
-    }
-
-    public function changeDepartmentShow($id)
-    {
-        $teacher = $this->teacherRepository->find($id)->load('department');
-        $departments = $this->departmentRepository->all();
-
-        return view('admin.teacher.change_department', compact('teacher', 'departments'));
     }
 
     public function changeDepartment(Request $request, $id)
@@ -129,9 +130,7 @@ class TeacherController extends Controller
             DB::beginTransaction();
             $teacher = $this->teacherRepository->find($id)->load('department');
             if ($teacher->next_department_id) {
-                return redirect()->back()->withErrors([
-                    'msg' => 'Teacher has department change, please contact to manager to handle'
-                ]);
+                return $this->failRouteRedirect();
             }
             if ($isManager) {
                 $this->departmentRepository->update($departmentId, [
@@ -146,25 +145,12 @@ class TeacherController extends Controller
             }
             DB::commit();
 
-            return redirect()->route('admin.teachers.index');
+            return $this->successRouteRedirect();
         } catch (Exception $e) {
             DB::rollBack();
 
-            return back();
+            return $this->failRouteRedirect($e->getMessage());
         }
-    }
-
-    public function chooseSubjectShow($id)
-    {
-        $teacher = $this->teacherRepository->find($id)
-            ->load(['subjects' => function ($query) {
-                $query->orderBy('name');
-            }, 'department']);
-        $teacherSubjects = $teacher->subjects->pluck('id')
-            ->toArray();
-        $subjects = $teacher->department->subjects;
-
-        return view('admin.teacher.choose_subject', compact('teacher', 'subjects', 'teacherSubjects'));
     }
 
     public function chooseSubject(Request $request, $id)
@@ -173,25 +159,24 @@ class TeacherController extends Controller
         $teacher = $this->teacherRepository->find($id);
         $teacher->subjects()->sync($subjectIds);
 
-        return redirect()->route('admin.teachers.index');
+        return $this->successRouteRedirect();
     }
 
     public function destroy($id)
     {
         $result = $this->teacherRepository->delete($id);
         if ($result) {
-            return redirect()->route('admin.teachers.index');
+            return $this->successRouteRedirect();
         }
 
-        return redirect()->route('admin.teachers.index')
-            ->withErrors(['msg' => 'Delete Error']);
+        return $this->failRouteRedirect();
     }
 
     public function restore($id)
     {
         $result = $this->teacherRepository->restore($id);
         if ($result) {
-            return $this->successRouteRedirect('admin.teachers.index');
+            return $this->successRouteRedirect();
         }
 
         return $this->failRouteRedirect();

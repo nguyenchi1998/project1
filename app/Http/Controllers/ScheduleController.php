@@ -110,8 +110,11 @@ class ScheduleController extends Controller
 
     public function destroy($id)
     {
-        $this->scheduleDetailRepository->delete($id, true);
+        $result = $this->scheduleDetailRepository->delete($id, true);
+        if ($result) {
+            return $this->successRouteRedirect();
+        }
 
-        return $this->successRouteRedirect('scheduleDetails.credits.index');
+        return $this->failRouteRedirect();
     }
 }

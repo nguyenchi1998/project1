@@ -16,7 +16,7 @@ if (!function_exists('getNameSchedule')) {
                     $name = 'Mới Tạo';
                     break;
                 }
-            case config('schedule.status.inprogress'): {
+            case config('schedule.status.progress'): {
                     $name = 'Đang Học';
                     break;
                 }

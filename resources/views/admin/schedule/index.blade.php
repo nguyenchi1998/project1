@@ -23,8 +23,8 @@
                                 <option value="{{ config('schedule.status.new') }}" @if($status==config('schedule.status.new')) selected @endif>
                                     {{ getNameSchedule(config('schedule.status.new')) }}
                                 </option>
-                                <option value="{{ config('schedule.status.inprogress') }}" @if($status==config('schedule.status.inprogress')) selected @endif>
-                                    {{ getNameSchedule(config('schedule.status.inprogress')) }}
+                                <option value="{{ config('schedule.status.progress') }}" @if($status==config('schedule.status.progress')) selected @endif>
+                                    {{ getNameSchedule(config('schedule.status.progress')) }}
                                 </option>
                                 <option value="{{ config('schedule.status.finish') }}" @if($status==config('schedule.status.finish')) selected @endif>
                                     {{ getNameSchedule(config('schedule.status.finish')) }}
@@ -94,8 +94,8 @@
                                             <option value="{{ config('schedule.status.new') }}" @if($schedule->status == config('schedule.status.new')) selected @endif>
                                                 {{ getNameSchedule(config('schedule.status.new')) }}
                                             </option>
-                                            <option value="{{ config('schedule.status.inprogress') }}" @if($schedule->status == config('schedule.status.inprogress')) selected @endif>
-                                                {{ getNameSchedule(config('schedule.status.inprogress')) }}
+                                            <option value="{{ config('schedule.status.progress') }}" @if($schedule->status == config('schedule.status.progress')) selected @endif>
+                                                {{ getNameSchedule(config('schedule.status.progress')) }}
                                             </option>
                                             <option value="{{ config('schedule.status.finish') }}" @if($schedule->status == config('schedule.status.finish')) selected @endif>
                                                 {{ getNameSchedule(config('schedule.status.finish')) }}

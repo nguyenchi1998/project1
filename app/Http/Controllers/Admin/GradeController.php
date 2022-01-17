@@ -28,7 +28,7 @@ class GradeController extends Controller
             ->with('students')
             ->get();
 
-        return new GradeResource($grades);
+        return GradeResource::collection($grades);
     }
 
     public function store(Request $request)
@@ -45,7 +45,7 @@ class GradeController extends Controller
             $request->only(['name',])
         );
         if ($success) {
-            return $this->successRouteRedirect('admin.grades.index');
+            return $this->successRouteRedirect();
         }
 
         return $this->failRouteRedirect();
@@ -56,7 +56,7 @@ class GradeController extends Controller
         $grade = $this->gradeRepository->find($id)->load('students');
         $result = $this->gradeRepository->delete($id, !count($grade->students));
         if ($result) {
-            return $this->successRouteRedirect('admin.grades.index');
+            return $this->successRouteRedirect();
         }
 
         return $this->failRouteRedirect();
@@ -66,7 +66,7 @@ class GradeController extends Controller
     {
         $result = $this->gradeRepository->restore($id);
         if ($result) {
-            return $this->successRouteRedirect('admin.grades.index');
+            return $this->successRouteRedirect();
         }
 
         return $this->failRouteRedirect();
@@ -74,11 +74,14 @@ class GradeController extends Controller
 
     public function registerCreditStatus(Request $request, $id)
     {
-        $this->gradeRepository->update(
+        $result = $this->gradeRepository->update(
             $id,
             $request->only('can_register_credit')
         );
+        if ($result) {
+            return $this->successRouteRedirect();
+        }
 
-        return $this->successRouteRedirect('admin.grades.index');
+        return $this->failRouteRedirect();
     }
 }

@@ -151,7 +151,7 @@ class ScheduleClassController extends Controller
             }
             DB::commit();
 
-            return $this->successRouteRedirect('admin.schedules.classes.show', $classId);
+            return $this->successRouteRedirect();
         } catch (Exception $e) {
             return $this->failRouteRedirect($e->getMessage());
         }
@@ -161,6 +161,6 @@ class ScheduleClassController extends Controller
     {
         $this->scheduleRepository->delete($scheduleId);
 
-        return $this->successRouteRedirect('admin.schedules.classes.show', $classId);
+        return $this->successRouteRedirect();
     }
 }

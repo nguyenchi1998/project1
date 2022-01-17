@@ -3,16 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\CreateManager;
-use App\Http\Resources\ManagerCollection;
+use App\Http\Requests\Admin\CreateManagerRequest;
 use App\Http\Resources\ManagerResource;
 use App\Repositories\IManagerRepository;
+use Carbon\Carbon;
 use Exception;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Intervention\Image\Exception\NotFoundException;
 
 class ManagerController extends Controller
 {
@@ -36,7 +34,7 @@ class ManagerController extends Controller
             })
             ->get();
 
-        return new ManagerCollection($managers);
+        return ManagerResource::collection($managers);
     }
 
     public function show($id)
@@ -46,19 +44,21 @@ class ManagerController extends Controller
         return new ManagerResource($manager);
     }
 
-    public function store(CreateManager $request)
+    public function store(CreateManagerRequest $request)
     {
         try {
-            $data =  $request->only([
-                'name', 'email', 'phone', 'birthday', 'address', 'gender'
-            ]);
             DB::beginTransaction();
-            $manager = $this->managerRepository->create(
-                array_merge(
-                    $data,
-                    ['password' => Hash::make(config('default.auth.password'))]
-                )
-            );
+            $data = array_merge($request->only([
+                'name',
+                'email',
+                'phone',
+                'address',
+                'gender'
+            ]), [
+                'birthday' => Carbon::createFromFormat('d/m/Y', $request->get('birthday')),
+                'password' => Hash::make(config('default.auth.password'))
+            ]);
+            $manager = $this->managerRepository->create($data);
             $avatar = $request->file('avatar');
             if ($avatar) {
                 $avatarFilename = $manager->email . '.' . $avatar->getClientOriginalExtension();
@@ -119,7 +119,7 @@ class ManagerController extends Controller
         $result = $this->managerRepository->delete($id);
 
         if ($result) {
-            return $this->successRouteRedirect('admin.managers.index');
+            return $this->successRouteRedirect();
         }
         return $this->failRouteRedirect();
     }
@@ -128,7 +128,7 @@ class ManagerController extends Controller
     {
         $result = $this->managerRepository->restore($id);
         if ($result) {
-            return $this->successRouteRedirect('admin.managers.index');
+            return $this->successRouteRedirect();
         }
 
         return $this->failRouteRedirect();

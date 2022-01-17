@@ -62,7 +62,7 @@
                                     @case(config('schedule.status.new'))
                                     Mới Đăng Ký
                                     @break
-                                    @case(config('schedule.status.inprogress'))
+                                    @case(config('schedule.status.progress'))
                                     Đang Học
                                     @break
                                     @case(config('schedule.status.finish'))

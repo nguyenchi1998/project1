@@ -24,7 +24,7 @@ class DepartmentController extends Controller
             ->with(['teachers', 'manager'])
             ->get();
 
-        return new DepartmentResource($departments);
+        return  DepartmentResource::collection($departments);
     }
 
     public function store(Request $request)
@@ -36,16 +36,20 @@ class DepartmentController extends Controller
 
     public function update(Request $request, $id)
     {
-        $this->departmentRepository->update($id, $request->only('name'));
+        $result = $this->departmentRepository->update($id, $request->only('name'));
 
-        return $this->successRouteRedirect('admin.departmants.index');
+        if ($result) {
+            return $this->successRouteRedirect();
+        }
+
+        return $this->failRouteRedirect();
     }
 
     public function destroy($id)
     {
         $result = $this->departmentRepository->delete($id);
         if ($result) {
-            return $this->successRouteRedirect('admin.departmants.index');
+            return $this->successRouteRedirect();
         }
 
         return $this->failRouteRedirect();
@@ -55,7 +59,7 @@ class DepartmentController extends Controller
     {
         $result = $this->departmentRepository->restore($id);
         if ($result) {
-            return $this->successRouteRedirect('admin.departmants.index');
+            return $this->successRouteRedirect();
         }
 
         return $this->failRouteRedirect();
@@ -63,11 +67,15 @@ class DepartmentController extends Controller
 
     public function changeManager(Request $request, $departmentId)
     {
-        $this->departmentRepository->update($departmentId, [
+        $result = $this->departmentRepository->update($departmentId, [
             'next_manager_id' => $request->get('next_manager_id'),
             'next_manager_status' => config('status.department.next_manager.pending')
         ]);
 
-        return $this->successRouteRedirect('admin.departments.index');
+        if ($result) {
+            return $this->successRouteRedirect();
+        }
+
+        return $this->failRouteRedirect();
     }
 }

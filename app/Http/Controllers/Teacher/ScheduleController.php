@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ScheduleResource;
 use App\Repositories\IScheduleDetailRepository;
 use App\Repositories\IScheduleRepository;
 use Illuminate\Http\Request;
@@ -23,19 +24,15 @@ class ScheduleController extends Controller
 
     public function index(Request $request)
     {
-        $keyword = $request->get('keyword');
-        $statusFilter = $request->get('status-filter', config('schedule.status.inprogress'));
+        $statusFilter = $request->get('status-filter', config('schedule.status.progress'));
         $teacher = Auth::user();
-        $states = array_map(function ($status) {
-            return getNameSchedule($status);
-        }, config('schedule.status'));
         $schedules = $this->scheduleRepository->model()
             ->where('teacher_id',  $teacher->id)
             ->where('status', $statusFilter)
             ->with(['subject', 'class.students', 'scheduleDetails'])
-            ->paginate(config('config.paginate'));
+            ->get();
 
-        return view('teacher.schedule', compact('schedules', 'states', 'statusFilter', 'keyword'));
+        return ScheduleResource::collection($schedules);
     }
 
     public function status(Request $request, $id)
@@ -48,7 +45,7 @@ class ScheduleController extends Controller
             $this->scheduleRepository->update($id, [
                 'status' => $status,
             ]);
-            return $this->successRouteRedirect('teacher.schedules.index');
+            return $this->successRouteRedirect();
         }
     }
 
@@ -63,16 +60,7 @@ class ScheduleController extends Controller
 
     public function attendance($id)
     {
-        return $this->successRouteRedirect('teacher.schedules.attendanceShow', $id, 'Chưa làm logic đâu :D');
-    }
-
-    public function markShow(Request $request, $id)
-    {
-        $schedule = $this->scheduleRepository->find($id)
-            ->load('scheduleDetails.student');
-        $scheduleDetails = $schedule->scheduleDetails;
-
-        return view('teacher.mark', compact('scheduleDetails', 'schedule'));
+        return $this->successRouteRedirect();
     }
 
     public function mark(Request $request, $scheduleId)

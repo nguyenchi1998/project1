@@ -23,8 +23,8 @@
                                 <option value="{{ config('schedule.status.new') }}" @if($statusFilter==config('schedule.status.new')) selected @endif>
                                     {{ getNameSchedule(config('schedule.status.new')) }}
                                 </option>
-                                <option value="{{ config('schedule.status.inprogress') }}" @if($statusFilter==config('schedule.status.inprogress')) selected @endif>
-                                    {{ getNameSchedule(config('schedule.status.inprogress')) }}
+                                <option value="{{ config('schedule.status.progress') }}" @if($statusFilter==config('schedule.status.progress')) selected @endif>
+                                    {{ getNameSchedule(config('schedule.status.progress')) }}
                                 </option>
                                 <option value="{{ config('schedule.status.finish') }}" @if($statusFilter==config('schedule.status.finish')) selected @endif>
                                     {{ getNameSchedule(config('schedule.status.finish')) }}
@@ -81,7 +81,7 @@
                                     </form>
                                 <td style="width: 150px">
                                     <div class="d-flex justify-content-center align-items-center">
-                                        @if($schedule->status == config('schedule.status.inprogress'))
+                                        @if($schedule->status == config('schedule.status.progress'))
                                         <a class="btn btn-outline-success" href="{{ route('teacher.schedules.attendanceShow', $schedule->id) }}">
                                             Điểm danh
                                         </a>

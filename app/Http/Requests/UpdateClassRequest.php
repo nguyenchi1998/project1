@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Admin;
+namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateManager extends FormRequest
+class UpdateClassRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,12 +24,14 @@ class CreateManager extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string',
-            'email' => 'required|email|unique:managers',
-            'phone' => 'required|max:11',
-            'birthday' => 'required|date',
-            'address' => 'nullable|string',
-            'gender' => 'required|in:0,1'
+            'students' => 'max:' . config('config.class_limit_student')
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'students.max' => 'Only max :max student in class',
         ];
     }
 }

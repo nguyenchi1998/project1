@@ -48,7 +48,7 @@ class SubjectController extends Controller
             ->with('department')
             ->get();
 
-        return new SubjectResource($subjects);
+        return SubjectResource::collection($subjects);
     }
 
     public function show($id)
@@ -74,22 +74,22 @@ class SubjectController extends Controller
 
     public function update(Request $request, $id)
     {
-        try {
-            $subject = $this->subjectRepository->update($id, $request->only([
-                'name',
-                'credit',
-                'semester'
-            ]));
-            return $this->successRouteRedirect('admin.subjects.index');
-        } catch (Exception $e) {
+        $result = $this->subjectRepository->update(
+            $id,
+            $request->only(['name', 'credit', 'semester'])
+        );
+        if ($result) {
+            return $this->successRouteRedirect();
         }
+
+        return $this->failRouteRedirect();
     }
 
     public function destroy($id)
     {
         $result = $this->subjectRepository->delete($id);
         if ($result) {
-            return $this->successRouteRedirect('admin.subjects.index');
+            return $this->successRouteRedirect();
         }
 
         return $this->failRouteRedirect();
@@ -99,7 +99,7 @@ class SubjectController extends Controller
     {
         $result = $this->subjectRepository->restore($id);
         if ($result) {
-            return $this->successRouteRedirect('admin.subjects.index');
+            return $this->successRouteRedirect();
         }
 
         return $this->failRouteRedirect();

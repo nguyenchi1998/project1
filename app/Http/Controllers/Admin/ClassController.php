@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UpdateClass;
+use App\Http\Requests\UpdateClassRequest;
 use App\Http\Resources\ClassCollection;
 use App\Http\Resources\ClassResource;
 use App\Http\Resources\Classs;
@@ -21,8 +21,8 @@ class ClassController extends Controller
     protected $specializationRepository;
 
     public function __construct(
-        IClassRepository $classRepository,
-        IStudentRepository $studentRepository,
+        IClassRepository          $classRepository,
+        IStudentRepository        $studentRepository,
         ISpecializationRepository $specializationRepository
     ) {
         $this->classRepository = $classRepository;
@@ -48,7 +48,7 @@ class ClassController extends Controller
             ->with(['students', 'specialization'])
             ->get();
 
-        return new ClassResource($classes);
+        return ClassResource::collection($classes);
     }
 
     public function store(Request $request)
@@ -82,30 +82,14 @@ class ClassController extends Controller
         return new ClassResource($class);
     }
 
-    public function studentsShow($id)
+    public function update(UpdateClassRequest $request, $id)
     {
-        $studentsNotHasClass = $this->studentRepository->model()
-            ->whereNull('class_id')
-            ->get()
-            ->count();
-        $class = $this->classRepository->findOrFail($id)->load('students');
-
-        return view('admin.class.show_students', compact('class', 'studentsNotHasClass'));
-    }
-
-    public function update(UpdateClass $request, $id)
-    {
-        try {
-            DB::beginTransaction();
-            $this->classRepository->update($id, $request->only(['name']));
-            DB::commit();
-
-            return $this->successRouteRedirect('admin.classes.index');
-        } catch (Exception $e) {
-            DB::rollBack();
-
-            return $this->failRouteRedirect($e->getMessage());
+        $result = $this->classRepository->update($id, $request->only(['name']));
+        if ($result) {
+            return $this->successRouteRedirect();
         }
+
+        return $this->failRouteRedirect();
     }
 
     public function removeStudent(Request $request, $id)
@@ -117,7 +101,7 @@ class ClassController extends Controller
             ]
         );
         if ($result) {
-            return $this->successRouteRedirect('admin.classes.students', [$id]);
+            return $this->successRouteRedirect();
         }
 
         return $this->failRouteRedirect();
@@ -127,7 +111,7 @@ class ClassController extends Controller
     {
         $result = $this->classRepository->delete($id);
         if ($result) {
-            return $this->successRouteRedirect('admin.classes.index');
+            return $this->successRouteRedirect();
         }
 
         return $this->failRouteRedirect();
@@ -137,7 +121,7 @@ class ClassController extends Controller
     {
         $result = $this->classRepository->restore($id);
         if ($result) {
-            return $this->successRouteRedirect('admin.classes.index');
+            return $this->successRouteRedirect();
         }
 
         return $this->failRouteRedirect();
@@ -145,18 +129,23 @@ class ClassController extends Controller
 
     public function nextSemester()
     {
-        $this->classRepository->model()->inprogressClass()
-            ->whereRaw('semester >= ?', [config('config.max_semester')])
-            ->update([
-                'finish' => true,
-            ]);
-        $this->classRepository->model()->inprogressClass()
-            ->whereRaw('semester < ?', [config('config.max_semester')])
-            ->update([
-                'semester' => DB::raw('semester + 1'),
-            ]);
-
-
-        return $this->successRouteRedirect('admin.classes.index');
+        try {
+            DB::beginTransaction();
+            $this->classRepository->model()->inprogressClass()
+                ->whereRaw('semester >= ?', [config('config.max_semester')])
+                ->update([
+                    'finish' => true,
+                ]);
+            $this->classRepository->model()->inprogressClass()
+                ->whereRaw('semester < ?', [config('config.max_semester')])
+                ->update([
+                    'semester' => DB::raw('semester + 1'),
+                ]);
+            DB::commit();
+            return $this->successRouteRedirect();
+        } catch (Exception $e) {
+            DB::rollBack();
+            return $this->failRouteRedirect($e->getMessage());
+        }
     }
 }
