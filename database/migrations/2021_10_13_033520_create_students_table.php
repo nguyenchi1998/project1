@@ -16,14 +16,15 @@ class CreateStudentsTable extends Migration
         Schema::create('students', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('code')->nullable();
+            $table->string('uuid');
             $table->string('email')->unique();
             $table->boolean('gender');
             $table->date('birthday');
+            $table->string('avatar');
             $table->string('address')->nullable();
             $table->string('phone')->nullable();
             $table->string('password');
-            $table->unsignedInteger('class_id')->nullable();
+            $table->unsignedInteger('class_room_id')->nullable();
             $table->unsignedInteger('grade_id')->nullable();
             $table->boolean('can_register_credit')->default(false);
             $table->timestamps();

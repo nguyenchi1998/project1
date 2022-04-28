@@ -3,6 +3,7 @@
 use App\Models\Manager;
 use Faker\Generator as Faker;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 /** @var Factory $factory */
 /*
@@ -17,6 +18,12 @@ use Illuminate\Support\Facades\Hash;
 */
 
 $factory->define(Manager::class, function (Faker $faker) {
+    $path = $faker->image(
+        storage_path(config('default.path.app_public')),
+        config('default.avatar_size'),
+        config('default.avatar_size')
+    );
+
     return [
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
@@ -26,6 +33,8 @@ $factory->define(Manager::class, function (Faker $faker) {
         'password' => Hash::make(config('default.auth.password')),
         'remember_token' => str_random(10),
         'address' => $faker->address(),
-        'type' => config('role.manager.normal')
+        'type' => config('role.manager.normal'),
+        'avatar' => str_replace(storage_path(config('default.path.app_public')), '', $path), 
+        'uuid' => Str::uuid(),
     ];
 });

@@ -21,19 +21,15 @@ class Student extends Authenticatable implements JWTSubject
         'password',
         'remember_token',
         'grade_id',
-        'class_id',
+        'avatar',
+        'class_room_id',
         'department_id',
         'can_register_credit',
     ];
 
-    public function class()
+    public function classRoom()
     {
-        return $this->belongsTo(Classs::class);
-    }
-
-    public function avatar()
-    {
-        return $this->morphOne(Media::class, 'mediable');
+        return $this->belongsTo(ClassRoom::class);
     }
 
     public function grade()

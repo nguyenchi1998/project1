@@ -4,7 +4,7 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateManagerRequest extends FormRequest
+class ManagerRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,7 +25,7 @@ class CreateManagerRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'email' => 'required|email|unique:managers',
+            'email' => 'required|email|unique:managers,' . $this->id,
             'phone' => 'required|max:11',
             'birthday' => 'required|date',
             'address' => 'nullable|string',

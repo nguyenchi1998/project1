@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\RegisterCreditStudentRequest;
-use App\Repositories\IClassRepository;
+use App\Repositories\IClassRoomRepository;
 use App\Repositories\IGradeRepository;
 use App\Repositories\IScheduleDetailRepository;
 use App\Repositories\IScheduleRepository;
@@ -31,7 +31,7 @@ class ScheduleStudentController extends Controller
         IScheduleDetailRepository $scheduleDetailRepository,
         ISpecializationRepository $specializationRepository,
         ISubjectRepository $subjectRepository,
-        IClassRepository $classRepository,
+        IClassRoomRepository $classRepository,
         IStudentRepository $studentRepository,
         IGradeRepository $gradeRepository,
         ISpecializationSubjectRepository $specializationSubjectRepository
@@ -88,7 +88,7 @@ class ScheduleStudentController extends Controller
     public function show(Request $request, $studentId)
     {
         $student = $this->studentRepository->find($studentId);
-        $class = $this->classRepository->find($student->class_id);
+        $class = $this->classRepository->find($student->class_room_id);
         $semesterFilter = $request->get('semester-filter', $class->semester);
         $specializationFilter = $request->get('specialization-filter');
         $keyword = $request->get('keyword');
@@ -168,20 +168,20 @@ class ScheduleStudentController extends Controller
             }, $request->get('subjectIds'))
         );
 
-        return $this->successRouteRedirect();
+        return $this->successResponse();
     }
 
     public function destroy($studentId, $scheduleDetailId)
     {
         $this->scheduleDetailRepository->delete($scheduleDetailId, true);
 
-        return $this->successRouteRedirect();
+        return $this->successResponse();
     }
 
     public function creditStatus(Request $request, $id)
     {
         $this->studentRepository->update($id, $request->only('can_register_credit'));
 
-        return $this->successRouteRedirect();
+        return $this->successResponse();
     }
 }

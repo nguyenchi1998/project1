@@ -84,7 +84,7 @@ class TeacherController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
 
-            return $this->failRouteRedirect();
+            return $this->errorResponse();
         }
     }
 
@@ -114,11 +114,11 @@ class TeacherController extends Controller
             }
             DB::commit();
 
-            return $this->successRouteRedirect();
+            return $this->successResponse();
         } catch (Exception $e) {
             DB::rollBack();
 
-            return $this->failRouteRedirect($e->getMessage());
+            return $this->errorResponse($e->getMessage());
         }
     }
 
@@ -130,7 +130,7 @@ class TeacherController extends Controller
             DB::beginTransaction();
             $teacher = $this->teacherRepository->find($id)->load('department');
             if ($teacher->next_department_id) {
-                return $this->failRouteRedirect();
+                return $this->errorResponse();
             }
             if ($isManager) {
                 $this->departmentRepository->update($departmentId, [
@@ -145,11 +145,11 @@ class TeacherController extends Controller
             }
             DB::commit();
 
-            return $this->successRouteRedirect();
+            return $this->successResponse();
         } catch (Exception $e) {
             DB::rollBack();
 
-            return $this->failRouteRedirect($e->getMessage());
+            return $this->errorResponse($e->getMessage());
         }
     }
 
@@ -159,26 +159,26 @@ class TeacherController extends Controller
         $teacher = $this->teacherRepository->find($id);
         $teacher->subjects()->sync($subjectIds);
 
-        return $this->successRouteRedirect();
+        return $this->successResponse();
     }
 
     public function destroy($id)
     {
         $result = $this->teacherRepository->delete($id);
         if ($result) {
-            return $this->successRouteRedirect();
+            return $this->successResponse();
         }
 
-        return $this->failRouteRedirect();
+        return $this->errorResponse();
     }
 
     public function restore($id)
     {
         $result = $this->teacherRepository->restore($id);
         if ($result) {
-            return $this->successRouteRedirect();
+            return $this->successResponse();
         }
 
-        return $this->failRouteRedirect();
+        return $this->errorResponse();
     }
 }

@@ -27,7 +27,8 @@ class Manager extends Authenticatable implements JWTSubject
         'birthday',
         'address',
         'phone',
-        'type'
+        'type',
+        'avatar',
     ];
 
     /**
@@ -38,11 +39,6 @@ class Manager extends Authenticatable implements JWTSubject
     protected $hidden = [
         'password', 'remember_token',
     ];
-
-    public function avatar()
-    {
-        return $this->morphOne(Media::class, 'mediable');
-    }
 
     public function isNormalManager()
     {

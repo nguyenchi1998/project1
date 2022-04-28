@@ -4,6 +4,7 @@ use App\Models\Department;
 use App\Models\Specialization;
 use App\Models\Subject;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class DepartmentSeeder extends Seeder
 {
@@ -338,18 +339,20 @@ class DepartmentSeeder extends Seeder
         foreach ($departments as $department) {
             $departmentInstance = Department::create([
                 'name' => $department['name'],
+                'uuid' => Str::uuid(),
             ]);
             foreach ($department['specializations'] as $specialization) {
                 Specialization::create([
                     'name' => $specialization,
                     'department_id' => $departmentInstance->id,
                     'min_credit' => 30,
+                    'uuid' => Str::uuid(),
                 ]);
             }
         }
         foreach ($subjects as $key => $subject) {
             $subject = Subject::create([
-
+                'uuid' => Str::uuid(),
                 'name' => $subject['name'],
                 'type' => $subject['type'],
                 'semester' => $subject['type'] == config('subject.type.basic')
@@ -368,9 +371,6 @@ class DepartmentSeeder extends Seeder
                 'department_id' => $faker->randomElement(
                     Department::all()->pluck('id')->toArray()
                 ),
-            ]);
-            $subject->update([
-                'code' => generate_code(Subject::class, $subject->id),
             ]);
         }
         Specialization::all()

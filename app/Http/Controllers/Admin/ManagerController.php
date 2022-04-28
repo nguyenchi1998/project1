@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\CreateManagerRequest;
+use App\Http\Requests\Admin\ManagerRequest;
 use App\Http\Resources\ManagerResource;
 use App\Repositories\IManagerRepository;
 use Carbon\Carbon;
@@ -11,6 +11,8 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Intervention\Image\Exception\NotFoundException;
 
 class ManagerController extends Controller
 {
@@ -37,14 +39,14 @@ class ManagerController extends Controller
         return ManagerResource::collection($managers);
     }
 
-    public function show($id)
+    public function show($uuid)
     {
-        $manager = $this->managerRepository->findOrFail($id);
+        $manager = $this->managerRepository->find($uuid, true);
 
         return new ManagerResource($manager);
     }
 
-    public function store(CreateManagerRequest $request)
+    public function store(ManagerRequest $request)
     {
         try {
             DB::beginTransaction();
@@ -56,7 +58,8 @@ class ManagerController extends Controller
                 'gender'
             ]), [
                 'birthday' => Carbon::createFromFormat('d/m/Y', $request->get('birthday')),
-                'password' => Hash::make(config('default.auth.password'))
+                'password' => Hash::make(config('default.auth.password')),
+                'uuid' => Str::uuid()
             ]);
             $manager = $this->managerRepository->create($data);
             $avatar = $request->file('avatar');
@@ -74,19 +77,22 @@ class ManagerController extends Controller
             }
             DB::commit();
 
-            return $this->successRouteRedirect($data);
+            return $this->successResponse($data);
         } catch (Exception $e) {
             DB::rollBack();
 
-            return $this->failRouteRedirect($e->getMessage());
+            return $this->errorResponse($e->getMessage());
         }
     }
 
     public function update(Request $request, $id)
     {
-        $manager = $this->managerRepository->findOrFail($id);
         try {
             DB::beginTransaction();
+            $manager = $this->managerRepository->find($id, true);
+            if (!$manager) {
+                throw new NotFoundException();
+            }
             $data = $request->only([
                 'name', 'phone', 'birthday', 'address', 'gender'
             ]);
@@ -106,11 +112,11 @@ class ManagerController extends Controller
             }
             DB::commit();
 
-            return $this->successRouteRedirect($data);
+            return $this->successResponse($data);
         } catch (Exception $e) {
             DB::rollBack();
 
-            return $this->failRouteRedirect($e->getMessage(), 404);
+            return $this->errorResponse($e->getMessage(), 404);
         }
     }
 
@@ -119,18 +125,18 @@ class ManagerController extends Controller
         $result = $this->managerRepository->delete($id);
 
         if ($result) {
-            return $this->successRouteRedirect();
+            return $this->successResponse();
         }
-        return $this->failRouteRedirect();
+        return $this->errorResponse();
     }
 
-    public function restore($id)
+    public function restore($uuid)
     {
-        $result = $this->managerRepository->restore($id);
+        $result = $this->managerRepository->restore($uuid);
         if ($result) {
-            return $this->successRouteRedirect();
+            return $this->successResponse();
         }
 
-        return $this->failRouteRedirect();
+        return $this->errorResponse();
     }
 }

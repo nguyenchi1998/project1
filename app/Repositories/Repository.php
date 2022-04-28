@@ -25,9 +25,12 @@ class Repository implements IRepository
         return $this->model->withTrashed()->get();;
     }
 
-    public function find($id)
+    public function find($id, $isUuid = false)
     {
-        return $this->model->find($id);
+        if ($isUuid) {
+            return $this->model->where('uuid', $id)->first();
+        }
+        return  $this->model->find($id);
     }
 
     public function findOrFail($id)

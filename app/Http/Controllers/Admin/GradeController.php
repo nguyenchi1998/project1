@@ -45,10 +45,10 @@ class GradeController extends Controller
             $request->only(['name',])
         );
         if ($success) {
-            return $this->successRouteRedirect();
+            return $this->successResponse();
         }
 
-        return $this->failRouteRedirect();
+        return $this->errorResponse();
     }
 
     public function destroy($id)
@@ -56,20 +56,20 @@ class GradeController extends Controller
         $grade = $this->gradeRepository->find($id)->load('students');
         $result = $this->gradeRepository->delete($id, !count($grade->students));
         if ($result) {
-            return $this->successRouteRedirect();
+            return $this->successResponse();
         }
 
-        return $this->failRouteRedirect();
+        return $this->errorResponse();
     }
 
     public function restore($id)
     {
         $result = $this->gradeRepository->restore($id);
         if ($result) {
-            return $this->successRouteRedirect();
+            return $this->successResponse();
         }
 
-        return $this->failRouteRedirect();
+        return $this->errorResponse();
     }
 
     public function registerCreditStatus(Request $request, $id)
@@ -79,9 +79,9 @@ class GradeController extends Controller
             $request->only('can_register_credit')
         );
         if ($result) {
-            return $this->successRouteRedirect();
+            return $this->successResponse();
         }
 
-        return $this->failRouteRedirect();
+        return $this->errorResponse();
     }
 }

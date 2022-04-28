@@ -16,6 +16,7 @@ class CreateGradesTable extends Migration
         Schema::create('grades', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->string('uuid');
             $table->boolean('can_register_credit')->default(false);
             $table->timestamps();
             $table->softDeletes();

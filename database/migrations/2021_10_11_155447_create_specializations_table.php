@@ -16,6 +16,7 @@ class CreateSpecializationsTable extends Migration
         Schema::create('specializations', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->string('uuid');
             $table->unsignedInteger('department_id');
             $table->unsignedInteger('min_credit');
             $table->timestamps();

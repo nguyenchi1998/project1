@@ -1,11 +1,5 @@
 <?php
 
-use App\Models\Classs;
-use App\Models\Manager;
-use App\Models\Schedule;
-use App\Models\Student;
-use App\Models\Subject;
-use App\Models\Teacher;
 use Carbon\Carbon;
 
 if (!function_exists('getNameSchedule')) {
@@ -81,21 +75,6 @@ if (!function_exists('range_semester')) {
         }
 
         return $semesters;
-    }
-}
-
-if (!function_exists('generate_code')) {
-    function generate_code($type, $number = null)
-    {
-        $types = [
-            Subject::class => 'SB',
-            Schedule::class => 'SC',
-            Student::class => 'ST',
-            Manager::class => 'MN',
-            Teacher::class => 'TC',
-            Classs::class => 'CLA',
-        ];
-        return $types[$type] . str_pad($number, 4, "0", STR_PAD_LEFT);
     }
 }
 

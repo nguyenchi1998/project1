@@ -16,6 +16,7 @@ class CreateDepartmentsTable extends Migration
         Schema::create('departments', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->string('uuid');
             $table->unsignedInteger('manager_id')->nullable();
             $table->unsignedInteger('next_manager_id')->nullable();
             $table->boolean('next_manager_status')

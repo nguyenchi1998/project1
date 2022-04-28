@@ -79,29 +79,29 @@ class SubjectController extends Controller
             $request->only(['name', 'credit', 'semester'])
         );
         if ($result) {
-            return $this->successRouteRedirect();
+            return $this->successResponse();
         }
 
-        return $this->failRouteRedirect();
+        return $this->errorResponse();
     }
 
     public function destroy($id)
     {
         $result = $this->subjectRepository->delete($id);
         if ($result) {
-            return $this->successRouteRedirect();
+            return $this->successResponse();
         }
 
-        return $this->failRouteRedirect();
+        return $this->errorResponse();
     }
 
     public function restore($id)
     {
         $result = $this->subjectRepository->restore($id);
         if ($result) {
-            return $this->successRouteRedirect();
+            return $this->successResponse();
         }
 
-        return $this->failRouteRedirect();
+        return $this->errorResponse();
     }
 }

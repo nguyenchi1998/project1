@@ -46,10 +46,10 @@ class RequestController extends Controller
             'next_department_status' => config('status.department.next_manager.success'),
         ]);
         if ($result) {
-            return $this->successRouteRedirect();
+            return $this->successResponse();
         }
 
-        return $this->failRouteRedirect();
+        return $this->errorResponse();
     }
 
     public function departmentManager(Request $request, $departmentId)
@@ -61,9 +61,9 @@ class RequestController extends Controller
         ]);
 
         if ($result) {
-            return $this->successRouteRedirect();
+            return $this->successResponse();
         }
 
-        return $this->failRouteRedirect();
+        return $this->errorResponse();
     }
 }

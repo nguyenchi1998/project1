@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\StudentCollection;
 use App\Http\Resources\StudentResource;
-use App\Repositories\IClassRepository;
+use App\Repositories\IClassRoomRepository;
 use App\Repositories\IGradeRepository;
 use App\Repositories\ISpecializationRepository;
 use App\Repositories\IStudentRepository;
@@ -24,7 +24,7 @@ class StudentController extends Controller
 
     public function __construct(
         IStudentRepository $studentRepository,
-        IClassRepository $classRepository,
+        IClassRoomRepository $classRepository,
         IGradeRepository $gradeRepository,
         ISpecializationRepository $specializationRepository
     ) {
@@ -86,7 +86,7 @@ class StudentController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
 
-            return $this->failRouteRedirect($e->getMessage());
+            return $this->errorResponse($e->getMessage());
         }
     }
 
@@ -125,11 +125,11 @@ class StudentController extends Controller
             }
             DB::commit();
 
-            return $this->successRouteRedirect();
+            return $this->successResponse();
         } catch (Exception $e) {
             DB::rollBack();
 
-            return $this->failRouteRedirect($e->getMessage());
+            return $this->errorResponse($e->getMessage());
         }
     }
 
@@ -137,19 +137,19 @@ class StudentController extends Controller
     {
         $result = $this->studentRepository->delete($id);
         if ($result) {
-            return $this->successRouteRedirect();
+            return $this->successResponse();
         }
 
-        return $this->failRouteRedirect();
+        return $this->errorResponse();
     }
 
     public function restore($id)
     {
         $result = $this->studentRepository->restore($id);
         if ($result) {
-            return $this->successRouteRedirect();
+            return $this->successResponse();
         }
 
-        return $this->failRouteRedirect();
+        return $this->errorResponse();
     }
 }

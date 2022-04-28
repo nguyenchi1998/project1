@@ -40,12 +40,12 @@ class ScheduleController extends Controller
         $schedule = $this->scheduleRepository->find($id);
         $status = $request->get('status');
         if ($schedule->status != config('schedule.status.new') && $status == config('schedule.status.new')) {
-            return $this->failRouteRedirect();
+            return $this->errorResponse();
         } else {
             $this->scheduleRepository->update($id, [
                 'status' => $status,
             ]);
-            return $this->successRouteRedirect();
+            return $this->successResponse();
         }
     }
 
@@ -60,7 +60,7 @@ class ScheduleController extends Controller
 
     public function attendance($id)
     {
-        return $this->successRouteRedirect();
+        return $this->successResponse();
     }
 
     public function mark(Request $request, $scheduleId)

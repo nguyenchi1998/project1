@@ -18,6 +18,7 @@ class Teacher extends Authenticatable implements JWTSubject
         'password',
         'gender',
         'birthday',
+        'avatar',
         'address',
         'phone',
         'department_id',
@@ -33,11 +34,6 @@ class Teacher extends Authenticatable implements JWTSubject
     public function nextDepartment()
     {
         return $this->belongsTo(Department::class, 'next_department_id');
-    }
-
-    public function avatar()
-    {
-        return $this->morphOne(Media::class, 'mediable');
     }
 
     public function subjects()

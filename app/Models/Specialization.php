@@ -29,7 +29,7 @@ class Specialization extends Model
 
     public function classes()
     {
-        return $this->hasMany(Classs::class);
+        return $this->hasMany(ClassRoom::class);
     }
 
     public function department()

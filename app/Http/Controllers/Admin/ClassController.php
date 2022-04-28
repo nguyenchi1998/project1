@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateClassRequest;
 use App\Http\Resources\ClassCollection;
 use App\Http\Resources\ClassResource;
-use App\Http\Resources\Classs;
-use App\Repositories\IClassRepository;
+use App\Http\Resources\ClassRoom;
+use App\Repositories\IClassRoomRepository;
 use App\Repositories\ISpecializationRepository;
 use App\Repositories\IStudentRepository;
 use Exception;
@@ -21,7 +21,7 @@ class ClassController extends Controller
     protected $specializationRepository;
 
     public function __construct(
-        IClassRepository          $classRepository,
+        IClassRoomRepository          $classRepository,
         IStudentRepository        $studentRepository,
         ISpecializationRepository $specializationRepository
     ) {
@@ -37,8 +37,7 @@ class ClassController extends Controller
         $classes = $this->classRepository->withTrashedModel()
             ->inprogressClass()
             ->when($keyword, function ($query) use ($keyword) {
-                $query->where('name', 'like', '%' . $keyword . '%')
-                    ->orWhere('code', $keyword);
+                $query->where('name', 'like', '%' . $keyword . '%');
             })
             ->when($filterSpecialization, function ($query) use ($filterSpecialization) {
                 $query->whereHas('specialization', function ($query) use ($filterSpecialization) {
@@ -63,7 +62,7 @@ class ClassController extends Controller
             );
             $this->studentRepository->whereIn('id', $students)
                 ->update([
-                    'class_id' => $class->id
+                    'class_room_id' => $class->id
                 ]);
             DB::commit();
 
@@ -71,7 +70,7 @@ class ClassController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
 
-            return $this->failRouteRedirect($e->getMessage());
+            return $this->errorResponse($e->getMessage());
         }
     }
 
@@ -86,10 +85,10 @@ class ClassController extends Controller
     {
         $result = $this->classRepository->update($id, $request->only(['name']));
         if ($result) {
-            return $this->successRouteRedirect();
+            return $this->successResponse();
         }
 
-        return $this->failRouteRedirect();
+        return $this->errorResponse();
     }
 
     public function removeStudent(Request $request, $id)
@@ -97,34 +96,34 @@ class ClassController extends Controller
         $result = $this->studentRepository->update(
             $request->get('student_id'),
             [
-                'class_id' => null,
+                'class_room_id' => null,
             ]
         );
         if ($result) {
-            return $this->successRouteRedirect();
+            return $this->successResponse();
         }
 
-        return $this->failRouteRedirect();
+        return $this->errorResponse();
     }
 
     public function destroy($id)
     {
         $result = $this->classRepository->delete($id);
         if ($result) {
-            return $this->successRouteRedirect();
+            return $this->successResponse();
         }
 
-        return $this->failRouteRedirect();
+        return $this->errorResponse();
     }
 
     public function restore($id)
     {
         $result = $this->classRepository->restore($id);
         if ($result) {
-            return $this->successRouteRedirect();
+            return $this->successResponse();
         }
 
-        return $this->failRouteRedirect();
+        return $this->errorResponse();
     }
 
     public function nextSemester()
@@ -142,10 +141,10 @@ class ClassController extends Controller
                     'semester' => DB::raw('semester + 1'),
                 ]);
             DB::commit();
-            return $this->successRouteRedirect();
+            return $this->successResponse();
         } catch (Exception $e) {
             DB::rollBack();
-            return $this->failRouteRedirect($e->getMessage());
+            return $this->errorResponse($e->getMessage());
         }
     }
 }

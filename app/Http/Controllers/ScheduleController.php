@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\IClassRepository;
+use App\Repositories\IClassRoomRepository;
 use App\Repositories\IScheduleDetailRepository;
 use App\Repositories\ISpecializationRepository;
 use App\Repositories\ISubjectRepository;
@@ -19,7 +19,7 @@ class ScheduleController extends Controller
     public function __construct(
         IScheduleDetailRepository $scheduleDetailRepository,
         ISpecializationRepository $specializationRepository,
-        IClassRepository $classRepository,
+        IClassRoomRepository $classRepository,
         ISubjectRepository $subjectRepository
     ) {
         $this->scheduleDetailRepository = $scheduleDetailRepository;
@@ -31,7 +31,7 @@ class ScheduleController extends Controller
     public function index(Request $request)
     {
         $student = Auth::user();
-        $class = $this->classRepository->find($student->class_id);
+        $class = $this->classRepository->find($student->class_room_id);
         $semesterFilter = $request->get('semester', $class->semester);
         $semester = range_semester(config('config.start_semester'), config('config.max_semester'), true, $class->semester);
         $scheduleDetails = $this->scheduleDetailRepository->model()
@@ -77,7 +77,7 @@ class ScheduleController extends Controller
     public function store(Request $request)
     {
         $student = Auth::user();
-        $class = $this->classRepository->find($student->class_id);
+        $class = $this->classRepository->find($student->class_room_id);
         $this->scheduleDetailRepository->updateOrCreateMany(
             array_map(function ($subjectId) use ($student, $class) {
                 $item['student_id'] = $student->id;
@@ -90,7 +90,7 @@ class ScheduleController extends Controller
             }, $request->get('subjectIds'))
         );
 
-        return $this->successRouteRedirect('scheduleDetails.credits.index');
+        return $this->successResponse('scheduleDetails.credits.index');
     }
 
     public function show($id)
@@ -112,9 +112,9 @@ class ScheduleController extends Controller
     {
         $result = $this->scheduleDetailRepository->delete($id, true);
         if ($result) {
-            return $this->successRouteRedirect();
+            return $this->successResponse();
         }
 
-        return $this->failRouteRedirect();
+        return $this->errorResponse();
     }
 }

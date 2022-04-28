@@ -12,14 +12,13 @@ class Schedule extends Model
     protected $table = 'schedules';
 
     protected $fillable = [
-        'code',
         'teacher_id',
         'subject_id',
         'specialization_subject_id',
         'name',
         'start_time',
         'end_time',
-        'class_id',
+        'class_room_id',
         'schedule_time',
         'status',
         'semester',
@@ -30,11 +29,6 @@ class Schedule extends Model
         parent::boot();
         static::deleting(function ($schedule) {
             $schedule->scheduleDetails()->delete();
-        });
-        static::created(function ($schedule) {
-            $schedule->update([
-                'code' => generate_code(Schedule::class, $schedule->id),
-            ]);
         });
     }
 
@@ -50,7 +44,7 @@ class Schedule extends Model
 
     public function class()
     {
-        return $this->belongsTo(Classs::class);
+        return $this->belongsTo(ClassRoom::class);
     }
 
     public function newSchedule()
@@ -60,12 +54,12 @@ class Schedule extends Model
 
     public function classSchedule()
     {
-        return $this->where('class_id', '!=', null);
+        return $this->where('class_room_id', '!=', null);
     }
 
     public function freeSchedule()
     {
-        return $this->where('class_id', null);
+        return $this->where('class_room_id', null);
     }
 
     public function subject()

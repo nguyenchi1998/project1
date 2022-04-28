@@ -82,7 +82,7 @@ class SpecializationController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
 
-            return $this->failRouteRedirect($e->getMessage());
+            return $this->errorResponse($e->getMessage());
         }
     }
 
@@ -96,11 +96,11 @@ class SpecializationController extends Controller
             ]));
             DB::commit();
 
-            return $this->successRouteRedirect();
+            return $this->successResponse();
         } catch (Exception $e) {
             DB::rollBack();
 
-            return $this->failRouteRedirect($e->getMessage());
+            return $this->errorResponse($e->getMessage());
         }
     }
 
@@ -109,9 +109,9 @@ class SpecializationController extends Controller
         $result = $this->specializationRepository->delete($id);
 
         if ($result) {
-            return $this->successRouteRedirect();
+            return $this->successResponse();
         }
-        return $this->failRouteRedirect();
+        return $this->errorResponse();
     }
 
 
@@ -119,10 +119,10 @@ class SpecializationController extends Controller
     {
         $result = $this->specializationRepository->restore($id);
         if ($result) {
-            return $this->successRouteRedirect();
+            return $this->successResponse();
         }
 
-        return $this->failRouteRedirect();
+        return $this->errorResponse();
     }
 
     public function chooseSubjectShow($id)
@@ -146,6 +146,6 @@ class SpecializationController extends Controller
         $specialization->subjects()
             ->sync($request->get('subjectIds'));
 
-        return $this->successRouteRedirect('admin.specializations.choose_subject_show', $id);
+        return $this->successResponse('admin.specializations.choose_subject_show', $id);
     }
 }

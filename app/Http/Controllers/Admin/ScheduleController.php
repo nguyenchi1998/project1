@@ -6,7 +6,7 @@ use App\Exports\MarkExport;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ScheduleCollection;
 use App\Http\Resources\ScheduleResource;
-use App\Repositories\IClassRepository;
+use App\Repositories\IClassRoomRepository;
 use App\Repositories\IScheduleDetailRepository;
 use App\Repositories\IScheduleRepository;
 use App\Repositories\ISpecializationRepository;
@@ -30,7 +30,7 @@ class ScheduleController extends Controller
         IScheduleDetailRepository $scheduleDetailRepository,
         ISpecializationRepository $specializationRepository,
         ISubjectRepository        $subjectRepository,
-        IClassRepository          $classRepository,
+        IClassRoomRepository          $classRepository,
         IStudentRepository        $studentRepository
     ) {
         $this->scheduleRepository = $scheduleRepository;
@@ -56,16 +56,15 @@ class ScheduleController extends Controller
                 });
             })
             ->when($keyword, function ($query) use ($keyword) {
-                $query->where('code', $keyword)
-                    ->orWhereHas('subject', function ($query) use ($keyword) {
-                        $query->where('name', 'like', '%' . $keyword . '%');
-                    });
+                $query->where('subject', function ($query) use ($keyword) {
+                    $query->where('name', 'like', '%' . $keyword . '%');
+                });
             })
             ->when(isset($classType), function ($query) use ($classType) {
                 $query->when($classType, function ($query) {
-                    $query->whereNull('class_id');
+                    $query->whereNull('class_room_id');
                 }, function ($query) {
-                    $query->whereNotNull('class_id');
+                    $query->whereNotNull('class_room_id');
                 });
             })
             ->with(['subject.teachers', 'teacher', 'scheduleDetails'])
@@ -103,11 +102,11 @@ class ScheduleController extends Controller
                     'register_status' => config('schedule.detail.status.register.success')
                 ]);
 
-            return $this->successRouteRedirect();
+            return $this->successResponse();
         } catch (Exception $e) {
             DB::rollBack();
 
-            return $this->failRouteRedirect($e->getMessage());
+            return $this->errorResponse($e->getMessage());
         }
     }
 
@@ -117,7 +116,6 @@ class ScheduleController extends Controller
             ->load('scheduleDetails.student');
         $filename = $schedule->code . '-mark.xlsx';
         $data = $schedule->scheduleDetails->map(function ($scheduleDetail) {
-            $item['code'] = $scheduleDetail->student->code;
             $item['name'] = $scheduleDetail->student->name;
             $item['mark'] = result_mark(
                 $scheduleDetail->activity_mark,
@@ -138,33 +136,32 @@ class ScheduleController extends Controller
             array_merge(
                 $request->only(['teacher_id', 'start_time', 'end_time']),
                 [
-                    'status' => $request->status ?? (
-                        $schedule->teacher && $schedule->start_time
-                            ? config('schedule.status.progress')
-                            : $schedule->status
-                        ),
+                    'status' => $request->status ?? ($schedule->teacher && $schedule->start_time
+                        ? config('schedule.status.progress')
+                        : $schedule->status
+                    ),
                 ]
             )
         );
 
-        return $this->successRouteRedirect();
+        return $this->successResponse();
     }
 
     public function destroy($id)
     {
         $this->scheduleRepository->delete($id);
 
-        return $this->successRouteRedirect();
+        return $this->successResponse();
     }
 
     public function restore($id)
     {
         $result = $this->scheduleRepository->restore($id);
         if ($result) {
-            return $this->successRouteRedirect();
+            return $this->successResponse();
         }
 
-        return $this->failRouteRedirect();
+        return $this->errorResponse();
     }
 
     public function scheduleTimeShow($id)
@@ -180,10 +177,10 @@ class ScheduleController extends Controller
             'schedule_time' => json_encode($request->get('timeschedules'))
         ]);
         if ($result) {
-            return $this->successRouteRedirect();
+            return $this->successResponse();
         }
 
-        return $this->failRouteRedirect();
+        return $this->errorResponse();
     }
 
     protected function calculateScheduleDetails()

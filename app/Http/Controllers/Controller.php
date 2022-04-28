@@ -11,16 +11,22 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    protected function successRouteRedirect($data = null, $message = 'Xử lý thành công')
+    protected function successResponse($data = null, $message = 'Xử lý thành công')
     {
-        return response([
+        if ($data) {
+            return response()->json([
+                'success' => true,
+                'data' => $data,
+            ]);
+        }
+
+        return response()->json([
             'success' => true,
             'message' => $message,
-            'data' => $data,
         ]);
     }
 
-    protected function failRouteRedirect($message = 'Xử lý thất bại', $status = 500)
+    protected function errorResponse($message = 'Xử lý thất bại', $status = 500)
     {
         return response([
             'success' => false,

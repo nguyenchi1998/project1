@@ -2,36 +2,14 @@
 
 namespace App\Http\Controllers\Teacher;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\BaseLoginController;
 
-class LoginController extends Controller
+class LoginController extends BaseLoginController
 {
-    use AuthenticatesUsers;
-
-    protected $redirectTo = '/teacher';
+    protected $guard = 'teacher';
 
     public function __construct()
     {
-        $this->middleware('guest:teacher')->except('logout');
-    }
-
-    public function showLoginForm()
-    {
-        Auth::guard('manager')->logout();
-        Auth::guard('student')->logout();
-        return view('teacher.login');
-    }
-
-    protected function guard()
-    {
-        return Auth::guard('teacher');
-    }
-
-    protected function loggedOut()
-    {
-        return redirect()->route('teacher.loginShow');
+        $this->middleware(['jwt.verify', 'auth.jwt', 'access:teacher'], ['except' => ['login']]);
     }
 }

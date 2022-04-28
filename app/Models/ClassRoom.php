@@ -3,14 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Classs extends Model
+class ClassRoom extends Model
 {
     use SoftDeletes;
-
-    protected $table = 'classes';
 
     protected $fillable = [
         'name',
@@ -20,7 +17,7 @@ class Classs extends Model
 
     public function students()
     {
-        return $this->hasMany(Student::class, 'class_id');
+        return $this->hasMany(Student::class, 'class_room_id');
     }
 
     public function specialization()
@@ -31,7 +28,7 @@ class Classs extends Model
 
     public function schedules()
     {
-        return $this->hasMany(Schedule::class, 'class_id');
+        return $this->hasMany(Schedule::class, 'class_room_id');
     }
 
     public function newbieClass()

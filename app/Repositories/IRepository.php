@@ -8,7 +8,7 @@ interface IRepository
 
     public function allWithTrashed();
 
-    public function find($id);
+    public function find($id, $isUuid = false);
 
     public function findOrFail($id);
 
@@ -18,7 +18,7 @@ interface IRepository
 
     public function withTrashedModel();
 
-    public function restore($id);
+    public function restore($uuid);
 
     public function get($key = '*');
 

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Repositories\IClassRepository;
+use App\Repositories\IClassRoomRepository;
 use App\Repositories\IGradeRepository;
 use App\Repositories\IScheduleDetailRepository;
 use App\Repositories\IScheduleRepository;
@@ -30,7 +30,7 @@ class ScheduleClassController extends Controller
         IScheduleDetailRepository $scheduleDetailRepository,
         ISpecializationRepository $specializationRepository,
         ISubjectRepository $subjectRepository,
-        IClassRepository $classRepository,
+        IClassRoomRepository $classRepository,
         IStudentRepository $studentRepository,
         IGradeRepository  $gradeRepository
     ) {
@@ -87,7 +87,7 @@ class ScheduleClassController extends Controller
             $class->semester
         );
         $schedules = $this->scheduleRepository->model()
-            ->where('class_id', $classId)
+            ->where('class_room_id', $classId)
             ->when($semesterFilter, function ($query) use ($semesterFilter) {
                 $query->where('semester', $semesterFilter);
             })
@@ -112,7 +112,7 @@ class ScheduleClassController extends Controller
             ->where('semester', $class->semester)
             ->get();
         $classSubjects = $this->scheduleRepository->model()
-            ->where('class_id', $classId)
+            ->where('class_room_id', $classId)
             ->where('semester', $class->semester)
             ->with('subject')
             ->get();
@@ -139,7 +139,7 @@ class ScheduleClassController extends Controller
                 'id',
                 $request->get('subjectIds')
             )->get()->map(function ($subject) use ($class) {
-                $item['class_id'] = $class->id;
+                $item['class_room_id'] = $class->id;
                 $item['subject_id'] = $subject->id;
                 $item['semester'] = $class->semester;
                 $item['credit'] = $subject->credit;
@@ -151,9 +151,9 @@ class ScheduleClassController extends Controller
             }
             DB::commit();
 
-            return $this->successRouteRedirect();
+            return $this->successResponse();
         } catch (Exception $e) {
-            return $this->failRouteRedirect($e->getMessage());
+            return $this->errorResponse($e->getMessage());
         }
     }
 
@@ -161,6 +161,6 @@ class ScheduleClassController extends Controller
     {
         $this->scheduleRepository->delete($scheduleId);
 
-        return $this->successRouteRedirect();
+        return $this->successResponse();
     }
 }
