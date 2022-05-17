@@ -3,17 +3,6 @@
 <div class="col-sm-6">
     <h1 class="m-0">Tạo Mới Lớp Học</h1>
 </div>
-<div class="col-sm-6">
-    <ol class="breadcrumb float-sm-right">
-        <li class="breadcrumb-item">
-            <a href="{{ route('admin.home') }}">Bảng Điều Khiển</a>
-        </li>
-        <li class="breadcrumb-item">
-            <a href="{{ route('admin.classes.index') }}">Danh Sách Lớp Học</a>
-        </li>
-        <li class="breadcrumb-item active">Tạo Mới Lớp Học</li>
-    </ol>
-</div>
 @endsection
 @section('main')
 <div class="row">

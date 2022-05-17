@@ -16,7 +16,7 @@ class CreateStudentsTable extends Migration
         Schema::create('students', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            
+            $table->string('avatar')->nullable();
             $table->string('email')->unique();
             $table->boolean('gender');
             $table->date('birthday');
@@ -28,7 +28,6 @@ class CreateStudentsTable extends Migration
             $table->boolean('can_register_credit')->default(false);
             $table->timestamps();
             $table->rememberToken();
-            
         });
     }
 

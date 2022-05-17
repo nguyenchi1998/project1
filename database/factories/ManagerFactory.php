@@ -17,15 +17,15 @@ use Illuminate\Support\Facades\Hash;
 */
 
 $factory->define(Manager::class, function (Faker $faker) {
-    return [
-        'name' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
-        'gender' => $faker->numberBetween(0, 1),
-        'birthday' => $faker->date,
-        'phone' => $faker->phoneNumber,
-        'password' => Hash::make(config('default.auth.password')),
-        'remember_token' => str_random(10),
-        'address' => $faker->address(),
-        'type' => config('role.manager.normal')
-    ];
+        return [
+                'name' => $faker->name,
+                'email' => $faker->unique()->safeEmail,
+                'gender' => $faker->numberBetween(0, 1),
+                'birthday' => $faker->date,
+                'phone' => $faker->phoneNumber,
+                'password' => Hash::make(config('default.auth.password')),
+                'remember_token' => str_random(10),
+                'address' => $faker->address(),
+                'type' => config('role.manager.normal'),
+        ];
 });

@@ -139,7 +139,7 @@ class StudentController extends Controller
             ]));
             if ($request->file('avatar')) {
                 $imageDeleted = $this->studentRepository
-                    ->deleteImage($student->avatar->path);
+                    ->deleteImage($student->avatar);
                 if (!$imageDeleted) {
                     throw new Exception('Error delete old image');
                 }

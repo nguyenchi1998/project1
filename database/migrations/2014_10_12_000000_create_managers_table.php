@@ -16,7 +16,7 @@ class CreateManagersTable extends Migration
         Schema::create('managers', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            
+            $table->string('avatar')->nullable();
             $table->string('email')->unique();
             $table->boolean('gender');
             $table->date('birthday');
@@ -28,7 +28,6 @@ class CreateManagersTable extends Migration
             $table->unsignedInteger('position')->nullable();
             $table->timestamps();
             $table->rememberToken();
-            
         });
     }
 

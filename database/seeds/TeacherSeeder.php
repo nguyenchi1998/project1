@@ -16,41 +16,29 @@ class TeacherSeeder extends Seeder
      */
     public function run()
     {
+
         $faker = Faker\Factory::create();
         $path = $faker->image(
-            storage_path(config('default.path.app_public')),
+            realpath(storage_path(config('default.path.app_public'))),
             config('default.avatar_size'),
             config('default.avatar_size')
         );
-        $teacher = Teacher::create([
+        Teacher::create([
             'name' => 'Teacher Chi',
+            'avatar' => str_replace(realpath(storage_path(config('default.path.app_public'))), '', $path),
             'gender' => 1,
             'birthday' => Carbon::now(),
             'email' => 'teacher@gmail.com',
             'password' => Hash::make(config('default.auth.password')),
-            'address' => $faker->address(),
-        ]);
-        $media = Media::create([
-            'path' => str_replace(
-                storage_path(config('default.path.app_public')),
-                '',
-                $path
-            ),
-        ]);
-        $teacher->avatar()->save($media);
-        $teacher->update([
-            'professional_group_id' => 1,
+            'address' => $faker->address(), 'professional_group_id' => 1,
         ]);
         $professionalGroupIds = ProfessionalGroup::all()->pluck('id')->toArray();
-        factory(Teacher::class, 50)->create()
-            ->each(function ($teacher) use ($professionalGroupIds, $path) {
-                $media = Media::create([
-                    'path' => str_replace(storage_path(config('default.path.app_public')), '', $path),
-                ]);
-                $teacher->avatar()->save($media);
-                $teacher->update([
-                    'professional_group_id' => $professionalGroupIds[array_rand($professionalGroupIds)]
-                ]);
-            });
+        factory(Teacher::class, 50)->create([
+            'avatar' => str_replace(realpath(storage_path(config('default.path.app_public'))), '', $path),
+        ])->each(function ($teacher) use ($professionalGroupIds) {
+            $teacher->update([
+                'professional_group_id' => $professionalGroupIds[array_rand($professionalGroupIds)]
+            ]);
+        });
     }
 }

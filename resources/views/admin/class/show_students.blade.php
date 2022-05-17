@@ -3,13 +3,6 @@
 <div class="col-sm-6">
     <h1 class="m-0">Danh Sách Sinh Viên</h1>
 </div>
-<div class="col-sm-6">
-    <ol class="breadcrumb float-sm-right">
-        <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('admin.classes.index') }}">Danh Sách Lớp Học</a></li>
-        <li class="breadcrumb-item active">Danh Sách Sinh Viên</li>
-    </ol>
-</div>
 @endsection
 @section('main')
 <div class="row">
@@ -46,7 +39,7 @@
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <div class="mr-4">
-                                            <img class="img-circle img-avatar" src="{{ assetStorage($student->avatar->path) }}" alt="avatar">
+                                            <img class="img-circle img-avatar" src="{{ assetStorage($student->avatar) }}" alt="avatar">
                                         </div>
                                         {{ $student->name }}
                                     </div>

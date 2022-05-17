@@ -28,30 +28,23 @@ class TeacherController extends Controller
     public function index(Request $request)
     {
         $keyword = $request->get('keyword');
-        $departmentFilter = $request->get('department-filter');
         $teachers = $this->teacherRepository->model()
             ->when($keyword, function ($query) use ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%')
                     ->orWhere('email', 'like', '%' . $keyword . '%')
                     ->orWhere('phone', $keyword);
             })
-            ->with(['department', 'nextDepartment'])
             ->paginate(config('config.paginate'));
 
         return view('admin.teacher.index', compact(
             'teachers',
-            'departmentFilter',
             'keyword'
         ));
     }
 
     public function create()
     {
-        $departments = $this->departmentRepository->all();
-
-        return view('admin.teacher.create', compact(
-            'departments'
-        ));
+        return view('admin.teacher.create');
     }
 
     public function store(Request $request)
@@ -78,9 +71,6 @@ class TeacherController extends Controller
                 config('default.avatar_size'),
                 config('default.avatar_size')
             );
-            $teacher->avatar()->create([
-                'path' => $path
-            ]);
             DB::commit();
 
             return redirect()->route('admin.teachers.index');
@@ -118,7 +108,7 @@ class TeacherController extends Controller
         ]));
         if ($request->file('avatar')) {
             $imageDeleted = $this->teacherRepository
-                ->deleteImage($teacher->avatar->path);
+                ->deleteImage($teacher->avatar);
             if (!$imageDeleted) {
                 throw new Exception('Error delete old image');
             }
@@ -131,10 +121,6 @@ class TeacherController extends Controller
                     config('default.avatar_size'),
                     config('default.avatar_size')
                 );
-            $teacher->avatar()
-                ->update([
-                    'path' => $path
-                ]);
         }
 
         return redirect()->route('admin.teachers.index');

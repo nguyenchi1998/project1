@@ -59,7 +59,7 @@
                                     {{ $class->semester }}
                                 </td>
                                 <td>
-                                    <span class="{{ modelTrash($class->specialization) }}">
+                                    <span>
                                         {{ $class->specialization->name }}
                                     </span>
                                 </td>

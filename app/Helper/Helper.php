@@ -63,27 +63,6 @@ if (!function_exists('assetStorage')) {
     }
 }
 
-if (!function_exists('range_semester')) {
-    function range_semester($start, $end, $hasTitle = true, $currentSemester = null, $nextSemester = false)
-    {
-        $semesters = [];
-        for ($i = $start; $i <= $end; $i++) {
-            $title = $currentSemester ?
-                ($currentSemester == $i ?
-                    ' - Kỳ Hiện Tại'
-                    : ($nextSemester && $currentSemester == $i - 1 ?
-                        ' - Kỳ Tiếp Theo'
-                        : ''
-                    )
-                )
-                : '';
-            $semesters[$i] = ($hasTitle ? 'Kỳ ' : '') . $i . $title;
-        }
-
-        return $semesters;
-    }
-}
-
 
 if (!function_exists('result_mark')) {
     function result_mark($activityMark, $middleMark, $finalMark)
@@ -110,12 +89,5 @@ if (!function_exists('result_schedule_detail')) {
         }
 
         return $result;
-    }
-}
-
-if (!function_exists('modelTrash')) {
-    function modelTrash($model)
-    {
-        return $model->trashed() ? 'text-decoration-line-through' : '';
     }
 }

@@ -3,14 +3,6 @@
 <div class="col-sm-6">
     <h1 class="m-0">Quản Lý Giảng Viên</h1>
 </div>
-<div class="col-sm-6">
-    <ol class="breadcrumb float-sm-right">
-        <li class="breadcrumb-item">
-            <a href="#">Bảng Điều Khiển</a>
-        </li>
-        <li class="breadcrumb-item active">Danh Sách Giảng Viên</li>
-    </ol>
-</div>
 @endsection
 @section('main')
 <div class="row">
@@ -21,7 +13,6 @@
                     <div class="">
                         <form action="{{ route('admin.teachers.index') }}" class="form-inline">
                             <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
-                            {{ Form::select('department-filter', $departments, $departmentFilter, ['class' => 'form-control  mr-2','placeholder' => 'Tất Cả Viện']) }}
                             <button class="btn btn-outline-secondary" type="submit">
                                 <i class="fa fa-search"></i>
                             </button>
@@ -36,7 +27,6 @@
                                 <th>Giảng Viên</th>
                                 <th>Email</th>
                                 <th>Số Điện Thoại</th>
-                                <th>Viện</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -46,7 +36,7 @@
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <div class="mr-4">
-                                            <img class="img-circle img-avatar" src="{{ assetStorage($teacher->avatar->path) }}" alt="avatar">
+                                            <img class="img-circle img-avatar" src="{{ assetStorage($teacher->avatar) }}" alt="avatar">
                                         </div>
                                         {{ $teacher->name }}
                                     </div>
@@ -57,21 +47,11 @@
                                 <td>
                                     {{ $teacher->phone }}
                                 </td>
-                                <td>
-                                    {{ $teacher->department->name ?? '' }} @if ($teacher->department->manager_id == $teacher->id)
-                                    <strong class="text text-danger ">(Viện Trưởng)</strong>
-                                    @endif
-                                </td>
                                 <td style="width: 255px;">
                                     <div class="d-flex justify-content-between">
                                         <div class="mr-2">
-                                            <a href="{{ route('admin.teachers.change_department_show', $teacher->id) }}" class="btn btn-outline-secondary">
-                                                Chuyển Viện
-                                            </a>
-                                        </div>
-                                        <div class="mr-2">
                                             <a href="{{ route('admin.teachers.edit', $teacher->id) }}" class="btn btn-outline-warning">
-                                                Sửa
+                                                <i class="fa fa-edit"></i>
                                             </a>
                                         </div>
                                         <div>
@@ -89,7 +69,7 @@
                     </table>
                 </div>
                 <div class="mt-3 d-flex justify-content-end">
-                    {{ $teachers->appends(['keyword' => $keyword, 'department-filter' => $departmentFilter])->links() }}
+                    {{ $teachers->appends(['keyword' => $keyword])->links() }}
                 </div>
             </div>
         </div>

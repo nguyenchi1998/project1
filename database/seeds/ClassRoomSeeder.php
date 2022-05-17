@@ -18,7 +18,7 @@ class ClassRoomSeeder extends Seeder
     {
         $faker = Faker\Factory::create();
         $path = $faker->image(
-            storage_path(config('default.path.app_public')),
+            realpath(storage_path(config('default.path.app_public'))),
             config('default.avatar_size'),
             config('default.avatar_size')
         );
@@ -26,12 +26,8 @@ class ClassRoomSeeder extends Seeder
             'name' => 'Chi Student',
             'email' => 'student@gmail.com ',
             'class_room_id' => 1,
-        ])->each(function ($student) use ($path) {
-            $media = Media::create([
-                'path' => str_replace(storage_path(config('default.path.app_public')), '', $path),
-            ]);
-            $student->avatar()->save($media);
-        });
+            'avatar' => str_replace(realpath(storage_path(config('default.path.app_public'))), '', $path),
+        ]);
         foreach ([10, 11, 12] as $class) {
             for ($i = 1; $i <= 10; $i++) {
                 $classInstance = ClassRoom::create([
@@ -40,13 +36,8 @@ class ClassRoomSeeder extends Seeder
                 factory(Student::class, $faker->randomElement([5, 10]))
                     ->create([
                         'class_room_id' => $classInstance->id,
-                    ])
-                    ->each(function ($student) use ($path) {
-                        $media = Media::create([
-                            'path' => str_replace(storage_path(config('default.path.app_public')), '', $path),
-                        ]);
-                        $student->avatar()->save($media);
-                    });
+                        'avatar' => str_replace(realpath(storage_path(config('default.path.app_public'))), '', $path),
+                    ]);
             }
         }
     }

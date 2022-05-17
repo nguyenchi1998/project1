@@ -19,16 +19,12 @@ class Teacher extends Authenticatable
         'address',
         'phone',
         'professional_group_id',
+        'avatar',
     ];
 
     public function professionalGroup()
     {
         return $this->belongsTo(ProfessionalGroup::class);
-    }
-
-    public function avatar()
-    {
-        return $this->morphOne(Media::class, 'mediable');
     }
 
     public function subjects()

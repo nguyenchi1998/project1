@@ -15,6 +15,7 @@ class Student extends Authenticatable
         'birthday',
         'phone',
         'password',
+        'avatar',
         'remember_token',
         'grade_id',
         'class_room_id',
@@ -25,11 +26,6 @@ class Student extends Authenticatable
     public function class()
     {
         return $this->belongsTo(ClassRoom::class);
-    }
-
-    public function avatar()
-    {
-        return $this->morphOne(Media::class, 'mediable');
     }
 
     public function grade()

@@ -25,7 +25,8 @@ class Manager extends Authenticatable
         'birthday',
         'address',
         'phone',
-        'type'
+        'type',
+        'avatar',
     ];
 
     /**
@@ -36,11 +37,6 @@ class Manager extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-
-    public function avatar()
-    {
-        return $this->morphOne(Media::class, 'mediable');
-    }
 
     public function isNormalManager()
     {

@@ -8,8 +8,15 @@ use Faker\Generator as Faker;
 use Illuminate\Database\Eloquent\Factory;
 
 $factory->define(Teacher::class, function (Faker $faker) {
+    $path = $faker->image(
+        realpath(storage_path(config('default.path.app_public'))),
+        config('default.avatar_size'),
+        config('default.avatar_size')
+    );
+
     return [
         'name' => $faker->name,
+        'avatar' => str_replace(realpath(storage_path(config('default.path.app_public'))), '', $path),
         'email' => $faker->unique()->safeEmail,
         'gender' => $faker->numberBetween(0, 1),
         'birthday' => $faker->date,
