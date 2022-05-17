@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Repositories\IClassRepository;
+use App\Repositories\IClassRoomRepository;
 use App\Repositories\IStudentRepository;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -35,7 +35,7 @@ class OpenRegisterCredit extends Command
     public function __construct()
     {
         parent::__construct();
-        $this->classRepository = app(IClassRepository::class);
+        $this->classRepository = app(IClassRoomRepository::class);
         $this->studentRepository = app(IStudentRepository::class);
     }
 

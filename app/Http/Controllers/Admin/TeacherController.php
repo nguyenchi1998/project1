@@ -13,17 +13,14 @@ use Illuminate\Support\Facades\Hash;
 
 class TeacherController extends Controller
 {
-    protected $departmentRepository;
     protected $teacherRepository;
     protected $roleRepository;
     protected $subjectRepository;
 
     public function __construct(
-        IDepartmentRepository $departmentRepository,
         ITeacherRepository $teacherRepository,
         ISubjectRepository $subjectRepository
     ) {
-        $this->departmentRepository = $departmentRepository;
         $this->teacherRepository = $teacherRepository;
         $this->subjectRepository = $subjectRepository;
     }
@@ -38,19 +35,12 @@ class TeacherController extends Controller
                     ->orWhere('email', 'like', '%' . $keyword . '%')
                     ->orWhere('phone', $keyword);
             })
-            ->when($departmentFilter, function ($query) use ($departmentFilter) {
-                $query->whereHas('department', function ($query) use ($departmentFilter) {
-                    $query->whereId($departmentFilter);
-                });
-            })
             ->with(['department', 'nextDepartment'])
             ->paginate(config('config.paginate'));
-        $departments = $this->departmentRepository->all()->pluck('name', 'id');
 
         return view('admin.teacher.index', compact(
             'teachers',
             'departmentFilter',
-            'departments',
             'keyword'
         ));
     }

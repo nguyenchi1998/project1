@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Repositories\IClassRepository;
+use App\Repositories\IClassRoomRepository;
 use App\Repositories\IGradeRepository;
 use App\Repositories\IScheduleDetailRepository;
 use App\Repositories\IScheduleRepository;
@@ -26,13 +26,13 @@ class ScheduleClassController extends Controller
     protected $gradeRepository;
 
     public function __construct(
-        IScheduleRepository $scheduleRepository,
+        IScheduleRepository       $scheduleRepository,
         IScheduleDetailRepository $scheduleDetailRepository,
         ISpecializationRepository $specializationRepository,
-        ISubjectRepository $subjectRepository,
-        IClassRepository $classRepository,
-        IStudentRepository $studentRepository,
-        IGradeRepository  $gradeRepository
+        ISubjectRepository        $subjectRepository,
+        IClassRoomRepository      $classRepository,
+        IStudentRepository        $studentRepository,
+        IGradeRepository          $gradeRepository
     ) {
         $this->scheduleRepository = $scheduleRepository;
         $this->specializationRepository = $specializationRepository;
@@ -101,7 +101,7 @@ class ScheduleClassController extends Controller
             $class->semester
         );
         $schedules = $this->scheduleRepository->model()
-            ->where('class_id', $classId)
+            ->where('class_room_id', $classId)
             ->when(
                 $semesterFilter,
                 function ($query) use ($semesterFilter) {
@@ -132,7 +132,7 @@ class ScheduleClassController extends Controller
             ->get();
         $classSubjects = $this->scheduleRepository
             ->model()
-            ->where('class_id', $classId)
+            ->where('class_room_id', $classId)
             ->where('semester', $class->semester)
             ->with('subject')
             ->get();
@@ -161,7 +161,7 @@ class ScheduleClassController extends Controller
                     'id',
                     $request->get('subjectIds')
                 )->get()->map(function ($subject) use ($class) {
-                    $item['class_id'] = $class->id;
+                    $item['class_room_id'] = $class->id;
                     $item['subject_id'] = $subject->id;
                     $item['semester'] = $class->semester;
                     $item['credit'] = $subject->credit;

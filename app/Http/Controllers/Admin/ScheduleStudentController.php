@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\RegisterCreditStudent;
-use App\Repositories\IClassRepository;
+use App\Repositories\IClassRoomRepository;
 use App\Repositories\IGradeRepository;
 use App\Repositories\IScheduleDetailRepository;
 use App\Repositories\IScheduleRepository;
@@ -27,13 +27,13 @@ class ScheduleStudentController extends Controller
     protected $specializationSubjectRepository;
 
     public function __construct(
-        IScheduleRepository $scheduleRepository,
-        IScheduleDetailRepository $scheduleDetailRepository,
-        ISpecializationRepository $specializationRepository,
-        ISubjectRepository $subjectRepository,
-        IClassRepository $classRepository,
-        IStudentRepository $studentRepository,
-        IGradeRepository $gradeRepository,
+        IScheduleRepository              $scheduleRepository,
+        IScheduleDetailRepository        $scheduleDetailRepository,
+        ISpecializationRepository        $specializationRepository,
+        ISubjectRepository               $subjectRepository,
+        IClassRoomRepository             $classRepository,
+        IStudentRepository               $studentRepository,
+        IGradeRepository                 $gradeRepository,
         ISpecializationSubjectRepository $specializationSubjectRepository
     ) {
         $this->scheduleRepository = $scheduleRepository;
@@ -95,7 +95,7 @@ class ScheduleStudentController extends Controller
         $student = $this->studentRepository
             ->find($studentId);
         $class = $this->classRepository
-            ->find($student->class_id);
+            ->find($student->class_room_id);
         $semesterFilter = $request->get(
             'semester-filter',
             $class->semester

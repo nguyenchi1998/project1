@@ -84,20 +84,6 @@ if (!function_exists('range_semester')) {
     }
 }
 
-if (!function_exists('generate_code')) {
-    function generate_code($type, $number = null)
-    {
-        $types = [
-            Subject::class => 'SB',
-            Schedule::class => 'SC',
-            Student::class => 'ST',
-            Manager::class => 'MN',
-            Teacher::class => 'TC',
-            Classs::class => 'CLA',
-        ];
-        return $types[$type] . str_pad($number, 4, "0", STR_PAD_LEFT);
-    }
-}
 
 if (!function_exists('result_mark')) {
     function result_mark($activityMark, $middleMark, $finalMark)

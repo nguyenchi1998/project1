@@ -3,11 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Schedule extends Model
 {
-    use SoftDeletes;
+
 
     protected $table = 'schedules';
 
@@ -19,7 +18,7 @@ class Schedule extends Model
         'name',
         'start_time',
         'end_time',
-        'class_id',
+        'class_room_id',
         'schedule_time',
         'status',
         'semester',
@@ -30,11 +29,6 @@ class Schedule extends Model
         parent::boot();
         static::deleting(function ($schedule) {
             $schedule->scheduleDetails()->delete();
-        });
-        static::created(function ($schedule) {
-            $schedule->update([
-                'code' => generate_code(Schedule::class, $schedule->id),
-            ]);
         });
     }
 
@@ -48,9 +42,9 @@ class Schedule extends Model
         return $this->belongsTo(Teacher::class, 'teacher_id');
     }
 
-    public function class()
+    public function classRoom()
     {
-        return $this->belongsTo(Classs::class);
+        return $this->belongsTo(ClassRoom::class);
     }
 
     public function newSchedule()
@@ -60,12 +54,12 @@ class Schedule extends Model
 
     public function classSchedule()
     {
-        return $this->where('class_id', '!=', null);
+        return $this->where('class_room_id', '!=', null);
     }
 
     public function freeSchedule()
     {
-        return $this->where('class_id', null);
+        return $this->where('class_room_id', null);
     }
 
     public function subject()

@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class Manager extends Authenticatable
 {
     use Notifiable;
-    use SoftDeletes;
+
 
     protected $guarded = 'manager';
 

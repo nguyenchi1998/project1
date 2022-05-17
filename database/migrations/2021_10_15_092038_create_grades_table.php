@@ -18,7 +18,7 @@ class CreateGradesTable extends Migration
             $table->string('name');
             $table->boolean('can_register_credit')->default(false);
             $table->timestamps();
-            $table->softDeletes();
+            
         });
     }
 

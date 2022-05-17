@@ -3,17 +3,6 @@
     <div class="col-sm-6">
         <h1 class="m-0">Sửa Đổi Môn Học</h1>
     </div>
-    <div class="col-sm-6">
-        <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item">
-                <a href="#">Bảng Điều Khiển</a>
-            </li>
-            <li class="breadcrumb-item">
-                <a href="{{ route('admin.subjects.index') }}">Danh Sách Môn Học</a>
-            </li>
-            <li class="breadcrumb-item active">Sửa Đổi Môn Học</li>
-        </ol>
-    </div>
 @endsection
 @section('main')
     <div class="row">
@@ -35,30 +24,14 @@
                         ]) }}
                     </div>
                     <div class="form-group">
-                        <label for="credit">Số Tín Chỉ</label>
-                        {{ Form::input('number', 'credit', $subject->credit, [
-                            'class' => 'form-control',
-                            'id' => 'credit',
-                            'placeholder' => 'Sô Tín Chỉ',
-                            'min' => 1,
-                        ]) }}
-                    </div>
-                    <div class="form-group">
-                        <label for="semester">Kỳ Học</label>
-                        {{ Form::select(
-                            'semester',
-                            range_semester(config('config.start_semester'), config('config.max_semester')),
-                            $subject->semester,
-                            ['class' => 'form-control', 'id' => 'semester', 'placeholder' => 'Chọn Kỳ Học'],
-                        ) }}
-                    </div>
-                    <div class="form-group">
                         <label for="type">Loại Môn Học</label>
                         <select name="type" class="form-control" id="type">
-                            <option value="{{ config('subject.type.basic') }}"
-                                @if ($subject->type == config('subject.type.basic')) selected @endif>Đại Cương</option>
-                            <option value="{{ config('subject.type.specialization') }}"
-                                @if ($subject->type == config('subject.type.specialization')) selected @endif>Chuyên Ngành</option>
+                            <option value="{{ config('constant.subject_type.natural') }}"
+                                @if ($subject->type == config('constant.subject_type.natural')) selected @endif>Môn Tự Nhiên</option>
+                            <option value="{{ config('constant.subject_type.social') }}"
+                                @if ($subject->type == config('constant.subject_type.social')) selected @endif>Môn Xã Hội</option>
+                            <option value="{{ config('constant.subject_type.another') }}"
+                                    @if ($subject->type == config('constant.subject_type.another')) selected @endif>Môn Khác</option>
                         </select>
                     </div>
                     <div class="mt-3">

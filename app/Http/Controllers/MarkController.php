@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\IClassRepository;
+use App\Repositories\IClassRoomRepository;
 use App\Repositories\IScheduleDetailRepository;
 use App\Repositories\ISubjectRepository;
 use Illuminate\Http\Request;
@@ -16,8 +16,8 @@ class MarkController extends Controller
 
     public function __construct(
         IScheduleDetailRepository $scheduleDetailRepository,
-        IClassRepository $classRepository,
-        ISubjectRepository $subjectRepository
+        IClassRoomRepository      $classRepository,
+        ISubjectRepository        $subjectRepository
     ) {
         $this->scheduleDetailRepository = $scheduleDetailRepository;
         $this->classRepository = $classRepository;
@@ -27,7 +27,7 @@ class MarkController extends Controller
     public function index(Request $request)
     {
         $student = Auth::user();
-        $class = $this->classRepository->find($student->class_id)
+        $class = $this->classRepository->find($student->class_room_id)
             ->load('specialization');
         $semesterFilter = $request->get(
             'semester',

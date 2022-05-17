@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Repositories\IClassRepository;
+use App\Repositories\IClassRoomRepository;
 use App\Repositories\IGradeRepository;
 use App\Repositories\ISpecializationRepository;
 use App\Repositories\IStudentRepository;
@@ -21,9 +21,9 @@ class StudentController extends Controller
     protected $roleRepository;
 
     public function __construct(
-        IStudentRepository $studentRepository,
-        IClassRepository $classRepository,
-        IGradeRepository $gradeRepository,
+        IStudentRepository        $studentRepository,
+        IClassRoomRepository      $classRepository,
+        IGradeRepository          $gradeRepository,
         ISpecializationRepository $specializationRepository
     ) {
         $this->studentRepository = $studentRepository;

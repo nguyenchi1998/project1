@@ -3,8 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UpdateClass;
-use App\Repositories\IClassRepository;
+use App\Repositories\IClassRoomRepository;
 use App\Repositories\ISpecializationRepository;
 use App\Repositories\IStudentRepository;
 use Exception;
@@ -18,7 +17,7 @@ class ClassController extends Controller
     protected $specializationRepository;
 
     public function __construct(
-        IClassRepository $classRepository,
+        IClassRoomRepository $classRepository,
         IStudentRepository $studentRepository,
         ISpecializationRepository $specializationRepository
     ) {
@@ -29,7 +28,7 @@ class ClassController extends Controller
 
     public function index(Request $request)
     {
-        $filterSpecialization = $request->get('specializaiton-filter');
+        $filterSpecialization = $request->get('specialization-filter');
         $keyword = $request->get('keyword');
         $specializations = $this->specializationRepository
             ->all()
@@ -37,12 +36,10 @@ class ClassController extends Controller
             ->toArray();
         $showCreateClassBtn = $this->studentRepository
             ->model()
-            ->whereNull('class_id')
+            ->whereNull('class_room_id')
             ->get()
             ->count();
         $classes = $this->classRepository
-            ->withTrashedModel()
-            ->inprogressClass()
             ->when($keyword, function ($query) use ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%')
                     ->orWhere('code', $keyword);
@@ -70,15 +67,6 @@ class ClassController extends Controller
         ));
     }
 
-    public function create()
-    {
-        $students = $this->studentRepository->model()
-            ->whereNull('class_id')
-            ->get();
-
-        return view('admin.class.create', compact('students'));
-    }
-
     public function store(Request $request)
     {
         try {
@@ -91,8 +79,35 @@ class ClassController extends Controller
             );
             $this->studentRepository->whereIn('id', $students)
                 ->update([
-                    'class_id' => $class->id
+                    'class_room_id' => $class->id
                 ]);
+            DB::commit();
+
+            return $this->successRouteRedirect('admin.classes.index');
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return $this->failRouteRedirect($e->getMessage());
+        }
+    }
+
+    public function create()
+    {
+        $students = $this->studentRepository->model()
+            ->whereNull('class_room_id')
+            ->get();
+
+        return view('admin.class.create', compact('students'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        try {
+            DB::beginTransaction();
+            $this->classRepository->update(
+                $id,
+                $request->only(['name'])
+            );
             DB::commit();
 
             return $this->successRouteRedirect('admin.classes.index');
@@ -106,7 +121,7 @@ class ClassController extends Controller
     public function studentsShow($id)
     {
         $studentsNotHasClass = $this->studentRepository->model()
-            ->whereNull('class_id')
+            ->whereNull('class_room_id')
             ->get()
             ->count();
         $class = $this->classRepository->find($id)->load('students');
@@ -126,31 +141,12 @@ class ClassController extends Controller
         ));
     }
 
-
-    public function update(UpdateClass $request, $id)
-    {
-        try {
-            DB::beginTransaction();
-            $this->classRepository->update(
-                $id,
-                $request->only(['name'])
-            );
-            DB::commit();
-
-            return $this->successRouteRedirect('admin.classes.index');
-        } catch (Exception $e) {
-            DB::rollBack();
-
-            return $this->failRouteRedirect($e->getMessage());
-        }
-    }
-
     public function removeStudent(Request $request, $id)
     {
         $result = $this->studentRepository->update(
             $request->get('student_id'),
             [
-                'class_id' => null,
+                'class_room_id' => null,
             ]
         );
         if ($result) {
@@ -181,22 +177,5 @@ class ClassController extends Controller
         }
 
         return $this->failRouteRedirect();
-    }
-
-    public function nextSemester()
-    {
-        $this->classRepository->model()->inprogressClass()
-            ->whereRaw('semester >= ?', [config('config.max_semester')])
-            ->update([
-                'finish' => true,
-            ]);
-        $this->classRepository->model()->inprogressClass()
-            ->whereRaw('semester < ?', [config('config.max_semester')])
-            ->update([
-                'semester' => DB::raw('semester + 1'),
-            ]);
-
-
-        return $this->successRouteRedirect('admin.classes.index');
     }
 }

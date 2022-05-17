@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Exports\MarkExport;
 use App\Http\Controllers\Controller;
-use App\Repositories\IClassRepository;
+use App\Repositories\IClassRoomRepository;
 use App\Repositories\IScheduleDetailRepository;
 use App\Repositories\IScheduleRepository;
 use App\Repositories\ISpecializationRepository;
@@ -24,12 +24,12 @@ class ScheduleController extends Controller
     protected $scheduleDetailRepository;
 
     public function __construct(
-        IScheduleRepository $scheduleRepository,
+        IScheduleRepository       $scheduleRepository,
         IScheduleDetailRepository $scheduleDetailRepository,
         ISpecializationRepository $specializationRepository,
-        ISubjectRepository $subjectRepository,
-        IClassRepository $classRepository,
-        IStudentRepository $studentRepository
+        ISubjectRepository        $subjectRepository,
+        IClassRoomRepository      $classRepository,
+        IStudentRepository        $studentRepository
     ) {
         $this->scheduleRepository = $scheduleRepository;
         $this->specializationRepository = $specializationRepository;
@@ -48,23 +48,20 @@ class ScheduleController extends Controller
         $schedules = $this->scheduleRepository->model()
             ->where('status', $status)
             ->where(function ($query) {
-                $query->whereHas('class', function ($query) {
-                    $query->inprogressClass();
-                })->orWhere(function ($query) {
+                $query->where(function ($query) {
                     $query->doesntHave('class');
                 });
             })
             ->when($keyword, function ($query) use ($keyword) {
-                $query->where('code', $keyword)
-                    ->orWhereHas('subject', function ($query) use ($keyword) {
+                $query->whereHas('subject', function ($query) use ($keyword) {
                         $query->where('name', 'like', '%' . $keyword . '%');
                     });;
             })
             ->when(isset($classType), function ($query) use ($classType) {
                 $query->when($classType, function ($query) {
-                    $query->whereNull('class_id');
+                    $query->whereNull('class_room_id');
                 }, function ($query) {
-                    $query->whereNotNull('class_id');
+                    $query->whereNotNull('class_room_id');
                 });
             })
             ->with(['subject.teachers', 'teacher', 'scheduleDetails'])

@@ -28,7 +28,7 @@ class CreateScheduleDetailsTable extends Migration
             $table->unsignedInteger('register_status')
                 ->default(config('schedule.detail.status.register.pending'));
             $table->timestamps();
-            $table->softDeletes();
+            
         });
     }
 

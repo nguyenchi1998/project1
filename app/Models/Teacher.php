@@ -2,12 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Teacher extends Authenticatable
 {
-    use SoftDeletes;
+
 
     protected $guarded = 'teacher';
 
@@ -19,19 +18,12 @@ class Teacher extends Authenticatable
         'birthday',
         'address',
         'phone',
-        'department_id',
-        'next_department_id',
-        'next_department_status',
+        'professional_group_id',
     ];
 
-    public function department()
+    public function professionalGroup()
     {
-        return $this->belongsTo(Department::class, 'department_id');
-    }
-
-    public function nextDepartment()
-    {
-        return $this->belongsTo(Department::class, 'next_department_id');
+        return $this->belongsTo(ProfessionalGroup::class);
     }
 
     public function avatar()

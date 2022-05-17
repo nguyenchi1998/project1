@@ -204,38 +204,6 @@
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-header text text-uppercase">Tín Chỉ</li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.schedules.index') }}" class="nav-link">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
-                                    Lớp Tín Chỉ
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-chart-pie"></i>
-                                <p>
-                                    Đăng Ký Tín Chỉ
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.schedules.classes.index') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Năm 1, 2 (Lớp)</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.schedules.students.index') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Năm 3, 4, 5 (Sinh Viên)</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
                         @can('process-request')
                         <li class="nav-header text text-uppercase">Super Admin</li>
                         <li class="nav-item">
@@ -246,32 +214,8 @@
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.requests.index') }}" class="nav-link">
-                                <i class="nav-icon fas fa-columns"></i>
-                                <p>
-                                    Yêu Cầu
-                                </p>
-                            </a>
-                        </li>
                         @endcan
                         <li class="nav-header text text-uppercase">Viện</li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.departments.index') }}" class="nav-link">
-                                <i class="nav-icon far fa-calendar-alt"></i>
-                                <p>
-                                    Viện
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.specializations.index') }}" class="nav-link">
-                                <i class="nav-icon far fa-image"></i>
-                                <p>
-                                    Chuyên Ngành
-                                </p>
-                            </a>
-                        </li>
                         <li class="nav-item">
                             <a href="{{ route('admin.teachers.index') }}" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -280,7 +224,6 @@
                                 </p>
                             </a>
                         </li>
-
                         <li class="nav-item">
                             <a href="{{ route('admin.subjects.index') }}" class="nav-link">
                                 <i class="nav-icon fas fa-columns"></i>
@@ -290,14 +233,7 @@
                             </a>
                         </li>
                         <li class="nav-header text text-uppercase">Sinh Viên</li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.grades.index') }}" class="nav-link">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
-                                    Niên Khóa
-                                </p>
-                            </a>
-                        </li>
+
                         <li class="nav-item">
                             <a href="{{ route('admin.classes.index') }}" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>

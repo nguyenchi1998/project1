@@ -13,12 +13,12 @@ class SubjectTeacherSeeder extends Seeder
      */
     public function run()
     {
-        $faker = Faker\Factory::create();
-        Subject::all()->each(
-            function ($subject) use ($faker) {
-                $teacherIds = Teacher::where('department_id', $subject->department_id)->get()->pluck('id');
-                $subject->teachers()->sync($faker->randomElements($teacherIds, $faker->randomElement(range(2, count($teacherIds)))));
-            }
-        );
+//        $faker = Faker\Factory::create();
+//        Subject::all()->each(
+//            function ($subject) use ($faker) {
+//                $teacherIds = Teacher::where('department_id', $subject->department_id)->get()->pluck('id');
+//                $subject->teachers()->sync($faker->randomElements($teacherIds, $faker->randomElement(range(2, count($teacherIds)))));
+//            }
+//        );
     }
 }

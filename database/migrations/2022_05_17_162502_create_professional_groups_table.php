@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSpecializationsTable extends Migration
+class CreateProfessionalGroupsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreateSpecializationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('specializations', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->unsignedInteger('department_id');
-            $table->unsignedInteger('min_credit');
+        Schema::create('professional_groups', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('name')->unique();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -30,6 +27,6 @@ class CreateSpecializationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('specializations');
+        Schema::dropIfExists('professional_groups');
     }
 }

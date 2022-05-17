@@ -16,7 +16,7 @@ class CreateTeachersTable extends Migration
         Schema::create('teachers', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('code')->nullable();
+
             $table->string('email')->unique();
             $table->boolean('gender');
             $table->date('birthday');
@@ -24,13 +24,10 @@ class CreateTeachersTable extends Migration
             $table->string('experience')->nullable();
             $table->string('phone')->nullable();
             $table->string('password');
-            $table->unsignedInteger('department_id')->nullable();
-            $table->unsignedInteger('next_department_id')->nullable();
-            $table->boolean('next_department_status')
-                ->default(config('status.teacher.next_department.pending'));
+            $table->unsignedInteger('professional_group_id')->nullable();
             $table->timestamps();
             $table->rememberToken();
-            $table->softDeletes();
+            
         });
     }
 

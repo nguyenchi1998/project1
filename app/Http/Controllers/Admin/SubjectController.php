@@ -3,40 +3,26 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Repositories\IDepartmentRepository;
-use App\Repositories\ISpecializationRepository;
 use App\Repositories\ISubjectRepository;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class SubjectController extends Controller
 {
     protected $subjectRepository;
-    protected $departmentRepository;
-    protected $specializationRepository;
 
     public function __construct(
-        ISubjectRepository $subjectRepository,
-        ISpecializationRepository $specializationRepository,
-        IDepartmentRepository $departmentRepository
-    ) {
+        ISubjectRepository $subjectRepository
+    )
+    {
         $this->subjectRepository = $subjectRepository;
-        $this->departmentRepository = $departmentRepository;
-        $this->specializationRepository = $specializationRepository;
     }
 
     public function index(Request $request)
     {
-        $departmentFilter = $request->get('department-filter');
         $typeFilter = $request->get('type-filter');
         $keyword = $request->get('keyword');
-        $departments = $this->departmentRepository
-            ->all()
-            ->pluck('name', 'id')
-            ->toArray();
-        $subjects = $this->subjectRepository
-            ->withTrashedModel()
+        $subjects = $this->subjectRepository->model()
             ->when(
                 $keyword,
                 function ($query) use ($keyword) {
@@ -49,36 +35,12 @@ class SubjectController extends Controller
                     $query->where('type', $typeFilter);
                 }
             )
-            ->when(
-                $departmentFilter,
-                function ($query) use ($departmentFilter) {
-                    $query->whereHas(
-                        'department',
-                        function ($query) use ($departmentFilter) {
-                            $query->where('id', $departmentFilter);
-                        }
-                    );
-                }
-            )
-            ->with('department')
             ->paginate(config('config.paginate'));
 
         return view('admin.subject.index', compact(
             'subjects',
-            'departments',
-            'departmentFilter',
             'typeFilter',
             'keyword'
-        ));
-    }
-
-    public function create()
-    {
-        $departments = $this->departmentRepository->all()
-            ->pluck('name', 'id');
-
-        return view('admin.subject.create', compact(
-            'departments'
         ));
     }
 
@@ -96,13 +58,17 @@ class SubjectController extends Controller
         return $this->successRouteRedirect('admin.subjects.index');
     }
 
+    public function create()
+    {
+        return view('admin.subject.create');
+    }
+
     public function edit($id)
     {
-        $subject = $this->subjectRepository->find($id)
-            ->load('specializations');
+        $subject = $this->subjectRepository->find($id);
 
         return view('admin.subject.edit', compact(
-            'subject',
+            'subject'
         ));
     }
 

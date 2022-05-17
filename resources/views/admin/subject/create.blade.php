@@ -3,13 +3,6 @@
     <div class="col-sm-6">
         <h1 class="m-0">Tạo Mới Môn Học</h1>
     </div>
-    <div class="col-sm-6">
-        <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="#">Bảng Điều Khiển</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('admin.subjects.index') }}">Danh Sách Môn Học</a></li>
-            <li class="breadcrumb-item active">Tạo Mới Môn Học</li>
-        </ol>
-    </div>
 @endsection
 @section('main')
     <div class="row">
@@ -29,42 +22,13 @@
                         ]) }}
                     </div>
                     <div class="form-group">
-                        {{ Form::label('credit', 'Số Tín Chỉ') }}
-                        {{ Form::input('number', 'credit', null, [
-                            'class' => 'form-control',
-                            'id' => 'name',
-                            'placeholder' => 'Số Tín Chỉ',
-                            'min' => 1,
-                        ]) }}
-                    </div>
-                    <div class="form-group">
                         <label for="type">Loại Môn Học</label>
                         <select name="type" class="form-control" id="type">
                             <option value="">Chọn Loại Môn</option>
-                            <option value="{{ config('subject.type.basic') }}">Đại Cương</option>
-                            <option value="{{ config('subject.type.specialization') }}">Chuyên Ngành</option>
+                            <option value="{{ config('constant.subject_type.social') }}">Môn Xã Hội</option>
+                            <option value="{{ config('constant.subject_type.natural') }}">Môn Tự Nhiên</option>
+                            <option value="{{ config('constant.subject_type.another') }}">Môn Khác</option>
                         </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="semester">Kỳ Học</label>
-                        {{ Form::select(
-                            'semester',
-                            range_semester(config('config.start_semester'), config('config.max_semester')),
-                            null,
-                            [
-                                'class' => 'form-control',
-                                'id' => 'semester',
-                                'placeholder' => 'Chọn Kỳ Học',
-                            ],
-                        ) }}
-                    </div>
-                    <div class="form-group">
-                        <label for="department">Viện</label>
-                        {{ Form::select('department_id', $departments, null, [
-                            'class' => 'form-control',
-                            'id' => 'department',
-                            'placeholder' => 'Chọn Viện',
-                        ]) }}
                     </div>
                     <div class="mt-3">
                         {{ Form::submit('Xác Nhận', [
