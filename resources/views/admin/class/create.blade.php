@@ -1,7 +1,7 @@
 @extends('layouts.manager')
 @section('breadcrumb')
 <div class="col-sm-6">
-    <h1 class="m-0">Tạo Mới Lớp Học</h1>
+    <h1 class="m-0">Class Create</h1>
 </div>
 @endsection
 @section('main')
@@ -18,28 +18,34 @@
                     {{ Form::input('text', 'name', null, [
                             'class' => 'form-control',
                             'id' => 'name',
-                            'placeholder' => 'Tên lớp',
+                            'placeholder' => 'Name',
                         ]) }}
                 </div>
                 <div class="form-group">
-                    {{ Form::label('subject', 'Sinh Viên') }}
-                    @foreach ($students as $key => $student)
+                    <label for="students">Students</label>
+                    @forelse ($students as $key => $student)
                     <div class="form-check form-check-info">
                         <label class="form-check-label">
                             {{ Form::checkbox('students[]', $student->id, false, [
-                                        'class' => 'form-check-input',
-                                    ]) }}
+                                    'class' => 'form-check-input',
+                                ]) }}
                             {{ $student->name }}
                             <i class="input-helper"></i>
                         </label>
                     </div>
-                    @endforeach
+                    @empty
+                        <p>All students already in class</p>
+                    @endforelse
+                </div>
+                <div class="form-group">
+                    <label for="manager_teacher">Manager Teacher</label>
+                    {{ Form::select('manager_teacher', $managerTeachers, null, ['class' => 'form-control mr-2', 'placeholder' => 'Choose Manager Teacher']) }}
                 </div>
                 <div class="mt-3">
-                    {{ Form::submit('Xác Nhận', [
+                    {{ Form::submit('Submit', [
                             'class' => 'btn btn-outline-success mr-2',
                         ]) }}
-                    <a href="{{ route('admin.classes.index') }}" class="btn btn-outline-dark">Huỷ Bỏ</a>
+                    <a href="{{ route('admin.classes.index') }}" class="btn btn-outline-dark">Cancel</a>
                     {{ Form::close() }}
                 </div>
             </div>

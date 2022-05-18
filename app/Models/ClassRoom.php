@@ -12,7 +12,7 @@ class ClassRoom extends Model
 
     public function students()
     {
-        return $this->hasMany(Student::class, 'class_room_id');
+        return $this->hasMany(Student::class);
     }
 
     public function schedules()
@@ -20,8 +20,8 @@ class ClassRoom extends Model
         return $this->hasMany(Schedule::class, 'class_room_id');
     }
 
-    public function newbieClass()
+    public function managerTeacher()
     {
-        return $this->where('semester', '<=', config('config.class_register_limit_semester'));
+        return $this->belongsTo(Teacher::class);
     }
 }

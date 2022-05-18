@@ -20,7 +20,7 @@
                 <div class="d-flex mb-4 justify-content-between">
                     <div class="">
                         <form action="{{ route('teacher.schedules.index') }}" class="form-inline">
-                            <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
+                            <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Keyword">
                             <select name="status-filter" class="form-control">
                                 <option value="{{ config('schedule.status.new') }}" @if ($statusFilter==config('schedule.status.new')) selected @endif>
                                     {{ getNameSchedule(config('schedule.status.new')) }}
@@ -50,10 +50,10 @@
                         <thead>
                             <tr>
                                 <th>Mã Lớp</th>
-                                <th>Môn Học</th>
+                                <th>Subject</th>
                                 <th>Thời Gian Bắt Đầu</th>
                                 <th>Thời Gian Kết Thú<code></code></th>
-                                <th>Số Sinh Viên</th>
+                                <th>Số Student</th>
                                 <th>Trạng Thái</th>
                                 <th></th>
                             </tr>

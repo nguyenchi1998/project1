@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\IClassRoomRepository;
-use App\Repositories\IScheduleDetailRepository;
 use App\Repositories\ISubjectRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,11 +14,9 @@ class MarkController extends Controller
     protected $subjectRepository;
 
     public function __construct(
-        IScheduleDetailRepository $scheduleDetailRepository,
         IClassRoomRepository      $classRepository,
         ISubjectRepository        $subjectRepository
     ) {
-        $this->scheduleDetailRepository = $scheduleDetailRepository;
         $this->classRepository = $classRepository;
         $this->subjectRepository = $subjectRepository;
     }

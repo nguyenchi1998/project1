@@ -54,7 +54,7 @@
                     <table class="table table-bordered table-hover" id="subjects">
                         <thead>
                             <tr>
-                                <th>Môn Học</th>
+                                <th>Subject</th>
                                 <th>Viện Khoa Phụ Trách</th>
                                 <th>Số Tín Chỉ</th>
                                 <th></th>

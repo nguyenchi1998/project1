@@ -22,22 +22,14 @@ class StudentController extends Controller
 
     public function __construct(
         IStudentRepository        $studentRepository,
-        IClassRoomRepository      $classRepository,
-        IGradeRepository          $gradeRepository,
-        ISpecializationRepository $specializationRepository
+        IClassRoomRepository      $classRepository
     ) {
         $this->studentRepository = $studentRepository;
         $this->classRepository = $classRepository;
-        $this->gradeRepository = $gradeRepository;
-        $this->specializationRepository = $specializationRepository;
     }
 
     public function index(Request $request)
     {
-        $specializationFilter = $request->get('specialization-filter');
-        $specializations = $this->specializationRepository
-            ->all()
-            ->pluck('name', 'id');
         $keyword = $request->get('keyword');
         $students = $this->studentRepository->model()
             ->when($keyword, function ($query) use ($keyword) {
@@ -45,37 +37,21 @@ class StudentController extends Controller
                     ->orWhere('email', 'like', '%' . $keyword . '%')
                     ->orWhere('phone', $keyword);
             })
-            ->when(
-                $specializationFilter,
-                function ($query) use ($specializationFilter) {
-                    $query->whereHas(
-                        'class.specialization',
-                        function ($query) use ($specializationFilter) {
-                            $query->whereId($specializationFilter);
-                        }
-                    );
-                }
-            )
-            ->with('class.specialization')
+            ->with('classRoom')
             ->paginate(config('config.paginate'));
         $classes = $this->classRepository->all()->pluck('name', 'id');
 
         return view('admin.student.index', compact(
             'students',
-            'specializations',
-            'specializationFilter',
             'keyword'
         ));
     }
 
     public function create()
     {
-        $grades = $this->gradeRepository
-            ->all()
-            ->pluck('name', 'id')
-            ->toArray();
+        $classRooms = $this->classRepository->all()->pluck('name', 'id')->toArray();
 
-        return view('admin.student.create', compact('grades'));
+        return view('admin.student.create', compact('classRooms'));
     }
 
     public function store(Request $request)
@@ -117,10 +93,10 @@ class StudentController extends Controller
 
 
     public function edit($id)
-    {
+    { $classRooms = $this->classRepository->all()->pluck('name', 'id')->toArray();
         $student = $this->studentRepository->find($id);
 
-        return view('admin.student.edit', compact('student'));
+        return view('admin.student.edit', compact('student', 'classRooms'));
     }
 
     public function update(Request $request, $id)

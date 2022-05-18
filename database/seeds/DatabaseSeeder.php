@@ -14,7 +14,6 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->truncateData();
-
         $this->call(SubjectSeeder::class);
         $this->call(ProfessionalGroupSeeder::class);
         $this->call(TeacherSeeder::class);

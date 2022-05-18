@@ -1,7 +1,7 @@
 @extends('layouts.manager')
 @section('breadcrumb')
     <div class="col-sm-6">
-        <h1 class="m-0">Quản Lý Giảng Viên</h1>
+        <h1 class="m-0">Teacher Management</h1>
     </div>
     <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
@@ -9,7 +9,7 @@
                 <a href="#">Bảng Điều Khiển</a>
             </li>
             <li class="breadcrumb-item">
-                <a href="{{ route('admin.teachers.index') }}">Danh Sách Giảng Viên</a>
+                <a href="{{ route('admin.teachers.index') }}">Danh Sách Teacher</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">Yêu Cầu Đổi Viện</li>
         </ol>
@@ -40,10 +40,10 @@
                         @endforeach
                     </div>
                     <div class="mt-3">
-                        {{ Form::submit('Xác Nhận', [
+                        {{ Form::submit('Submit', [
                             'class' => 'btn btn-outline-success mr-2',
                         ]) }}
-                        <a href="{{ route('admin.teachers.index') }}" class="btn btn-outline-dark">Huỷ Bỏ</a>
+                        <a href="{{ route('admin.teachers.index') }}" class="btn btn-outline-dark">Cancel</a>
                         {{ Form::close() }}
                     </div>
                 </div>

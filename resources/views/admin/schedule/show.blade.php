@@ -27,12 +27,12 @@
                                 <strong>Mã Lớp:</strong> {{ $schedule->code }}
                             </div>
                             <div class="form-group">
-                                <strong> Môn Học:</strong> {{ $schedule->subject->name }}
+                                <strong> Subject:</strong> {{ $schedule->subject->name }}
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="form-group">
-                                <strong>Số Sinh Viên:</strong> {{ count($schedule->scheduleDetails) }}
+                                <strong>Số Student:</strong> {{ count($schedule->scheduleDetails) }}
                             </div>
                             <div class="form-group">
                                 <strong>Thời Gian:</strong>
@@ -53,7 +53,7 @@
                         <thead>
                             <tr>
                                 <th>Mã</th>
-                                <th>Sinh Viên</th>
+                                <th>Student</th>
                                 <th>Điểm Chuyên Cần</th>
                                 <th>Điểm Giữa Kỳ</th>
                                 <th>Điểm Cuối Kỳ</th>

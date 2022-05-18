@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\IClassRoomRepository;
-use App\Repositories\ISpecializationRepository;
 use App\Repositories\IStudentRepository;
+use App\Repositories\ITeacherRepository;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -14,56 +14,31 @@ class ClassController extends Controller
 {
     protected $classRepository;
     protected $studentRepository;
-    protected $specializationRepository;
+    protected $teacherRepository;
 
     public function __construct(
         IClassRoomRepository $classRepository,
-        IStudentRepository $studentRepository,
-        ISpecializationRepository $specializationRepository
+        ITeacherRepository   $teacherRepository,
+        IStudentRepository   $studentRepository
     ) {
         $this->classRepository = $classRepository;
         $this->studentRepository = $studentRepository;
-        $this->specializationRepository = $specializationRepository;
+        $this->teacherRepository = $teacherRepository;
     }
 
     public function index(Request $request)
     {
-        $filterSpecialization = $request->get('specialization-filter');
         $keyword = $request->get('keyword');
-        $specializations = $this->specializationRepository
-            ->all()
-            ->pluck('name', 'id')
-            ->toArray();
-        $showCreateClassBtn = $this->studentRepository
-            ->model()
-            ->whereNull('class_room_id')
-            ->get()
-            ->count();
-        $classes = $this->classRepository
+        $classes = $this->classRepository->model()
             ->when($keyword, function ($query) use ($keyword) {
-                $query->where('name', 'like', '%' . $keyword . '%')
-                    ->orWhere('code', $keyword);
+                $query->where('name', 'like', '%' . $keyword . '%');
             })
-            ->when(
-                $filterSpecialization,
-                function ($query) use ($filterSpecialization) {
-                    $query->whereHas(
-                        'specialization',
-                        function ($query) use ($filterSpecialization) {
-                            $query->where('id', $filterSpecialization);
-                        }
-                    );
-                }
-            )
-            ->with(['students', 'specialization'])
+            ->with(['students'])
             ->paginate(config('config.paginate'));
 
         return view('admin.class.index', compact(
             'classes',
-            'filterSpecialization',
-            'keyword',
-            'specializations',
-            'showCreateClassBtn'
+            'keyword'
         ));
     }
 
@@ -73,7 +48,7 @@ class ClassController extends Controller
             DB::beginTransaction();
             $students = $request->get('students');
             $class = $this->classRepository->create(
-                array_merge($request->only(['name', 'specialization_id']), [
+                array_merge($request->only(['name',]), [
                     'semester' => config('config.start_semester')
                 ])
             );
@@ -96,8 +71,10 @@ class ClassController extends Controller
         $students = $this->studentRepository->model()
             ->whereNull('class_room_id')
             ->get();
+        $managerTeachers = $this->teacherRepository->all()
+            ->pluck('name', 'id')->toArray();
 
-        return view('admin.class.create', compact('students'));
+        return view('admin.class.create', compact('students', 'managerTeachers'));
     }
 
     public function update(Request $request, $id)
@@ -118,25 +95,24 @@ class ClassController extends Controller
         }
     }
 
-    public function studentsShow($id)
-    {
-        $studentsNotHasClass = $this->studentRepository->model()
-            ->whereNull('class_room_id')
-            ->get()
-            ->count();
-        $class = $this->classRepository->find($id)->load('students');
-
-        return view('admin.class.show_students', compact(
-            'class',
-            'studentsNotHasClass'
-        ));
-    }
 
     public function edit($id)
     {
         $class = $this->classRepository->find($id);
+        $managerTeachers = $this->teacherRepository->all()
+            ->pluck('name', 'id')->toArray();
 
         return view('admin.class.edit', compact(
+            'class',
+            'managerTeachers'
+        ));
+    }
+
+    public function studentsShow($id)
+    {
+        $class = $this->classRepository->find($id)->load('students');
+
+        return view('admin.class.show_students', compact(
             'class'
         ));
     }

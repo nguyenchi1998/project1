@@ -36,7 +36,7 @@
     <div class=" d-flex justify-content-center align-items-center m-auto" style="height: 100vh;">
         <div class="d-block">
             <div class="text-center">
-                <h1 class="text-info">Trang Sinh Viên</h1>
+                <h1 class="text-info">Trang Student</h1>
             </div>
             <div class="m-auto" style="width: 400px">
                 <form method="POST" action="{{ url('/login') }}">

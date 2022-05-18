@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
-use App\Repositories\IScheduleDetailRepository;
 use App\Repositories\IScheduleRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,11 +13,9 @@ class ScheduleController extends Controller
     protected $scheduleDetailsRepository;
 
     public function __construct(
-        IScheduleRepository $scheduleRepository,
-        IScheduleDetailRepository $scheduleDetailsRepository
+        IScheduleRepository $scheduleRepository
     ) {
         $this->scheduleRepository = $scheduleRepository;
-        $this->scheduleDetailsRepository = $scheduleDetailsRepository;
     }
 
     public function index(Request $request)

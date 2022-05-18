@@ -35,9 +35,9 @@
                     <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th>Lớp Học</th>
+                                <th>Class</th>
                                 <th>Thời Gian Bắt Đầu</th>
-                                <th>Môn Học</th>
+                                <th>Subject</th>
                                 <th>Tín Chỉ</th>
                                 <th>Trạng Thái</th>
                                 <th></th>

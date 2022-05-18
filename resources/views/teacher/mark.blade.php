@@ -29,12 +29,12 @@
                                     <strong>Mã Lớp:</strong> {{ $schedule->code }}
                                 </div>
                                 <div class="form-group">
-                                    <strong> Môn Học:</strong> {{ $schedule->subject->name }}
+                                    <strong> Subject:</strong> {{ $schedule->subject->name }}
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
-                                    <strong>Số Sinh Viên:</strong> {{ count($scheduleDetails) }}
+                                    <strong>Số Student:</strong> {{ count($scheduleDetails) }}
                                 </div>
                             </div>
                         </div>
@@ -44,7 +44,7 @@
                         <table class="table table-bordered table-hover" id="mark">
                             <thead>
                                 <tr>
-                                    <th>Sinh Viên</th>
+                                    <th>Student</th>
                                     <th>Điểm Chuyên Cần</th>
                                     <th>Điểm Giữa Kỳ</th>
                                     <th>Điểm Cuối Kỳ</th>
@@ -87,7 +87,7 @@
                         </table>
                     </div>
                     <div class="mt-3 d-flex justify-content-end">
-                        <button class="btn btn-outline-success" id="submit">Xác Nhận</button>
+                        <button class="btn btn-outline-success" id="submit">Submit</button>
                     </div>
                 </div>
             </div>

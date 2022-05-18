@@ -1,7 +1,7 @@
 @extends('layouts.manager')
 @section('breadcrumb')
     <div class="col-sm-6">
-        <h1 class="m-0">Sửa Đổi Môn Học</h1>
+        <h1 class="m-0">Subject Edit</h1>
     </div>
 @endsection
 @section('main')
@@ -15,30 +15,44 @@
                     ]) }}
                     @method('PUT')
                     @csrf
-                    <div class="form-group">
-                        <label for="name">Môn Học</label>
-                        {{ Form::input('text', 'name', $subject->name, [
-                            'class' => 'form-control',
-                            'id' => 'name',
-                            'placeholder' => 'Môn Học',
-                        ]) }}
+                   <div class="row">
+                       <div class="form-group col-lg-12">
+                           <label for="name">Subject</label>
+                           {{ Form::input('text', 'name', $subject->name, [
+                               'class' => 'form-control',
+                               'id' => 'name',
+                               'placeholder' => 'Subject',
+                           ]) }}
+                       </div>
+                   </div>
+                    <div class="row">
+                        <div class="form-group col-lg-12">
+                            <label for="number_lessons">Number Lessons</label>
+                            {{ Form::input('number', 'number_lessons', $subject->number_lessons, [
+                                'class' => 'form-control',
+                                'id' => 'number_lessons',
+                                'placeholder' => 'Set number of lessons',
+                            ]) }}
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="type">Loại Môn Học</label>
-                        <select name="type" class="form-control" id="type">
-                            <option value="{{ config('constant.subject_type.natural') }}"
-                                @if ($subject->type == config('constant.subject_type.natural')) selected @endif>Môn Tự Nhiên</option>
-                            <option value="{{ config('constant.subject_type.social') }}"
-                                @if ($subject->type == config('constant.subject_type.social')) selected @endif>Môn Xã Hội</option>
-                            <option value="{{ config('constant.subject_type.another') }}"
-                                    @if ($subject->type == config('constant.subject_type.another')) selected @endif>Môn Khác</option>
-                        </select>
+                    <div class="row">
+                        <div class="form-group col-lg-12">
+                            <label for="type">Subject Type</label>
+                            <select name="type" class="form-control" id="type">
+                                <option value="{{ config('constant.subject_type.natural') }}"
+                                        @if ($subject->type == config('constant.subject_type.natural')) selected @endif>Natural Subject</option>
+                                <option value="{{ config('constant.subject_type.social') }}"
+                                        @if ($subject->type == config('constant.subject_type.social')) selected @endif>Social Subject</option>
+                                <option value="{{ config('constant.subject_type.another') }}"
+                                        @if ($subject->type == config('constant.subject_type.another')) selected @endif>Another Subject</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="mt-3">
-                        {{ Form::submit('Xác Nhận', [
+                        {{ Form::submit('Submit', [
                             'class' => 'btn btn-outline-success mr-2',
                         ]) }}
-                        <a href="{{ route('admin.subjects.index') }}" class="btn btn-outline-dark">Huỷ Bỏ</a>
+                        <a href="{{ route('admin.subjects.index') }}" class="btn btn-outline-dark">Cancel</a>
                     </div>
                     {{ Form::close() }}
                 </div>

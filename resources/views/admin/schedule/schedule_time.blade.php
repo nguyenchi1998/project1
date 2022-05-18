@@ -60,7 +60,7 @@
                             @endforeach
                             <tr>
                                 <td colspan="2" class="text-right">
-                                    <button class="btn btn-outline-success" id="submit">Xác Nhận</button>
+                                    <button class="btn btn-outline-success" id="submit">Submit</button>
                                 </td>
                             </tr>
                         </tbody>

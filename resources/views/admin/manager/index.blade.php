@@ -18,7 +18,7 @@
                 <div class="d-flex mb-3 justify-content-between">
                     <div class="">
                         <form action="{{ route('admin.managers.index') }}" class="form-inline">
-                            <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
+                            <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Keyword">
                             <button class="btn btn-outline-secondary" type="submit">
                                 <i class="fa fa-search"></i>
                             </button>
@@ -32,9 +32,9 @@
                             <tr>
                                 <th>Quản Trị Viên</th>
                                 <th>Email</th>
-                                <th>Số Điện Thoại</th>
-                                <th>Ngày Sinh</th>
-                                <th>Địa Chỉ</th>
+                                <th>Phone</th>
+                                <th>Birthday</th>
+                                <th>Address</th>
                                 <th>Chức Vụ</th>
                                 <th></th>
                             </tr>
@@ -70,7 +70,7 @@
                                 <td width="100">
                                     <div class="d-flex justify-content-between">
                                         <div class="mr-2">
-                                            <a href="{{ route('admin.managers.edit', $manager->id) }}" class="btn btn-outline-warning">
+                                            <a href="{{ route('admin.managers.edit', $manager->id) }}" class="btn btn-outline-primary">
                                                 <i class="fa fa-edit"></i>
                                             </a>
                                         </div>

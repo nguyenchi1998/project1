@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\RegisterCreditStudent;
 use App\Repositories\IClassRoomRepository;
 use App\Repositories\IGradeRepository;
-use App\Repositories\IScheduleDetailRepository;
 use App\Repositories\IScheduleRepository;
 use App\Repositories\ISpecializationRepository;
 use App\Repositories\ISpecializationSubjectRepository;
@@ -18,7 +17,6 @@ use Illuminate\Http\Request;
 class ScheduleStudentController extends Controller
 {
     protected $scheduleRepository;
-    protected $scheduleDetailRepository;
     protected $specializationRepository;
     protected $subjectRepository;
     protected $classRepository;
@@ -28,7 +26,6 @@ class ScheduleStudentController extends Controller
 
     public function __construct(
         IScheduleRepository              $scheduleRepository,
-        IScheduleDetailRepository        $scheduleDetailRepository,
         ISpecializationRepository        $specializationRepository,
         ISubjectRepository               $subjectRepository,
         IClassRoomRepository             $classRepository,
@@ -42,7 +39,6 @@ class ScheduleStudentController extends Controller
         $this->classRepository = $classRepository;
         $this->studentRepository = $studentRepository;
         $this->gradeRepository = $gradeRepository;
-        $this->scheduleDetailRepository = $scheduleDetailRepository;
         $this->specializationSubjectRepository = $specializationSubjectRepository;
     }
 

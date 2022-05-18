@@ -43,7 +43,7 @@
                     <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th>Môn Học</th>
+                                <th>Subject</th>
                                 <th>Số Tín Chỉ</th>
                                 <th>Kỳ Học</th>
                                 <th>Trạng Thái</th>

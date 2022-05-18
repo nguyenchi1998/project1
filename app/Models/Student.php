@@ -23,19 +23,14 @@ class Student extends Authenticatable
         'can_register_credit',
     ];
 
-    public function class()
+    public function classRoom()
     {
         return $this->belongsTo(ClassRoom::class);
     }
 
-    public function grade()
-    {
-        return $this->belongsTo(Grade::class);
-    }
-
     public function schedules()
     {
-        return $this->hasManyThrough(Schedule::class, Specialization::class);
+        return $this->hasManyThrough(Schedule::class);
     }
 
     public function scheduleDetails()

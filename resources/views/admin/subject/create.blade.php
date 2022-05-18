@@ -1,7 +1,7 @@
 @extends('layouts.manager')
 @section('breadcrumb')
     <div class="col-sm-6">
-        <h1 class="m-0">Tạo Mới Môn Học</h1>
+        <h1 class="m-0">Subject Create</h1>
     </div>
 @endsection
 @section('main')
@@ -13,28 +13,40 @@
                         'url' => route('admin.subjects.store'),
                         'method' => 'POST',
                     ]) }}
-                    <div class="form-group">
-                        {{ Form::label('name', 'Môn Học') }}
-                        {{ Form::input('text', 'name', null, [
-                            'class' => 'form-control',
-                            'id' => 'name',
-                            'placeholder' => 'Môn Học',
-                        ]) }}
+                    <div class="row">
+                        <div class="form-group col-lg-12">
+                            {{ Form::label('name', 'Subject') }}
+                            {{ Form::input('text', 'name', null, [
+                                'class' => 'form-control',
+                                'id' => 'name',
+                                'placeholder' => 'Subject',
+                            ]) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-12">
+                            <label for="number_lessons">Number Lessons</label>
+                            {{ Form::input('number', 'number_lessons', null, [
+                                'class' => 'form-control',
+                                'id' => 'number_lessons',
+                                'placeholder' => 'Set number of lessons',
+                            ]) }}
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="type">Loại Môn Học</label>
+                        <label for="type">Subject Subject</label>
                         <select name="type" class="form-control" id="type">
-                            <option value="">Chọn Loại Môn</option>
-                            <option value="{{ config('constant.subject_type.social') }}">Môn Xã Hội</option>
-                            <option value="{{ config('constant.subject_type.natural') }}">Môn Tự Nhiên</option>
-                            <option value="{{ config('constant.subject_type.another') }}">Môn Khác</option>
+                            <option value="">Choose subject type</option>
+                            <option value="{{ config('constant.subject_type.natural') }}">Natural Subject</option>
+                            <option value="{{ config('constant.subject_type.social') }}">Social Subject</option>
+                            <option value="{{ config('constant.subject_type.another') }}">Another Subject</option>
                         </select>
                     </div>
                     <div class="mt-3">
-                        {{ Form::submit('Xác Nhận', [
+                        {{ Form::submit('Submit', [
                             'class' => 'btn btn-outline-success mr-2',
                         ]) }}
-                        <a href="{{ route('admin.subjects.index') }}" class="btn btn-outline-dark">Huỷ Bỏ</a>
+                        <a href="{{ route('admin.subjects.index') }}" class="btn btn-outline-dark">Cancel</a>
                         {{ Form::close() }}
                     </div>
                 </div>

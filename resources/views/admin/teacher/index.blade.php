@@ -1,7 +1,7 @@
 @extends('layouts.manager')
 @section('breadcrumb')
 <div class="col-sm-6">
-    <h1 class="m-0">Quản Lý Giảng Viên</h1>
+    <h1 class="m-0">Teacher Management</h1>
 </div>
 @endsection
 @section('main')
@@ -12,7 +12,7 @@
                 <div class="d-flex mb-3 justify-content-between">
                     <div class="">
                         <form action="{{ route('admin.teachers.index') }}" class="form-inline">
-                            <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
+                            <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Keyword">
                             <button class="btn btn-outline-secondary" type="submit">
                                 <i class="fa fa-search"></i>
                             </button>
@@ -24,9 +24,10 @@
                     <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th>Giảng Viên</th>
+                                <th>Teacher</th>
+                                <th>Gender</th>
                                 <th>Email</th>
-                                <th>Số Điện Thoại</th>
+                                <th>Phone</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -42,16 +43,24 @@
                                     </div>
                                 </td>
                                 <td>
+                                    <p class="text-capitalize">{{ array_search($teacher->gender, config('config.gender')) }}</p>
+                                </td>
+                                <td>
                                     {{ $teacher->email }}
                                 </td>
                                 <td>
                                     {{ $teacher->phone }}
                                 </td>
-                                <td style="width: 255px;">
+                                <td width="100">
                                     <div class="d-flex justify-content-between">
                                         <div class="mr-2">
-                                            <a href="{{ route('admin.teachers.edit', $teacher->id) }}" class="btn btn-outline-warning">
+                                            <a href="{{ route('admin.teachers.edit', $teacher->id) }}" class="btn btn-outline-primary">
                                                 <i class="fa fa-edit"></i>
+                                            </a>
+                                        </div>
+                                        <div class="mr-2">
+                                            <a href="{{ route('admin.teachers.choose_subject_show', $teacher->id) }}" class="btn btn-outline-dark">
+                                               <i class="fa fa-book"></i>
                                             </a>
                                         </div>
                                         <div>

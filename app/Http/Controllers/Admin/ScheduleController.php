@@ -5,11 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Exports\MarkExport;
 use App\Http\Controllers\Controller;
 use App\Repositories\IClassRoomRepository;
-use App\Repositories\IScheduleDetailRepository;
 use App\Repositories\IScheduleRepository;
-use App\Repositories\ISpecializationRepository;
 use App\Repositories\IStudentRepository;
 use App\Repositories\ISubjectRepository;
+use App\Repositories\ITeacherRepository;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -17,102 +16,38 @@ use Illuminate\Support\Facades\DB;
 class ScheduleController extends Controller
 {
     protected $scheduleRepository;
-    protected $specializationRepository;
     protected $subjectRepository;
     protected $classRepository;
+    protected $teacherRepository;
     protected $studentRepository;
-    protected $scheduleDetailRepository;
 
     public function __construct(
-        IScheduleRepository       $scheduleRepository,
-        IScheduleDetailRepository $scheduleDetailRepository,
-        ISpecializationRepository $specializationRepository,
-        ISubjectRepository        $subjectRepository,
-        IClassRoomRepository      $classRepository,
-        IStudentRepository        $studentRepository
-    ) {
+        IScheduleRepository  $scheduleRepository,
+        ISubjectRepository   $subjectRepository,
+        IClassRoomRepository $classRepository,
+        ITeacherRepository $teacherRepository,
+        IStudentRepository   $studentRepository
+    )
+    {
         $this->scheduleRepository = $scheduleRepository;
-        $this->specializationRepository = $specializationRepository;
         $this->subjectRepository = $subjectRepository;
+        $this->teacherRepository = $teacherRepository;
         $this->classRepository = $classRepository;
         $this->studentRepository = $studentRepository;
-        $this->scheduleDetailRepository = $scheduleDetailRepository;
     }
 
     public function index(Request $request)
     {
-        $hasScheduleDetails = count($this->calculateScheduleDetails());
-        $classType = $request->get('class-type');
         $status = $request->get('status', config('schedule.status.new'));
         $keyword = $request->get('keyword');
         $schedules = $this->scheduleRepository->model()
-            ->where('status', $status)
-            ->where(function ($query) {
-                $query->where(function ($query) {
-                    $query->doesntHave('class');
-                });
-            })
-            ->when($keyword, function ($query) use ($keyword) {
-                $query->whereHas('subject', function ($query) use ($keyword) {
-                        $query->where('name', 'like', '%' . $keyword . '%');
-                    });;
-            })
-            ->when(isset($classType), function ($query) use ($classType) {
-                $query->when($classType, function ($query) {
-                    $query->whereNull('class_room_id');
-                }, function ($query) {
-                    $query->whereNotNull('class_room_id');
-                });
-            })
-            ->with(['subject.teachers', 'teacher', 'scheduleDetails'])
-            ->orderBy('status', 'asc')
             ->paginate(config('config.paginate'));
 
         return view('admin.schedule.index', compact(
             'schedules',
             'status',
-            'hasScheduleDetails',
-            'classType',
             'keyword'
         ));
-    }
-
-    protected function calculateScheduleDetails()
-    {
-        $scheduleDetails = $this->scheduleDetailRepository->model()
-            ->doesntHave('schedule')
-            ->get()
-            ->load('subject.teachers')
-            ->reduce(function (&$subjects, $scheduleDetail) {
-                if (isset($subjects[$scheduleDetail->subject_id])) {
-                    $subjects[$scheduleDetail->subject_id] = [
-                        'subject' => $scheduleDetail->subject->toArray(),
-                        'schedule_details' => array_merge(
-                            $subjects[$scheduleDetail->subject_id]['schedule_details'],
-                            [$scheduleDetail->id]
-                        )
-                    ];
-                } else {
-                    $subjects[$scheduleDetail->subject_id] = [
-                        'subject' => $scheduleDetail->subject->toArray(),
-                        'schedule_details' => [$scheduleDetail->id],
-                    ];
-                }
-                return $subjects;
-            }, []);
-        return array_map(function ($item) {
-            $item['subject']['teachers'] = collect($item['subject']['teachers'])
-                ->pluck('name', 'id');
-
-            return $item;
-        }, $scheduleDetails);
-    }
-
-    public function create()
-    {
-        $scheduleDetails = $this->calculateScheduleDetails();
-
-        return view('admin.schedule.create', compact('scheduleDetails'));
     }
 
     public function store(Request $request)
@@ -142,6 +77,31 @@ class ScheduleController extends Controller
 
             return $this->failRouteRedirect($e->getMessage());
         }
+    }
+
+    public function create()
+    {
+        $subjects = $this->subjectRepository->all()->pluck('name', 'id')->toArray();
+        $teachers = $this->teacherRepository->all()->pluck('name', 'id')->toArray();
+
+        return view('admin.schedule.create', compact('subjects', 'teachers'));
+    }
+
+    public function update(Request $request, $scheduleId)
+    {
+        $schedule = $this->scheduleRepository->find($scheduleId);
+        $schedule->update(
+            array_merge(
+                $request->only(['teacher_id', 'start_time', 'end_time']),
+                [
+                    'status' => $request->status ?? ($schedule->teacher
+                        && $schedule->start_time
+                            ? config('schedule.status.inprogress') : $schedule->status),
+                ]
+            )
+        );
+
+        return $this->successRouteRedirect('admin.schedules.index');
     }
 
     public function show($id)
@@ -184,23 +144,6 @@ class ScheduleController extends Controller
             'schedule',
             'teachers'
         ));
-    }
-
-    public function update(Request $request, $scheduleId)
-    {
-        $schedule = $this->scheduleRepository->find($scheduleId);
-        $schedule->update(
-            array_merge(
-                $request->only(['teacher_id', 'start_time', 'end_time']),
-                [
-                    'status' => $request->status ?? ($schedule->teacher
-                        && $schedule->start_time
-                        ? config('schedule.status.inprogress') : $schedule->status),
-                ]
-            )
-        );
-
-        return $this->successRouteRedirect('admin.schedules.index');
     }
 
     public function destroy($id)

@@ -11,7 +11,7 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    protected function successRouteRedirect($routeName, $routeParam = null, $message = 'Xử lý thành công', $params = [])
+    protected function successRouteRedirect($routeName, $routeParam = null, $message = 'Action Success', $params = [])
     {
         if ($routeName) {
             return redirect()->route($routeName, $routeParam)
@@ -30,7 +30,7 @@ class Controller extends BaseController
             );
     }
 
-    protected function failRouteRedirect($message = 'Xử lý thất bại', $params = [])
+    protected function failRouteRedirect($message = 'Action Fail', $params = [])
     {
         return back()->withErrors(['msg' => $message])
             ->with($params);

@@ -36,10 +36,10 @@
                             ]) }}
                     </div>
                     <div class="form-group col-lg-6">
-                        {{ Form::label('teacher_id', 'Giảng Viên') }}
+                        {{ Form::label('teacher_id', 'Teacher') }}
                         {{ Form::select('teacher_id', $teachers, $schedule->teacher_id ?? null, [
                                 'class' => 'form-control ',
-                                'placeholder' => 'Chọn Giảng Viên',
+                                'placeholder' => 'Chọn Teacher',
                                 'disabled' => (bool) $schedule->teacher_id,
                             ]) }}
                     </div>
@@ -61,10 +61,10 @@
                     </div>
                 </div>
                 <div class="mt-3">
-                    {{ Form::submit('Xác Nhận', [
+                    {{ Form::submit('Submit', [
                             'class' => 'btn btn-outline-success mr-2',
                         ]) }}
-                    <a href="{{ route('admin.schedules.index') }}" class="btn btn-outline-dark">Huỷ Bỏ</a>
+                    <a href="{{ route('admin.schedules.index') }}" class="btn btn-outline-dark">Cancel</a>
                     {{ Form::close() }}
                 </div>
             </div>

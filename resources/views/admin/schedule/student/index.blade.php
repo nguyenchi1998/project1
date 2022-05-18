@@ -1,12 +1,12 @@
 @extends('layouts.manager')
 @section('breadcrumb')
 <div class="col-sm-6">
-    <h1 class="m-0">Đăng Ký Tín Chỉ Cho Sinh Viên</h1>
+    <h1 class="m-0">Đăng Ký Tín Chỉ Cho Student</h1>
 </div>
 <div class="col-sm-6">
     <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
-        <li class="breadcrumb-item active">Đăng Ký Tín Chỉ Cho Sinh Viên</li>
+        <li class="breadcrumb-item active">Đăng Ký Tín Chỉ Cho Student</li>
     </ol>
 </div>
 @endsection
@@ -18,7 +18,7 @@
                 <div class="d-flex mb-3 justify-content-between">
                     <div class="">
                         <form action="{{ route('admin.schedules.students.index') }}" class="form-inline">
-                            <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
+                            <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Keyword">
                             {{ Form::select('semester-filter', $semesters, $filterSemester, ['class' => 'form-control  mr-2', 'placeholder' => 'Tất Cả Kỳ Học']) }}
                             {{ Form::select('grade-filter', $grades, $filterGrade , ['class' => 'form-control mr-2', 'placeholder' => 'Tất Cả Khóa']) }}
                             <button class="btn btn-outline-secondary" type="submit">
@@ -31,7 +31,7 @@
                     <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th>Sinh Viên</th>
+                                <th>Student</th>
                                 <th>Khóa</th>
                                 <th>Kỳ Hiện Tại</th>
                                 <th>Chuyên Ngành</th>

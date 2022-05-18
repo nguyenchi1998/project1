@@ -6,7 +6,7 @@
 <div class="col-sm-6">
     <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Bảng Điều Khiển</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('admin.schedules.classes.index') }}">Đăng Ký Tín Chỉ Cho Sinh Viên</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('admin.schedules.classes.index') }}">Đăng Ký Tín Chỉ Cho Student</a></li>
         <li class="breadcrumb-item active">Danh Sách Tín Chỉ</li>
     </ol>
 </div>
@@ -19,7 +19,7 @@
                 <div class="d-flex mb-3 justify-content-between align-items-center">
                     <div class="d-flex justify-content-between flex-column">
                         <div class="d-flex align-items-center mb-2">
-                            <strong class="mr-1">Sinh Viên: </strong> {{ $student->name }}
+                            <strong class="mr-1">Student: </strong> {{ $student->name }}
                         </div>
                         <div class="d-flex align-items-center">
                             <strong class="mr-1">Kỳ Học: </strong>
@@ -36,7 +36,7 @@
                     <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th>Môn Học</th>
+                                <th>Subject</th>
                                 <th>Số Tín Chỉ</th>
                                 <th>Mã Lớp</th>
                                 <th>Trạng Thái</th>

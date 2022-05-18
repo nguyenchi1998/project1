@@ -29,12 +29,12 @@
                                 Mã Lớp: {{ $schedule->code }}
                             </div>
                             <div class="form-group">
-                                Môn Học: {{ $schedule->subject->name }}
+                                Subject: {{ $schedule->subject->name }}
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group">
-                                Số Sinh Viên: {{ count($scheduleDetails) }}
+                                Số Student: {{ count($scheduleDetails) }}
                             </div>
                             <div class="form-group">
                                 Ngày: {{ now()->format('d/m/yy') }}
@@ -51,7 +51,7 @@
                     <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th>Sinh Viên</th>
+                                <th>Student</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -74,10 +74,10 @@
                     </table>
                 </div>
                 <div class="mt-3 float-right">
-                    {{ Form::submit('Xác Nhận', [
+                    {{ Form::submit('Submit', [
                             'class' => 'btn btn-outline-success mr-2',
                         ]) }}
-                    <a href="{{ route('teacher.schedules.index') }}" class="btn btn-outline-dark">Huỷ Bỏ</a>
+                    <a href="{{ route('teacher.schedules.index') }}" class="btn btn-outline-dark">Cancel</a>
                 </div>
                 {{ Form::close() }}
             </div>

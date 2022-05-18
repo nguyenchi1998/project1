@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\IClassRoomRepository;
-use App\Repositories\IScheduleDetailRepository;
 use App\Repositories\ISpecializationRepository;
 use App\Repositories\ISubjectRepository;
 use Illuminate\Http\Request;

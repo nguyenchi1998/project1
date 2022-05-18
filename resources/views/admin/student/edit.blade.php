@@ -1,18 +1,7 @@
 @extends('layouts.manager')
 @section('breadcrumb')
     <div class="col-sm-6">
-        <h1 class="m-0">Sửa Đổi Sinh Viên</h1>
-    </div>
-    <div class="col-sm-6">
-        <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item">
-                <a href="{{ route('admin.home') }}">Bảng Điều Khiển</a>
-            </li>
-            <li class="breadcrumb-item">
-                <a href="{{ route('admin.students.index') }}">Danh Sách Sinh Viên</a>
-            </li>
-            <li class="breadcrumb-item active">Sửa Đổi Sinh Viên</li>
-        </ol>
+        <h1 class="m-0">Student Edit</h1>
     </div>
 @endsection
 @section('main')
@@ -27,40 +16,36 @@
                     ]) }}
                     @method('PUT')
                     {{ Form::text('id', $student->id, ['hidden' => true]) }}
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        {{ Form::input('email', 'email', $student->email, [
-                            'readonly' => true,
-                            'class' => 'form-control',
-                            'id' => 'name',
-                            'placeholder' => 'Email',
-                        ]) }}
-                    </div>
                     <div class="row">
                         <div class="form-group col-lg-6">
-                            <label for="name">Họ Tên</label>
+                            <label for="email">Email</label>
+                            {{ Form::input('email', 'email', $student->email, [
+                                'readonly' => true,
+                                'class' => 'form-control',
+                                'id' => 'name',
+                                'placeholder' => 'Email',
+                            ]) }}
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="name">Name</label>
                             {{ Form::input('text', 'name', $student->name, [
                                 'class' => 'form-control',
                                 'id' => 'name',
-                                'placeholder' => 'Họ tên',
+                                'placeholder' => 'Name',
                             ]) }}
-                        </div>
-                        <div class="form-group col-lg-6">
-                            <label for="name">Ảnh Đại Diện</label>
-                            {{ Form::file('avatar', ['class' => 'form-control']) }}
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-6">
-                            <label for="phone">Số Điện Thoại</label>
+                            <label for="phone">Phone</label>
                             {{ Form::input('text', 'phone', $student->phone, [
                                 'class' => 'form-control',
                                 'id' => 'name',
-                                'placeholder' => 'Số điện thoại',
+                                'placeholder' => 'Phone',
                             ]) }}
                         </div>
                         <div class="form-group col-lg-6">
-                            <label for="birthday">Ngày Sinh</label>
+                            <label for="birthday">Birthday</label>
                             {{ Form::input('date', 'birthday', $student->birthday, [
                                 'class' => 'form-control',
                                 'id' => 'credit',
@@ -69,7 +54,7 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-6">
-                            {{ Form::label('gender', 'Giới Tính') }}
+                            {{ Form::label('gender', 'Gender') }}
                             <div class="form-inline">
                                 <div class="form-check form-check-info">
                                     <label class="form-check-label">
@@ -92,19 +77,25 @@
                             </div>
                         </div>
                         <div class="form-group col-lg-6">
-                            <label for="address">Địa chỉ</label>
+                            <label for="address">Address</label>
                             {{ Form::input('text', 'address', $student->address, [
                                 'class' => 'form-control',
                                 'id' => 'credit',
-                                'placeholder' => 'Đại chỉ liên hệ',
+                                'placeholder' => 'Address',
                             ]) }}
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="form-group col-lg-6">
+                            <label for="class_room">ClassRoom</label>
+                            {{ Form::select('class_room_id', $classRooms, $student->class_room_id, ['class' => 'form-control mr-2', 'placeholder' => 'Choose ClassRoom']) }}
+                        </div>
+                    </div>
                     <div class="mt-3">
-                        {{ Form::submit('Xác Nhận', [
+                        {{ Form::submit('Submit', [
                             'class' => 'btn btn-outline-success mr-2',
                         ]) }}
-                        <a href="{{ route('admin.students.index') }}" class="btn btn-outline-dark">Huỷ Bỏ</a>
+                        <a href="{{ route('admin.students.index') }}" class="btn btn-outline-dark">Cancel</a>
                         {{ Form::close() }}
                     </div>
                 </div>

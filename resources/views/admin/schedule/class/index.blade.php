@@ -20,7 +20,7 @@
                 <div class="d-flex mb-3 justify-content-between">
                     <div class="">
                         <form action="{{ route('admin.schedules.classes.index') }}" class="form-inline">
-                            <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Từ Khoá">
+                            <input type="search" name="keyword" value="{{ $keyword }}" class="form-control  mr-2" placeholder="Keyword">
                             {{ Form::select('semester-filter', $semesters, $semesterFilter, [
                                     'class' => 'form-control  mr-2',
                                     'placeholder' => 'Tất Cả Kỳ Học',
@@ -39,8 +39,8 @@
                     <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th>Lớp Học</th>
-                                <th>Sinh Viên</th>
+                                <th>Class</th>
+                                <th>Student</th>
                                 <th>Kỳ Hiện Tại</th>
                                 <th>Chuyên Ngành</th>
                                 <th></th>

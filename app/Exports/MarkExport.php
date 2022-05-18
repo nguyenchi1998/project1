@@ -20,7 +20,7 @@ class MarkExport implements FromCollection, Responsable, WithHeadings, ShouldAut
     {
         return [
             'MSSV',
-            'Họ Tên',
+            'Name',
             'Điểm',
         ];
     }

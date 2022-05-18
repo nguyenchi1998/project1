@@ -84,14 +84,9 @@ class TeacherController extends Controller
     public function edit($id)
     {
         $teacher = $this->teacherRepository->find($id);
-        if ($teacher) {
-            $teacher->load('department');
-        }
-        $departments = $this->departmentRepository->all();
 
         return view('admin.teacher.edit', compact(
-            'teacher',
-            'departments'
+            'teacher'
         ));
     }
 
@@ -181,10 +176,10 @@ class TeacherController extends Controller
         $teacher = $this->teacherRepository->find($id)
             ->load(['subjects' => function ($query) {
                 $query->orderBy('name');
-            }, 'department']);
+            },]);
         $teacherSubjects = $teacher->subjects->pluck('id')
             ->toArray();
-        $subjects = $teacher->department->subjects;
+        $subjects = $this->subjectRepository->all();
 
         return view('admin.teacher.choose_subject', compact(
             'teacher',

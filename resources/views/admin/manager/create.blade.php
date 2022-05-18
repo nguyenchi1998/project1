@@ -23,27 +23,27 @@
                 </div>
                 <div class="row">
                     <div class="form-group col-lg-6">
-                        <label for="name">Họ Tên</label>
-                        {{ Form::input('text', 'name', null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Họ tên']) }}
+                        <label for="name">Name</label>
+                        {{ Form::input('text', 'name', null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Name']) }}
                     </div>
                     <div class="form-group col-lg-6">
-                        <label for="avatar">Ảnh Đại Diện</label>
+                        <label for="avatar">Avatar</label>
                         {{ Form::file('avatar', ['class' =>'form-control', 'id' => 'avatar']) }}
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-lg-6">
-                        <label for="phone">Số Điện Thoại</label>
-                        {{ Form::input('text', 'phone', null, ['class' => 'form-control', 'id' => 'phone', 'placeholder' => 'Số điện thoại']) }}
+                        <label for="phone">Phone</label>
+                        {{ Form::input('text', 'phone', null, ['class' => 'form-control', 'id' => 'phone', 'placeholder' => 'Phone']) }}
                     </div>
                     <div class="form-group col-lg-6">
-                        <label for="birthday">Ngày Sinh</label>
+                        <label for="birthday">Birthday</label>
                         {{ Form::input('date', 'birthday', null, ['class' => 'form-control', 'id' => 'birthday']) }}
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-lg-6">
-                        {{ Form::label('gender', 'Giới Tính') }}
+                        {{ Form::label('gender', 'Gender') }}
                         <div class="form-inline">
                             <div class="form-check form-check-info">
                                 <label class="form-check-label">
@@ -62,13 +62,13 @@
                         </div>
                     </div>
                     <div class="form-group col-lg-6">
-                        <label for="address">Địa chỉ</label>
-                        {{ Form::input('text', 'address', null, ['class' => 'form-control', 'id' => 'credit', 'placeholder' => 'Đại chỉ liên hệ']) }}
+                        <label for="address">Address</label>
+                        {{ Form::input('text', 'address', null, ['class' => 'form-control', 'id' => 'credit', 'placeholder' => 'Address']) }}
                     </div>
                 </div>
                 <div class="mt-3">
-                    {{Form::submit('Xác Nhận', ['class'=> 'btn btn-outline-success mr-2']) }}
-                    <a href="{{ route('admin.managers.index') }}" class="btn btn-outline-dark">Huỷ Bỏ</a>
+                    {{Form::submit('Submit', ['class'=> 'btn btn-outline-success mr-2']) }}
+                    <a href="{{ route('admin.managers.index') }}" class="btn btn-outline-dark">Cancel</a>
                     {{ Form::close() }}
                 </div>
             </div>

@@ -29,7 +29,7 @@
                     <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th>Môn Học</th>
+                                <th>Subject</th>
                                 <th>Điểm Chuyên Cần</th>
                                 <th>Điểm Giữa Kỳ</th>
                                 <th>Điểm Cuối Kỳ</th>

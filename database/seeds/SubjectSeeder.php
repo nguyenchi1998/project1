@@ -12,6 +12,7 @@ class SubjectSeeder extends Seeder
      */
     public function run()
     {
+        $faker = Faker\Factory::create();
         $subjects = [
             'Toán',
             'Vật Lý',
@@ -31,6 +32,7 @@ class SubjectSeeder extends Seeder
             for ($i = 10; $i <= 12; $i++)
                 Subject::create([
                     'name' => $subject . ' ' . $i,
+                    'number_lessons' => $faker->randomElement(range(50, 100)),
                 ]);
         }
     }
